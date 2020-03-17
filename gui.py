@@ -1,6 +1,7 @@
 import bpy
 
 
+# sequencer panel
 class BpmSequencerPanel(bpy.types.Panel):
     bl_label = "Project Manager"
     bl_idname = "BPM_PT_sequencer"
@@ -26,8 +27,27 @@ class BpmSequencerPanel(bpy.types.Panel):
         layout.label(text = project_data.name)
         layout.operator('bpm.open_shot')
 
+# topbar function
+def bpmTopbarFunction(self, context):
+    winman = context.window_manager
+    if winman.bpm_isproject:
+        if not winman.bpm_isedit:
+            self.layout.operator('bpm.back_to_edit')
+        # else:
+        #     self.layout.operator('bpm.open_shot')
+        self.layout.menu('BPM_MT_topbar_menu')
+
+# topbar menu
+class BpmTopbarMenu(bpy.types.Menu):
+    bl_label = "BPM"
+    bl_idname = "BPM_MT_topbar_menu"
+
+    def draw(self, context):
+        winman = context.window_manager
+
+        layout = self.layout
+
         #debug
         layout.prop(winman, 'bpm_debug')
         layout.prop(winman, 'bpm_isproject')
         layout.prop(winman, 'bpm_isedit')
-

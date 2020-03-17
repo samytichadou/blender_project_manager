@@ -50,6 +50,7 @@ classes = (OpenShot,
             BackToEdit,
             ProjectSettings,
             BpmSequencerPanel,
+            BpmTopbarMenu,
             )
 
 def register():
@@ -72,6 +73,9 @@ def register():
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
 
+    ### TOPBAR ###
+    bpy.types.TOPBAR_HT_upper_bar.prepend(bpmTopbarFunction)
+
 def unregister():
     
     ### OPERATORS ###
@@ -87,3 +91,6 @@ def unregister():
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
+
+    ### TOPBAR ###
+    bpy.types.TOPBAR_HT_upper_bar.remove(bpmTopbarFunction)

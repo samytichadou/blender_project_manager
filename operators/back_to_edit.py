@@ -13,7 +13,6 @@ class BackToEdit(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         if context.window_manager.bpm_isproject and not context.window_manager.bpm_isedit:
-            #TODO check if all project datas are complete
             return True
 
     def execute(self, context):
