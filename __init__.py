@@ -36,13 +36,16 @@ import bpy
 # IMPORT SPECIFICS
 ##################################
 
+from .startup_handler import bpmStartupHandler
 from .operators.open_shot import *
+from .properties import *
 
 
 # register
 ##################################
 
 classes = (OpenShot,
+            ProjectSettings,
             )
 
 def register():
@@ -55,6 +58,15 @@ def register():
     ### PROPERTIES ###
     bpy.types.WindowManager.bpm_isproject = \
         bpy.props.BoolProperty(default=False)
+    bpy.types.WindowManager.bpm_isedit = \
+        bpy.props.BoolProperty(default=False)
+    bpy.types.WindowManager.bpm_debug = \
+        bpy.props.BoolProperty(default=True)
+    bpy.types.WindowManager.bpm_datas = \
+        bpy.props.CollectionProperty(type = ProjectSettings)
+
+    ### HANDLER ###
+    bpy.app.handlers.load_post.append(bpmStartupHandler)
 
 def unregister():
     
@@ -65,3 +77,9 @@ def unregister():
 
     ### PROPERTIES ###
     del bpy.types.WindowManager.bpm_isproject
+    del bpy.types.WindowManager.bpm_isedit
+    del bpy.types.WindowManager.bpm_debug
+    del bpy.types.WindowManager.bpm_datas
+
+    ### HANDLER ###
+    bpy.app.handlers.load_post.remove(bpmStartupHandler)
