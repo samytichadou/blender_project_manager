@@ -2,7 +2,7 @@ import bpy, os
 from bpy.app.handlers import persistent
 
 
-from .functions.project_data_functions import getProjectDataFile
+from .functions.project_data_functions import getProjectDataFile, createProjectDatas
 from .global_variables import startup_statement, loaded_datas_statement, no_datas_statement
 
 
@@ -13,7 +13,7 @@ def bpmStartupHandler(scene):
 
     project_data_file = getProjectDataFile(winman)
     if project_data_file is not None:
-        #winman.bpm_isproject = True
+        createProjectDatas(winman, project_data_file)
         if winman.bpm_debug: print(loaded_datas_statement) #debug
     else:
         if winman.bpm_debug: print(no_datas_statement) #debug
