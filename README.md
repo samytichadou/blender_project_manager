@@ -1,2 +1,2 @@
-# blender_project_manager
+# Blender Project Manager
 Manage small animation project from Blender
