@@ -29,4 +29,5 @@ class OpenShot(bpy.types.Operator):
         bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
         # open
         bpy.ops.wm.open_mainfile(filepath=filepath)
+        
         return {'FINISHED'}

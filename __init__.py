@@ -38,6 +38,7 @@ import bpy
 
 from .startup_handler import bpmStartupHandler
 from .operators.open_shot import *
+from .operators.back_to_edit import *
 from .properties import *
 
 
@@ -45,6 +46,7 @@ from .properties import *
 ##################################
 
 classes = (OpenShot,
+            BackToEdit,
             ProjectSettings,
             )
 
