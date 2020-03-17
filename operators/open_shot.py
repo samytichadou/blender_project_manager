@@ -8,11 +8,12 @@ class OpenShot(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if context.scene.sequence_editor.active_strip:
-            active = context.scene.sequence_editor.active_strip
-            if active.type == 'SCENE':
-                if active.scene.library:
-                    return True
+        if context.window_manager.bpm_isproject:
+            if context.scene.sequence_editor.active_strip:
+                active = context.scene.sequence_editor.active_strip
+                if active.type == 'SCENE':
+                    if active.scene.library:
+                        return True
 
     def execute(self, context):
         pass
