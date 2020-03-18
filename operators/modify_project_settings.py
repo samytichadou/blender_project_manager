@@ -5,10 +5,10 @@ from ..functions.dataset_functions import returnDatasetProperties
 
 
 # display project settings
-class BpmDisplayProjectSettings(bpy.types.Operator):
-    """Display Project Settings"""
-    bl_idname = "bpm.display_project_settings"
-    bl_label = "Display Project Settings"
+class BpmModifyProjectSettings(bpy.types.Operator):
+    """Modify Project Settings"""
+    bl_idname = "bpm.modify_project_settings"
+    bl_label = "Modify Project Settings"
 
     @classmethod
     def poll(cls, context):
@@ -29,9 +29,8 @@ class BpmDisplayProjectSettings(bpy.types.Operator):
             box = col1.box()
             box.label(text=p[0].name)
             box = col2.box()
-            box.label(text=str(p[1]))
-
-        layout.operator('bpm.modify_project_settings')
+            box.prop(datas, '%s' % p[0].identifier, text='')
         
     def execute(self, context):
+        # save to json
         return {'FINISHED'}
