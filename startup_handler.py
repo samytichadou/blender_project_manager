@@ -3,7 +3,7 @@ from bpy.app.handlers import persistent
 
 
 from .functions.project_data_functions import getProjectDataFile, createProjectDatas, getCustomFoldersFile, loadCustomFolders
-from .global_variables import startup_statement, loaded_datas_statement, no_datas_statement, loaded_folders_statement
+from .global_variables import startup_statement, loaded_datas_statement, no_datas_statement, folders_loading_statement, loaded_folders_statement
 
 
 @persistent
@@ -20,6 +20,7 @@ def bpmStartupHandler(scene):
         #load project custom folders
         custom_folders_file = getCustomFoldersFile(winman)
         if custom_folders_file is not None:
+            if winman.bpm_debug: print(folders_loading_statement + custom_folders_file) #debug
             loadCustomFolders(winman, custom_folders_file)
             if winman.bpm_debug: print(loaded_folders_statement) #debug
 

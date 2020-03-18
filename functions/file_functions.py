@@ -32,3 +32,20 @@ def getLastVersion(folder, pattern, extension):
 def suppressExistingFile(filepath) :
     if os.path.isfile(filepath) :
         os.remove(filepath)
+
+# get next shot
+def getNextShot(folder, pattern, shot_digits):
+    shot_subdirs = []
+    subdir = [f.path for f in os.scandir(folder) if f.is_dir()]
+    path_pattern = os.path.join(folder, pattern)
+
+    for s in subdir:
+        if path_pattern in s:
+            shot_number = int(s.split(path_pattern)[1])
+            shot_subdirs.append([s, shot_number])
+
+    shot_subdirs_sorted = sorted(shot_subdirs, key=lambda item: item[1], reverse=True)
+    next_shot = shot_subdirs_sorted[0][1] + 1
+    next_shot_folder = os.path.join(folder, pattern + str(next_shot).zfill(shot_digits))
+    
+    return [next_shot_folder, next_shot]

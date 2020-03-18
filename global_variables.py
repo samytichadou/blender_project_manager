@@ -1,6 +1,10 @@
 bpm_statement = "Blender Project Manager --- "
+
 opening_statement = bpm_statement + "Opening "
 back_to_edit_statement = bpm_statement + "Opening Editing Project "
+
+creating_shot_statement = bpm_statement + "Creating New Shot"
+
 startup_statement = bpm_statement + "Looking for Project Datas"
 loaded_datas_statement = bpm_statement + "Project Datas loaded"
 loaded_folders_statement = bpm_statement + "Project Folders loaded"

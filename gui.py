@@ -26,6 +26,7 @@ class BPM_PT_sequencer(bpy.types.Panel):
         #common
         layout.label(text = project_data.name)
         layout.operator('bpm.open_shot')
+        layout.operator('bpm.create_shot')
 
 # topbar function
 def bpmTopbarFunction(self, context):

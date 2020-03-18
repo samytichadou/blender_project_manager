@@ -45,10 +45,16 @@ def getCustomFoldersFile(winman):
 
 # load custom folders
 def loadCustomFolders(winman, folders_file):
-    if winman.bpm_debug: print(folders_loading_statement + folders_file) #debug
-
     folders_coll = winman.bpm_folders
     dataset = read_json(folders_file)
     for f in dataset["folders"]:
         folder = folders_coll.add()
         setPropertiesFromJsonDataset(f, folder, winman)
+
+# get shot pattern
+def getShotPattern(project_datas):
+    prefix = project_datas.project_prefix
+    if not project_datas.project_prefix.endswith("_"):
+        prefix += "_"
+    prefix += project_datas.shot_prefix
+    return prefix
