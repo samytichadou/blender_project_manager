@@ -62,7 +62,10 @@ def replaceContentInPythonScript(python_script_in, python_script_out, replacemen
     python_code= open(python_script_in, 'r').read()
 
     for r in replacement_list:
-        python_code = python_code.replace(r[0], r[1])
+        if type(r[1]) is str:
+            python_code = python_code.replace(r[0], '"' + r[1] + '"')
+        else:
+            python_code = python_code.replace(r[0], str(r[1]))
 
     with open(python_script_out, 'w') as file:
         file.write(python_code)

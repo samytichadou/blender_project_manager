@@ -1,3 +1,5 @@
+import os
+
 bpm_statement = "Blender Project Manager --- "
 
 opening_statement = bpm_statement + "Opening "
@@ -25,3 +27,7 @@ setting_prop_error_statement = bpm_statement + "Unable to set property : "
 file_project = "project_data.json"
 custom_folders_file = "project_custom_folders.json"
 python_temp = "python_temp.py"
+
+script_file = os.path.realpath(__file__)
+setup_script_folder = os.path.join(os.path.dirname(script_file), "setup_blend_scripts")
+shot_setup_file = os.path.join(setup_script_folder, "shot_setup.py")

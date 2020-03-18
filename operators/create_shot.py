@@ -1,7 +1,7 @@
 import bpy, os
 
 
-from ..global_variables import creating_shot_statement, creating_shot_folder_statement, python_temp
+from ..global_variables import creating_shot_statement, creating_shot_folder_statement, python_temp, shot_setup_file
 from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile
 from ..functions.project_data_functions import getShotPattern, getShotReplacementList
 
@@ -31,10 +31,9 @@ class BPMCreateShot(bpy.types.Operator):
         # modify and copy python script
         replacement_list = getShotReplacementList(project_datas, next_shot_folder, next_shot_file, next_shot_number)
         
-        python_script = 
         temp_python_script = os.path.join(next_shot_folder, python_temp)
 
-        replaceContentInPythonScript(python_script, temp_python_script, replacement_list)
+        replaceContentInPythonScript(shot_setup_file, temp_python_script, replacement_list)
 
         # launch the blend command
 
