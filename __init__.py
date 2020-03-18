@@ -38,8 +38,11 @@ import bpy
 
 from .startup_handler import bpmStartupHandler
 from .functions.filebrowser_update_function import updateFilebrowserPath
+
 from .operators.open_shot import *
 from .operators.back_to_edit import *
+from .operators.display_project_settings import *
+
 from .properties import *
 from .gui import *
 
@@ -49,8 +52,11 @@ from .gui import *
 
 classes = (OpenShot,
             BackToEdit,
+            BpmDisplayProjectSettings,
+
             ProjectSettings,
             CustomFolders,
+
             BPM_PT_sequencer,
             BpmTopbarMenu,
             BPM_UL_Folders_Uilist,
