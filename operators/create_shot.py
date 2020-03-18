@@ -56,5 +56,5 @@ class BPMCreateShot(bpy.types.Operator):
         if winman.bpm_debug: print(deleted_file_statement + temp_python_script) #debug
 
         # link shot and add it in timeline
-
+        
         return {'FINISHED'}
