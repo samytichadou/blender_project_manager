@@ -3,6 +3,7 @@ import bpy, os
 
 from ..global_variables import file_project, loading_statement, currently_loading_statement, folders_loading_statement, custom_folders_file
 from .json_functions import read_json
+from .dataset_functions import setPropertiesFromJsonDataset
 
 
 # get project data file
@@ -30,12 +31,13 @@ def createProjectDatas(winman, project_data_file):
     dataset = read_json(project_data_file)
 
     # set datas
-    datas.name = dataset["name"]
-    datas.framerate = dataset["framerate"]
-    datas.resolution_x = dataset["resolution_x"]
-    datas.resolution_y = dataset["resolution_y"]
-    datas.project_folder = dataset["project_folder"]
-    datas.edit_file = dataset["edit_file"]
+    setPropertiesFromJsonDataset(dataset, datas, winman)
+    # datas.name = dataset["name"]
+    # datas.framerate = dataset["framerate"]
+    # datas.resolution_x = dataset["resolution_x"]
+    # datas.resolution_y = dataset["resolution_y"]
+    # datas.project_folder = dataset["project_folder"]
+    # datas.edit_file = dataset["edit_file"]
 
 # get custom folders file
 def getCustomFoldersFile(winman):
