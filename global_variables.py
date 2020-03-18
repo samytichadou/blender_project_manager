@@ -24,6 +24,11 @@ saved_to_json_statement = bpm_statement + "Successfully saved to json"
 setting_prop_statement = bpm_statement + "Setting property : "
 setting_prop_error_statement = bpm_statement + "Unable to set property : "
 
+creating_python_script_statement = bpm_statement + "Creating Python script : "
+python_script_created_statement = bpm_statement + "Python script successfully created"
+launching_command_statement = bpm_statement + "Launching Command : "
+deleted_file_statement = bpm_statement + "File successfully deleted : "
+
 file_project = "project_data.json"
 custom_folders_file = "project_custom_folders.json"
 python_temp = "python_temp.py"

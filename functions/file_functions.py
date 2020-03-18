@@ -63,7 +63,7 @@ def replaceContentInPythonScript(python_script_in, python_script_out, replacemen
 
     for r in replacement_list:
         if type(r[1]) is str:
-            python_code = python_code.replace(r[0], '"' + r[1] + '"')
+            python_code = python_code.replace(r[0], 'r"' + r[1] + '"')
         else:
             python_code = python_code.replace(r[0], str(r[1]))
 
