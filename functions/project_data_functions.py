@@ -58,3 +58,16 @@ def getShotPattern(project_datas):
         prefix += "_"
     prefix += project_datas.shot_prefix
     return prefix
+
+# get shot replacement list for python script
+def getShotReplacementList(project_datas, next_shot_folder, next_shot_file, next_shot_number):
+    replacement_list = []
+    replacement_list.append(['#filepath', next_shot_file])
+    replacement_list.append(['#scene_name', project_datas.shot_prefix + next_shot_number])
+    replacement_list.append(['#frame_start', project_datas.shot_start_frame])
+    replacement_list.append(['#frame_end', project_datas.shot_start_frame + project_datas.default_shot_length])
+    replacement_list.append(['#framerate', project_datas.framerate])
+    replacement_list.append(['#resolution_x', project_datas.resolution_x])
+    replacement_list.append(['#resolution_y', project_datas.resolution_y])
+
+    return replacement_list

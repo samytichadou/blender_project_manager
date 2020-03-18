@@ -13,6 +13,8 @@ class ProjectSettings(bpy.types.PropertyGroup) :
     edit_file : bpy.props.StringProperty(name = "Edit File")
     shot_prefix : bpy.props.StringProperty(name = "Shot Prefix")
     shot_digits : bpy.props.IntProperty(name = "Shot Digits")
+    shot_start_frame : bpy.props.IntProperty(name = "Shot Start Frame")
+    default_shot_length : bpy.props.IntProperty(name = "Default Shot Length")
 
 # custom project folders
 class CustomFolders(bpy.types.PropertyGroup) :

@@ -45,12 +45,24 @@ def getNextShot(folder, pattern, shot_digits):
             shot_subdirs.append([s, shot_number])
 
     shot_subdirs_sorted = sorted(shot_subdirs, key=lambda item: item[1], reverse=True)
-    next_shot = shot_subdirs_sorted[0][1] + 1
-    next_shot_folder = os.path.join(folder, pattern + str(next_shot).zfill(shot_digits))
+    next_shot_number = str(shot_subdirs_sorted[0][1] + 1).zfill(shot_digits)
+    next_shot = pattern + next_shot_number
+    next_shot_folder = os.path.join(folder, next_shot)
+    next_shot_file = os.path.join(next_shot_folder, next_shot + ".blend")
 
-    return [next_shot_folder, next_shot]
+    return [next_shot_folder, next_shot_file, next_shot_number]
 
 # create directory if doesn't exist
 def createDirectory(dir_path):
     if os.path.isdir(dir_path) == False :
         os.makedirs(dir_path)
+
+# replace content in py scripts with a list ([to_replace, replacement])
+def replaceContentInPythonScript(python_script_in, python_script_out, replacement_list):
+    python_code= open(python_script_in, 'r').read()
+
+    for r in replacement_list:
+        python_code = python_code.replace(r[0], r[1])
+
+    with open(python_script_out, 'w') as file:
+        file.write(python_code)

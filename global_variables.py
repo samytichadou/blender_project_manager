@@ -24,3 +24,4 @@ setting_prop_error_statement = bpm_statement + "Unable to set property : "
 
 file_project = "project_data.json"
 custom_folders_file = "project_custom_folders.json"
+python_temp = "python_temp.py"
