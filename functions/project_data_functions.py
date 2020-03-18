@@ -32,6 +32,8 @@ def createProjectDatas(winman, project_data_file):
     # set datas
     datas.name = dataset["name"]
     datas.framerate = dataset["framerate"]
+    datas.resolution_x = dataset["resolution_x"]
+    datas.resolution_y = dataset["resolution_y"]
     datas.project_folder = dataset["project_folder"]
     datas.edit_file = dataset["edit_file"]
 

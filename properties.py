@@ -6,6 +6,8 @@ class ProjectSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     #name : bpy.props.StringProperty(name = "Project Name")
     framerate : bpy.props.IntProperty(name = "Project Framerate")
+    resolution_x : bpy.props.IntProperty(name = "Resolution X")
+    resolution_y : bpy.props.IntProperty(name = "Resolution Y")
     project_folder : bpy.props.StringProperty(name = "Project Folder", subtype = 'DIR_PATH')
     edit_file : bpy.props.StringProperty(name = "Edit File")
 
