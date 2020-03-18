@@ -47,5 +47,10 @@ def getNextShot(folder, pattern, shot_digits):
     shot_subdirs_sorted = sorted(shot_subdirs, key=lambda item: item[1], reverse=True)
     next_shot = shot_subdirs_sorted[0][1] + 1
     next_shot_folder = os.path.join(folder, pattern + str(next_shot).zfill(shot_digits))
-    
+
     return [next_shot_folder, next_shot]
+
+# create directory if doesn't exist
+def createDirectory(dir_path) :
+    if os.path.isdir(dir_path) == False :
+        os.makedirs(dir_path)
