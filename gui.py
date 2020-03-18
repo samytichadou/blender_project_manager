@@ -48,6 +48,7 @@ class BpmTopbarMenu(bpy.types.Menu):
 
         layout = self.layout
         layout.label(text = project_data.name)
+        layout.operator('bpm.display_project_settings')
 
         #debug
         layout.separator()
