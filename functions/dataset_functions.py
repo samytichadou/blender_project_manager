@@ -4,7 +4,7 @@ import bpy
 from ..global_variables import setting_prop_statement, setting_prop_error_statement
 
 
-# return props of a dataset
+# return props of a dataset as a list [prop, value]
 def returnDatasetProperties(dataset):
     properties_list = []
 
