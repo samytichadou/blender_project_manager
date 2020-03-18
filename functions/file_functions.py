@@ -51,6 +51,6 @@ def getNextShot(folder, pattern, shot_digits):
     return [next_shot_folder, next_shot]
 
 # create directory if doesn't exist
-def createDirectory(dir_path) :
+def createDirectory(dir_path):
     if os.path.isdir(dir_path) == False :
         os.makedirs(dir_path)
