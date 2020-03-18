@@ -39,7 +39,7 @@ def bpmTopbarFunction(self, context):
             self.layout.menu('BPM_MT_topbar_menu')
 
 # topbar menu
-class BpmTopbarMenu(bpy.types.Menu):
+class BPMTopbarMenu(bpy.types.Menu):
     bl_label = "BPM"
     bl_idname = "BPM_MT_topbar_menu"
 

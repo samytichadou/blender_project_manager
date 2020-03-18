@@ -4,7 +4,7 @@ import bpy
 from ..functions.file_functions import absolutePath, getLastVersion
 from ..global_variables import back_to_edit_statement
 
-class BackToEdit(bpy.types.Operator):
+class BPMBackToEdit(bpy.types.Operator):
     """Go Back to Edit Project"""
     bl_idname = "bpm.back_to_edit"
     bl_label = "Back to Edit"

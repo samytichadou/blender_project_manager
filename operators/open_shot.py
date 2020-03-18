@@ -4,7 +4,7 @@ import bpy
 from ..functions.file_functions import absolutePath
 from ..global_variables import opening_statement
 
-class OpenShot(bpy.types.Operator):
+class BPMOpenShot(bpy.types.Operator):
     """Open Shot from Timeline"""
     bl_idname = "bpm.open_shot"
     bl_label = "Open Shot"

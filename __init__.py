@@ -41,6 +41,8 @@ from .functions.filebrowser_update_function import updateFilebrowserPath
 
 from .operators.open_shot import *
 from .operators.back_to_edit import *
+from .operators.create_shot import *
+
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
 
@@ -51,8 +53,9 @@ from .gui import *
 # register
 ##################################
 
-classes = (OpenShot,
-            BackToEdit,
+classes = (BPMOpenShot,
+            BPMBackToEdit,
+            BPMCreateShot,
             BpmDisplayModifyProjectSettings,
             BpmSaveProjectSettingsToJson,
 
@@ -60,7 +63,7 @@ classes = (OpenShot,
             CustomFolders,
 
             BPM_PT_sequencer,
-            BpmTopbarMenu,
+            BPMTopbarMenu,
             BPM_UL_Folders_Uilist,
             BPM_PT_FileBrowser_Panel,
             )
