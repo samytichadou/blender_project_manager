@@ -37,6 +37,7 @@ import bpy
 ##################################
 
 from .startup_handler import bpmStartupHandler
+from .functions.filebrowser_update_function import updateFilebrowserPath
 from .operators.open_shot import *
 from .operators.back_to_edit import *
 from .properties import *
@@ -49,8 +50,11 @@ from .gui import *
 classes = (OpenShot,
             BackToEdit,
             ProjectSettings,
-            BpmSequencerPanel,
+            CustomFolders,
+            BPM_PT_sequencer,
             BpmTopbarMenu,
+            BPM_UL_Folders_Uilist,
+            BPM_PT_FileBrowser_Panel,
             )
 
 def register():
@@ -67,13 +71,17 @@ def register():
         bpy.props.BoolProperty(default=False)
     bpy.types.WindowManager.bpm_debug = \
         bpy.props.BoolProperty(default=True)
+    bpy.types.WindowManager.bpm_foldersindex = \
+        bpy.props.IntProperty(update = updateFilebrowserPath)
     bpy.types.WindowManager.bpm_datas = \
         bpy.props.CollectionProperty(type = ProjectSettings)
+    bpy.types.WindowManager.bpm_folders = \
+        bpy.props.CollectionProperty(type = CustomFolders)
 
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
 
-    ### TOPBAR ###
+    ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.prepend(bpmTopbarFunction)
 
 def unregister():
@@ -87,10 +95,12 @@ def unregister():
     del bpy.types.WindowManager.bpm_isproject
     del bpy.types.WindowManager.bpm_isedit
     del bpy.types.WindowManager.bpm_debug
+    del bpy.types.WindowManager.bpm_foldersindex
     del bpy.types.WindowManager.bpm_datas
+    del bpy.types.WindowManager.bpm_folders
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
 
-    ### TOPBAR ###
+    ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.remove(bpmTopbarFunction)

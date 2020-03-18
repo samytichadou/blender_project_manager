@@ -2,7 +2,7 @@ import bpy
 
 
 # sequencer panel
-class BpmSequencerPanel(bpy.types.Panel):
+class BPM_PT_sequencer(bpy.types.Panel):
     bl_label = "Project Manager"
     bl_idname = "BPM_PT_sequencer"
     bl_space_type = 'SEQUENCE_EDITOR'
@@ -51,3 +51,27 @@ class BpmTopbarMenu(bpy.types.Menu):
         layout.prop(winman, 'bpm_debug')
         layout.prop(winman, 'bpm_isproject')
         layout.prop(winman, 'bpm_isedit')
+
+# project folder ui list
+class BPM_UL_Folders_Uilist(bpy.types.UIList):
+
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag):
+        layout.label(text = item.name)
+
+# filebrowser gui
+class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
+    bl_space_type = 'FILE_BROWSER'
+    bl_region_type = 'TOOLS'
+    bl_category = "BPM"
+    bl_label = "BPM Project Folders"
+    bl_idname = "BPM_PT_FileBrowser_Panel"
+    
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_folders
+    
+    def draw(self, context):
+        winman = context.window_manager
+
+        layout = self.layout
+        layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_folders", winman, "bpm_foldersindex", rows=4)
