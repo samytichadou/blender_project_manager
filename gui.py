@@ -44,10 +44,14 @@ class BpmTopbarMenu(bpy.types.Menu):
 
     def draw(self, context):
         winman = context.window_manager
+        project_data = winman.bpm_datas[0]
 
         layout = self.layout
+        layout.label(text = project_data.name)
 
         #debug
+        layout.separator()
+        layout.label(text='Debug')
         layout.prop(winman, 'bpm_debug')
         layout.prop(winman, 'bpm_isproject')
         layout.prop(winman, 'bpm_isedit')
