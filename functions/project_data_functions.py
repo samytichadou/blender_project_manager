@@ -32,12 +32,6 @@ def createProjectDatas(winman, project_data_file):
 
     # set datas
     setPropertiesFromJsonDataset(dataset, datas, winman)
-    # datas.name = dataset["name"]
-    # datas.framerate = dataset["framerate"]
-    # datas.resolution_x = dataset["resolution_x"]
-    # datas.resolution_y = dataset["resolution_y"]
-    # datas.project_folder = dataset["project_folder"]
-    # datas.edit_file = dataset["edit_file"]
 
 # get custom folders file
 def getCustomFoldersFile(winman):
@@ -57,5 +51,4 @@ def loadCustomFolders(winman, folders_file):
     dataset = read_json(folders_file)
     for f in dataset["folders"]:
         folder = folders_coll.add()
-        folder.name = f['name']
-        folder.filepath = f['filepath']
+        setPropertiesFromJsonDataset(f, folder, winman)
