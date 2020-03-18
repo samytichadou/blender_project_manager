@@ -27,3 +27,8 @@ def getLastVersion(folder, pattern, extension):
     filepath = os.path.join(folder, corresponding_files_sorted[0][0])
 
     return filepath
+
+# suppress existing file
+def suppressExistingFile(filepath) :
+    if os.path.isfile(filepath) :
+        os.remove(filepath)

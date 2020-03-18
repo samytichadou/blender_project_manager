@@ -3,7 +3,7 @@ import json
 # create json file
 def create_json_file(datas, path) :
     with open(path, "w") as write_file :
-        json.dump(datas, write_file, indent=4, sort_keys=True)
+        json.dump(datas, write_file, indent=4, sort_keys=False)
 
 # read json
 def read_json(filepath):
@@ -11,6 +11,13 @@ def read_json(filepath):
         dataset = json.load(read_file)
     return dataset
 
+# create json dataset
+def createJsonDatasetFromProperties(datasetin):
+    json_dataset = {}
+    for p in datasetin.bl_rna.properties:
+        if not p.is_readonly:
+            json_dataset[p.identifier] = getattr(datasetin, p.identifier)
+    return json_dataset
 
 ### MAIN LIST FILE ####
 

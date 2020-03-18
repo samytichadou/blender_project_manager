@@ -9,6 +9,11 @@ loading_statement = bpm_statement + "Project Datas found, loading from "
 folders_loading_statement = bpm_statement + "Project Folders found, loading from "
 currently_loading_statement = bpm_statement + "Currently loading "
 
+reading_json_statement = bpm_statement + "Reading Project Datas from json file"
+
+saving_to_json_statement = bpm_statement + "Saving to json"
+saved_to_json_statement = bpm_statement + "Successfully saved to json"
+
 setting_prop_statement = bpm_statement + "Setting property : "
 setting_prop_error_statement = bpm_statement + "Unable to set property : "
 
