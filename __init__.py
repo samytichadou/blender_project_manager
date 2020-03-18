@@ -43,6 +43,7 @@ from .operators.open_shot import *
 from .operators.back_to_edit import *
 from .operators.display_project_settings import *
 from .operators.modify_project_settings import *
+from .operators.save_project_settings_to_json import *
 
 from .properties import *
 from .gui import *
@@ -55,6 +56,7 @@ classes = (OpenShot,
             BackToEdit,
             BpmDisplayProjectSettings,
             BpmModifyProjectSettings,
+            BpmSaveProjectSettingsToJson,
 
             ProjectSettings,
             CustomFolders,

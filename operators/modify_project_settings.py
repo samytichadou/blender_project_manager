@@ -30,7 +30,9 @@ class BpmModifyProjectSettings(bpy.types.Operator):
             box.label(text=p[0].name)
             box = col2.box()
             box.prop(datas, '%s' % p[0].identifier, text='')
+
+        layout.operator('bpm.save_project_settings_json')
         
     def execute(self, context):
-        # save to json
+        # reload from json
         return {'FINISHED'}
