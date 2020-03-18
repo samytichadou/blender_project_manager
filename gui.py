@@ -29,13 +29,14 @@ class BPM_PT_sequencer(bpy.types.Panel):
 
 # topbar function
 def bpmTopbarFunction(self, context):
-    winman = context.window_manager
-    if winman.bpm_isproject:
-        if not winman.bpm_isedit:
-            self.layout.operator('bpm.back_to_edit')
-        # else:
-        #     self.layout.operator('bpm.open_shot')
-        self.layout.menu('BPM_MT_topbar_menu')
+    if context.region.alignment == 'RIGHT':
+        winman = context.window_manager
+        if winman.bpm_isproject:
+            if not winman.bpm_isedit:
+                self.layout.operator('bpm.back_to_edit')
+            # else:
+            #     self.layout.operator('bpm.open_shot')
+            self.layout.menu('BPM_MT_topbar_menu')
 
 # topbar menu
 class BpmTopbarMenu(bpy.types.Menu):
