@@ -21,11 +21,20 @@ class BpmCreateProject(bpy.types.Operator):
         winman = context.window_manager
         if not winman.bpm_datas:
             winman.bpm_datas.add()
+        datas = winman.bpm_datas[0]
+
+        # find project dir and project file
+        project_dir = os.path.dirname(absolutePath(bpy.data.filepath))
+        edit_file_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
+
+        # set specific project properties
+        datas.project_folder = project_dir
+        datas.edit_file_pattern = edit_file_name
+
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
         datas = context.window_manager.bpm_datas[0]
-        properties_excluded = ["project_folder", "edit_file_pattern"]
 
         layout = self.layout
         split = layout.split(align=True)
@@ -33,11 +42,10 @@ class BpmCreateProject(bpy.types.Operator):
         col2 = split.column(align=True)
 
         for p in returnDatasetProperties(datas):
-            if p[0].identifier not in properties_excluded:
-                box = col1.box()
-                box.label(text=p[0].name)
-                box = col2.box()
-                box.prop(datas, '%s' % p[0].identifier, text='')
+            box = col1.box()
+            box.label(text=p[0].name)
+            box = col2.box()
+            box.prop(datas, '%s' % p[0].identifier, text='')
         
     def execute(self, context):
         winman = context.window_manager
@@ -45,14 +53,7 @@ class BpmCreateProject(bpy.types.Operator):
 
         if winman.bpm_debug: print(saving_to_json_statement)
 
-        # find project dir and project file
-        project_dir = os.path.dirname(absolutePath(bpy.data.filepath))
-        project_file = os.path.join(project_dir, file_project)
-        edit_file_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
-
-        # set excluded project properties
-        datas.project_folder = project_dir
-        datas.edit_file_pattern = edit_file_name
+        project_file = os.path.join(datas.project_folder, file_project)
 
         # format the json dataset
         json_dataset = createJsonDatasetFromProperties(datas)
@@ -62,5 +63,9 @@ class BpmCreateProject(bpy.types.Operator):
         create_json_file(json_dataset, project_file)
 
         if winman.bpm_debug: print(saved_to_json_statement)
+
+        # set project as bpm edit project
+        winman.bpm_isproject = True
+        winman.bpm_isedit = True
 
         return {'FINISHED'}
