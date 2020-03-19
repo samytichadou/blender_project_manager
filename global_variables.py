@@ -5,7 +5,7 @@ bpm_statement = "Blender Project Manager --- "
 opening_statement = bpm_statement + "Opening "
 back_to_edit_statement = bpm_statement + "Opening Editing Project "
 
-creating_shot_statement = bpm_statement + "Creating New Shot"
+creating_shot_statement = bpm_statement + "Starting new shot creation"
 creating_shot_folder_statement = bpm_statement + "Creating New Shot Folder : "
 
 startup_statement = bpm_statement + "Looking for Project Datas"
@@ -29,6 +29,9 @@ python_script_created_statement = bpm_statement + "Python script successfully cr
 launching_command_statement = bpm_statement + "Launching Command : "
 deleted_file_statement = bpm_statement + "File successfully deleted : "
 scenes_linked_statement = bpm_statement + "Scenes linked from : "
+no_available_timeline_space_message = "No available space on timeline"
+no_available_timeline_space_statement = bpm_statement + no_available_timeline_space_message
+checking_available_timeline_space_statement = bpm_statement + "Checking on timeline for available space"
 
 file_project = "project_data.json"
 custom_folders_file = "project_custom_folders.json"

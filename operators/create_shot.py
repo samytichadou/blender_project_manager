@@ -10,6 +10,9 @@ from ..global_variables import (creating_shot_statement,
                                 python_script_created_statement,
                                 deleted_file_statement,
                                 scenes_linked_statement,
+                                no_available_timeline_space_message,
+                                no_available_timeline_space_statement,
+                                checking_available_timeline_space_statement,
                             )
 from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile, linkExternalScenes
 from ..functions.project_data_functions import getShotPattern, getShotReplacementList
@@ -37,6 +40,22 @@ class BPMCreateShot(bpy.types.Operator):
         project_datas = winman.bpm_datas[0]
         next_shot_folder, next_shot_file, next_shot_number = getNextShot(project_datas, getShotPattern(project_datas), 1)
 
+        # check timeline available space
+        if winman.bpm_debug: print(checking_available_timeline_space_statement) #debug
+        name = project_datas.shot_prefix + next_shot_number
+        start = scn.frame_current
+        duration = project_datas.default_shot_length
+        sequencer = scn.sequence_editor
+        channel = returnAvailablePositionStripChannel(start, duration, sequencer)
+
+        # if no place to put the clip
+        if channel == 0:
+            # return no place to put the strip
+            self.report({'WARNING'}, no_available_timeline_space_message)
+            print(no_available_timeline_space_statement)
+            return {'FINISHED'}
+
+        # create shot dir
         createDirectory(next_shot_folder)
         if winman.bpm_debug: print(creating_shot_folder_statement + next_shot_folder) #debug
 
@@ -64,12 +83,6 @@ class BPMCreateShot(bpy.types.Operator):
         if winman.bpm_debug: print(scenes_linked_statement + next_shot_file) #debug
 
         # add it to timeline
-        name = project_datas.shot_prefix + next_shot_number
-        start = scn.frame_current
-        duration = project_datas.default_shot_length
-        sequencer = scn.sequence_editor
-        channel = returnAvailablePositionStripChannel(start, duration, sequencer)
-
         linked_strip = sequencer.sequences.new_scene(name=name, scene=bpy.data.scenes[name], channel=channel, frame_start=start)
         sequencer.active_strip = linked_strip
 

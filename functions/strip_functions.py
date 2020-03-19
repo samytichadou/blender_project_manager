@@ -35,4 +35,4 @@ def returnAvailablePositionStripChannel(start, duration, sequencer):
     for i in range (1,32):
         if i not in unavailable_channels:
             return i
-    return 1
+    return 0
