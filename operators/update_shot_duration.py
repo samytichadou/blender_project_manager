@@ -1,7 +1,7 @@
 import bpy
 
 
-from ..functions.strip_functions import returnSelectedStrips
+from ..functions.strip_functions import returnSelectedStrips, getStripOffsets
 
 class BPMCreateShot(bpy.types.Operator):
     """Create Shot from Timeline"""
@@ -26,8 +26,9 @@ class BPMCreateShot(bpy.types.Operator):
 
         selected_strips = returnSelectedStrips(context.scene.sequence_editor):
         for strip in selected:
-            # get duration
-            duration = strip.frame_final_duration
+            # get offsets
+            start_offset, end_offset = getStripOffsets(strip)
+
             # get argument
 
             # build command
