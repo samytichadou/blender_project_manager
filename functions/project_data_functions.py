@@ -59,8 +59,8 @@ def getShotPattern(project_datas):
     prefix += project_datas.shot_prefix
     return prefix
 
-# get shot replacement list for python script
-def getShotReplacementList(project_datas, next_shot_folder, next_shot_file, next_shot_number):
+# get shot replacement list for python script for shot creation
+def getScriptReplacementListShotCreation(project_datas, next_shot_folder, next_shot_file, next_shot_number):
     replacement_list = []
     replacement_list.append(['|bpm_statement', bpm_statement])
     replacement_list.append(['|filepath', next_shot_file])
@@ -72,3 +72,10 @@ def getShotReplacementList(project_datas, next_shot_folder, next_shot_file, next
     replacement_list.append(['|resolution_y', project_datas.resolution_y])
 
     return replacement_list
+
+# get shot arguments list for python script for shot creation
+def getArgumentForShotCreationScript(argument_list):
+    arguments = ""
+    for a in argument_list:
+        arguments += str(a)
+    return arguments

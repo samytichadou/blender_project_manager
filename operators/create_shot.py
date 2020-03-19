@@ -15,7 +15,7 @@ from ..global_variables import (creating_shot_statement,
                                 checking_available_timeline_space_statement,
                             )
 from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile, linkExternalScenes
-from ..functions.project_data_functions import getShotPattern, getShotReplacementList
+from ..functions.project_data_functions import getShotPattern, getScriptReplacementListShotCreation
 from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
 from ..functions.strip_functions import returnAvailablePositionStripChannel
 
@@ -60,7 +60,7 @@ class BPMCreateShot(bpy.types.Operator):
         if winman.bpm_debug: print(creating_shot_folder_statement + next_shot_folder) #debug
 
         # modify and copy python script
-        replacement_list = getShotReplacementList(project_datas, next_shot_folder, next_shot_file, next_shot_number)
+        replacement_list = getScriptReplacementListShotCreation(project_datas, next_shot_folder, next_shot_file, next_shot_number)
         
         temp_python_script = os.path.join(next_shot_folder, python_temp)
         if winman.bpm_debug: print(launching_command_statement + temp_python_script) #debug
@@ -69,7 +69,7 @@ class BPMCreateShot(bpy.types.Operator):
         if winman.bpm_debug: print(python_script_created_statement) #debug
 
         # launch the blend command
-        command = buildBlenderCommandBackgroundPython(temp_python_script)
+        command = buildBlenderCommandBackgroundPython(temp_python_script, "")
         if winman.bpm_debug: print(launching_command_statement + command) #debug
 
         launchCommand(command)

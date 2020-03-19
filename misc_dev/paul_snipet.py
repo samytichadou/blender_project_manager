@@ -12,7 +12,7 @@ def get_args() :
 	for a in sys.argv :
 		if add : ag.append(a)
 		if a == '--' : add = True
-	return(ag)
+	return(ag) 
 
 print(get_args())
 
