@@ -11,6 +11,7 @@ class ProjectSettings(bpy.types.PropertyGroup) :
     resolution_y : bpy.props.IntProperty(name = "Resolution Y")
     project_folder : bpy.props.StringProperty(name = "Project Folder")
     edit_file_pattern : bpy.props.StringProperty(name = "Edit File Pattern")
+    edit_scene_keyword : bpy.props.StringProperty(name = "Edit Scene Keyword")
     shot_prefix : bpy.props.StringProperty(name = "Shot Prefix")
     shot_digits : bpy.props.IntProperty(name = "Shot Digits")
     shot_version_suffix : bpy.props.StringProperty(name = "Shot Version Suffix")

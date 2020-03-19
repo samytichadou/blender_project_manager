@@ -14,6 +14,7 @@ from ..global_variables import (creating_shot_statement,
 from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile, linkExternalScenes
 from ..functions.project_data_functions import getShotPattern, getShotReplacementList
 from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
+from ..functions.strip_functions import returnAvailablePositionStripChannel
 
 
 class BPMCreateShot(bpy.types.Operator):
@@ -24,10 +25,12 @@ class BPMCreateShot(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_isproject and context.window_manager.bpm_isedit
+        keyword = context.window_manager.bpm_datas[0].edit_scene_keyword
+        return context.window_manager.bpm_isproject and context.window_manager.bpm_isedit and keyword in context.scene.name
 
     def execute(self, context):
         winman = context.window_manager
+        scn = context.scene
         
         if winman.bpm_debug: print(creating_shot_statement) #debug
         
@@ -56,8 +59,16 @@ class BPMCreateShot(bpy.types.Operator):
         suppressExistingFile(temp_python_script)
         if winman.bpm_debug: print(deleted_file_statement + temp_python_script) #debug
 
-        # link shot and add it in timeline
+        # link shot
         linkExternalScenes(next_shot_file)
         if winman.bpm_debug: print(scenes_linked_statement + next_shot_file) #debug
+
+        # add it to timeline
+        name = project_datas.shot_prefix + next_shot_number
+        start = scn.frame_current
+        duration = start + project_datas.default_shot_length
+        sequencer = scn.sequence_editor
+        channel = returnAvailablePositionStripChannel(start, duration, sequencer)
+        sequencer.sequences.new_scene(name=name, scene=bpy.data.scenes[name], channel=channel, frame_start=start)
 
         return {'FINISHED'}
