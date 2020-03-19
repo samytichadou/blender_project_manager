@@ -43,6 +43,7 @@ from .operators.open_shot import *
 from .operators.back_to_edit import *
 from .operators.create_shot import *
 from .operators.create_project import *
+from .operators.update_shot_duration import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -58,6 +59,7 @@ classes = (BPMOpenShot,
             BPMBackToEdit,
             BPMCreateShot,
             BpmCreateProject,
+            BPMUpdateShotDuration,
             BpmDisplayModifyProjectSettings,
             BpmSaveProjectSettingsToJson,
 

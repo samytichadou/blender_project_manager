@@ -73,9 +73,11 @@ def getScriptReplacementListShotCreation(project_datas, next_shot_folder, next_s
 
     return replacement_list
 
-# get shot arguments list for python script for shot creation
-def getArgumentForShotCreationScript(argument_list):
+# get shot arguments list for python script
+def getArgumentForPythonScript(argument_list):
     arguments = ""
     for a in argument_list:
         arguments += str(a)
+        if not arguments.endswith(" "):
+            arguments += " "
     return arguments

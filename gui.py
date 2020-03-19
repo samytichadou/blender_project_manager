@@ -20,8 +20,9 @@ class BPM_MT_sequencer_menu(bpy.types.Menu):
 
         #common
         layout.label(text = project_data.name)
-        layout.operator('bpm.open_shot')
         layout.operator('bpm.create_shot')
+        layout.operator('bpm.open_shot')
+        layout.operator('bpm.update_shot_duration')
 
 # topbar function
 def bpmTopbarFunction(self, context):

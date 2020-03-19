@@ -4,7 +4,7 @@ import bpy
 # get strip offsets
 def getStripOffsets(strip):
     start_offset = strip.frame_final_start - strip.frame_start
-    end_offset = strip.frame_final_end - strip.frame_end
+    end_offset = strip.frame_final_end - (strip.frame_start + strip.frame_duration)
     return start_offset, end_offset
 
 # check if strip is in target timing on the timeline

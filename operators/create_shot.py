@@ -69,7 +69,7 @@ class BPMCreateShot(bpy.types.Operator):
         if winman.bpm_debug: print(python_script_created_statement) #debug
 
         # launch the blend command
-        command = buildBlenderCommandBackgroundPython(temp_python_script, "")
+        command = buildBlenderCommandBackgroundPython(temp_python_script, "", "")
         if winman.bpm_debug: print(launching_command_statement + command) #debug
 
         launchCommand(command)
