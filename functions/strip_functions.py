@@ -1,6 +1,12 @@
 import bpy
 
 
+# get strip offsets
+def getStripOffsets(strip):
+    start_offset = strip.frame_final_start - strip.frame_start
+    end_offset = strip.frame_final_end - strip.frame_end
+    return start_offset, end_offset
+
 # check if strip is in target timing on the timeline
 def checkStripInTargetSpaceOnSequencer(start, end, target_start, target_end):
     if target_start >= start and target_start <= end:
