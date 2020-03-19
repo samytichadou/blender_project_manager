@@ -34,7 +34,17 @@ def suppressExistingFile(filepath) :
         os.remove(filepath)
 
 # get next shot
-def getNextShot(folder, pattern, shot_digits):
+def getNextShot(project_datas, pattern, shot_version):
+    folder = project_datas.project_folder
+    shot_digits = project_datas.shot_digits
+    version_suffix = project_datas.shot_version_suffix
+    version_digits = project_datas.shot_version_digits
+
+    version = ""
+    if not pattern.endswith("_"):
+        version += "_"
+    version += version_suffix + str(shot_version).zfill(version_digits)
+
     shot_subdirs = []
     subdir = [f.path for f in os.scandir(folder) if f.is_dir()]
     path_pattern = os.path.join(folder, pattern)
@@ -48,7 +58,7 @@ def getNextShot(folder, pattern, shot_digits):
     next_shot_number = str(shot_subdirs_sorted[0][1] + 1).zfill(shot_digits)
     next_shot = pattern + next_shot_number
     next_shot_folder = os.path.join(folder, next_shot)
-    next_shot_file = os.path.join(next_shot_folder, next_shot + ".blend")
+    next_shot_file = os.path.join(next_shot_folder, next_shot + version + ".blend")
 
     return [next_shot_folder, next_shot_file, next_shot_number]
 
@@ -69,3 +79,8 @@ def replaceContentInPythonScript(python_script_in, python_script_out, replacemen
 
     with open(python_script_out, 'w') as file:
         file.write(python_code)
+
+# link all scenes as libraries
+def linkExternalScenes(filepath):
+    with bpy.data.libraries.load(filepath, link=True) as (data_from, data_to):
+        data_to.scenes = data_from.scenes

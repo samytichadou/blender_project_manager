@@ -9,8 +9,9 @@ from ..global_variables import (creating_shot_statement,
                                 creating_python_script_statement,
                                 python_script_created_statement,
                                 deleted_file_statement,
+                                scenes_linked_statement,
                             )
-from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile
+from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile, linkExternalScenes
 from ..functions.project_data_functions import getShotPattern, getShotReplacementList
 from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
 
@@ -31,7 +32,7 @@ class BPMCreateShot(bpy.types.Operator):
         if winman.bpm_debug: print(creating_shot_statement) #debug
         
         project_datas = winman.bpm_datas[0]
-        next_shot_folder, next_shot_file, next_shot_number = getNextShot(project_datas.project_folder, getShotPattern(project_datas), project_datas.shot_digits)
+        next_shot_folder, next_shot_file, next_shot_number = getNextShot(project_datas, getShotPattern(project_datas), 1)
 
         createDirectory(next_shot_folder)
         if winman.bpm_debug: print(creating_shot_folder_statement + next_shot_folder) #debug
@@ -56,5 +57,7 @@ class BPMCreateShot(bpy.types.Operator):
         if winman.bpm_debug: print(deleted_file_statement + temp_python_script) #debug
 
         # link shot and add it in timeline
-        
+        linkExternalScenes(next_shot_file)
+        if winman.bpm_debug: print(scenes_linked_statement + next_shot_file) #debug
+
         return {'FINISHED'}

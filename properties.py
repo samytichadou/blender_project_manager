@@ -10,9 +10,11 @@ class ProjectSettings(bpy.types.PropertyGroup) :
     resolution_x : bpy.props.IntProperty(name = "Resolution X")
     resolution_y : bpy.props.IntProperty(name = "Resolution Y")
     project_folder : bpy.props.StringProperty(name = "Project Folder")
-    edit_file : bpy.props.StringProperty(name = "Edit File")
+    edit_file_pattern : bpy.props.StringProperty(name = "Edit File Pattern")
     shot_prefix : bpy.props.StringProperty(name = "Shot Prefix")
     shot_digits : bpy.props.IntProperty(name = "Shot Digits")
+    shot_version_suffix : bpy.props.StringProperty(name = "Shot Version Suffix")
+    shot_version_digits : bpy.props.IntProperty(name = "Shot Version Digits")
     shot_start_frame : bpy.props.IntProperty(name = "Shot Start Frame")
     default_shot_length : bpy.props.IntProperty(name = "Default Shot Length")
 
