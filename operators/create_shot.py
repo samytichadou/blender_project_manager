@@ -66,7 +66,7 @@ class BPMCreateShot(bpy.types.Operator):
         # add it to timeline
         name = project_datas.shot_prefix + next_shot_number
         start = scn.frame_current
-        duration = start + project_datas.default_shot_length
+        duration = project_datas.default_shot_length
         sequencer = scn.sequence_editor
         channel = returnAvailablePositionStripChannel(start, duration, sequencer)
         sequencer.sequences.new_scene(name=name, scene=bpy.data.scenes[name], channel=channel, frame_start=start)

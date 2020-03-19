@@ -54,8 +54,11 @@ def getNextShot(project_datas, pattern, shot_version):
             shot_number = int(s.split(path_pattern)[1])
             shot_subdirs.append([s, shot_number])
 
-    shot_subdirs_sorted = sorted(shot_subdirs, key=lambda item: item[1], reverse=True)
-    next_shot_number = str(shot_subdirs_sorted[0][1] + 1).zfill(shot_digits)
+    if len(shot_subdirs) != 0:
+        shot_subdirs_sorted = sorted(shot_subdirs, key=lambda item: item[1], reverse=True)
+        next_shot_number = str(shot_subdirs_sorted[0][1] + 1).zfill(shot_digits)
+    else:
+        next_shot_number = str(1).zfill(shot_digits)
     next_shot = pattern + next_shot_number
     next_shot_folder = os.path.join(folder, next_shot)
     next_shot_file = os.path.join(next_shot_folder, next_shot + version + ".blend")
