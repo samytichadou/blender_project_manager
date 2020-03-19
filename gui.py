@@ -1,21 +1,16 @@
 import bpy
 
 
-# sequencer panel
-class BPM_PT_sequencer(bpy.types.Panel):
-    bl_label = "Project Manager"
-    bl_idname = "BPM_PT_sequencer"
-    bl_space_type = 'SEQUENCE_EDITOR'
-    bl_region_type = 'UI'
-    bl_category = "BPM"
+# sequencer function
+def bpmSequencerMenuFunction(self, context):
+    if context.space_data.view_type in {'SEQUENCER', 'SEQUENCER_PREVIEW'}:
+        if context.window_manager.bpm_isproject and context.window_manager.bpm_isedit:
+            self.layout.menu('BPM_MT_sequencer_menu')
 
-    @staticmethod
-    def has_sequencer(context):
-        return (context.space_data.view_type in {'SEQUENCER', 'SEQUENCER_PREVIEW'})
-
-    @classmethod
-    def poll(cls, context):
-        return cls.has_sequencer(context) and context.window_manager.bpm_isproject and context.window_manager.bpm_isedit
+# sequencer menu
+class BPM_MT_sequencer_menu(bpy.types.Menu):
+    bl_label = "BPM"
+    bl_idname = "BPM_MT_sequencer_menu"
 
     def draw(self, context):
         winman = context.window_manager
@@ -40,7 +35,7 @@ def bpmTopbarFunction(self, context):
             self.layout.menu('BPM_MT_topbar_menu')
 
 # topbar menu
-class BPMTopbarMenu(bpy.types.Menu):
+class BPM_MT_topbar_menu(bpy.types.Menu):
     bl_label = "BPM"
     bl_idname = "BPM_MT_topbar_menu"
 

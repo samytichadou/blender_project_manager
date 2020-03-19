@@ -62,8 +62,8 @@ classes = (BPMOpenShot,
             ProjectSettings,
             CustomFolders,
 
-            BPM_PT_sequencer,
-            BPMTopbarMenu,
+            BPM_MT_sequencer_menu,
+            BPM_MT_topbar_menu,
             BPM_UL_Folders_Uilist,
             BPM_PT_FileBrowser_Panel,
             )
@@ -94,6 +94,7 @@ def register():
 
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.prepend(bpmTopbarFunction)
+    bpy.types.SEQUENCER_MT_editor_menus.append(bpmSequencerMenuFunction)
 
 def unregister():
     
@@ -114,4 +115,4 @@ def unregister():
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
 
     ### SPECIAL GUI ###
-    bpy.types.TOPBAR_HT_upper_bar.remove(bpmTopbarFunction)
+    bpy.types.SEQUENCER_MT_editor_menus.remove(bpmSequencerMenuFunction)
