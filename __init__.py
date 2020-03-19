@@ -42,6 +42,7 @@ from .functions.filebrowser_update_function import updateFilebrowserPath
 from .operators.open_shot import *
 from .operators.back_to_edit import *
 from .operators.create_shot import *
+from .operators.create_project import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -56,6 +57,7 @@ from .gui import *
 classes = (BPMOpenShot,
             BPMBackToEdit,
             BPMCreateShot,
+            BpmCreateProject,
             BpmDisplayModifyProjectSettings,
             BpmSaveProjectSettingsToJson,
 
@@ -95,6 +97,7 @@ def register():
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.prepend(bpmTopbarFunction)
     bpy.types.SEQUENCER_MT_editor_menus.append(bpmSequencerMenuFunction)
+    bpy.types.TOPBAR_MT_app.append(createProjectAppMenuFunction)
 
 def unregister():
     
@@ -116,3 +119,5 @@ def unregister():
 
     ### SPECIAL GUI ###
     bpy.types.SEQUENCER_MT_editor_menus.remove(bpmSequencerMenuFunction)
+    bpy.types.SEQUENCER_MT_editor_menus.remove(bpmSequencerMenuFunction)
+    bpy.types.TOPBAR_MT_app.remove(createProjectAppMenuFunction)

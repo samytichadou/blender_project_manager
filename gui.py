@@ -77,3 +77,8 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
 
         layout = self.layout
         layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_folders", winman, "bpm_foldersindex", rows=4)
+
+# new bpm function topbar app menu
+def createProjectAppMenuFunction(self, context):
+    self.layout.separator()
+    self.layout.operator('bpm.create_project')    
