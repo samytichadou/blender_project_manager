@@ -61,7 +61,4 @@ class BpmDisplayModifyProjectSettings(bpy.types.Operator):
             row.operator('bpm.save_project_settings_json', icon = 'FILE_TICK')
         
     def execute(self, context):
-        if self.modify:
-            # reload from json
-            pass
         return {'FINISHED'}
