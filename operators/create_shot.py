@@ -69,6 +69,8 @@ class BPMCreateShot(bpy.types.Operator):
         duration = project_datas.default_shot_length
         sequencer = scn.sequence_editor
         channel = returnAvailablePositionStripChannel(start, duration, sequencer)
-        sequencer.sequences.new_scene(name=name, scene=bpy.data.scenes[name], channel=channel, frame_start=start)
+
+        linked_strip = sequencer.sequences.new_scene(name=name, scene=bpy.data.scenes[name], channel=channel, frame_start=start)
+        sequencer.active_strip = linked_strip
 
         return {'FINISHED'}
