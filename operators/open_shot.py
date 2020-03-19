@@ -12,13 +12,15 @@ class BPMOpenShot(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
+        keyword = context.window_manager.bpm_datas[0].edit_scene_keyword
         if context.window_manager.bpm_isproject and context.window_manager.bpm_isedit:
-            if context.scene.sequence_editor.active_strip:
-                active = context.scene.sequence_editor.active_strip
-                if active.type == 'SCENE':
-                    if active.scene:
-                        if active.scene.library:
-                            return True
+            if keyword in context.scene.name:
+                if context.scene.sequence_editor.active_strip:
+                    active = context.scene.sequence_editor.active_strip
+                    if active.type == 'SCENE':
+                        if active.scene:
+                            if active.scene.library:
+                                return True
 
     def execute(self, context):
         winman = context.window_manager
