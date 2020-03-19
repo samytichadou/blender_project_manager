@@ -3,7 +3,6 @@ import bpy
 
 # project settings
 class ProjectSettings(bpy.types.PropertyGroup) :
-    '''name : StringProperty() '''
     name : bpy.props.StringProperty(name = "Project Name", default = "Project Name")
     project_prefix : bpy.props.StringProperty(name = "Project Prefix", default = "Project Prefix")
     framerate : bpy.props.IntProperty(name = "Project Framerate", default = 25)
