@@ -16,8 +16,9 @@ class BPMOpenShot(bpy.types.Operator):
             if context.scene.sequence_editor.active_strip:
                 active = context.scene.sequence_editor.active_strip
                 if active.type == 'SCENE':
-                    if active.scene.library:
-                        return True
+                    if active.scene:
+                        if active.scene.library:
+                            return True
 
     def execute(self, context):
         winman = context.window_manager
