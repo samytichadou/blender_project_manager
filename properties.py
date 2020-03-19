@@ -4,20 +4,20 @@ import bpy
 # project settings
 class ProjectSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
-    #name : bpy.props.StringProperty(name = "Project Name")
-    project_prefix : bpy.props.StringProperty(name = "Project Prefix")
-    framerate : bpy.props.IntProperty(name = "Project Framerate")
-    resolution_x : bpy.props.IntProperty(name = "Resolution X")
-    resolution_y : bpy.props.IntProperty(name = "Resolution Y")
+    name : bpy.props.StringProperty(name = "Project Name", default = "Project Name")
+    project_prefix : bpy.props.StringProperty(name = "Project Prefix", default = "Project Prefix")
+    framerate : bpy.props.IntProperty(name = "Project Framerate", default = 25)
+    resolution_x : bpy.props.IntProperty(name = "Resolution X", default = 1920)
+    resolution_y : bpy.props.IntProperty(name = "Resolution Y", default = 1080)
     project_folder : bpy.props.StringProperty(name = "Project Folder")
     edit_file_pattern : bpy.props.StringProperty(name = "Edit File Pattern")
-    edit_scene_keyword : bpy.props.StringProperty(name = "Edit Scene Keyword")
-    shot_prefix : bpy.props.StringProperty(name = "Shot Prefix")
-    shot_digits : bpy.props.IntProperty(name = "Shot Digits")
-    shot_version_suffix : bpy.props.StringProperty(name = "Shot Version Suffix")
-    shot_version_digits : bpy.props.IntProperty(name = "Shot Version Digits")
-    shot_start_frame : bpy.props.IntProperty(name = "Shot Start Frame")
-    default_shot_length : bpy.props.IntProperty(name = "Default Shot Length")
+    edit_scene_keyword : bpy.props.StringProperty(name = "Edit Scene Keyword", default = "edit")
+    shot_prefix : bpy.props.StringProperty(name = "Shot Prefix", default = "S")
+    shot_digits : bpy.props.IntProperty(name = "Shot Digits", default = 3)
+    shot_version_suffix : bpy.props.StringProperty(name = "Shot Version Suffix", default = "v")
+    shot_version_digits : bpy.props.IntProperty(name = "Shot Version Digits", default = 3)
+    shot_start_frame : bpy.props.IntProperty(name = "Shot Start Frame", default = 100)
+    default_shot_length : bpy.props.IntProperty(name = "Default Shot Length", default = 100)
 
 # custom project folders
 class CustomFolders(bpy.types.PropertyGroup) :
