@@ -83,7 +83,12 @@ class BPMCreateShot(bpy.types.Operator):
         if winman.bpm_debug: print(scenes_linked_statement + next_shot_file) #debug
 
         # add it to timeline
-        linked_strip = sequencer.sequences.new_scene(name=name, scene=bpy.data.scenes[name], channel=channel, frame_start=start)
+        linked_strip = sequencer.sequences.new_scene(
+            name=name, 
+            scene=bpy.data.scenes[name], 
+            channel=channel, 
+            frame_start=start
+            )
         linked_strip.bpm_isshot = True
         sequencer.active_strip = linked_strip
 

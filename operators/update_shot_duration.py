@@ -1,8 +1,17 @@
 import bpy
 
 
-from ..global_variables import update_shot_file
-from ..functions.strip_functions import returnSelectedStrips, getStripOffsets
+from ..global_variables import (
+    update_shot_file,
+    shot_update_impossible_message,
+    shot_update_impossible_statement,
+)
+from ..functions.strip_functions import (
+    returnSelectedStrips, 
+    getStripOffsets, 
+    getStripNewTiming, 
+    updateStripOnTimeline,
+)
 from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
 from ..functions.project_data_functions import getArgumentForPythonScript
 from ..functions.file_functions import absolutePath
@@ -33,26 +42,35 @@ class BPMUpdateShotDuration(bpy.types.Operator):
         for strip in selected_strips:
             try:
                 if strip.bpm_isshot and strip.scene.library:
-                    filepath = absolutePath(strip.scene.library.filepath)
-                    # get offsets
-                    offsets = getStripOffsets(strip)
-                    arguments = getArgumentForPythonScript(offsets)
+                    strip_scene = strip.scene
+                    new_start, new_end = getStripNewTiming(strip)
 
-                    # build command
-                    command = buildBlenderCommandBackgroundPython(update_shot_file, filepath, arguments)
-                    print(command)
-                    # launch command
-                    launchCommand(command)
+                    if new_start != strip_scene.frame_start or new_end != strip_scene.frame_end:
+                        # check if frame become negative and avoid it
+                        if new_start < 0:
+                            self.report({'WARNING'}, shot_update_impossible_message)
+                            print(shot_update_impossible_statement)
+                        else:
+                            filepath = absolutePath(strip.scene.library.filepath)
 
-                    # correct offsets
-                    strip.frame_offset_start = strip.frame_still_start + offsets[0]
-                    strip.frame_offset_end = strip.frame_still_end + offsets[1]
-                    # slide clip content
+                            arguments = getArgumentForPythonScript([new_start, new_end])
+
+                            # build command
+                            command = buildBlenderCommandBackgroundPython(update_shot_file, filepath, arguments)
+                            print(command)
+                            # launch command
+                            launchCommand(command)
+
+                            # update scene fram_start frame_end
+                            strip_scene.frame_start = new_start
+                            strip_scene.frame_end   = new_end
+
+                            # update the strip
+                            updateStripOnTimeline(strip)
+
             except AttributeError:
                 pass
             
         # reload library
-        # redraw sequencer
-        redrawAreas(context, 'SEQUENCE_EDITOR')
 
         return {'FINISHED'}

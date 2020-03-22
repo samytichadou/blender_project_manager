@@ -33,6 +33,9 @@ no_available_timeline_space_message = "No available space on timeline"
 no_available_timeline_space_statement = bpm_statement + no_available_timeline_space_message
 checking_available_timeline_space_statement = bpm_statement + "Checking on timeline for available space"
 
+shot_update_impossible_message = "Impossible to update shot (negative shot start frame)"
+shot_update_impossible_statement = bpm_statement + shot_update_impossible_message
+
 file_project = "project_data.json"
 custom_folders_file = "project_custom_folders.json"
 python_temp = "python_temp.py"
