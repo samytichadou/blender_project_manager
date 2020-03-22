@@ -85,5 +85,8 @@ def replaceContentInPythonScript(python_script_in, python_script_out, replacemen
 
 # link all scenes as libraries
 def linkExternalScenes(filepath):
-    with bpy.data.libraries.load(filepath, link=True) as (data_from, data_to):
-        data_to.scenes = data_from.scenes
+    try:
+        with bpy.data.libraries.load(filepath, link=True) as (data_from, data_to):
+            data_to.scenes = data_from.scenes
+    except OSError as err:
+        print("OS error: {0}".format(err))
