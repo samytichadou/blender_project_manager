@@ -18,37 +18,38 @@ class BPMUpdateShotDuration(bpy.types.Operator):
     def poll(cls, context):
         keyword = context.window_manager.bpm_datas[0].edit_scene_keyword
         if context.window_manager.bpm_isproject and context.window_manager.bpm_isedit and keyword in context.scene.name:
-            selected_strips = returnSelectedStrips(context.scene.sequence_editor)
-            if selected_strips:
-                for strip in selected_strips:
-                    if strip.type == 'SCENE':
-                        if strip.scene:
-                            if strip.scene.library:
-                                return True
+            if context.scene.sequence_editor.active_strip:
+                active = context.scene.sequence_editor.active_strip
+                try:
+                    if active.bpm_isshot and active.scene.library:
+                        return True
+                except AttributeError:
+                    pass
 
     def execute(self, context):
         winman = context.window_manager
 
         selected_strips = returnSelectedStrips(context.scene.sequence_editor)
         for strip in selected_strips:
-            if strip.type == 'SCENE':
-                if strip.scene:
-                    if strip.scene.library:
-                        filepath = absolutePath(strip.scene.library.filepath)
-                        # get offsets
-                        offsets = getStripOffsets(strip)
-                        arguments = getArgumentForPythonScript(offsets)
+            try:
+                if strip.bpm_isshot and strip.scene.library:
+                    filepath = absolutePath(strip.scene.library.filepath)
+                    # get offsets
+                    offsets = getStripOffsets(strip)
+                    arguments = getArgumentForPythonScript(offsets)
 
-                        # build command
-                        command = buildBlenderCommandBackgroundPython(update_shot_file, filepath, arguments)
-                        print(command)
-                        # launch command
-                        launchCommand(command)
+                    # build command
+                    command = buildBlenderCommandBackgroundPython(update_shot_file, filepath, arguments)
+                    print(command)
+                    # launch command
+                    launchCommand(command)
 
-                        # correct offsets
-                        strip.frame_offset_start = strip.frame_still_start + offsets[0]
-                        strip.frame_offset_end = strip.frame_still_end + offsets[1]
-                        # slide clip content
+                    # correct offsets
+                    strip.frame_offset_start = strip.frame_still_start + offsets[0]
+                    strip.frame_offset_end = strip.frame_still_end + offsets[1]
+                    # slide clip content
+            except AttributeError:
+                pass
             
         # reload library
         # redraw sequencer
