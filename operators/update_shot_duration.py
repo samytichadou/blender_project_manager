@@ -47,6 +47,8 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
         if winman.bpm_debug: print(start_update_shot_statement) #debug
 
+        chk_updated = False
+
         selected_strips = returnSelectedStrips(context.scene.sequence_editor)
         for strip in selected_strips:
             try:
@@ -64,6 +66,8 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                             self.report({'WARNING'}, shot_update_impossible_message)
                             print(shot_update_impossible_statement)
                         else:
+                            chk_updated = True
+
                             filepath = absolutePath(strip.scene.library.filepath)
 
                             arguments = getArgumentForPythonScript([new_start, new_end])
@@ -90,6 +94,8 @@ class BPMUpdateShotDuration(bpy.types.Operator):
             except AttributeError:
                 pass
             
-        # reload library
+        # reload sequencer if needed
+        if chk_updated:
+            bpy.ops.sequencer.refresh_all()
 
         return {'FINISHED'}
