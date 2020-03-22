@@ -12,7 +12,7 @@ def getLastVersion(folder, pattern, extension):
     print("DEBUG --- pattern : "+pattern) #debug
     corresponding_files = []
     for filename in os.listdir(folder):
-        print("DEBUG --- iterate filename : "+folder) #debug
+        print("DEBUG --- iterate filename : "+filename) #debug
         if pattern in filename and filename.endswith(extension):
             temp_name = os.path.splitext(filename)[0]
             temp_name_2 = temp_name.split(pattern)[1]
