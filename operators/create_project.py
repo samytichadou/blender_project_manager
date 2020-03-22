@@ -4,7 +4,7 @@ import bpy, os
 from ..functions.dataset_functions import returnDatasetProperties
 from ..functions.file_functions import suppressExistingFile, absolutePath
 from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
-from ..global_variables import file_project, saving_to_json_statement, saved_to_json_statement
+from ..global_variables import file_project, saving_to_json_statement, saved_to_json_statement, new_project_name
 
 # display project settings
 class BpmCreateProject(bpy.types.Operator):
@@ -30,6 +30,7 @@ class BpmCreateProject(bpy.types.Operator):
         # set specific project properties
         datas.project_folder = project_dir
         datas.edit_file_pattern = edit_file_name
+        datas.name = new_project_name
 
         return context.window_manager.invoke_props_dialog(self)
  

@@ -41,3 +41,5 @@ script_file = os.path.realpath(__file__)
 setup_script_folder = os.path.join(os.path.dirname(script_file), "setup_blend_scripts")
 shot_setup_file = os.path.join(setup_script_folder, "shot_setup.py")
 update_shot_file = os.path.join(setup_script_folder, "update_shot.py")
+
+new_project_name = "Project_name"

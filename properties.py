@@ -3,8 +3,9 @@ import bpy
 
 # project settings
 class ProjectSettings(bpy.types.PropertyGroup) :
-    name : bpy.props.StringProperty(name = "Project Name", default = "Project Name")
-    project_prefix : bpy.props.StringProperty(name = "Project Prefix", default = "Project Prefix")
+    '''name : StringProperty() '''
+    #name : bpy.props.StringProperty(name = "Name", default = "Project Name")
+    project_prefix : bpy.props.StringProperty(name = "Project Prefix", default = "Project_prefix")
     framerate : bpy.props.IntProperty(name = "Project Framerate", default = 25)
     resolution_x : bpy.props.IntProperty(name = "Resolution X", default = 1920)
     resolution_y : bpy.props.IntProperty(name = "Resolution Y", default = 1080)
