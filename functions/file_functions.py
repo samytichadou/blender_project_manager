@@ -26,9 +26,9 @@ def getLastVersion(folder, pattern, extension):
             if version_number != -1:
                 corresponding_files.append([filename, version_number])
 
-    print("DEBUG --- corresponding files : "+corresponding_files) #debug
+    print("DEBUG --- corresponding files : "+str(corresponding_files)) #debug
     corresponding_files_sorted = sorted(corresponding_files, key=lambda item: item[1], reverse=True)
-    print("DEBUG --- corresponding files sorted : "+corresponding_files_sorted) #debug
+    print("DEBUG --- corresponding files sorted : "+str(corresponding_files_sorted)) #debug
     filepath = os.path.join(folder, corresponding_files_sorted[0][0])
 
     return filepath
