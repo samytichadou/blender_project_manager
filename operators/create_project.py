@@ -43,10 +43,11 @@ class BpmCreateProject(bpy.types.Operator):
         col2 = split.column(align=True)
 
         for p in returnDatasetProperties(datas):
-            box = col1.box()
-            box.label(text=p[0].name)
-            box = col2.box()
-            box.prop(datas, '%s' % p[0].identifier, text='')
+            if p[0].identifier != "project_folder":
+                box = col1.box()
+                box.label(text=p[0].name)
+                box = col2.box()
+                box.prop(datas, '%s' % p[0].identifier, text='')
         
     def execute(self, context):
         winman = context.window_manager
