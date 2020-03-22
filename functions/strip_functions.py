@@ -14,11 +14,11 @@ def getStripNewTiming(strip) :
     start = strip_scene.frame_start + offset
     end = strip_scene.frame_end + strip.frame_still_end - strip.frame_offset_end
 
-    print("DEBUG --- offset_start : " + str(strip.frame_offset_start)) #debug
-    print("DEBUG --- still_start : " + str(strip.frame_still_start))#debug
-    print("DEBUG --- offset : " + str(offset))#debug
-    print("DEBUG --- start : " + str(start))#debug
-    print("DEBUG --- end : " + str(end))#debug
+    # print("DEBUG --- offset_start : " + str(strip.frame_offset_start)) #debug
+    # print("DEBUG --- still_start : " + str(strip.frame_still_start))#debug
+    # print("DEBUG --- offset : " + str(offset))#debug
+    # print("DEBUG --- start : " + str(start))#debug
+    # print("DEBUG --- end : " + str(end))#debug
 
     return start, end
 
@@ -63,7 +63,7 @@ def returnSelectedStrips(sequencer):
 
 # update shot strip start/end
 def updateStripOnTimeline(strip):
-    print("DEBUG --- frame_start : "+str(strip.frame_start))
+    # print("DEBUG --- frame_start : "+str(strip.frame_start))
     # copy strip
     new_strip = bpy.context.scene.sequence_editor.sequences.new_scene(
         scene       = strip.scene,

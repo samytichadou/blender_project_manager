@@ -33,6 +33,12 @@ no_available_timeline_space_message = "No available space on timeline"
 no_available_timeline_space_statement = bpm_statement + no_available_timeline_space_message
 checking_available_timeline_space_statement = bpm_statement + "Checking on timeline for available space"
 
+start_update_shot_statement = bpm_statement + "Starting update shot(s) from timeline"
+checking_update_shot_statement  = bpm_statement + "Checking strip for needed update : "
+updating_shot_statement = bpm_statement + "Update needed, starting"
+update_shot_new_start_end_statement = bpm_statement + "Strip new start-end : "
+updated_shot_statement = bpm_statement + "Strip successfully updated"
+no_update_needed_statement = bpm_statement + "No update needed"
 shot_update_impossible_message = "Impossible to update shot (negative shot start frame)"
 shot_update_impossible_statement = bpm_statement + shot_update_impossible_message
 

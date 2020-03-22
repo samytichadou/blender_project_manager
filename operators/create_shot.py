@@ -63,7 +63,7 @@ class BPMCreateShot(bpy.types.Operator):
         replacement_list = getScriptReplacementListShotCreation(project_datas, next_shot_folder, next_shot_file, next_shot_number)
         
         temp_python_script = os.path.join(next_shot_folder, python_temp)
-        if winman.bpm_debug: print(launching_command_statement + temp_python_script) #debug
+        if winman.bpm_debug: print(creating_python_script_statement + temp_python_script) #debug
 
         replaceContentInPythonScript(shot_setup_file, temp_python_script, replacement_list)
         if winman.bpm_debug: print(python_script_created_statement) #debug

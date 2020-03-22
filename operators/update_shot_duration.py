@@ -2,6 +2,13 @@ import bpy
 
 
 from ..global_variables import (
+    launching_command_statement,
+    start_update_shot_statement,
+    checking_update_shot_statement,
+    updating_shot_statement,
+    update_shot_new_start_end_statement,
+    updated_shot_statement,
+    no_update_needed_statement,
     update_shot_file,
     shot_update_impossible_message,
     shot_update_impossible_statement,
@@ -38,14 +45,20 @@ class BPMUpdateShotDuration(bpy.types.Operator):
     def execute(self, context):
         winman = context.window_manager
 
+        if winman.bpm_debug: print(start_update_shot_statement) #debug
+
         selected_strips = returnSelectedStrips(context.scene.sequence_editor)
         for strip in selected_strips:
             try:
                 if strip.bpm_isshot and strip.scene.library:
+                    if winman.bpm_debug: print(checking_update_shot_statement + strip.name) #debug
+                    
                     strip_scene = strip.scene
                     new_start, new_end = getStripNewTiming(strip)
 
                     if new_start != strip_scene.frame_start or new_end != strip_scene.frame_end:
+                        if winman.bpm_debug: print(updating_shot_statement) #debug
+                        if winman.bpm_debug: print(update_shot_new_start_end_statement + str(new_start) + "-" + str(new_end)) #debug
                         # check if frame become negative and avoid it
                         if new_start < 0:
                             self.report({'WARNING'}, shot_update_impossible_message)
@@ -57,7 +70,9 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
                             # build command
                             command = buildBlenderCommandBackgroundPython(update_shot_file, filepath, arguments)
-                            print(command)
+
+                            if winman.bpm_debug: print(launching_command_statement + command) #debug
+
                             # launch command
                             launchCommand(command)
 
@@ -67,6 +82,10 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
                             # update the strip
                             updateStripOnTimeline(strip)
+
+                            if winman.bpm_debug: print(updated_shot_statement) #debug
+
+                    elif winman.bpm_debug: print(no_update_needed_statement) #debug
 
             except AttributeError:
                 pass
