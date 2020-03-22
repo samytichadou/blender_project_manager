@@ -53,7 +53,7 @@ class BpmCreateProject(bpy.types.Operator):
         winman = context.window_manager
         datas = winman.bpm_datas[0]
 
-        if winman.bpm_debug: print(saving_to_json_statement)
+        if winman.bpm_debug: print(saving_to_json_statement) #debug
 
         project_file = os.path.join(datas.project_folder, file_project)
 
@@ -64,7 +64,7 @@ class BpmCreateProject(bpy.types.Operator):
         # create json file
         create_json_file(json_dataset, project_file)
 
-        if winman.bpm_debug: print(saved_to_json_statement)
+        if winman.bpm_debug: print(saved_to_json_statement) #debug
 
         # set project as bpm edit project
         winman.bpm_isproject = True
