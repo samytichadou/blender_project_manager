@@ -93,6 +93,9 @@ def register():
     bpy.types.WindowManager.bpm_folders = \
         bpy.props.CollectionProperty(type = CustomFolders)
 
+    bpy.types.SceneSequence.bpm_isshot = \
+        bpy.props.BoolProperty(default=False)
+
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
 
@@ -115,6 +118,8 @@ def unregister():
     del bpy.types.WindowManager.bpm_foldersindex
     del bpy.types.WindowManager.bpm_datas
     del bpy.types.WindowManager.bpm_folders
+
+    del bpy.types.SceneSequence.bpm_isshot
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)

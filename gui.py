@@ -15,6 +15,7 @@ class BPM_MT_sequencer_menu(bpy.types.Menu):
     def draw(self, context):
         winman = context.window_manager
         project_data = winman.bpm_datas[0]
+        sequencer = context.scene.sequence_editor
 
         layout = self.layout
 
@@ -23,6 +24,13 @@ class BPM_MT_sequencer_menu(bpy.types.Menu):
         layout.operator('bpm.create_shot')
         layout.operator('bpm.open_shot')
         layout.operator('bpm.update_shot_duration')
+        layout.separator()
+        if winman.bpm_debug: #debug
+            layout.label(text = "Debug")
+            if sequencer.active_strip:
+                active = sequencer.active_strip
+                if active.type == 'SCENE':
+                    layout.prop(active, 'bpm_isshot')
 
 # topbar function
 def bpmTopbarFunction(self, context):
