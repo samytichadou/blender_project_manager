@@ -51,6 +51,7 @@ from .operators.save_project_settings_to_json import *
 from .properties import *
 from .gui import *
 
+from .operators.dummy_markers import * #debug
 
 # register
 ##################################
@@ -62,6 +63,7 @@ classes = (BPMOpenShot,
             BPMUpdateShotDuration,
             BpmDisplayModifyProjectSettings,
             BpmSaveProjectSettingsToJson,
+            BpmDummy, #debug
 
             ProjectSettings,
             CustomFolders,
@@ -96,6 +98,9 @@ def register():
     bpy.types.SceneSequence.bpm_isshot = \
         bpy.props.BoolProperty(default=False)
 
+    bpy.types.Scene.bpm_displaymarkers = \
+        bpy.props.BoolProperty(name = "Display shot markers", default = False)
+
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
 
@@ -120,6 +125,8 @@ def unregister():
     del bpy.types.WindowManager.bpm_folders
 
     del bpy.types.SceneSequence.bpm_isshot
+
+    del bpy.types.Scene.bpm_displaymarkers
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
