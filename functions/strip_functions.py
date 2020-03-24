@@ -76,14 +76,3 @@ def updateStripOnTimeline(strip):
     # delete previous strip
     bpy.context.scene.sequence_editor.sequences.remove(strip)
     return new_strip
-
-# get link scene marker fram
-def getMarkerFrameFromShotStrip(strip):
-    marker_list = []
-    frame_start = strip.frame_start
-    scn = strip.scene
-    for marker in scn.timeline_markers:
-        marker_frame = (marker.frame - scn.frame_start) + frame_start
-        if marker_frame >= strip.frame_final_start and marker_frame < strip.frame_final_end:
-            marker_list.append((marker.name, marker_frame))
-    return marker_list
