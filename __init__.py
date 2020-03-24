@@ -72,6 +72,7 @@ classes = (BPMOpenShot,
             BPM_PT_FileBrowser_Panel,
             )
 
+
 def register():
 
     ### OPERATORS ###
@@ -95,9 +96,17 @@ def register():
 
     bpy.types.SceneSequence.bpm_isshot = \
         bpy.props.BoolProperty(default=False)
+    bpy.types.SceneSequence.bpm_displaymarkers = \
+        bpy.props.BoolProperty(default=False)
 
+    display_marker_items = [
+        ('NONE', 'None', ""),
+        ('SELECTED', 'Selected', ""),
+        ('PERSTRIP', 'Per strip', ""),
+        ('ALL', 'All', ""),
+        ]
     bpy.types.Scene.bpm_displaymarkers = \
-        bpy.props.BoolProperty(name = "Display shot markers", default = False)
+        bpy.props.EnumProperty(name = "Display shot markers", items = display_marker_items, default = 'ALL')
 
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
@@ -123,6 +132,7 @@ def unregister():
     del bpy.types.WindowManager.bpm_folders
 
     del bpy.types.SceneSequence.bpm_isshot
+    del bpy.types.SceneSequence.bpm_displaymarkers
 
     del bpy.types.Scene.bpm_displaymarkers
 

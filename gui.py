@@ -25,7 +25,8 @@ class BPM_MT_sequencer_menu(bpy.types.Menu):
         layout.operator('bpm.open_shot')
         layout.operator('bpm.update_shot_duration')
         layout.separator()
-        layout.prop(context.scene, 'bpm_displaymarkers')
+        layout.label(text = "Markers")
+        layout.prop(context.scene, 'bpm_displaymarkers', text='')
         layout.separator()
         if winman.bpm_debug: #debug
             layout.label(text = "Debug")
@@ -33,6 +34,7 @@ class BPM_MT_sequencer_menu(bpy.types.Menu):
                 active = sequencer.active_strip
                 if active.type == 'SCENE':
                     layout.prop(active, 'bpm_isshot')
+                    layout.prop(active, 'bpm_displaymarkers')
 
 # topbar function
 def bpmTopbarFunction(self, context):

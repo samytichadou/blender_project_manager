@@ -4,8 +4,10 @@ from bpy.app.handlers import persistent
 
 from .functions.project_data_functions import getProjectDataFile, createProjectDatas, getCustomFoldersFile, loadCustomFolders
 from .global_variables import startup_statement, loaded_datas_statement, no_datas_statement, folders_loading_statement, loaded_folders_statement
+from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 
 
+### HANDLER ###
 @persistent
 def bpmStartupHandler(scene):
     winman = bpy.data.window_managers[0]
@@ -26,3 +28,9 @@ def bpmStartupHandler(scene):
 
     else:
         if winman.bpm_debug: print(no_datas_statement) #debug
+        
+    #load ui if needed
+    if winman.bpm_isproject and winman.bpm_isedit:
+        enableSequencerCallback()
+    else:
+       disableSequencerCallback()
