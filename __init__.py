@@ -51,7 +51,6 @@ from .operators.save_project_settings_to_json import *
 from .properties import *
 from .gui import *
 
-from .operators.dummy_markers import * #debug
 
 # register
 ##################################
@@ -63,7 +62,6 @@ classes = (BPMOpenShot,
             BPMUpdateShotDuration,
             BpmDisplayModifyProjectSettings,
             BpmSaveProjectSettingsToJson,
-            BpmDummy, #debug
 
             ProjectSettings,
             CustomFolders,

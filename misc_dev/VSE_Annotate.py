@@ -88,6 +88,7 @@ def draw_callback_px():
 	glEnable(GL_BLEND) # enable transparency
 
 	region         = ctx.region
+	
 	xwin1, ywin1   = region.view2d.region_to_view(0, 0)
 	xwin2, ywin2   = region.view2d.region_to_view(region.width, region.height)
 	x              = 22 # x position/offset
