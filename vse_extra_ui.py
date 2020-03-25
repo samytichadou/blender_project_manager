@@ -1,8 +1,9 @@
 import bpy
 import gpu
 import blf
+import bgl
 from gpu_extras.batch import batch_for_shader
-from bgl import glEnable, glDisable, GL_BLEND
+#from bgl import glEnable, glDisable, GL_BLEND
 
 
 from .functions.utils_functions import redrawAreas
@@ -90,11 +91,12 @@ def drawBpmSequencerCallbackPx():
     color_e = (0.5, 0.5, 0.5, 0.5)
 
     # iterate through strips
-    glEnable(GL_BLEND) # enable transparency
+    bgl.glEnable(bgl.GL_BLEND) # enable transparency
 
     n_m = 0
     n_e = 0
 
+    ### COMPUTE TIMELINE ###
     for strip in sequencer.sequences_all:
 
         if strip.type in {'SCENE'}:
@@ -128,14 +130,16 @@ def drawBpmSequencerCallbackPx():
                                 or (mn_display == "CURRENT" and scn.frame_current == m[1]):
                                     marker_texts.append((coord[1], m[0]))
     
-    # built shaders
+    ### DRAW SHADERS ###
 
+    #glBlendFunc(GL_DST_ALPHA, GL_ONE)
+    
     #extras
     BPM_extra_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
     BMP_extra_batch = batch_for_shader(BPM_extra_shaders, 'TRIS', {"pos": vertices_e}, indices=indices_e)
     BPM_extra_shaders.bind()
     BPM_extra_shaders.uniform_float("color", color_e)
-    BMP_extra_batch.draw(BPM_extra_shaders,)
+    #BMP_extra_batch.draw(BPM_extra_shaders,)
 
     # markers
     BPM_marker_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
@@ -148,7 +152,7 @@ def drawBpmSequencerCallbackPx():
     for t in marker_texts:
         drawText(t[0], t[1])
 
-    glDisable(GL_BLEND)
+    bgl.glDisable(bgl.GL_BLEND)
 
 #enable callback
 cb_handle = []
