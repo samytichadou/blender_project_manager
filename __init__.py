@@ -99,6 +99,8 @@ def register():
     bpy.types.SceneSequence.bpm_displaymarkers = \
         bpy.props.BoolProperty(default=False)
 
+    bpy.types.Scene.bpm_extraui = \
+        bpy.props.BoolProperty(name = "BPM Extra UI", default=True)
     display_marker_items = [
         ('NONE', 'None', ""),
         ('SELECTED', 'Selected', ""),
@@ -107,6 +109,13 @@ def register():
         ]
     bpy.types.Scene.bpm_displaymarkers = \
         bpy.props.EnumProperty(name = "Display shot markers", items = display_marker_items, default = 'ALL')
+    display_marker_name_items = [
+        ('NONE', 'None', ""),
+        ('CURRENT', 'Current', ""),
+        ('ALL', 'All', ""),
+        ]
+    bpy.types.Scene.bpm_displaymarkernames = \
+        bpy.props.EnumProperty(name = "Display marker names", items = display_marker_name_items, default = 'ALL')
 
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
@@ -133,7 +142,9 @@ def unregister():
 
     del bpy.types.SceneSequence.bpm_isshot
     del bpy.types.SceneSequence.bpm_displaymarkers
+    del bpy.types.SceneSequence.bpm_displaymarkernames
 
+    del bpy.types.Scene.bpm_extraui
     del bpy.types.Scene.bpm_displaymarkers
 
     ### HANDLER ###
