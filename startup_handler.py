@@ -14,10 +14,11 @@ def bpmStartupHandler(scene):
     if winman.bpm_debug: print(startup_statement) #debug
 
     #load project datas
-    project_data_file = getProjectDataFile(winman)
+    project_data_file, project_folder = getProjectDataFile(winman)
     if project_data_file is not None:
         createProjectDatas(winman, project_data_file)
         if winman.bpm_debug: print(loaded_datas_statement) #debug
+        winman.bpm_projectfolder = project_folder
 
         #load project custom folders
         custom_folders_file = getCustomFoldersFile(winman)

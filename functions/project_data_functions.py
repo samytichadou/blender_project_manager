@@ -17,11 +17,15 @@ def getProjectDataFile(winman):
         if os.path.isfile(edit_project_data_file):
             winman.bpm_isproject = True
             winman.bpm_isedit = True
-            return edit_project_data_file
+            return edit_project_data_file, parent_folder
         elif os.path.isfile(shot_project_data_file):
             winman.bpm_isproject = True
             winman.bpm_isedit = False
-            return shot_project_data_file
+            return shot_project_data_file, subparent_folder
+        else:
+            return None, None
+    else:
+        return None, None    
 
 # load datas
 def createProjectDatas(winman, project_data_file):

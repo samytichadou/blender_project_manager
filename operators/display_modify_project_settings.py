@@ -14,7 +14,7 @@ def reloadProjectSettingsFromJson(self, context):
         if winman.bpm_debug: print(reading_json_statement) #debug
 
         datas = winman.bpm_datas[0]
-        json_project_file = os.path.join(datas.project_folder, file_project)
+        json_project_file = os.path.join(winman.bpm_projectfolder, file_project)
 
         json_dataset = read_json(json_project_file)
 

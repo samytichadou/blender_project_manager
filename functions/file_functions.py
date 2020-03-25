@@ -39,8 +39,8 @@ def suppressExistingFile(filepath) :
         os.remove(filepath)
 
 # get next shot
-def getNextShot(project_datas, pattern, shot_version):
-    folder = project_datas.project_folder
+def getNextShot(winman, project_datas, pattern, shot_version):
+    folder = winman.bpm_projectfolder
     shot_digits = project_datas.shot_digits
     version_suffix = project_datas.shot_version_suffix
     version_digits = project_datas.shot_version_digits

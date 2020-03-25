@@ -29,7 +29,7 @@ class BpmSaveProjectSettingsToJson(bpy.types.Operator):
 
         if winman.bpm_debug: print(saving_to_json_statement)
 
-        project_file = os.path.join(datas.project_folder, file_project)
+        project_file = os.path.join(winman.bpm_projectfolder, file_project)
 
         # format the json dataset
         json_dataset = createJsonDatasetFromProperties(datas)

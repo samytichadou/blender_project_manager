@@ -89,6 +89,8 @@ def register():
         bpy.props.BoolProperty(default=True)
     bpy.types.WindowManager.bpm_foldersindex = \
         bpy.props.IntProperty(update = updateFilebrowserPath)
+    bpy.types.WindowManager.bpm_projectfolder = \
+        bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
     bpy.types.WindowManager.bpm_datas = \
         bpy.props.CollectionProperty(type = ProjectSettings)
     bpy.types.WindowManager.bpm_folders = \
@@ -143,6 +145,7 @@ def unregister():
     del bpy.types.WindowManager.bpm_isedit
     del bpy.types.WindowManager.bpm_debug
     del bpy.types.WindowManager.bpm_foldersindex
+    del bpy.types.WindowManager.bpm_projectfolder
     del bpy.types.WindowManager.bpm_datas
     del bpy.types.WindowManager.bpm_folders
 

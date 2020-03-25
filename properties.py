@@ -9,7 +9,7 @@ class ProjectSettings(bpy.types.PropertyGroup) :
     framerate : bpy.props.IntProperty(name = "Project Framerate", default = 25)
     resolution_x : bpy.props.IntProperty(name = "Resolution X", default = 1920)
     resolution_y : bpy.props.IntProperty(name = "Resolution Y", default = 1080)
-    project_folder : bpy.props.StringProperty(name = "Project Folder", default = "")
+    #project_folder : bpy.props.StringProperty(name = "Project Folder", default = "")
     edit_file_pattern : bpy.props.StringProperty(name = "Edit File Pattern", default = "")
     edit_scene_keyword : bpy.props.StringProperty(name = "Edit Scene Keyword", default = "")
     shot_prefix : bpy.props.StringProperty(name = "Shot Prefix", default = "S")

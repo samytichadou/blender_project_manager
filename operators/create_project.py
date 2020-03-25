@@ -28,7 +28,7 @@ class BpmCreateProject(bpy.types.Operator):
         edit_file_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
 
         # set specific project properties
-        datas.project_folder = project_dir
+        winman.bpm_projectfolder = project_dir
         datas.edit_file_pattern = edit_file_name
         datas.name = new_project_name
 
@@ -43,11 +43,10 @@ class BpmCreateProject(bpy.types.Operator):
         col2 = split.column(align=True)
 
         for p in returnDatasetProperties(datas):
-            if p[0].identifier != "project_folder":
-                box = col1.box()
-                box.label(text=p[0].name)
-                box = col2.box()
-                box.prop(datas, '%s' % p[0].identifier, text='')
+            box = col1.box()
+            box.label(text=p[0].name)
+            box = col2.box()
+            box.prop(datas, '%s' % p[0].identifier, text='')
         
     def execute(self, context):
         winman = context.window_manager
@@ -55,7 +54,7 @@ class BpmCreateProject(bpy.types.Operator):
 
         if winman.bpm_debug: print(saving_to_json_statement) #debug
 
-        project_file = os.path.join(datas.project_folder, file_project)
+        project_file = os.path.join(winman.bpm_projectfolder, file_project)
 
         # format the json dataset
         json_dataset = createJsonDatasetFromProperties(datas)

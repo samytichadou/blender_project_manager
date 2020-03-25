@@ -38,7 +38,7 @@ class BPMCreateShot(bpy.types.Operator):
         if winman.bpm_debug: print(creating_shot_statement) #debug
         
         project_datas = winman.bpm_datas[0]
-        next_shot_folder, next_shot_file, next_shot_number = getNextShot(project_datas, getShotPattern(project_datas), 1)
+        next_shot_folder, next_shot_file, next_shot_number = getNextShot(winman, project_datas, getShotPattern(project_datas), 1)
 
         # check timeline available space
         if winman.bpm_debug: print(checking_available_timeline_space_statement) #debug
