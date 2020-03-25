@@ -17,11 +17,12 @@ class BPMOpenShot(bpy.types.Operator):
             if keyword in context.scene.name:
                 if context.scene.sequence_editor.active_strip:
                     active = context.scene.sequence_editor.active_strip
-                    try:
-                        if active.bpm_isshot and active.scene.library:
-                            return True
-                    except AttributeError:
-                        pass
+                    if not active.lock:
+                        try:
+                            if active.bpm_isshot and active.scene.library:
+                                return True
+                        except AttributeError:
+                            pass
 
     def execute(self, context):
         winman = context.window_manager
