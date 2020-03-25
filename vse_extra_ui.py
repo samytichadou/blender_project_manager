@@ -6,8 +6,7 @@ from gpu_extras.batch import batch_for_shader
 
 
 #from .functions.utils_functions import redrawAreas
-from .global_variables import font_file
-
+from .global_variables import font_file, add_extra_ui_statement, remove_extra_ui_statement, load_font_statement
 
 
 # compute dpi_fac on every blender startup
@@ -19,9 +18,9 @@ markers_font = {
 }
 
 # initialize fonts
-def initializeFontId():
-    print("loading font") #debug TODO add statement
-    markers_font["font_id"] = blf.load(font_file)
+def initializeExternalFontId(font_id, file_font):
+    print(load_font_statement + file_font) #debug
+    font_id["font_id"] = blf.load(file_font)
 
 # get link scene marker fram
 def getMarkerFrameFromShotStrip(strip):
@@ -256,18 +255,19 @@ def enableSequencerCallback():
     if cb_handle:
         return
     
-    initializeFontId()
+    initializeExternalFontId(markers_font, font_file)
 
     cb_handle.append(bpy.types.SpaceSequenceEditor.draw_handler_add(
         drawBpmSequencerCallbackPx, (), 'WINDOW', 'POST_PIXEL'))
 
-    print('add') #debug TODO statement system
+    print(add_extra_ui_statement)#debug
 
 #disable callback
 def disableSequencerCallback():
     if not cb_handle:
         return
+
     bpy.types.SpaceSequenceEditor.draw_handler_remove(cb_handle[0], 'WINDOW')
     cb_handle.clear()
 
-    print('remove') #debug TODO statement system
+    print(remove_extra_ui_statement) #debug
