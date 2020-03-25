@@ -177,10 +177,11 @@ def drawBpmSequencerCallbackPx():
                 n_e += 4
 
                 # bpm need to update
-                if getStripNeedUpdate(strip):
-                    vertices_e_w += getWarningZoneStrip(*v4)
-                    indices_e_w += ((n_e_w, n_e_w + 1, n_e_w + 2), (n_e_w + 2, n_e_w + 1, n_e_w + 3))
-                    n_e_w += 4
+                if scn.bpm_displayshotupdatewarning:
+                    if getStripNeedUpdate(strip):
+                        vertices_e_w += getWarningZoneStrip(*v4)
+                        indices_e_w += ((n_e_w, n_e_w + 1, n_e_w + 2), (n_e_w + 2, n_e_w + 1, n_e_w + 3))
+                        n_e_w += 4
 
                 if strip.scene:
 
@@ -222,32 +223,38 @@ def drawBpmSequencerCallbackPx():
 
     bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE_MINUS_SRC_ALPHA)
 
-    #warning zones
-    BPM_extra__warning_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-    BMP_extra_warning_batch = batch_for_shader(BPM_extra__warning_shaders, 'TRIS', {"pos": vertices_e_w}, indices=indices_e_w)
-    BPM_extra__warning_shaders.bind()
-    BPM_extra__warning_shaders.uniform_float("color", color_e_w)
-    BMP_extra_warning_batch.draw(BPM_extra__warning_shaders,)
-
-    # markers bounding boxes
-    BPM_marker_bb_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-    BMP_marker_bb_batch = batch_for_shader(BPM_marker_bb_shader, 'TRIS', {"pos": vertices_m_bb}, indices=indices_m_bb)
-    BPM_marker_bb_shader.bind()
-    BPM_marker_bb_shader.uniform_float("color", color_m_bb)
-    BMP_marker_bb_batch.draw(BPM_marker_bb_shader,)
+    # update warning
+    if scn.bpm_displayshotupdatewarning:
+        BPM_extra_warning_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
+        BMP_extra_warning_batch = batch_for_shader(BPM_extra_warning_shaders, 'TRIS', {"pos": vertices_e_w}, indices=indices_e_w)
+        BPM_extra_warning_shaders.bind()
+        BPM_extra_warning_shaders.uniform_float("color", color_e_w)
+        BMP_extra_warning_batch.draw(BPM_extra_warning_shaders,)
 
     # markers
-    BPM_marker_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-    BMP_marker_batch = batch_for_shader(BPM_marker_shader, 'TRIS', {"pos": vertices_m}, indices=indices_m)
-    BPM_marker_shader.bind()
-    BPM_marker_shader.uniform_float("color", color_m)
-    BMP_marker_batch.draw(BPM_marker_shader,)
+    if m_display != 'NONE' :
 
-    # draw marker texts
-    for t in marker_texts:
-        drawText(t[0], t[1], id_m)
+        # markers bounding boxes
+        if mn_display != "NONE" and scn.bpm_displaymarkerboxes:
+            BPM_marker_bb_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
+            BMP_marker_bb_batch = batch_for_shader(BPM_marker_bb_shader, 'TRIS', {"pos": vertices_m_bb}, indices=indices_m_bb)
+            BPM_marker_bb_shader.bind()
+            BPM_marker_bb_shader.uniform_float("color", color_m_bb)
+            BMP_marker_bb_batch.draw(BPM_marker_bb_shader,)
 
-    bgl.glDisable(bgl.GL_BLEND)
+        # markers
+        BPM_marker_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
+        BMP_marker_batch = batch_for_shader(BPM_marker_shader, 'TRIS', {"pos": vertices_m}, indices=indices_m)
+        BPM_marker_shader.bind()
+        BPM_marker_shader.uniform_float("color", color_m)
+        BMP_marker_batch.draw(BPM_marker_shader,)
+
+        # draw marker texts
+        if mn_display != "NONE":
+            for t in marker_texts:
+                drawText(t[0], t[1], id_m)
+
+            bgl.glDisable(bgl.GL_BLEND)
 
 #enable callback
 cb_handle = []
