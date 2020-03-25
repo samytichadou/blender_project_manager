@@ -42,7 +42,7 @@ def getStripRectangle(strip):
     x1 = strip.frame_final_start
     x2 = strip.frame_final_end
     y1 = strip.channel
-    y2 = y1 + 0.1
+    y2 = y1 + 1
     return [x1, y1, x2, y2]
 
 # draw text
@@ -73,25 +73,27 @@ def drawBpmSequencerCallbackPx():
     # compute dpi_fac on every draw dynamically
     dpi_fac = getDpiFactorFromContext(context)
 
-    
-    glEnable(GL_BLEND) # enable transparency
-
     # setup markers
     vertices_m = ()
     indices_m = ()
     color_m = (1, 1, 1, 1)
+
+    id_m = 0
     text_size = int(12 * dpi_fac)
-    blf.color(1, *color_m)
-    blf.size(0, text_size, context.preferences.system.dpi)
+    blf.color(id_m, *color_m)
+    blf.size(id_m, text_size, context.preferences.system.dpi)
+    marker_texts = []
 
     # setup extras
-    # vertices_e = ()
-    # indices_e = ()
-    # color_e = (0.5, 0.5, 0.5, 0.5)
+    vertices_e = ()
+    indices_e = ()
+    color_e = (0.5, 0.5, 0.5, 0.5)
 
     # iterate through strips
+    glEnable(GL_BLEND) # enable transparency
+
     n_m = 0
-    # n_e = 0
+    n_e = 0
 
     for strip in sequencer.sequences_all:
 
@@ -100,14 +102,14 @@ def drawBpmSequencerCallbackPx():
             # bpm shot
             if strip.bpm_isshot:
 
-                # x1, y1, x2, y2 = getStripRectangle(strip)
-                # v1 = region.view2d.view_to_region(x1, y1, clip=False)
-                # v2 = region.view2d.view_to_region(x2, y1, clip=False)
-                # v3 = region.view2d.view_to_region(x1, y2, clip=False)
-                # v4 = region.view2d.view_to_region(x2, y2, clip=False)
-                # vertices_e += (v1, v2, v3, v4)
-                # indices_e += ((n_e, n_e + 1, n_e + 2), (n_e + 2, n_e + 1, n_e + 3))
-                # n_e += 4
+                x1, y1, x2, y2 = getStripRectangle(strip)
+                v1 = region.view2d.view_to_region(x1, y1, clip=False)
+                v2 = region.view2d.view_to_region(x2, y1, clip=False)
+                v3 = region.view2d.view_to_region(x1, y2, clip=False)
+                v4 = region.view2d.view_to_region(x2, y2, clip=False)
+                vertices_e += (v1, v2, v3, v4)
+                indices_e += ((n_e, n_e + 1, n_e + 2), (n_e + 2, n_e + 1, n_e + 3))
+                n_e += 4
 
                 if strip.scene:
 
@@ -124,16 +126,16 @@ def drawBpmSequencerCallbackPx():
                                 # markers text
                                 if (mn_display == "ALL") \
                                 or (mn_display == "CURRENT" and scn.frame_current == m[1]):
-                                    drawText(coord[1], m[0])
+                                    marker_texts.append((coord[1], m[0]))
     
     # built shaders
 
     #extras
-    # BPM_extra_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-    # BMP_extra_batch = batch_for_shader(BPM_extra_shaders, 'TRIS', {"pos": vertices_e}, indices=indices_e)
-    # BPM_extra_shaders.bind()
-    # BPM_extra_shaders.uniform_float("color", color_e)
-    # BMP_extra_batch.draw(BPM_extra_shaders,)
+    BPM_extra_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
+    BMP_extra_batch = batch_for_shader(BPM_extra_shaders, 'TRIS', {"pos": vertices_e}, indices=indices_e)
+    BPM_extra_shaders.bind()
+    BPM_extra_shaders.uniform_float("color", color_e)
+    BMP_extra_batch.draw(BPM_extra_shaders,)
 
     # markers
     BPM_marker_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
@@ -141,6 +143,10 @@ def drawBpmSequencerCallbackPx():
     BPM_marker_shader.bind()
     BPM_marker_shader.uniform_float("color", color_m)
     BMP_marker_batch.draw(BPM_marker_shader,)
+
+    # draw marker texts
+    for t in marker_texts:
+        drawText(t[0], t[1])
 
     glDisable(GL_BLEND)
 
