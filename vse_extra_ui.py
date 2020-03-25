@@ -74,6 +74,24 @@ def getBoundingBoxCoordinates(pos, text, text_size, dpi_fac):
 
     return (v1, v2, v3, v4)
 
+# get warning zone of a strip
+def getWarningZoneStrip(x, y):
+    square_size = 10
+    v1 = (x-square_size, y-square_size)
+    v2 = (x, y-square_size)
+    v3 = (x-square_size, y)
+    v4 = (x, y)
+    return (v1,v2,v3,v4)
+
+# check if a strip has to be updated
+def getStripNeedUpdate(strip):
+    if strip.frame_start != strip.frame_final_start:
+        return True
+    elif (strip.frame_start + strip.frame_duration) != strip.frame_final_end:
+        return True
+    else:
+        return False
+
 # draw text
 def drawText(location, text, f_id):
     blf.position(f_id, location[0], location[1], 0)   
@@ -122,14 +140,20 @@ def drawBpmSequencerCallbackPx():
     color_m_bb = (0, 0, 0, 0.5)
 
     # setup extras
+    # bpm shots
     vertices_e = ()
     indices_e = ()
     color_e = (0, 1, 0, 0.25)
+    # warning bpm shots
+    vertices_e_w = ()
+    indices_e_w = ()
+    color_e_w = (1, 0, 0, 1)
 
     # iterate through strips
     bgl.glEnable(bgl.GL_BLEND) # enable transparency
 
     n_e = 0
+    n_e_w = 0
     n_m = 0
     n_m_bb = 0
 
@@ -138,9 +162,9 @@ def drawBpmSequencerCallbackPx():
 
         if strip.type in {'SCENE'}:
 
-            # bpm shot
             if strip.bpm_isshot:
 
+                # bpm shot
                 x1, y1, x2, y2 = getStripRectangle(strip)
                 y1 += 0.5
 
@@ -152,6 +176,12 @@ def drawBpmSequencerCallbackPx():
                 vertices_e += (v1, v2, v3, v4)
                 indices_e += ((n_e, n_e + 1, n_e + 2), (n_e + 2, n_e + 1, n_e + 3))
                 n_e += 4
+
+                # bpm need to update
+                if getStripNeedUpdate(strip):
+                    vertices_e_w += getWarningZoneStrip(*v4)
+                    indices_e_w += ((n_e_w, n_e_w + 1, n_e_w + 2), (n_e_w + 2, n_e_w + 1, n_e_w + 3))
+                    n_e_w += 4
 
                 if strip.scene:
 
@@ -192,6 +222,13 @@ def drawBpmSequencerCallbackPx():
     BMP_extra_batch.draw(BPM_extra_shaders,)
 
     bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE_MINUS_SRC_ALPHA)
+
+    #warning zones
+    BPM_extra__warning_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
+    BMP_extra_warning_batch = batch_for_shader(BPM_extra__warning_shaders, 'TRIS', {"pos": vertices_e_w}, indices=indices_e_w)
+    BPM_extra__warning_shaders.bind()
+    BPM_extra__warning_shaders.uniform_float("color", color_e_w)
+    BMP_extra_warning_batch.draw(BPM_extra__warning_shaders,)
 
     # markers bounding boxes
     BPM_marker_bb_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
