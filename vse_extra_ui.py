@@ -171,7 +171,7 @@ def drawBpmSequencerCallbackPx():
                                 or (mn_display == "CURRENT" and scn.frame_current == m[1]):
                                     text = m[0]
                                     if len(text) > scn.bpm_displaymarkerlimit:
-                                        text = text[0:scn.bpm_displaymarkerlimit] + "..."
+                                        text = text[0:scn.bpm_displaymarkerlimit - 3] + "..."
                                     marker_texts.append((coord[1], text))
 
                                     # marker box
