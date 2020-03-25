@@ -95,34 +95,36 @@ def drawBpmSequencerCallbackPx():
 
     for strip in sequencer.sequences_all:
 
-        # bpm shot
-        if strip.bpm_isshot:
+        if strip.type in {'SCENE'}:
 
-            # x1, y1, x2, y2 = getStripRectangle(strip)
-            # v1 = region.view2d.view_to_region(x1, y1, clip=False)
-            # v2 = region.view2d.view_to_region(x2, y1, clip=False)
-            # v3 = region.view2d.view_to_region(x1, y2, clip=False)
-            # v4 = region.view2d.view_to_region(x2, y2, clip=False)
-            # vertices_e += (v1, v2, v3, v4)
-            # indices_e += ((n_e, n_e + 1, n_e + 2), (n_e + 2, n_e + 1, n_e + 3))
-            # n_e += 4
+            # bpm shot
+            if strip.bpm_isshot:
 
-            if strip.scene:
+                # x1, y1, x2, y2 = getStripRectangle(strip)
+                # v1 = region.view2d.view_to_region(x1, y1, clip=False)
+                # v2 = region.view2d.view_to_region(x2, y1, clip=False)
+                # v3 = region.view2d.view_to_region(x1, y2, clip=False)
+                # v4 = region.view2d.view_to_region(x2, y2, clip=False)
+                # vertices_e += (v1, v2, v3, v4)
+                # indices_e += ((n_e, n_e + 1, n_e + 2), (n_e + 2, n_e + 1, n_e + 3))
+                # n_e += 4
 
-                # markers
-                if m_display != 'NONE' :
-                    if (m_display == 'SELECTED' and strip.select) \
-                    or (m_display == 'PERSTRIP' and strip.bpm_displaymarkers) \
-                    or (m_display == 'ALL'):
-                        for m in getMarkerFrameFromShotStrip(strip):
-                            coord = getMarkerCoordinates(m[1], strip.channel, region, dpi_fac)
-                            vertices_m += coord[0]
-                            indices_m += ((n_m, n_m + 1, n_m + 2),)
-                            n_m += 3   
-                            # markers text
-                            if (mn_display == "ALL") \
-                            or (mn_display == "CURRENT" and scn.frame_current == m[1]):
-                                drawText(coord[1], m[0])
+                if strip.scene:
+
+                    # markers
+                    if m_display != 'NONE' :
+                        if (m_display == 'SELECTED' and strip.select) \
+                        or (m_display == 'PERSTRIP' and strip.bpm_displaymarkers) \
+                        or (m_display == 'ALL'):
+                            for m in getMarkerFrameFromShotStrip(strip):
+                                coord = getMarkerCoordinates(m[1], strip.channel, region, dpi_fac)
+                                vertices_m += coord[0]
+                                indices_m += ((n_m, n_m + 1, n_m + 2),)
+                                n_m += 3   
+                                # markers text
+                                if (mn_display == "ALL") \
+                                or (mn_display == "CURRENT" and scn.frame_current == m[1]):
+                                    drawText(coord[1], m[0])
     
     # built shaders
 
