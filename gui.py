@@ -29,6 +29,8 @@ class BPM_MT_sequencer_menu(bpy.types.Menu):
         layout.prop(context.scene, 'bpm_displaymarkers', text='')
         layout.prop(context.scene, 'bpm_displaymarkernames', text='')
         layout.prop(context.scene, 'bpm_extraui')
+        layout.prop(context.scene, 'bpm_displaymarkerboxes')
+        layout.prop(context.scene, 'bpm_displaymarkerlimit', text='')
         layout.separator()
         if winman.bpm_debug: #debug
             layout.label(text = "Debug")

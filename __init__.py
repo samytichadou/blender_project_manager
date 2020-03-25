@@ -116,6 +116,10 @@ def register():
         ]
     bpy.types.Scene.bpm_displaymarkernames = \
         bpy.props.EnumProperty(name = "Display marker names", items = display_marker_name_items, default = 'ALL')
+    bpy.types.Scene.bpm_displaymarkerboxes = \
+        bpy.props.BoolProperty(name = "BPM shot marker boxes", default=True)
+    bpy.types.Scene.bpm_displaymarkerlimit = \
+        bpy.props.IntProperty(name = "BPM shot marker limit", default = 15)
 
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
@@ -143,9 +147,11 @@ def unregister():
     del bpy.types.SceneSequence.bpm_isshot
     del bpy.types.SceneSequence.bpm_displaymarkers
     del bpy.types.SceneSequence.bpm_displaymarkernames
+    del bpy.types.SceneSequence.bpm_displaymarkerboxes
+    del bpy.types.SceneSequence.bpm_displaymarkerlimit
 
     del bpy.types.Scene.bpm_extraui
-    del bpy.types.Scene.bpm_displaymarkers
+    del bpy.types.Scene.bpm_displaymarkerboxes
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
