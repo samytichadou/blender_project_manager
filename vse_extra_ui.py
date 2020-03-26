@@ -172,9 +172,10 @@ def drawBpmSequencerCallbackPx():
                 v3 = region.view2d.view_to_region(x1, y2, clip=False)
                 v4 = region.view2d.view_to_region(x2, y2, clip=False)
 
-                vertices_e += (v1, v2, v3, v4)
-                indices_e += ((n_e, n_e + 1, n_e + 2), (n_e + 2, n_e + 1, n_e + 3))
-                n_e += 4
+                if scn.bpm_displayshotstrip:
+                    vertices_e += (v1, v2, v3, v4)
+                    indices_e += ((n_e, n_e + 1, n_e + 2), (n_e + 2, n_e + 1, n_e + 3))
+                    n_e += 4
 
                 # bpm need to update
                 if scn.bpm_displayshotupdatewarning:
@@ -212,16 +213,17 @@ def drawBpmSequencerCallbackPx():
     
     ### DRAW SHADERS ###
 
-    bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE)
     
-    #extras
-    BPM_extra_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-    BMP_extra_batch = batch_for_shader(BPM_extra_shaders, 'TRIS', {"pos": vertices_e}, indices=indices_e)
-    BPM_extra_shaders.bind()
-    BPM_extra_shaders.uniform_float("color", color_e)
-    BMP_extra_batch.draw(BPM_extra_shaders,)
+    # extras
+    if scn.bpm_displayshotstrip:
+        bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE)
+        BPM_extra_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
+        BMP_extra_batch = batch_for_shader(BPM_extra_shaders, 'TRIS', {"pos": vertices_e}, indices=indices_e)
+        BPM_extra_shaders.bind()
+        BPM_extra_shaders.uniform_float("color", color_e)
+        BMP_extra_batch.draw(BPM_extra_shaders,)
 
-    bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE_MINUS_SRC_ALPHA)
+        bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE_MINUS_SRC_ALPHA)
 
     # update warning
     if scn.bpm_displayshotupdatewarning:

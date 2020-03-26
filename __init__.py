@@ -102,7 +102,9 @@ def register():
         bpy.props.BoolProperty(default=False)
 
     bpy.types.Scene.bpm_extraui = \
-        bpy.props.BoolProperty(name = "BPM Extra UI", default=True)
+        bpy.props.BoolProperty(name = "Display Extra UI", default=True)
+    bpy.types.Scene.bpm_displayshotstrip = \
+        bpy.props.BoolProperty(name = "Display shot strips", default=True)
     display_marker_items = [
         ('NONE', 'None', ""),
         ('SELECTED', 'Selected', ""),
@@ -150,14 +152,15 @@ def unregister():
     del bpy.types.WindowManager.bpm_folders
 
     del bpy.types.SceneSequence.bpm_isshot
+
+    del bpy.types.Scene.bpm_extraui
+    del bpy.types.Scene.bpm_displayshotstrip
+    del bpy.types.Scene.bpm_displaymarkerboxes
     del bpy.types.SceneSequence.bpm_displaymarkers
     del bpy.types.SceneSequence.bpm_displaymarkernames
     del bpy.types.SceneSequence.bpm_displaymarkerboxes
     del bpy.types.SceneSequence.bpm_displaymarkerlimit
     del bpy.types.SceneSequence.bpm_displayshotupdatewarning
-
-    del bpy.types.Scene.bpm_extraui
-    del bpy.types.Scene.bpm_displaymarkerboxes
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
