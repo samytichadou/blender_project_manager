@@ -1,4 +1,6 @@
-import bpy, os
+import bpy
+import os
+import re
 
 
 from ..functions.dataset_functions import returnDatasetProperties
@@ -26,7 +28,14 @@ class BpmCreateProject(bpy.types.Operator):
 
         # find project dir and project file
         project_dir = os.path.dirname(absolutePath(bpy.data.filepath))
-        edit_file_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
+        file_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
+        
+        # get edit file pattern without version numbers
+        i = re.search(r'\d+$', file_name)
+        if i is not None:
+            edit_file_name = file_name[:-len(i.group())]
+        else:
+            edit_file_name = file_name
 
         # set specific project properties
         winman.bpm_projectfolder = project_dir
