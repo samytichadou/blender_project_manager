@@ -3,6 +3,7 @@ import bpy, os
 
 from ..global_variables import file_project, loading_statement, currently_loading_statement, folders_loading_statement, custom_folders_file, bpm_statement
 from .json_functions import read_json
+from .file_functions import absolutePath
 from .dataset_functions import setPropertiesFromJsonDataset
 
 
@@ -15,17 +16,45 @@ def getProjectDataFile(winman):
         edit_project_data_file = os.path.join(parent_folder, file_project)
         shot_project_data_file = os.path.join(subparent_folder, file_project)
         if os.path.isfile(edit_project_data_file):
-            winman.bpm_isproject = True
+            #winman.bpm_isproject = True
             winman.bpm_isedit = True
             return edit_project_data_file, parent_folder
         elif os.path.isfile(shot_project_data_file):
-            winman.bpm_isproject = True
+            #winman.bpm_isproject = True
             winman.bpm_isedit = False
             return shot_project_data_file, subparent_folder
         else:
             return None, None
     else:
         return None, None    
+
+# check if project name match json project
+def chekIfBpmProject(winman, project_data_file):
+    dataset = read_json(project_data_file)
+    blend_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
+    # edit
+    if winman.bpm_isedit:
+        pattern = dataset['edit_file_pattern']
+        print(pattern)
+        print(blend_name)
+        if pattern == blend_name:
+            winman.bpm_isproject = True
+            return True
+        elif pattern in blend_name:
+            try:
+                int(blend_name.split(pattern)[1])
+                winman.bpm_isproject = True
+                return True
+            except (ValueError, IndexError):
+                return False
+    # shot
+    else:
+        pattern1 = dataset['project_prefix'] + "_" + dataset['shot_prefix']
+        pattern2 = "_" + dataset['shot_version_suffix']
+        if pattern1 in blend_name and pattern2 in blend_name:
+            winman.bpm_isproject = True
+            return True
+    return False
 
 # load datas
 def createProjectDatas(winman, project_data_file):
