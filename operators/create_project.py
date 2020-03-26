@@ -5,6 +5,7 @@ from ..functions.dataset_functions import returnDatasetProperties
 from ..functions.file_functions import suppressExistingFile, absolutePath
 from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
 from ..global_variables import file_project, saving_to_json_statement, saved_to_json_statement, new_project_name
+from ..vse_extra_ui import enableSequencerCallback
 
 # display project settings
 class BpmCreateProject(bpy.types.Operator):
@@ -68,5 +69,7 @@ class BpmCreateProject(bpy.types.Operator):
         # set project as bpm edit project
         winman.bpm_isproject = True
         winman.bpm_isedit = True
+
+        enableSequencerCallback()
 
         return {'FINISHED'}
