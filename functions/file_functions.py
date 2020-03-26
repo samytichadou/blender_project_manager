@@ -8,11 +8,13 @@ def absolutePath(path):
 
 # get last version of file
 def getLastVersion(folder, pattern, extension):
-    print("DEBUG --- folder : "+folder) #debug
-    print("DEBUG --- pattern : "+pattern) #debug
+    # print("DEBUG --- folder : "+folder) #debug
+    # print("DEBUG --- pattern : "+pattern) #debug
+
     corresponding_files = []
     for filename in os.listdir(folder):
-        print("DEBUG --- iterate filename : "+filename) #debug
+        
+        # print("DEBUG --- iterate filename : "+filename) #debug
         if pattern in filename and filename.endswith(extension):
             temp_name = os.path.splitext(filename)[0]
             temp_name_2 = temp_name.split(pattern)[1]
@@ -26,9 +28,10 @@ def getLastVersion(folder, pattern, extension):
             if version_number != -1:
                 corresponding_files.append([filename, version_number])
 
-    print("DEBUG --- corresponding files : "+str(corresponding_files)) #debug
+    # print("DEBUG --- corresponding files : "+str(corresponding_files)) #debug
     corresponding_files_sorted = sorted(corresponding_files, key=lambda item: item[1], reverse=True)
-    print("DEBUG --- corresponding files sorted : "+str(corresponding_files_sorted)) #debug
+
+    # print("DEBUG --- corresponding files sorted : "+str(corresponding_files_sorted)) #debug
     filepath = os.path.join(folder, corresponding_files_sorted[0][0])
 
     return filepath
