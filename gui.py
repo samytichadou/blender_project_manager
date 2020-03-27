@@ -44,12 +44,13 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
         layout = self.layout
 
         layout.prop(scn, 'bpm_extraui')
-        layout.prop(scn, 'bpm_displayshotstrip')
-        layout.prop(scn, 'bpm_displayshotupdatewarning')
-        layout.prop(scn, 'bpm_displaymarkers')
-        layout.prop(scn, 'bpm_displaymarkernames')
-        layout.prop(scn, 'bpm_displaymarkerboxes')
-        layout.prop(scn, 'bpm_displaymarkerlimit')
+        if scn.bpm_extraui:
+            layout.prop(scn, 'bpm_displayshotstrip')
+            layout.prop(scn, 'bpm_displayshotupdatewarning')
+            layout.prop(scn, 'bpm_displaymarkers')
+            layout.prop(scn, 'bpm_displaymarkernames')
+            layout.prop(scn, 'bpm_displaymarkerboxes')
+            layout.prop(scn, 'bpm_displaymarkerlimit')
 
 
 # sequencer shot panel
