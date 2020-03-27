@@ -4,9 +4,18 @@ import re
 
 
 from ..functions.dataset_functions import returnDatasetProperties
-from ..functions.file_functions import suppressExistingFile, absolutePath
+from ..functions.file_functions import suppressExistingFile, absolutePath, createFolder
 from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
-from ..global_variables import file_project, saving_to_json_statement, saved_to_json_statement, new_project_name
+from ..global_variables import (
+                            file_project,
+                            saving_to_json_statement,
+                            saved_to_json_statement,
+                            new_project_name,
+                            shot_folder,
+                            asset_folder,
+                            render_folder,
+                            folder_created_statement,
+                        )
 from ..vse_extra_ui import enableSequencerCallback
 
 # display project settings
@@ -64,7 +73,8 @@ class BpmCreateProject(bpy.types.Operator):
 
         if winman.bpm_debug: print(saving_to_json_statement) #debug
 
-        project_file = os.path.join(winman.bpm_projectfolder, file_project)
+        project_folder = winman.bpm_projectfolder
+        project_file = os.path.join(project_folder, file_project)
 
         # format the json dataset
         json_dataset = createJsonDatasetFromProperties(datas)
@@ -78,6 +88,19 @@ class BpmCreateProject(bpy.types.Operator):
         # set project as bpm edit project
         winman.bpm_isproject = True
         winman.bpm_isedit = True
+
+        # create associated folder structure
+        shot_folder_path = os.path.join(project_folder, shot_folder)
+        createFolder(shot_folder_path)
+        if winman.bpm_debug: print(folder_created_statement + shot_folder_path) #debug
+
+        asset_folder_path = os.path.join(project_folder, asset_folder)
+        createFolder(asset_folder_path)
+        if winman.bpm_debug: print(folder_created_statement + asset_folder_path) #debug
+
+        render_folder_path = os.path.join(project_folder, render_folder)
+        createFolder(render_folder_path)
+        if winman.bpm_debug: print(folder_created_statement + render_folder_path) #debug
 
         enableSequencerCallback()
 

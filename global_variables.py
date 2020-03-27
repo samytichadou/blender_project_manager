@@ -42,6 +42,7 @@ launching_command_statement = bpm_statement + "Launching command : "
 # files operation statements
 deleted_file_statement = bpm_statement + "File successfully deleted : "
 scenes_linked_statement = bpm_statement + "Scenes linked from : "
+folder_created_statement = bpm_statement + "Folder created : "
 
 
 # timeline statements
@@ -82,3 +83,7 @@ ressources_folder = os.path.join(os.path.dirname(script_file), "ressources")
 font_file = os.path.join(ressources_folder, "JetBrainsMono-Regular.ttf")
 
 new_project_name = "Project_name"
+
+shot_folder = "shots"
+asset_folder = "assets"
+render_folder = "renders"

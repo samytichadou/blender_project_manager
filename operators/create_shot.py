@@ -2,18 +2,18 @@ import bpy, os
 
 
 from ..global_variables import (creating_shot_statement, 
-                                creating_shot_folder_statement, 
-                                python_temp, 
-                                shot_setup_file, 
-                                launching_command_statement, 
-                                creating_python_script_statement,
-                                python_script_created_statement,
-                                deleted_file_statement,
-                                scenes_linked_statement,
-                                no_available_timeline_space_message,
-                                no_available_timeline_space_statement,
-                                checking_available_timeline_space_statement,
-                            )
+                            creating_shot_folder_statement, 
+                            python_temp, 
+                            shot_setup_file, 
+                            launching_command_statement, 
+                            creating_python_script_statement,
+                            python_script_created_statement,
+                            deleted_file_statement,
+                            scenes_linked_statement,
+                            no_available_timeline_space_message,
+                            no_available_timeline_space_statement,
+                            checking_available_timeline_space_statement,
+                        )
 from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile, linkExternalScenes
 from ..functions.project_data_functions import getShotPattern, getScriptReplacementListShotCreation
 from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand

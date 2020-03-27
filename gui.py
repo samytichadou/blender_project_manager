@@ -115,7 +115,6 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
 
     def draw(self, context):
         winman = context.window_manager
-        project_data = winman.bpm_datas[0]
 
         layout = self.layout
         
@@ -123,6 +122,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             layout.operator('bpm.create_project')  
         
         else:
+            project_data = winman.bpm_datas[0]
             layout.label(text = project_data.name)
             layout.operator('bpm.display_modify_project_settings')
             layout.separator()
