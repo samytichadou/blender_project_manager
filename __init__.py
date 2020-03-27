@@ -66,7 +66,7 @@ classes = (BPMOpenShot,
             ProjectSettings,
             CustomFolders,
 
-            BPM_MT_sequencer_menu,
+            BPM_PT_sequencer_panel,
             BPM_MT_topbar_menu,
             BPM_UL_Folders_Uilist,
             BPM_PT_FileBrowser_Panel,
@@ -102,9 +102,9 @@ def register():
         bpy.props.BoolProperty(default=False)
 
     bpy.types.Scene.bpm_extraui = \
-        bpy.props.BoolProperty(name = "Display Extra UI", default=True)
+        bpy.props.BoolProperty(name = "Extra UI", default=True)
     bpy.types.Scene.bpm_displayshotstrip = \
-        bpy.props.BoolProperty(name = "Display shot strips", default=True)
+        bpy.props.BoolProperty(name = "Shot strips", default=True)
     display_marker_items = [
         ('NONE', 'None', ""),
         ('SELECTED', 'Selected', ""),
@@ -112,28 +112,27 @@ def register():
         ('ALL', 'All', ""),
         ]
     bpy.types.Scene.bpm_displaymarkers = \
-        bpy.props.EnumProperty(name = "Display shot markers", items = display_marker_items, default = 'ALL')
+        bpy.props.EnumProperty(name = "Shot markers", items = display_marker_items, default = 'ALL')
     display_marker_name_items = [
         ('NONE', 'None', ""),
         ('CURRENT', 'Current', ""),
         ('ALL', 'All', ""),
         ]
     bpy.types.Scene.bpm_displaymarkernames = \
-        bpy.props.EnumProperty(name = "Display marker names", items = display_marker_name_items, default = 'ALL')
+        bpy.props.EnumProperty(name = "Marker names", items = display_marker_name_items, default = 'ALL')
     bpy.types.Scene.bpm_displaymarkerboxes = \
-        bpy.props.BoolProperty(name = "Display marker boxes", default=True)
+        bpy.props.BoolProperty(name = "Marker boxes", default=True)
     bpy.types.Scene.bpm_displaymarkerlimit = \
-        bpy.props.IntProperty(name = "Shot marker text limit", default = 15)
+        bpy.props.IntProperty(name = "Marker text limit", default = 15)
     bpy.types.Scene.bpm_displayshotupdatewarning = \
-        bpy.props.BoolProperty(name = "Display shot update warning", default=True)
+        bpy.props.BoolProperty(name = "Shot update warning", default=True)
 
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
 
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.prepend(bpmTopbarFunction)
-    bpy.types.SEQUENCER_MT_editor_menus.append(bpmSequencerMenuFunction)
-    bpy.types.TOPBAR_MT_app.append(createProjectAppMenuFunction)
+    bpy.types.TOPBAR_MT_file.prepend(bpmFileMenuFunction)
 
 def unregister():
     
@@ -166,6 +165,5 @@ def unregister():
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
 
     ### SPECIAL GUI ###
-    bpy.types.SEQUENCER_MT_editor_menus.remove(bpmSequencerMenuFunction)
-    bpy.types.SEQUENCER_MT_editor_menus.remove(bpmSequencerMenuFunction)
-    bpy.types.TOPBAR_MT_app.remove(createProjectAppMenuFunction)
+    bpy.types.TOPBAR_HT_upper_bar.remove(bpmTopbarFunction)
+    bpy.types.TOPBAR_MT_file.remove(bpmFileMenuFunction)
