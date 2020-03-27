@@ -43,7 +43,8 @@ class BPM_PT_sequencer_panel(bpy.types.Panel):
                     layout.prop(active, 'bpm_isshot')
                     layout.prop(active, 'bpm_displaymarkers')
 
-# topbar function
+
+# bpm function topbar back/open operators
 def bpmTopbarFunction(self, context):
     if context.region.alignment == 'RIGHT':
         winman = context.window_manager
@@ -54,7 +55,14 @@ def bpmTopbarFunction(self, context):
                 self.layout.operator('bpm.open_shot', icon = "SEQUENCE")
             #self.layout.menu('BPM_MT_topbar_menu')
 
-# topbar menu
+
+# bpm function topbar file menu
+def bpmFileMenuFunction(self, context):
+    self.layout.separator()
+    self.layout.menu('BPM_MT_topbar_menu')
+
+
+# topbar file menu function
 class BPM_MT_topbar_menu(bpy.types.Menu):
     bl_label = "BPM"
     bl_idname = "BPM_MT_topbar_menu"
@@ -79,11 +87,13 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             layout.prop(winman, 'bpm_isproject')
             layout.prop(winman, 'bpm_isedit')
 
+
 # project folder ui list
 class BPM_UL_Folders_Uilist(bpy.types.UIList):
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag):
         layout.label(text = item.name)
+        
 
 # filebrowser gui
 class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
@@ -102,8 +112,3 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
 
         layout = self.layout
         layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_folders", winman, "bpm_foldersindex", rows=4)
-
-# new bpm function topbar app menu
-def bpmFileMenuFunction(self, context):
-    self.layout.separator()
-    self.layout.menu('BPM_MT_topbar_menu')
