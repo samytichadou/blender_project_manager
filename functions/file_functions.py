@@ -98,3 +98,9 @@ def linkExternalScenes(filepath):
             data_to.scenes = data_from.scenes
     except OSError as err: #debug
         print("OS error: {0}".format(err)) #debug
+
+# create folder if doesn't exist
+def createFolder(dir_path) :
+    path = absolutePath(dir_path)
+    if not os.path.isdir(path):
+            os.makedirs(path)
