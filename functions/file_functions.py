@@ -42,8 +42,7 @@ def suppressExistingFile(filepath) :
         os.remove(filepath)
 
 # get next shot
-def getNextShot(winman, project_datas, pattern, shot_version):
-    folder = winman.bpm_projectfolder
+def getNextShot(winman, project_datas, pattern, shot_version, shot_folder):
     shot_digits = project_datas.shot_digits
     version_suffix = project_datas.shot_version_suffix
     version_digits = project_datas.shot_version_digits
@@ -54,8 +53,8 @@ def getNextShot(winman, project_datas, pattern, shot_version):
     version += version_suffix + str(shot_version).zfill(version_digits)
 
     shot_subdirs = []
-    subdir = [f.path for f in os.scandir(folder) if f.is_dir()]
-    path_pattern = os.path.join(folder, pattern)
+    subdir = [f.path for f in os.scandir(shot_folder) if f.is_dir()]
+    path_pattern = os.path.join(shot_folder, pattern)
 
     for s in subdir:
         if path_pattern in s:
@@ -68,7 +67,7 @@ def getNextShot(winman, project_datas, pattern, shot_version):
     else:
         next_shot_number = str(1).zfill(shot_digits)
     next_shot = pattern + next_shot_number
-    next_shot_folder = os.path.join(folder, next_shot)
+    next_shot_folder = os.path.join(shot_folder, next_shot)
     next_shot_file = os.path.join(next_shot_folder, next_shot + version + ".blend")
 
     return [next_shot_folder, next_shot_file, next_shot_number]
