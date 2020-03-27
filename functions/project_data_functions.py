@@ -13,16 +13,22 @@ def getProjectDataFile(winman):
         # edit file
         parent_folder = os.path.dirname(bpy.data.filepath)
         subparent_folder = os.path.dirname(parent_folder)
+        subsubparent_folder = os.path.dirname(subparent_folder)
         edit_project_data_file = os.path.join(parent_folder, file_project)
-        shot_project_data_file = os.path.join(subparent_folder, file_project)
+        shot_project_data_file = os.path.join(subsubparent_folder, file_project)
+
+        # edit file
         if os.path.isfile(edit_project_data_file):
             #winman.bpm_isproject = True
             winman.bpm_isedit = True
             return edit_project_data_file, parent_folder
+
+        # shot file
         elif os.path.isfile(shot_project_data_file):
             #winman.bpm_isproject = True
             winman.bpm_isedit = False
-            return shot_project_data_file, subparent_folder
+            return shot_project_data_file, subsubparent_folder
+
         else:
             return None, None
     else:
