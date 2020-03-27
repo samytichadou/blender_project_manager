@@ -1,12 +1,12 @@
 import bpy
 
 
-# sequencer menu
-class BPM_PT_sequencer_panel(bpy.types.Panel):
+# sequencer management
+class BPM_PT_sequencer_management_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
-    bl_label = "BPM"
-    bl_idname = "BPM_PT_sequencer_panel"
+    bl_label = "Management"
+    bl_idname = "BPM_PT_sequencer_management_panel"
     bl_category = "BPM"
 
     @classmethod
@@ -16,32 +16,77 @@ class BPM_PT_sequencer_panel(bpy.types.Panel):
     def draw(self, context):
         winman = context.window_manager
         project_data = winman.bpm_datas[0]
-        sequencer = context.scene.sequence_editor
 
         layout = self.layout
 
         #common
         layout.label(text = project_data.name)
         layout.operator('bpm.create_shot')
+        layout.separator()
+        layout.prop(winman, 'bpm_debug', text = "Debug")
+        if winman.bpm_debug:
+            layout.prop(winman, 'bpm_isproject')
+            layout.prop(winman, 'bpm_isedit')
+
+
+# sequencer UI panel
+class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "UI"
+    bl_idname = "BPM_PT_sequencer_ui_panel"
+    bl_category = "BPM"
+    bl_parent_id = "BPM_PT_sequencer_management_panel"
+
+    def draw(self, context):
+        scn = context.scene
+
+        layout = self.layout
+
+        layout.prop(scn, 'bpm_extraui')
+        layout.prop(scn, 'bpm_displayshotstrip')
+        layout.prop(scn, 'bpm_displayshotupdatewarning')
+        layout.prop(scn, 'bpm_displaymarkers')
+        layout.prop(scn, 'bpm_displaymarkernames')
+        layout.prop(scn, 'bpm_displaymarkerboxes')
+        layout.prop(scn, 'bpm_displaymarkerlimit')
+
+
+# sequencer shot panel
+class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "Shot"
+    bl_idname = "BPM_PT_sequencer_shot_panel"
+    bl_category = "BPM"
+
+    @classmethod
+    def poll(cls, context):
+        chk_isshot = False
+        if context.scene.sequence_editor.active_strip:
+            active = context.scene.sequence_editor.active_strip
+            try:
+                if active.bpm_isshot:
+                    chk_isshot = True
+            except AttributeError:
+                return False
+        return context.window_manager.bpm_isproject and context.window_manager.bpm_isedit and chk_isshot
+
+    def draw(self, context):
+        winman = context.window_manager
+        sequencer = context.scene.sequence_editor
+
+        layout = self.layout
+
         layout.operator('bpm.open_shot')
         layout.operator('bpm.update_shot_duration')
         layout.separator()
-        layout.label(text = "Extra UI")
-        layout.prop(context.scene, 'bpm_extraui')
-        layout.prop(context.scene, 'bpm_displayshotstrip')
-        layout.prop(context.scene, 'bpm_displayshotupdatewarning')
-        layout.prop(context.scene, 'bpm_displaymarkers')
-        layout.prop(context.scene, 'bpm_displaymarkernames')
-        layout.prop(context.scene, 'bpm_displaymarkerboxes')
-        layout.prop(context.scene, 'bpm_displaymarkerlimit')
-        layout.separator()
-        if winman.bpm_debug: #debug
-            layout.label(text = "Debug")
-            if sequencer.active_strip:
-                active = sequencer.active_strip
-                if active.type == 'SCENE':
-                    layout.prop(active, 'bpm_isshot')
-                    layout.prop(active, 'bpm_displaymarkers')
+        if sequencer.active_strip:
+            active = sequencer.active_strip
+            if active.type == 'SCENE':
+                layout.prop(active, 'bpm_displaymarkers')
+            if winman.bpm_debug: #debug:
+                layout.prop(active, 'bpm_isshot')
 
 
 # bpm function topbar back/open operators
@@ -82,10 +127,10 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             layout.separator()
 
             #debug
-            layout.label(text='Debug')
-            layout.prop(winman, 'bpm_debug')
-            layout.prop(winman, 'bpm_isproject')
-            layout.prop(winman, 'bpm_isedit')
+            layout.prop(winman, 'bpm_debug', text = "Debug")
+            if winman.bpm_debug:
+                layout.prop(winman, 'bpm_isproject')
+                layout.prop(winman, 'bpm_isedit')
 
 
 # project folder ui list
@@ -93,7 +138,7 @@ class BPM_UL_Folders_Uilist(bpy.types.UIList):
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag):
         layout.label(text = item.name)
-        
+
 
 # filebrowser gui
 class BPM_PT_FileBrowser_Panel(bpy.types.Panel):

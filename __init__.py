@@ -66,7 +66,9 @@ classes = (BPMOpenShot,
             ProjectSettings,
             CustomFolders,
 
-            BPM_PT_sequencer_panel,
+            BPM_PT_sequencer_management_panel,
+            BPM_PT_sequencer_shot_panel,
+            BPM_PT_sequencer_ui_panel,
             BPM_MT_topbar_menu,
             BPM_UL_Folders_Uilist,
             BPM_PT_FileBrowser_Panel,
@@ -99,7 +101,7 @@ def register():
     bpy.types.SceneSequence.bpm_isshot = \
         bpy.props.BoolProperty(default=False)
     bpy.types.SceneSequence.bpm_displaymarkers = \
-        bpy.props.BoolProperty(default=False)
+        bpy.props.BoolProperty(name = "Display markers for this shot", default=False)
 
     bpy.types.Scene.bpm_extraui = \
         bpy.props.BoolProperty(name = "Extra UI", default=True)

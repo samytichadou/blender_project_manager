@@ -25,9 +25,9 @@ from ..functions.file_functions import absolutePath
 from ..functions.utils_functions import redrawAreas
 
 class BPMUpdateShotDuration(bpy.types.Operator):
-    """Update selected shots duration"""
+    """Update selected shot(s) duration"""
     bl_idname = "bpm.update_shot_duration"
-    bl_label = "Update Shots duration"
+    bl_label = "Update Shot(s) duration"
     #bl_options = {}
 
     @classmethod
