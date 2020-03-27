@@ -3,7 +3,7 @@ from bpy.app.handlers import persistent
 
 
 from .functions.project_data_functions import getProjectDataFile, createProjectDatas, getCustomFoldersFile, loadCustomFolders, chekIfBpmProject
-from .global_variables import startup_statement, loaded_datas_statement, no_datas_statement, folders_loading_statement, loaded_folders_statement
+from .global_variables import startup_statement, loaded_datas_statement, no_datas_statement, folders_loading_statement, loaded_folders_statement, loaded_project_folder
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 
 
@@ -21,6 +21,7 @@ def bpmStartupHandler(scene):
             createProjectDatas(winman, project_data_file)
             if winman.bpm_debug: print(loaded_datas_statement) #debug
             winman.bpm_projectfolder = project_folder
+            if winman.bpm_debug: print(loaded_project_folder + project_folder) #debug
 
             #load project custom folders
             custom_folders_file = getCustomFoldersFile(winman)

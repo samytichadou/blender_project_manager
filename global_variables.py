@@ -6,24 +6,25 @@ import os
 bpm_statement = "Blender Project Manager --- "
 
 opening_statement = bpm_statement + "Opening "
-back_to_edit_statement = bpm_statement + "Opening Editing Project "
+back_to_edit_statement = bpm_statement + "Opening editing eroject "
+loaded_project_folder = bpm_statement + "Project folder loaded : "
 
 
 # shot creation statements
 creating_shot_statement = bpm_statement + "Starting new shot creation"
-creating_shot_folder_statement = bpm_statement + "Creating New Shot Folder : "
+creating_shot_folder_statement = bpm_statement + "Creating new shot folder : "
 
 
 # project datas statements
-startup_statement = bpm_statement + "Looking for Project Datas"
-loaded_datas_statement = bpm_statement + "Project Datas loaded"
-loaded_folders_statement = bpm_statement + "Project Folders loaded"
-no_datas_statement = bpm_statement + "Project Datas not found"
-loading_statement = bpm_statement + "Project Datas found, loading from "
-folders_loading_statement = bpm_statement + "Project Folders found, loading from "
+startup_statement = bpm_statement + "Looking for project datas"
+loaded_datas_statement = bpm_statement + "Project datas loaded"
+loaded_folders_statement = bpm_statement + "Project folders loaded"
+no_datas_statement = bpm_statement + "Project datas not found"
+loading_statement = bpm_statement + "Project datas found, loading from "
+folders_loading_statement = bpm_statement + "Project folders found, loading from "
 currently_loading_statement = bpm_statement + "Currently loading "
 
-reading_json_statement = bpm_statement + "Reading Project Datas from json file"
+reading_json_statement = bpm_statement + "Reading project datas from json file"
 
 saving_to_json_statement = bpm_statement + "Saving to json"
 saved_to_json_statement = bpm_statement + "Successfully saved to json"
@@ -33,9 +34,9 @@ setting_prop_error_statement = bpm_statement + "Unable to set property : "
 
 
 # python scripts statement
-creating_python_script_statement = bpm_statement + "Creating Python script : "
+creating_python_script_statement = bpm_statement + "Creating python script : "
 python_script_created_statement = bpm_statement + "Python script successfully created"
-launching_command_statement = bpm_statement + "Launching Command : "
+launching_command_statement = bpm_statement + "Launching command : "
 
 
 # files operation statements
