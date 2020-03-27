@@ -14,7 +14,7 @@ class BpmSaveProjectSettingsToJson(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_isproject
+        return context.window_manager.bpm_isproject and not context.window_manager.bpm_isshot
     
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
