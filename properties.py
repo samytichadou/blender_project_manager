@@ -40,7 +40,6 @@ class BPMCustomFolders(bpy.types.PropertyGroup) :
 # asset settings
 class BPMAssetSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
-    
     asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER')
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
     
