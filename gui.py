@@ -32,6 +32,8 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         row = layout.row(align=True)
         row.operator('bpm.create_asset')
+        drawWikiHelpOperator(row, 'Create-Asset-Operator')
+
         layout.separator()
         layout.prop(winman, 'bpm_debug', text = "Debug")
         if winman.bpm_debug:
