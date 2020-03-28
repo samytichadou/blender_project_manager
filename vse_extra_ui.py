@@ -5,7 +5,6 @@ import bgl
 from gpu_extras.batch import batch_for_shader
 
 
-#from .functions.utils_functions import redrawAreas
 from .global_variables import font_file, add_extra_ui_statement, remove_extra_ui_statement, load_font_statement
 
 
@@ -19,7 +18,8 @@ markers_font = {
 
 # initialize fonts
 def initializeExternalFontId(font_id, file_font):
-    print(load_font_statement + file_font) #debug
+    winman = bpy.context.window_manager
+    if winman.bpm_debug: print(load_font_statement + file_font) #debug
     font_id["font_id"] = blf.load(file_font)
 
 # get link scene marker fram
@@ -269,7 +269,8 @@ def enableSequencerCallback():
     cb_handle.append(bpy.types.SpaceSequenceEditor.draw_handler_add(
         drawBpmSequencerCallbackPx, (), 'WINDOW', 'POST_PIXEL'))
 
-    print(add_extra_ui_statement)#debug
+    winman = bpy.context.window_manager
+    if winman.bpm_debug: print(add_extra_ui_statement)#debug
 
 #disable callback
 def disableSequencerCallback():
@@ -279,4 +280,5 @@ def disableSequencerCallback():
     bpy.types.SpaceSequenceEditor.draw_handler_remove(cb_handle[0], 'WINDOW')
     cb_handle.clear()
 
-    print(remove_extra_ui_statement) #debug
+    winman = bpy.context.window_manager
+    if winman.bpm_debug: print(remove_extra_ui_statement) #debug

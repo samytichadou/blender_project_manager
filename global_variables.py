@@ -68,9 +68,17 @@ remove_extra_ui_statement = bpm_statement + "Sequencer UI handler removed"
 load_font_statement = bpm_statement + "External font loaded : "
 
 
+# asset statements
+creating_asset_statement = bpm_statement + "Creating new asset : "
+asset_created_statement = bpm_statement + "Asset successfully created : "
+dupe_asset_name_message = "Asset name already exists"
+dupe_asset_name_statement = bpm_statement + dupe_asset_name_message
+
+
 ### FILES ###
 
 file_project = "project_data.json"
+asset_file = "project_assets.json"
 custom_folders_file = "project_custom_folders.json"
 python_temp = "python_temp.py"
 

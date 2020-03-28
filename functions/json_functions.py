@@ -19,20 +19,20 @@ def createJsonDatasetFromProperties(datasetin):
             json_dataset[p.identifier] = getattr(datasetin, p.identifier)
     return json_dataset
 
-### MAIN LIST FILE ####
-
-# initialize json datas
-def initialize_json_datas () :
+# initialize json asset datas
+def initializeAssetJsonDatas () :
     datas = {}
-    datas['size'] = []
-    datas['fonts'] = []
-    datas['subdirectories'] = []
+    datas['assets'] = []
     return datas
 
+
+
+### OLD FONT SELECTOR ####
+
+
 # add fonts to json datas
-def add_fonts_json(datas, font_list) :
-    #datas = {}
-    #datas['font'] = []
+def appendDatasToJson(to_append, json_datas) :
+    json_datas.append(to_append)
     for font in font_list :
         datas['fonts'].append({
             "name" : font[0],

@@ -22,7 +22,6 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         #common
         layout.label(text = project_data.name)
         layout.operator('bpm.create_shot')
-        layout.separator()
         layout.operator('bpm.create_asset')
         layout.separator()
         layout.prop(winman, 'bpm_debug', text = "Debug")

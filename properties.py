@@ -1,6 +1,19 @@
 import bpy
 
 
+asset_type_items = [
+        ('CHARACTER', 'Character', ""),
+        ('PROP', 'Prop', ""),
+        ('SET', 'Set', ""),
+        ('SHADER', 'Shader', ""),
+        ]
+asset_state_items = [
+        ('CONCEPT', 'Concept', ""),
+        ('INCREATION', 'In creation', ""),
+        ('FNISHED', 'Finished', ""),
+        ]
+
+
 # project settings
 class BPMProjectSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
@@ -27,17 +40,7 @@ class BPMCustomFolders(bpy.types.PropertyGroup) :
 # asset settings
 class BPMAssetSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
-    asset_type_items = [
-        ('CHARACTER', 'Character', ""),
-        ('PROP', 'Prop', ""),
-        ('SET', 'Set', ""),
-        ('SHADER', 'Shader', ""),
-        ]
+    
     asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER')
-    asset_state_items = [
-        ('CONCEPT', 'Concept', ""),
-        ('INCREATION', 'In creation', ""),
-        ('FNISHED', 'Finished', ""),
-        ]
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
     
