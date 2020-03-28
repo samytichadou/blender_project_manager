@@ -41,8 +41,8 @@ def chekIfBpmProject(winman, project_data_file):
     # edit
     if winman.bpm_isedit:
         pattern = dataset['edit_file_pattern']
-        print(pattern)
-        print(blend_name)
+        # print(pattern)
+        # print(blend_name)
         if pattern == blend_name:
             winman.bpm_isproject = True
             return True

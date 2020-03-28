@@ -2,7 +2,7 @@ import bpy
 
 
 # project settings
-class ProjectSettings(bpy.types.PropertyGroup) :
+class BPMProjectSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     #name : bpy.props.StringProperty(name = "Name", default = "Project Name")
     project_prefix : bpy.props.StringProperty(name = "Project Prefix", default = "Project_prefix")
@@ -20,7 +20,24 @@ class ProjectSettings(bpy.types.PropertyGroup) :
     default_shot_length : bpy.props.IntProperty(name = "Default Shot Length", default = 100)
 
 # custom project folders
-class CustomFolders(bpy.types.PropertyGroup) :
+class BPMCustomFolders(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
-    #name : bpy.props.StringProperty(name = "Project Name")
     filepath : bpy.props.StringProperty(name = "Filepath")
+
+# asset settings
+class BPMAssetSettings(bpy.types.PropertyGroup) :
+    '''name : StringProperty() '''
+    asset_type_items = [
+        ('CHARACTER', 'Character', ""),
+        ('PROP', 'Prop', ""),
+        ('SET', 'Set', ""),
+        ('SHADER', 'Shader', ""),
+        ]
+    asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER')
+    asset_state_items = [
+        ('CONCEPT', 'Concept', ""),
+        ('INCREATION', 'In creation', ""),
+        ('FNISHED', 'Finished', ""),
+        ]
+    asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
+    

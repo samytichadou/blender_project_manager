@@ -65,8 +65,9 @@ classes = (BPMOpenShot,
             BpmSaveProjectSettingsToJson,
             BPMCreateAsset,
 
-            ProjectSettings,
-            CustomFolders,
+            BPMProjectSettings,
+            BPMCustomFolders,
+            BPMAssetSettings,
 
             BPM_PT_sequencer_management_panel,
             BPM_PT_sequencer_shot_panel,
@@ -96,9 +97,11 @@ def register():
     bpy.types.WindowManager.bpm_projectfolder = \
         bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
     bpy.types.WindowManager.bpm_datas = \
-        bpy.props.CollectionProperty(type = ProjectSettings)
+        bpy.props.CollectionProperty(type = BPMProjectSettings)
     bpy.types.WindowManager.bpm_folders = \
-        bpy.props.CollectionProperty(type = CustomFolders)
+        bpy.props.CollectionProperty(type = BPMCustomFolders)
+    bpy.types.WindowManager.bpm_assets = \
+        bpy.props.CollectionProperty(type = BPMAssetSettings)
 
     bpy.types.SceneSequence.bpm_isshot = \
         bpy.props.BoolProperty(default=False)
