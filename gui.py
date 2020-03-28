@@ -11,7 +11,7 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_isproject and context.window_manager.bpm_isedit
+        return context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT'
 
     def draw(self, context):
         winman = context.window_manager
@@ -27,7 +27,7 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         layout.prop(winman, 'bpm_debug', text = "Debug")
         if winman.bpm_debug:
             layout.prop(winman, 'bpm_isproject')
-            layout.prop(winman, 'bpm_isedit')
+            layout.prop(winman, 'bpm_filetype')
 
 
 # sequencer UI panel
@@ -72,7 +72,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
                     chk_isshot = True
             except AttributeError:
                 return False
-        return context.window_manager.bpm_isproject and context.window_manager.bpm_isedit and chk_isshot
+        return context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT' and chk_isshot
 
     def draw(self, context):
         winman = context.window_manager
@@ -96,9 +96,9 @@ def bpmTopbarFunction(self, context):
     if context.region.alignment == 'RIGHT':
         winman = context.window_manager
         if winman.bpm_isproject:
-            if not winman.bpm_isedit:
+            if winman.bpm_filetype in {'SHOT', 'ASSET'}:
                 self.layout.operator('bpm.back_to_edit', icon = "SEQ_SEQUENCER")
-            else:
+            elif winman.bpm_filetype == 'EDIT':
                 self.layout.operator('bpm.open_shot', icon = "SEQUENCE")
             #self.layout.menu('BPM_MT_topbar_menu')
 
@@ -132,7 +132,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             layout.prop(winman, 'bpm_debug', text = "Debug")
             if winman.bpm_debug:
                 layout.prop(winman, 'bpm_isproject')
-                layout.prop(winman, 'bpm_isedit')
+                layout.prop(winman, 'bpm_filetype')
 
 
 # project folder ui list

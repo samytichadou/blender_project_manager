@@ -29,13 +29,13 @@ def getProjectDataFile(winman):
         # edit file
         if os.path.isfile(edit_project_data_file):
             #winman.bpm_isproject = True
-            winman.bpm_isedit = True
+            winman.bpm_filetype = 'EDIT'
             return edit_project_data_file, parent_folder
 
         # shot file
         elif os.path.isfile(shot_project_data_file):
             #winman.bpm_isproject = True
-            winman.bpm_isedit = False
+            winman.bpm_filetype = 'SHOT'
             return shot_project_data_file, subsubparent_folder
 
         else:
@@ -48,7 +48,7 @@ def chekIfBpmProject(winman, project_data_file):
     dataset = read_json(project_data_file)
     blend_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
     # edit
-    if winman.bpm_isedit:
+    if winman.bpm_filetype == 'EDIT':
         pattern = dataset['edit_file_pattern']
         # print(pattern)
         # print(blend_name)
@@ -63,7 +63,7 @@ def chekIfBpmProject(winman, project_data_file):
             except (ValueError, IndexError):
                 return False
     # shot
-    else:
+    elif winman.bpm_filetype == 'SHOT':
         pattern1 = dataset['project_prefix'] + "_" + dataset['shot_prefix']
         pattern2 = "_" + dataset['shot_version_suffix']
         if pattern1 in blend_name and pattern2 in blend_name:

@@ -62,7 +62,7 @@ def bpmStartupHandler(scene):
         if winman.bpm_debug: print(no_datas_statement) #debug
         
     #load ui if needed
-    if winman.bpm_isproject and winman.bpm_isedit:
+    if winman.bpm_isproject and winman.bpm_filetype == 'EDIT':
         enableSequencerCallback()
     else:
        disableSequencerCallback()

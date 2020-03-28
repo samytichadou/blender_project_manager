@@ -88,8 +88,14 @@ def register():
     ### PROPERTIES ###
     bpy.types.WindowManager.bpm_isproject = \
         bpy.props.BoolProperty(default=False)
-    bpy.types.WindowManager.bpm_isedit = \
-        bpy.props.BoolProperty(default=False)
+    file_type = [
+        ('EDIT', 'Edit', ""),
+        ('SHOT', 'Shot', ""),
+        ('ASSET', 'Asset', ""),
+        ('NONE', 'None', ""),
+        ]
+    bpy.types.WindowManager.bpm_filetype = \
+        bpy.props.EnumProperty(items = file_type, default='NONE')
     bpy.types.WindowManager.bpm_debug = \
         bpy.props.BoolProperty(default=True)
     bpy.types.WindowManager.bpm_foldersindex = \
@@ -150,7 +156,7 @@ def unregister():
 
     ### PROPERTIES ###
     del bpy.types.WindowManager.bpm_isproject
-    del bpy.types.WindowManager.bpm_isedit
+    del bpy.types.WindowManager.bpm_filetype
     del bpy.types.WindowManager.bpm_debug
     del bpy.types.WindowManager.bpm_foldersindex
     del bpy.types.WindowManager.bpm_projectfolder

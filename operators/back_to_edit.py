@@ -12,7 +12,7 @@ class BPMBackToEdit(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if context.window_manager.bpm_isproject and not context.window_manager.bpm_isedit:
+        if context.window_manager.bpm_isproject and context.window_manager.bpm_filetype in {'SHOT', 'ASSET'}:
             return True
 
     def execute(self, context):

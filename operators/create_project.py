@@ -87,7 +87,7 @@ class BpmCreateProject(bpy.types.Operator):
 
         # set project as bpm edit project
         winman.bpm_isproject = True
-        winman.bpm_isedit = True
+        winman.bpm_filetype = 'EDIT'
 
         # create associated folder structure
         shot_folder_path = os.path.join(project_folder, shot_folder)

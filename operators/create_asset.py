@@ -54,6 +54,8 @@ class BPMCreateAsset(bpy.types.Operator):
 
         if winman.bpm_debug: (print(creating_asset_statement + self.name)) #debug
 
+        # create asset blend and get the link TODO
+
         # create asset datas
         asset_prop = asset_collection.add()
 
@@ -86,7 +88,7 @@ class BPMCreateAsset(bpy.types.Operator):
             
 
         else:
-            
+
             datas = initializeAssetJsonDatas()
 
         # format new asset datas
