@@ -15,8 +15,6 @@ class BPMCreateAsset(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
-        datas = context.window_manager.bpm_datas[0]
-
         layout = self.layout
         # name
         layout.label(text="Asset name")
@@ -26,6 +24,10 @@ class BPMCreateAsset(bpy.types.Operator):
         layout.label(text="Asset state")
 
     def execute(self, context):
+        # check json file if existing and get datas
 
+        # format new asset datas
+
+        # add it if name doesn't exist
 
         return {'FINISHED'}
