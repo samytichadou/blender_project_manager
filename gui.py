@@ -1,6 +1,10 @@
 import bpy
 
 
+# help function
+def drawWikiHelpOperator(container, wikipage):
+    container.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
+
 # sequencer management
 class BPM_PT_sequencer_management_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
@@ -21,8 +25,13 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         #common
         layout.label(text = project_data.name)
-        layout.operator('bpm.create_shot')
-        layout.operator('bpm.create_asset')
+
+        row = layout.row(align=True)
+        row.operator('bpm.create_shot')
+        drawWikiHelpOperator(row, 'Create-Shot-Operator')
+
+        row = layout.row(align=True)
+        row.operator('bpm.create_asset')
         layout.separator()
         layout.prop(winman, 'bpm_debug', text = "Debug")
         if winman.bpm_debug:
@@ -44,7 +53,9 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
 
         layout = self.layout
 
-        layout.prop(scn, 'bpm_extraui')
+        row = layout.row(align=True)
+        row.prop(scn, 'bpm_extraui')
+        drawWikiHelpOperator(row, 'Extra-UI-in-Sequencer')
         if scn.bpm_extraui:
             layout.prop(scn, 'bpm_displayshotstrip')
             layout.prop(scn, 'bpm_displayshotupdatewarning')
@@ -80,8 +91,14 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
         layout = self.layout
 
-        layout.operator('bpm.open_shot')
-        layout.operator('bpm.update_shot_duration')
+        row = layout.row(align=True)
+        row.operator('bpm.open_shot')
+        drawWikiHelpOperator(row, 'Open-Shot-and-Back-to-Edit')
+
+        row = layout.row(align=True)
+        row.operator('bpm.update_shot_duration')
+        drawWikiHelpOperator(row, 'Update-Shot-Operator')
+
         layout.separator()
         if sequencer.active_strip:
             active = sequencer.active_strip
@@ -96,12 +113,18 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 def bpmTopbarFunction(self, context):
     if context.region.alignment == 'RIGHT':
         winman = context.window_manager
+
         if winman.bpm_isproject:
+            
+            row = self.layout.row(align=True)
+
             if winman.bpm_filetype in {'SHOT', 'ASSET'}:
-                self.layout.operator('bpm.back_to_edit', icon = "SEQ_SEQUENCER")
+                row.operator('bpm.back_to_edit', icon = "SEQ_SEQUENCER")
+                drawWikiHelpOperator(row, 'Open-Shot-and-Back-to-Edit')
+
             elif winman.bpm_filetype == 'EDIT':
-                self.layout.operator('bpm.open_shot', icon = "SEQUENCE")
-            #self.layout.menu('BPM_MT_topbar_menu')
+                row.operator('bpm.open_shot', icon = "SEQUENCE")
+                drawWikiHelpOperator(row, 'Open-Shot-and-Back-to-Edit')
 
 
 # bpm function topbar file menu
@@ -122,11 +145,15 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
         
         if not winman.bpm_isproject:
             layout.operator('bpm.create_project')  
+            #drawWikiHelpOperator(row, 'Create-Project-Operator')
         
         else:
             project_data = winman.bpm_datas[0]
             layout.label(text = project_data.name)
+
             layout.operator('bpm.display_modify_project_settings')
+            #drawWikiHelpOperator(row, 'Modify-Project-Settings')
+            
             layout.separator()
 
             #debug

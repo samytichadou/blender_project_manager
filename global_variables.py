@@ -77,6 +77,10 @@ assets_loading_statement = bpm_statement + "Loading assets from : "
 assets_loaded_statement = bpm_statement + "Assets loaded"
 
 
+# help statements
+opening_web_page_statement = bpm_statement + "Opening web page : "
+
+
 ### FILES ###
 
 file_project = "project_data.json"
@@ -97,3 +101,8 @@ new_project_name = "Project_name"
 shot_folder = "shots"
 asset_folder = "assets"
 render_folder = "renders"
+
+
+### WEB ###
+
+wiki_url = "https://github.com/samytichadou/blender_project_manager/wiki/"
