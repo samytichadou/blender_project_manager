@@ -65,7 +65,7 @@ classes = (BPMOpenShot,
             BpmDisplayModifyProjectSettings,
             BpmSaveProjectSettingsToJson,
             BPMCreateAsset,
-            
+
             BPMOpenWikiPage,
 
             BPMProjectSettings,
@@ -118,7 +118,7 @@ def register():
     bpy.types.SceneSequence.bpm_isshot = \
         bpy.props.BoolProperty(default=False)
     bpy.types.SceneSequence.bpm_displaymarkers = \
-        bpy.props.BoolProperty(name = "Display markers for this shot", default=False)
+        bpy.props.BoolProperty(name = "Display markers", default=False)
     bpy.types.SceneSequence.bpm_shot_state = \
         bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD')
 
