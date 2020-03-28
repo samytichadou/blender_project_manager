@@ -113,6 +113,8 @@ def register():
         bpy.props.BoolProperty(default=False)
     bpy.types.SceneSequence.bpm_displaymarkers = \
         bpy.props.BoolProperty(name = "Display markers for this shot", default=False)
+    bpy.types.SceneSequence.bpm_shot_state = \
+        bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD')
 
     bpy.types.Scene.bpm_extraui = \
         bpy.props.BoolProperty(name = "Extra UI", default=True)
@@ -162,17 +164,19 @@ def unregister():
     del bpy.types.WindowManager.bpm_projectfolder
     del bpy.types.WindowManager.bpm_datas
     del bpy.types.WindowManager.bpm_folders
+    del bpy.types.WindowManager.bpm_assets
 
     del bpy.types.SceneSequence.bpm_isshot
+    del bpy.types.SceneSequence.bpm_displaymarkers
+    del bpy.types.SceneSequence.bpm_shot_state
 
     del bpy.types.Scene.bpm_extraui
     del bpy.types.Scene.bpm_displayshotstrip
+    del bpy.types.Scene.bpm_displaymarkers
+    del bpy.types.Scene.bpm_displaymarkernames
     del bpy.types.Scene.bpm_displaymarkerboxes
-    del bpy.types.SceneSequence.bpm_displaymarkers
-    del bpy.types.SceneSequence.bpm_displaymarkernames
-    del bpy.types.SceneSequence.bpm_displaymarkerboxes
-    del bpy.types.SceneSequence.bpm_displaymarkerlimit
-    del bpy.types.SceneSequence.bpm_displayshotupdatewarning
+    del bpy.types.Scene.bpm_displaymarkerlimit
+    del bpy.types.Scene.bpm_displayshotupdatewarning
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
