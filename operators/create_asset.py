@@ -18,6 +18,7 @@ from ..global_variables import(
 from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
 from ..functions.file_functions import suppressExistingFile
 from ..functions.dataset_functions import setPropertiesFromDataset
+from ..functions.project_data_functions import getAssetFile
 
 
 class BPMCreateAsset(bpy.types.Operator):
@@ -62,12 +63,11 @@ class BPMCreateAsset(bpy.types.Operator):
         asset_prop.asset_state = self.asset_state
 
         # get json file path
-        asset_path = os.path.join(winman.bpm_projectfolder, asset_folder)
-        asset_file_path = os.path.join(asset_path, asset_file)
+        asset_file_path = getAssetFile(winman)
 
         # check json file if existing and get datas
 
-        if os.path.isfile(asset_file_path):
+        if asset_file_path is not None:
 
             if winman.bpm_debug: (print(reading_json_statement + asset_file_path)) #debug
 
@@ -86,6 +86,7 @@ class BPMCreateAsset(bpy.types.Operator):
             
 
         else:
+            
             datas = initializeAssetJsonDatas()
 
         # format new asset datas

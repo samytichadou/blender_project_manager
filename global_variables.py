@@ -73,6 +73,8 @@ creating_asset_statement = bpm_statement + "Creating new asset : "
 asset_created_statement = bpm_statement + "Asset successfully created : "
 dupe_asset_name_message = "Asset name already exists"
 dupe_asset_name_statement = bpm_statement + dupe_asset_name_message
+assets_loading_statement = bpm_statement + "Loading assets from : "
+assets_loaded_statement = bpm_statement + "Assets loaded"
 
 
 ### FILES ###
