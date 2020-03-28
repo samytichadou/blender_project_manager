@@ -78,7 +78,7 @@ class BPMCreateAsset(bpy.types.Operator):
             for asset in datas['assets']:
                 if asset['name']==self.name:
                     # error message because dupe name
-                    self.report({'WARNING'}, dupe_asset_name_message)
+                    self.report({'INFO'}, dupe_asset_name_message)
                     print(dupe_asset_name_statement)
                     return {'FINISHED'}
 

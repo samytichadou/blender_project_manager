@@ -54,7 +54,7 @@ class BPMCreateShot(bpy.types.Operator):
         # if no place to put the clip
         if channel == 0:
             # return no place to put the strip
-            self.report({'WARNING'}, no_available_timeline_space_message)
+            self.report({'INFO'}, no_available_timeline_space_message)
             print(no_available_timeline_space_statement)
             return {'FINISHED'}
 
