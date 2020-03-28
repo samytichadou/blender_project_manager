@@ -7,12 +7,21 @@ asset_type_items = [
         ('SET', 'Set', ""),
         ('SHADER', 'Shader', ""),
         ]
+
 asset_state_items = [
         ('CONCEPT', 'Concept', ""),
         ('INCREATION', 'In creation', ""),
         ('FNISHED', 'Finished', ""),
         ]
 
+shot_state_items = [
+        ('STORYBOARD', 'Storyboard', ""),
+        ('LAYOUT', 'Layout', ""),
+        ('ANIMATION', 'Animation', ""),
+        ('LIGHTING', 'Lighting', ""),
+        ('RENDERING', 'Rendering', ""),
+        ('COMPOSITING', 'Compositing', ""),
+        ]
 
 # project settings
 class BPMProjectSettings(bpy.types.PropertyGroup) :
@@ -42,4 +51,9 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER')
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
-    
+
+# shot settings
+class BPMShotSettings(bpy.types.PropertyGroup) :
+    '''name : StringProperty() '''
+    # asset list : pointer to assets
+    shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD')

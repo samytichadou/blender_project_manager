@@ -68,6 +68,7 @@ classes = (BPMOpenShot,
             BPMProjectSettings,
             BPMCustomFolders,
             BPMAssetSettings,
+            BPMShotSettings,
 
             BPM_PT_sequencer_management_panel,
             BPM_PT_sequencer_shot_panel,
@@ -108,6 +109,8 @@ def register():
         bpy.props.CollectionProperty(type = BPMCustomFolders)
     bpy.types.WindowManager.bpm_assets = \
         bpy.props.CollectionProperty(type = BPMAssetSettings)
+    bpy.types.WindowManager.bpm_shots = \
+        bpy.props.CollectionProperty(type = BPMShotSettings)
 
     bpy.types.SceneSequence.bpm_isshot = \
         bpy.props.BoolProperty(default=False)
@@ -165,6 +168,7 @@ def unregister():
     del bpy.types.WindowManager.bpm_datas
     del bpy.types.WindowManager.bpm_folders
     del bpy.types.WindowManager.bpm_assets
+    del bpy.types.WindowManager.bpm_shots
 
     del bpy.types.SceneSequence.bpm_isshot
     del bpy.types.SceneSequence.bpm_displaymarkers
