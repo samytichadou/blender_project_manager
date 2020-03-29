@@ -121,7 +121,7 @@ def register():
         bpy.props.BoolProperty(name = "Display markers", default=False)
     bpy.types.SceneSequence.bpm_shotstate = \
         bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD')
-    bpy.types.SceneSequence.bpm_shotassets = \ 
+    bpy.types.SceneSequence.bpm_shotassets = \
         bpy.props.PointerProperty(type = BPMAssetSettings, name="Assets list") # test prop test TODO
 
     bpy.types.Scene.bpm_extraui = \
