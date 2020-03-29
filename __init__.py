@@ -119,8 +119,10 @@ def register():
         bpy.props.BoolProperty(default=False)
     bpy.types.SceneSequence.bpm_displaymarkers = \
         bpy.props.BoolProperty(name = "Display markers", default=False)
-    bpy.types.SceneSequence.bpm_shot_state = \
+    bpy.types.SceneSequence.bpm_shotstate = \
         bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD')
+    bpy.types.SceneSequence.bpm_shotassets = \ 
+        bpy.props.PointerProperty(type = BPMAssetSettings, name="Assets list") # test prop test TODO
 
     bpy.types.Scene.bpm_extraui = \
         bpy.props.BoolProperty(name = "Extra UI", default=True)
@@ -175,7 +177,8 @@ def unregister():
 
     del bpy.types.SceneSequence.bpm_isshot
     del bpy.types.SceneSequence.bpm_displaymarkers
-    del bpy.types.SceneSequence.bpm_shot_state
+    del bpy.types.SceneSequence.bpm_shotstate
+    del bpy.types.SceneSequence.bpm_shotassets # test prop test TODO
 
     del bpy.types.Scene.bpm_extraui
     del bpy.types.Scene.bpm_displayshotstrip

@@ -106,7 +106,8 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
             active = sequencer.active_strip
             if active.type == 'SCENE':
                 layout.prop(active, 'bpm_displaymarkers')
-                layout.prop(active, 'bpm_shot_state')
+                layout.prop(active, 'bpm_shotstate')
+                layout.prop(active, 'bpm_shotassets')
             if winman.bpm_debug: #debug:
                 layout.prop(active, 'bpm_isshot')
 
