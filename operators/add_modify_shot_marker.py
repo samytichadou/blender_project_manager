@@ -8,7 +8,7 @@ from ..functions.strip_functions import getShotMarkerPosition
 from ..global_variables import (
                             back_to_edit_statement,
                             launching_command_statement,
-                            add_marker_file,
+                            add_modify_marker_file,
                             start_add_shot_marker_statement,
                             adding_shot_marker_statement,
                             added_shot_marker_statement,
@@ -16,19 +16,19 @@ from ..global_variables import (
 from ..vse_extra_ui import getMarkerFrameFromShotStrip
 
 
-class BPMAddShotMarker(bpy.types.Operator):
-    """Add shot marker to active strip"""
-    bl_idname = "bpm.add_shot_marker"
-    bl_label = "Add shot marker"
+class BPMAddModifyShotMarker(bpy.types.Operator):
+    """Add or modify shot marker to active strip"""
+    bl_idname = "bpm.add_modify_shot_marker"
+    bl_label = "Add/Modify shot marker"
     #bl_options = {}
 
     name = bpy.props.StringProperty(name = "Marker name", default = "Marker name")
     frame = bpy.props.IntProperty(name = "Marker frame")
+    modify = False
 
     @classmethod
     def poll(cls, context):
         keyword = context.window_manager.bpm_datas[0].edit_scene_keyword
-        scn = context.scene
         if context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT':
             if keyword in context.scene.name:
                 if context.scene.sequence_editor.active_strip:
@@ -36,19 +36,30 @@ class BPMAddShotMarker(bpy.types.Operator):
                     if not active.lock:
                         try:
                             if active.bpm_isshot and active.scene.library: #TODO when other strip type than scene, change this
-                                for m in getMarkerFrameFromShotStrip(active):
-                                    if m[1] == scn.frame_current:
-                                        return False
+                                
                                 return True
                         except AttributeError:
                             return False
 
     def invoke(self, context, event):
+        scn = context.scene
         self.frame = context.scene.frame_current
+
+        active = context.scene.sequence_editor.active_strip
+
+        for m in getMarkerFrameFromShotStrip(active):
+            if m[1] == scn.frame_current:
+                self.name = m[0]
+                self.modify = True
+                break
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
         layout = self.layout
+        if not self.modify:
+            layout.label(text = "Add a marker")
+        else:
+            layout.label(text = "Modify a marker")
         # name
         layout.prop(self, 'name', text='')
         # frame
@@ -69,12 +80,12 @@ class BPMAddShotMarker(bpy.types.Operator):
         shot_frame = getShotMarkerPosition(self.frame, active, strip_scn)
         
         # build command
-        arguments = getArgumentForPythonScript([self.name, shot_frame])
+        arguments = getArgumentForPythonScript([self.name, shot_frame, self.modify])
 
         if winman.bpm_debug: print(adding_shot_marker_statement + self.name + " - frame " + str(shot_frame)) #debug
 
         # build command
-        command = buildBlenderCommandBackgroundPython(add_marker_file, filepath, arguments)
+        command = buildBlenderCommandBackgroundPython(add_modify_marker_file, filepath, arguments)
 
         # launch command
         if winman.bpm_debug: print(launching_command_statement + command) #debug

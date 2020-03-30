@@ -46,7 +46,7 @@ from .operators.create_project import *
 from .operators.update_shot_duration import *
 from .operators.create_asset import *
 from .operators.open_webpage import *
-from .operators.add_shot_marker import *
+from .operators.add_modify_shot_marker import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -68,7 +68,7 @@ classes = (BPMOpenShot,
             BpmDisplayModifyProjectSettings,
             BpmSaveProjectSettingsToJson,
             BPMCreateAsset,
-            BPMAddShotMarker,
+            BPMAddModifyShotMarker,
 
             BPMOpenWikiPage,
 

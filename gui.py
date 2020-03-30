@@ -102,8 +102,8 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         drawWikiHelpOperator(row, 'Update-Shot-Operator')
 
         row = layout.row(align=True)
-        row.operator('bpm.add_shot_marker')
-        drawWikiHelpOperator(row, 'Add-Shot-Marker-Operator')
+        row.operator('bpm.add_modify_shot_marker')
+        drawWikiHelpOperator(row, 'Add-Modify-Shot-Marker-Operator')
 
         layout.separator()
         layout.prop(active, 'bpm_displaymarkers')
