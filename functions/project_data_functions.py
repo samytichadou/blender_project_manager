@@ -86,7 +86,9 @@ def getCustomFoldersFile(winman):
     project_folder = winman.bpm_projectfolder
     folders_file = os.path.join(project_folder, custom_folders_file)
     if os.path.isfile(folders_file):
-        return folders_file
+        return folders_file, True
+    else:
+        return folders_file, False
 
 # get asset file
 def getAssetFile(winman):
@@ -94,7 +96,9 @@ def getAssetFile(winman):
     asset_folder_path = os.path.join(project_folder, asset_folder)
     asset_file_path = os.path.join(asset_folder_path, asset_file)
     if os.path.isfile(asset_file_path):
-        return asset_file_path
+        return asset_file_path, True
+    else:
+        return asset_file_path, False
 
 # load json in collection
 def loadJsonInCollection(winman, json_file, collection, json_coll_name):

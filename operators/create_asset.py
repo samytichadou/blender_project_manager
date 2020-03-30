@@ -14,6 +14,7 @@ from ..global_variables import(
                         asset_created_statement,
                         dupe_asset_name_message,
                         dupe_asset_name_statement,
+                        initialize_json_statement,
                         )
 from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
 from ..functions.file_functions import suppressExistingFile
@@ -52,7 +53,7 @@ class BPMCreateAsset(bpy.types.Operator):
         winman = context.window_manager
         asset_collection = winman.bpm_assets
 
-        if winman.bpm_debug: (print(creating_asset_statement + self.name)) #debug
+        if winman.bpm_debug: print(creating_asset_statement + self.name) #debug
 
         # create asset blend and get the link TODO
 
@@ -65,13 +66,13 @@ class BPMCreateAsset(bpy.types.Operator):
         asset_prop.asset_state = self.asset_state
 
         # get json file path
-        asset_file_path = getAssetFile(winman)
+        asset_file_path, is_asset_file = getAssetFile(winman)
 
         # check json file if existing and get datas
 
-        if asset_file_path is not None:
+        if is_asset_file:
 
-            if winman.bpm_debug: (print(reading_json_statement + asset_file_path)) #debug
+            if winman.bpm_debug: print(reading_json_statement + asset_file_path) #debug
 
             datas = read_json(asset_file_path)
 
@@ -84,10 +85,12 @@ class BPMCreateAsset(bpy.types.Operator):
 
             # remove json
             suppressExistingFile(asset_file_path)
-            if winman.bpm_debug: (print(deleted_file_statement + asset_file_path)) #debug
+            if winman.bpm_debug: print(deleted_file_statement + asset_file_path) #debug
             
 
         else:
+
+            if winman.bpm_debug: print(initialize_json_statement + asset_file_path) #debug
 
             datas = initializeAssetJsonDatas()
 
@@ -98,10 +101,10 @@ class BPMCreateAsset(bpy.types.Operator):
         datas['assets'].append(asset_datas_json)
 
         # write json
-        if winman.bpm_debug: (print(saving_to_json_statement)) #debug
+        if winman.bpm_debug: print(saving_to_json_statement) #debug
         create_json_file(datas, asset_file_path)
-        if winman.bpm_debug: (print(saved_to_json_statement)) #debug
+        if winman.bpm_debug: print(saved_to_json_statement) #debug
 
-        if winman.bpm_debug: (print(asset_created_statement + self.name)) #debug
+        if winman.bpm_debug: print(asset_created_statement + self.name) #debug
 
         return {'FINISHED'}
