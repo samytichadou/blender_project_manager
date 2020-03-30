@@ -13,6 +13,7 @@ from ..global_variables import (
                             adding_shot_marker_statement,
                             added_shot_marker_statement,
                         )
+from ..vse_extra_ui import getMarkerFrameFromShotStrip
 
 
 class BPMAddShotMarker(bpy.types.Operator):
@@ -27,6 +28,7 @@ class BPMAddShotMarker(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         keyword = context.window_manager.bpm_datas[0].edit_scene_keyword
+        scn = context.scene
         if context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT':
             if keyword in context.scene.name:
                 if context.scene.sequence_editor.active_strip:
@@ -34,9 +36,12 @@ class BPMAddShotMarker(bpy.types.Operator):
                     if not active.lock:
                         try:
                             if active.bpm_isshot and active.scene.library: #TODO when other strip type than scene, change this
+                                for m in getMarkerFrameFromShotStrip(active):
+                                    if m[1] == scn.frame_current:
+                                        return False
                                 return True
                         except AttributeError:
-                            pass
+                            return False
 
     def invoke(self, context, event):
         self.frame = context.scene.frame_current
