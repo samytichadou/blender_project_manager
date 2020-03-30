@@ -24,7 +24,12 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
 
     name = bpy.props.StringProperty(name = "Marker name", default = "Marker name")
     frame = bpy.props.IntProperty(name = "Marker frame")
-    modify = False
+    modify_delete_items = [
+        ('MODIFY', 'Modify', ""),
+        ('DELETE', 'Delete', ""),
+        ]
+    modify_delete = bpy.props.EnumProperty(items = modify_delete_items, default = 'MODIFY')
+    existing_marker = False
 
     @classmethod
     def poll(cls, context):
@@ -50,26 +55,36 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
         for m in getMarkerFrameFromShotStrip(active):
             if m[1] == scn.frame_current:
                 self.name = m[0]
-                self.modify = True
+                self.existing_marker = True
                 break
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
         layout = self.layout
-        if not self.modify:
-            layout.label(text = "Add a marker")
+        if not self.existing_marker:
+            layout.label(text = "Add :")
+            # frame
+            layout.prop(self, 'frame')
         else:
-            layout.label(text = "Modify a marker")
-        # name
-        layout.prop(self, 'name', text='')
-        # frame
-        layout.prop(self, 'frame')
+            layout.prop(self, 'modify_delete', expand=True)
+
+        if self.modify_delete == 'MODIFY'or not self.existing_marker:
+            # name
+            layout.prop(self, 'name', text='')
 
     def execute(self, context):
         winman = context.window_manager
         active = context.scene.sequence_editor.active_strip
         strip_scn = active.scene
         library = strip_scn.library
+
+        if not self.existing_marker: 
+            behaviour = "ADD"
+        else:
+            if self.modify_delete == "MODIFY":
+                behaviour = "MODIFY"
+            else:
+                behaviour = "DELETE"
         
         if winman.bpm_debug: print(start_add_shot_marker_statement) #debug
 
@@ -80,7 +95,7 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
         shot_frame = getShotMarkerPosition(self.frame, active, strip_scn)
         
         # build command
-        arguments = getArgumentForPythonScript([self.name, shot_frame, self.modify])
+        arguments = getArgumentForPythonScript([self.name, shot_frame, behaviour])
 
         if winman.bpm_debug: print(adding_shot_marker_statement + self.name + " - frame " + str(shot_frame)) #debug
 

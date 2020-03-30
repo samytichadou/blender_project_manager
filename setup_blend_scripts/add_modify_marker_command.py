@@ -9,7 +9,9 @@ def get_args() :
     ag_list = []
     arg = ""
     for i in ag:
-        if i != "###": arg += " " + i
+        if i != "###":
+            if arg != "":arg += " " 
+            arg += i
         else:
             ag_list.append(arg)
             arg = ""
@@ -19,14 +21,18 @@ args = get_args()
 scn = bpy.context.scene
 
 # set marker
-if args[2] == "False":
+if args[2] == "ADD":
     # add
     scn.timeline_markers.new(args[0], frame=int(args[1]))
 else:
-    # modify
     for m in scn.timeline_markers:
         if m.frame == int(args[1]):
-            m.name = args[0]
+            # modify
+            if args[2] == "MODIFY":
+                m.name = args[0]
+            # remove
+            elif args[2] == "DELETE":
+                scn.timeline_markers.remove(m)
             break
 
 # save file

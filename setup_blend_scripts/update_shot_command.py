@@ -9,7 +9,9 @@ def get_args() :
     ag_list = []
     arg = ""
     for i in ag:
-        if i != "###": arg += " " + i
+        if i != "###":
+            if arg != "":arg += " " 
+            arg += i
         else:
             ag_list.append(arg)
             arg = ""
