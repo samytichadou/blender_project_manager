@@ -64,9 +64,9 @@ shot_update_impossible_statement = bpm_statement + shot_update_impossible_messag
 
 
 # marker statements
-start_add_shot_marker_statement = bpm_statement + "Starting adding shot marker"
-adding_shot_marker_statement = bpm_statement + "Adding shot marker : "
-added_shot_marker_statement= bpm_statement + "Shot marker successfully added"
+start_edit_shot_marker_statement = bpm_statement + "Starting editing shot marker"
+editing_shot_marker_statement = bpm_statement + "Editing shot marker : "
+edited_shot_marker_statement= bpm_statement + "Shot marker successfully edited"
 
 
 # extra ui statements
