@@ -5,7 +5,13 @@ import bgl
 from gpu_extras.batch import batch_for_shader
 
 
-from .global_variables import font_file, add_extra_ui_statement, remove_extra_ui_statement, load_font_statement
+from .global_variables import (
+                            font_file, 
+                            add_extra_ui_statement, 
+                            remove_extra_ui_statement, 
+                            load_font_statement, 
+                            unload_font_statement,
+                        )
 
 
 # compute dpi_fac on every blender startup
@@ -21,6 +27,13 @@ def initializeExternalFontId(font_id, file_font):
     winman = bpy.context.window_manager
     if winman.bpm_debug: print(load_font_statement + file_font) #debug
     font_id["font_id"] = blf.load(file_font)
+
+# unload external font
+def unloadExternalFontId(font_id, file_font):
+    winman = bpy.context.window_manager
+    if winman.bpm_debug: print(unload_font_statement + file_font) #debug
+    font_id["font_id"] = 0
+    blf.unload(file_font)
 
 # get link scene marker fram
 def getMarkerFrameFromShotStrip(strip):
@@ -276,6 +289,8 @@ def enableSequencerCallback():
 def disableSequencerCallback():
     if not cb_handle:
         return
+
+    unloadExternalFontId(markers_font, font_file)
 
     bpy.types.SpaceSequenceEditor.draw_handler_remove(cb_handle[0], 'WINDOW')
     cb_handle.clear()

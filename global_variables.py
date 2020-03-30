@@ -67,6 +67,7 @@ shot_update_impossible_statement = bpm_statement + shot_update_impossible_messag
 add_extra_ui_statement = bpm_statement + "Sequencer UI handler added"
 remove_extra_ui_statement = bpm_statement + "Sequencer UI handler removed"
 load_font_statement = bpm_statement + "External font loaded : "
+unload_font_statement = bpm_statement + "External font unloaded : "
 
 
 # asset statements

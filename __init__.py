@@ -53,6 +53,8 @@ from .operators.save_project_settings_to_json import *
 from .properties import *
 from .gui import *
 
+from .vse_extra_ui import disableSequencerCallback
+
 
 # register
 ##################################
@@ -157,7 +159,11 @@ def register():
     bpy.types.TOPBAR_HT_upper_bar.prepend(bpmTopbarFunction)
     bpy.types.TOPBAR_MT_file.prepend(bpmFileMenuFunction)
 
+
 def unregister():
+
+    ### DISABLE EXTRA UI IF EXISTING ###
+    disableSequencerCallback()
     
     ### OPERATORS ###
     from bpy.utils import unregister_class
