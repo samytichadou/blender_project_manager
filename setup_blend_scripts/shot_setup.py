@@ -1,6 +1,6 @@
 import bpy
 
-debug = bpy.context.window_manager.bpm_debug
+debug = bpy.data.window_managers[0]
 
 if debug: print(|bpm_statement + "Setting Shot scene variables") #debug
 

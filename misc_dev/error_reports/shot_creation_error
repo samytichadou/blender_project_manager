@@ -1,0 +1,45 @@
+Modules Installed (blender_project_manager-master) from 'C:\\Users\\user\\Downloads\\blender_project_manager-master (18).zip' into 'C:\\Users\\user\\AppData\\Roaming\\Blender Foundation\\Blender\\2.83\\scripts\\addons'
+Info: Total files 1 | Changed 1 | Failed 0
+Blender Project Manager --- Saving to json
+Blender Project Manager --- Successfully saved to json
+Blender Project Manager --- Folder created : C:\Users\user\Documents\BPM\shots
+Blender Project Manager --- Folder created : C:\Users\user\Documents\BPM\assets
+Blender Project Manager --- Folder created : C:\Users\user\Documents\BPM\renders
+Blender Project Manager --- External font loaded : C:\Users\user\AppData\Roaming\Blender Foundation\Blender\2.83\scripts\addons\blender_project_manager-master\ressources\JetBrainsMono-Regular.ttf
+Blender Project Manager --- Sequencer UI handler added
+
+
+
+Blender Project Manager --- Starting new shot creation
+Blender Project Manager --- Checking on timeline for available space
+Blender Project Manager --- Creating new shot folder : C:\Users\user\Documents\BPM\shots\Project_prefix_S001
+Blender Project Manager --- Creating python script : C:\Users\user\Documents\BPM\shots\Project_prefix_S001\python_temp.py
+Blender Project Manager --- Python script successfully created
+Blender Project Manager --- Launching command : C:\Users\user\Documents\build_windows_x64_vc16_Release\bin\Release\blender.exe  --background --python "C:\Users\user\Documents\BPM\shots\Project_prefix_S001\python_temp.py" --
+Blender 2.83 (sub 11) (hash a24f52c51cff built 2020-03-29 05:31:59)
+Read prefs: C:\Users\user\AppData\Roaming\Blender Foundation\Blender\2.83\config\userpref.blend
+found bundled python: C:\Users\user\Documents\build_windows_x64_vc16_Release\bin\Release\2.83\python
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\user\Documents\BPM\shots\Project_prefix_S001\python_temp.py", line 3, in <module>
+    debug = bpy.context.window_manager.bpm_debug
+AttributeError: 'WindowManager' object has no attribute 'bpm_debug'
+
+Blender quit
+Blender Project Manager --- File successfully deleted : C:\Users\user\Documents\BPM\shots\Project_prefix_S001\python_temp.py
+OS error: load: C:\Users\user\Documents\BPM\shots\Project_prefix_S001\Project_prefix_S001_v001.blend failed to open blend file
+Blender Project Manager --- Scenes linked from : C:\Users\user\Documents\BPM\shots\Project_prefix_S001\Project_prefix_S001_v001.blend
+Traceback (most recent call last):
+  File "C:\Users\user\AppData\Roaming\Blender Foundation\Blender\2.83\scripts\addons\blender_project_manager-master\operators\create_shot.py", line 91, in execute
+    scene=http://bpy.data.scenes[name],
+KeyError: 'bpy_prop_collection[key]: key "S001" not found'
+
+location: <unknown location>:-1
+
+location: <unknown location>:-1
+Error: Traceback (most recent call last):
+  File "C:\Users\user\AppData\Roaming\Blender Foundation\Blender\2.83\scripts\addons\blender_project_manager-master\operators\create_shot.py", line 91, in execute
+    scene=http://bpy.data.scenes[name],
+KeyError: 'bpy_prop_collection[key]: key "S001" not found'
+
+location: <unknown location>:-1
