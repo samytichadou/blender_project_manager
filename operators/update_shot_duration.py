@@ -2,23 +2,23 @@ import bpy
 
 
 from ..global_variables import (
-    launching_command_statement,
-    start_update_shot_statement,
-    checking_update_shot_statement,
-    updating_shot_statement,
-    update_shot_new_start_end_statement,
-    updated_shot_statement,
-    no_update_needed_statement,
-    update_shot_file,
-    shot_update_impossible_message,
-    shot_update_impossible_statement,
-)
+                            launching_command_statement,
+                            start_update_shot_statement,
+                            checking_update_shot_statement,
+                            updating_shot_statement,
+                            update_shot_new_start_end_statement,
+                            updated_shot_statement,
+                            no_update_needed_statement,
+                            update_shot_file,
+                            shot_update_impossible_message,
+                            shot_update_impossible_statement,
+                        )
 from ..functions.strip_functions import (
-    returnSelectedStrips, 
-    getStripOffsets, 
-    getStripNewTiming, 
-    updateStripOnTimeline,
-)
+                                    returnSelectedStrips, 
+                                    getStripOffsets, 
+                                    getStripNewTiming, 
+                                    updateStripOnTimeline,
+                                )
 from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
 from ..functions.project_data_functions import getArgumentForPythonScript
 from ..functions.file_functions import absolutePath

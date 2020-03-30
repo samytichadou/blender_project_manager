@@ -76,3 +76,8 @@ def updateStripOnTimeline(strip):
     # delete previous strip
     bpy.context.scene.sequence_editor.sequences.remove(strip)
     return new_strip
+
+# get shot marker position
+def getShotMarkerPosition(marker_frame, shot_strip, marker_scn):
+    shot_frame = (marker_frame - shot_strip.frame_final_start) + marker_scn.frame_start
+    return shot_frame

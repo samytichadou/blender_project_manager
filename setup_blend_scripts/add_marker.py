@@ -18,9 +18,8 @@ def get_args() :
 args = get_args()
 scn = bpy.context.scene
 
-# set start and end frame
-scn.frame_start = int(args[0])
-scn.frame_end = int(args[1])
+# set marker
+scn.timeline_markers.new(args[0], frame=int(args[1]))
 
 # save file
 bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)

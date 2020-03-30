@@ -63,6 +63,12 @@ shot_update_impossible_message = "Impossible to update shot (negative shot start
 shot_update_impossible_statement = bpm_statement + shot_update_impossible_message
 
 
+# marker statements
+start_add_shot_marker_statement = bpm_statement + "Starting adding shot marker"
+adding_shot_marker_statement = bpm_statement + "Adding shot marker : "
+added_shot_marker_statement= bpm_statement + "Shot marker successfully added"
+
+
 # extra ui statements
 add_extra_ui_statement = bpm_statement + "Sequencer UI handler added"
 remove_extra_ui_statement = bpm_statement + "Sequencer UI handler removed"
@@ -94,6 +100,7 @@ script_file = os.path.realpath(__file__)
 setup_script_folder = os.path.join(os.path.dirname(script_file), "setup_blend_scripts")
 shot_setup_file = os.path.join(setup_script_folder, "shot_setup.py")
 update_shot_file = os.path.join(setup_script_folder, "update_shot.py")
+add_marker_file = os.path.join(setup_script_folder, "add_marker.py")
 
 ressources_folder = os.path.join(os.path.dirname(script_file), "ressources")
 font_file = os.path.join(ressources_folder, "JetBrainsMono-Regular.ttf")

@@ -89,7 +89,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
     def draw(self, context):
         winman = context.window_manager
-        sequencer = context.scene.sequence_editor
+        active = context.scene.sequence_editor.active_strip
 
         layout = self.layout
 
@@ -101,15 +101,16 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         row.operator('bpm.update_shot_duration')
         drawWikiHelpOperator(row, 'Update-Shot-Operator')
 
+        row = layout.row(align=True)
+        row.operator('bpm.add_shot_marker')
+        drawWikiHelpOperator(row, 'Add-Shot-Marker-Operator')
+
         layout.separator()
-        if sequencer.active_strip:
-            active = sequencer.active_strip
-            if active.type == 'SCENE':
-                layout.prop(active, 'bpm_displaymarkers')
-                layout.prop(active, 'bpm_shotstate')
-                layout.prop(active, 'bpm_shotassets')
-            if winman.bpm_debug: #debug:
-                layout.prop(active, 'bpm_isshot')
+        layout.prop(active, 'bpm_displaymarkers')
+        layout.prop(active, 'bpm_shotstate')
+        layout.prop(active, 'bpm_shotassets')
+        if winman.bpm_debug: #debug:
+            layout.prop(active, 'bpm_isshot')
 
 
 # bpm function topbar back/open operators

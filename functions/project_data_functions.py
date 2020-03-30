@@ -134,6 +134,5 @@ def getArgumentForPythonScript(argument_list):
     arguments = ""
     for a in argument_list:
         arguments += str(a)
-        if not arguments.endswith(" "):
-            arguments += " "
+        arguments += " ### "
     return arguments
