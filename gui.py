@@ -31,12 +31,12 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         drawWikiHelpOperator(row, 'Create-Shot-Operator')
 
         row = layout.row(align=True)
-        row.operator('bpm.create_asset')
-        drawWikiHelpOperator(row, 'Create-Asset-Operator')
-
-        row = layout.row(align=True)
         row.operator('bpm.delete_unused_shots')
         drawWikiHelpOperator(row, 'Delete-Unused-Shots')
+
+        row = layout.row(align=True)
+        row.operator('bpm.create_asset')
+        drawWikiHelpOperator(row, 'Create-Asset-Operator')
 
         layout.separator()
         layout.prop(winman, 'bpm_debug', text = "Debug")
