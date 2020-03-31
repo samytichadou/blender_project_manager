@@ -1,12 +1,11 @@
 import bpy
 
 
-from ..functions.file_functions import absolutePath, getLastVersion
+from ..functions.file_functions import absolutePath
 from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
 from ..functions.project_data_functions import getArgumentForPythonScript
 from ..functions.strip_functions import getShotMarkerPosition
 from ..global_variables import (
-                            back_to_edit_statement,
                             launching_command_statement,
                             add_modify_marker_file,
                             start_edit_shot_marker_statement,
