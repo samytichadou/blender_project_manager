@@ -7,6 +7,7 @@ def getStripOffsets(strip):
     end_offset      = strip.frame_final_end     - (strip.frame_start + strip.frame_duration)
     return start_offset, end_offset
 
+
 # get new timing of a shot strip
 def getStripNewTiming(strip) :
     strip_scene = strip.scene
@@ -14,13 +15,8 @@ def getStripNewTiming(strip) :
     start = strip_scene.frame_start + offset
     end = strip_scene.frame_end + strip.frame_still_end - strip.frame_offset_end
 
-    # print("DEBUG --- offset_start : " + str(strip.frame_offset_start)) #debug
-    # print("DEBUG --- still_start : " + str(strip.frame_still_start))#debug
-    # print("DEBUG --- offset : " + str(offset))#debug
-    # print("DEBUG --- start : " + str(start))#debug
-    # print("DEBUG --- end : " + str(end))#debug
-
     return start, end
+
 
 # check if strip is in target timing on the timeline
 def checkStripInTargetSpaceOnSequencer(start, end, target_start, target_end):
@@ -32,6 +28,7 @@ def checkStripInTargetSpaceOnSequencer(start, end, target_start, target_end):
         return True
     else:
         return False
+
 
 # return available position for a strip
 def returnAvailablePositionStripChannel(start, duration, sequencer):
@@ -53,6 +50,7 @@ def returnAvailablePositionStripChannel(start, duration, sequencer):
             return i
     return 0
 
+
 # return selected strips
 def returnSelectedStrips(sequencer):
     selected_strips = []
@@ -60,6 +58,7 @@ def returnSelectedStrips(sequencer):
         if strip.select:
             selected_strips.append(strip)
     return selected_strips
+
 
 # update shot strip start/end
 def updateStripOnTimeline(strip):
@@ -77,7 +76,20 @@ def updateStripOnTimeline(strip):
     bpy.context.scene.sequence_editor.sequences.remove(strip)
     return new_strip
 
+
 # get shot marker position
 def getShotMarkerPosition(marker_frame, shot_strip, marker_scn):
     shot_frame = (marker_frame - shot_strip.frame_final_start) + marker_scn.frame_start
     return shot_frame
+
+
+# get list of sequencer shot
+def getListSequencerShots(sequencer):
+    shot_list = []
+    for s in sequencer.sequences_all:
+        try:
+            if s.bpm_isshot:
+                shot_list.append(s.name)
+        except AttributeError:
+            pass
+    return shot_list

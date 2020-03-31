@@ -66,7 +66,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                         # check if frame become negative and avoid it
                         if new_start < 0:
                             self.report({'INFO'}, shot_update_impossible_message)
-                            print(shot_update_impossible_statement)
+                            if winman.bpm_debug: print(shot_update_impossible_statement) #debug
                         else:
                             chk_updated = True
 

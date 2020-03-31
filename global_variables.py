@@ -10,9 +10,17 @@ back_to_edit_statement = bpm_statement + "Opening editing eroject "
 loaded_project_folder = bpm_statement + "Project folder loaded : "
 
 
-# shot creation statements
+# shot management statements
 creating_shot_statement = bpm_statement + "Starting new shot creation"
 creating_shot_folder_statement = bpm_statement + "Creating new shot folder : "
+used_shots_list_statement = bpm_statement + "Shots used in edit : "
+existing_shots_list_statement = bpm_statement + "Existing shots in project : "
+unused_shots_list_statement = bpm_statement + "Unused shots : "
+no_unused_shots_message = "No unused shots"
+no_unused_shots_statement = bpm_statement + no_unused_shots_message
+starting_delete_shots_statement = bpm_statement + "Starting shot(s) deletion"
+starting_delete_specific_shot_statement = bpm_statement + "Starting to delete shot : "
+deleting_scene_statement = bpm_statement + "Starting to delete scene : "
 
 
 # project datas statements
@@ -44,6 +52,10 @@ launching_command_statement = bpm_statement + "Launching command : "
 deleted_file_statement = bpm_statement + "File successfully deleted : "
 scenes_linked_statement = bpm_statement + "Scenes linked from : "
 folder_created_statement = bpm_statement + "Folder created : "
+starting_moving_folder = bpm_statement + "Moving folder : "
+moved_folder_statement = bpm_statement + "Folder successfully moved"
+starting_deleting_folder = bpm_statement + "Deleting folder : "
+deleted_folder_statement = bpm_statement + "Folder successfully deleted"
 
 
 # timeline statements

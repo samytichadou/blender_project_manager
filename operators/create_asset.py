@@ -80,7 +80,7 @@ class BPMCreateAsset(bpy.types.Operator):
                 if asset['name']==self.name:
                     # error message because dupe name
                     self.report({'INFO'}, dupe_asset_name_message)
-                    print(dupe_asset_name_statement)
+                    if winman.bpm_debug: print(dupe_asset_name_statement) #debug
                     return {'FINISHED'}
 
             # remove json

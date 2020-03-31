@@ -55,7 +55,7 @@ class BPMCreateShot(bpy.types.Operator):
         if channel == 0:
             # return no place to put the strip
             self.report({'INFO'}, no_available_timeline_space_message)
-            print(no_available_timeline_space_statement)
+            if winman.bpm_debug: print(no_available_timeline_space_statement) #debug
             return {'FINISHED'}
 
         # create shot dir

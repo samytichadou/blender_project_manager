@@ -43,6 +43,7 @@ def getProjectDataFile(winman):
     else:
         return None, None    
 
+
 # check if project name match json project
 def chekIfBpmProject(winman, project_data_file):
     dataset = read_json(project_data_file)
@@ -71,6 +72,7 @@ def chekIfBpmProject(winman, project_data_file):
             return True
     return False
 
+
 # load datas
 def createProjectDatas(winman, project_data_file):
     if winman.bpm_debug: print(loading_statement + project_data_file) #debug
@@ -81,6 +83,7 @@ def createProjectDatas(winman, project_data_file):
     # set datas
     setPropertiesFromJsonDataset(dataset, datas, winman)
 
+
 # get custom folders file
 def getCustomFoldersFile(winman):
     project_folder = winman.bpm_projectfolder
@@ -89,6 +92,7 @@ def getCustomFoldersFile(winman):
         return folders_file, True
     else:
         return folders_file, False
+
 
 # get asset file
 def getAssetFile(winman):
@@ -100,12 +104,14 @@ def getAssetFile(winman):
     else:
         return asset_file_path, False
 
+
 # load json in collection
 def loadJsonInCollection(winman, json_file, collection, json_coll_name):
     dataset = read_json(json_file)
     for f in dataset[json_coll_name]:
         new = collection.add()
         setPropertiesFromJsonDataset(f, new, winman)
+
 
 # get shot pattern
 def getShotPattern(project_datas):
@@ -114,6 +120,7 @@ def getShotPattern(project_datas):
         prefix += "_"
     prefix += project_datas.shot_prefix
     return prefix
+
 
 # get shot replacement list for python script for shot creation
 def getScriptReplacementListShotCreation(project_datas, next_shot_folder, next_shot_file, next_shot_number):
@@ -129,6 +136,7 @@ def getScriptReplacementListShotCreation(project_datas, next_shot_folder, next_s
 
     return replacement_list
 
+
 # get shot arguments list for python script
 def getArgumentForPythonScript(argument_list):
     arguments = ""
@@ -136,3 +144,14 @@ def getArgumentForPythonScript(argument_list):
         arguments += str(a)
         arguments += " ### "
     return arguments
+
+
+# get all available shots list
+def getAvailableShotsList(shot_folder, project_prefix):
+    shot_list = []
+    for filename in os.listdir(shot_folder):
+        filepath = os.path.join(shot_folder, filename)
+        if os.path.isdir(filepath):
+            if project_prefix in filename:
+                shot_list.append(filename.split(project_prefix)[1])
+    return shot_list
