@@ -15,6 +15,7 @@ from ..global_variables import (
                             asset_folder,
                             render_folder,
                             folder_created_statement,
+                            old_folder,
                         )
 from ..vse_extra_ui import enableSequencerCallback
 
@@ -90,17 +91,38 @@ class BpmCreateProject(bpy.types.Operator):
         winman.bpm_filetype = 'EDIT'
 
         # create associated folder structure
+        #shot
         shot_folder_path = os.path.join(project_folder, shot_folder)
         createFolder(shot_folder_path)
         if winman.bpm_debug: print(folder_created_statement + shot_folder_path) #debug
 
+        #asset
         asset_folder_path = os.path.join(project_folder, asset_folder)
         createFolder(asset_folder_path)
         if winman.bpm_debug: print(folder_created_statement + asset_folder_path) #debug
 
+        #render
         render_folder_path = os.path.join(project_folder, render_folder)
         createFolder(render_folder_path)
         if winman.bpm_debug: print(folder_created_statement + render_folder_path) #debug
+
+        #old
+        old_folder_path = os.path.join(project_folder, old_folder)
+
+        #old shot
+        old_shot_folder_path = os.path.join(old_folder_path, shot_folder)
+        createFolder(old_shot_folder_path)
+        if winman.bpm_debug: print(folder_created_statement + old_shot_folder_path) #debug
+
+        #old asset
+        old_asset_folder_path = os.path.join(old_folder_path, asset_folder)
+        createFolder(old_asset_folder_path)
+        if winman.bpm_debug: print(folder_created_statement + old_asset_folder_path) #debug
+
+        #old render
+        old_render_folder_path = os.path.join(old_folder_path, render_folder)
+        createFolder(old_render_folder_path)
+        if winman.bpm_debug: print(folder_created_statement + old_render_folder_path) #debug
 
         enableSequencerCallback()
 

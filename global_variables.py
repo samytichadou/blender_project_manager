@@ -107,9 +107,10 @@ font_file = os.path.join(ressources_folder, "JetBrainsMono-Regular.ttf")
 
 new_project_name = "Project_name"
 
-shot_folder = "shots"
-asset_folder = "assets"
-render_folder = "renders"
+asset_folder = "01_assets"
+shot_folder = "02_shots"
+render_folder = "03_renders"
+old_folder = "zz_old"
 
 
 ### WEB ###
