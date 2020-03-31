@@ -34,6 +34,10 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         row.operator('bpm.create_asset')
         drawWikiHelpOperator(row, 'Create-Asset-Operator')
 
+        row = layout.row(align=True)
+        row.operator('bpm.delete_unused_shots')
+        drawWikiHelpOperator(row, 'Delete-Unused-Shots')
+
         layout.separator()
         layout.prop(winman, 'bpm_debug', text = "Debug")
         if winman.bpm_debug:
