@@ -155,3 +155,12 @@ def getAvailableShotsList(shot_folder, project_prefix):
             if project_prefix in filename:
                 shot_list.append(filename.split(project_prefix)[1])
     return shot_list
+
+
+# find lib from shot name
+def findLibFromShot(shot_name):
+    for l in bpy.data.libraries:
+        if shot_name in l.name:
+            lib = l
+            break
+    return lib

@@ -20,7 +20,7 @@ from ..global_variables import (
                             deleted_folder_statement,
                         )
 
-from ..functions.project_data_functions import getAvailableShotsList
+from ..functions.project_data_functions import getAvailableShotsList, findLibFromShot
 from ..functions.strip_functions import getListSequencerShots
 from ..functions.utils_functions import listDifference
 
@@ -32,11 +32,12 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
     #bl_options = {}
 
     shots_to_remove = []
+    libraries_to_unload = []
     shot_folder_path = None
     project_prefix = None
     shot_prefix = None
 
-    permanently_delete = bpy.props.BoolProperty(name = "Permanently delete")
+    permanently_delete : bpy.props.BoolProperty(name = "Permanently delete")
 
     @classmethod
     def poll(cls, context):
@@ -61,7 +62,9 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
         sequencer = context.scene.sequence_editor
 
         # get used shot
-        timeline_shots = getListSequencerShots(sequencer)
+        timeline_shots, self.libraries_to_unload = getListSequencerShots(sequencer)
+
+        print(str(self.libraries_to_unload))
 
         if winman.bpm_debug: print(used_shots_list_statement + str(timeline_shots)) #debug
 
@@ -113,6 +116,8 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
                 old_shot_folder = os.path.join(winman.bpm_projectfolder, old_folder)
                 if winman.bpm_debug: print(starting_moving_folder + shot_folder_name + " to " + old_shot_folder) #debug
 
+                # check if existing and change name to copy
+
                 old_shot_path = os.path.join(old_shot_folder, shot_folder)
                 shutil.move(folder, old_shot_path)
 
@@ -122,5 +127,12 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
                 if winman.bpm_debug: print(starting_deleting_folder + shot_folder_name) #debug
                 shutil.rmtree(folder)
                 if winman.bpm_debug: print(deleted_folder_statement) #debug
+
+            # remove libraries
+            lib = findLibFromShot(shot_folder_name)
+            if lib is not None:
+                lib.use_fake_user = False
+                while lib.users != 0:
+                    lib.user_clear()
         
         return {'FINISHED'}

@@ -64,5 +64,7 @@ def bpmStartupHandler(scene):
     #load ui if needed
     if winman.bpm_isproject and winman.bpm_filetype == 'EDIT':
         enableSequencerCallback()
+        # check for unused libraries to clear
+        
     else:
        disableSequencerCallback()

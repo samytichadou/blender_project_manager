@@ -83,13 +83,14 @@ def getShotMarkerPosition(marker_frame, shot_strip, marker_scn):
     return shot_frame
 
 
-# get list of sequencer shot
+# get list of sequencer shot and libs
 def getListSequencerShots(sequencer):
     shot_list = []
+    lib_list = []
     for s in sequencer.sequences_all:
         try:
             if s.bpm_isshot:
                 shot_list.append(s.name)
         except AttributeError:
             pass
-    return shot_list
+    return shot_list, lib_list
