@@ -113,10 +113,21 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
                 old_shot_folder = os.path.join(winman.bpm_projectfolder, old_folder)
                 if winman.bpm_debug: print(starting_moving_folder + shot_folder_name + " to " + old_shot_folder) #debug
 
-                # check if existing and change name to copy
-
                 old_shot_path = os.path.join(old_shot_folder, shot_folder)
-                shutil.move(folder, old_shot_path)
+                temp_dir_path = os.path.join(old_shot_path, shot_folder_name)
+
+                # check if existing and change name to copy
+                if os.path.isdir(temp_dir_path):
+                    v_number = 0
+                    dir_path = temp_dir_path
+                    while os.path.isdir(dir_path):
+                        v_number += 1
+                        dir_path = temp_dir_path + "_" + str(v_number)
+
+                else:
+                    dir_path = temp_dir_path
+
+                shutil.move(folder, dir_path)
 
                 if winman.bpm_debug: print(moved_folder_statement) #debug
             # delete

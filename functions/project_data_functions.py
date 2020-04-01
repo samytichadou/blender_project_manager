@@ -164,8 +164,7 @@ def findLibFromShot(shot_name):
     for l in bpy.data.libraries:
         if shot_name in l.name:
             lib = l
-            break
-    return lib
+            return lib
 
 
 # find unused lib
