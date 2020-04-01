@@ -71,7 +71,7 @@ def updateStripOnTimeline(strip):
         frame_start = strip.frame_final_start,
     )
     # set it to bpm shot
-    new_strip.bpm_isshot = True
+    new_strip.bpm_shotsettings.is_shot = True
     # delete previous strip
     bpy.context.scene.sequence_editor.sequences.remove(strip)
     return new_strip
@@ -89,7 +89,7 @@ def getListSequencerShots(sequencer):
     lib_list = []
     for s in sequencer.sequences_all:
         try:
-            if s.bpm_isshot:
+            if s.bpm_shotsettings.is_shot:
                 shot_list.append(s.name)
         except AttributeError:
             pass

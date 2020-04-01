@@ -25,7 +25,7 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
     def draw(self, context):
         winman = context.window_manager
-        project_data = winman.bpm_datas[0]
+        project_data = winman.bpm_datas
 
         layout = self.layout
 
@@ -57,20 +57,20 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
     bl_parent_id = "BPM_PT_sequencer_management_panel"
 
     def draw(self, context):
-        scn = context.scene
+        scn_settings = context.scene.bpm_scenesettings
 
         layout = self.layout
 
         row = layout.row(align=True)
-        row.prop(scn, 'bpm_extraui')
+        row.prop(scn_settings, 'extra_ui')
         drawWikiHelp(row, 'Extra-UI-in-Sequencer')
-        if scn.bpm_extraui:
-            layout.prop(scn, 'bpm_displayshotstrip')
-            layout.prop(scn, 'bpm_displayshotupdatewarning')
-            layout.prop(scn, 'bpm_displaymarkers')
-            layout.prop(scn, 'bpm_displaymarkernames')
-            layout.prop(scn, 'bpm_displaymarkerboxes')
-            layout.prop(scn, 'bpm_displaymarkerlimit')
+        if scn_settings.extra_ui:
+            layout.prop(scn_settings, 'display_shot_strip')
+            layout.prop(scn_settings, 'display_shot_update_warning')
+            layout.prop(scn_settings, 'display_markers')
+            layout.prop(scn_settings, 'display_marker_names')
+            layout.prop(scn_settings, 'display_marker_boxes')
+            layout.prop(scn_settings, 'display_marker_limit')
 
 
 # sequencer shot panel
@@ -87,7 +87,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         if context.scene.sequence_editor.active_strip:
             active = context.scene.sequence_editor.active_strip
             try:
-                if active.bpm_isshot:
+                if active.bpm_shotsettings.is_shot:
                     chk_isshot = True
             except AttributeError:
                 return False
@@ -106,11 +106,11 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         drawOperatorAndHelp(layout, 'bpm.add_modify_shot_marker', 'Add-Modify-Shot-Marker-Operator')
 
         layout.separator()
-        layout.prop(active, 'bpm_displaymarkers')
-        layout.prop(active, 'bpm_shotstate')
-        layout.prop(active, 'bpm_shotassets')
+        layout.prop(active.bpm_shotsettings, 'display_markers')
+        layout.prop(active.bpm_shotsettings, 'shot_state')
+
         if winman.bpm_debug: #debug:
-            layout.prop(active, 'bpm_isshot')
+            layout.prop(active.bpm_shotsettings, 'is_shot')
 
 
 # bpm function topbar back/open operators
@@ -149,7 +149,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             layout.operator('bpm.create_project')  
         
         else:
-            project_data = winman.bpm_datas[0]
+            project_data = winman.bpm_datas
             layout.label(text = project_data.name)
 
             layout.operator('bpm.display_modify_project_settings')

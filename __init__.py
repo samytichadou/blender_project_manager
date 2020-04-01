@@ -80,6 +80,8 @@ classes = (BPMOpenShot,
             BPMCustomFolders,
             BPMAssetSettings,
             BPMShotSettings,
+            BPMSceneSettings,
+            BPMGeneralSettings,
 
             BPM_PT_sequencer_management_panel,
             BPM_PT_sequencer_shot_panel,
@@ -115,7 +117,7 @@ def register():
     bpy.types.WindowManager.bpm_projectfolder = \
         bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
     bpy.types.WindowManager.bpm_datas = \
-        bpy.props.CollectionProperty(type = BPMProjectSettings)
+        bpy.props.PointerProperty(type = BPMProjectSettings)
     bpy.types.WindowManager.bpm_folders = \
         bpy.props.CollectionProperty(type = BPMCustomFolders)
     bpy.types.WindowManager.bpm_assets = \
@@ -123,40 +125,14 @@ def register():
     bpy.types.WindowManager.bpm_shots = \
         bpy.props.CollectionProperty(type = BPMShotSettings)
 
-    bpy.types.SceneSequence.bpm_isshot = \
-        bpy.props.BoolProperty(default=False)
-    bpy.types.SceneSequence.bpm_displaymarkers = \
-        bpy.props.BoolProperty(name = "Display markers", default=False)
-    bpy.types.SceneSequence.bpm_shotstate = \
-        bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD')
-    bpy.types.SceneSequence.bpm_shotassets = \
-        bpy.props.PointerProperty(type = BPMAssetSettings, name="Assets list") # test prop test TODO
+    bpy.types.WindowManager.bpm_generalsettings = \
+        bpy.props.PointerProperty(type = BPMGeneralSettings, name="BPM general settings")
 
-    bpy.types.Scene.bpm_extraui = \
-        bpy.props.BoolProperty(name = "Extra UI", default=True)
-    bpy.types.Scene.bpm_displayshotstrip = \
-        bpy.props.BoolProperty(name = "Shot strips", default=True)
-    display_marker_items = [
-        ('NONE', 'None', ""),
-        ('SELECTED', 'Selected', ""),
-        ('PERSTRIP', 'Per strip', ""),
-        ('ALL', 'All', ""),
-        ]
-    bpy.types.Scene.bpm_displaymarkers = \
-        bpy.props.EnumProperty(name = "Shot markers", items = display_marker_items, default = 'ALL')
-    display_marker_name_items = [
-        ('NONE', 'None', ""),
-        ('CURRENT', 'Current', ""),
-        ('ALL', 'All', ""),
-        ]
-    bpy.types.Scene.bpm_displaymarkernames = \
-        bpy.props.EnumProperty(name = "Marker names", items = display_marker_name_items, default = 'ALL')
-    bpy.types.Scene.bpm_displaymarkerboxes = \
-        bpy.props.BoolProperty(name = "Marker boxes", default=True)
-    bpy.types.Scene.bpm_displaymarkerlimit = \
-        bpy.props.IntProperty(name = "Marker text limit", default = 15)
-    bpy.types.Scene.bpm_displayshotupdatewarning = \
-        bpy.props.BoolProperty(name = "Shot update warning", default=True)
+    bpy.types.SceneSequence.bpm_shotsettings = \
+        bpy.props.PointerProperty(type = BPMShotSettings, name="BPM shot settings")
+
+    bpy.types.Scene.bpm_scenesettings = \
+        bpy.props.PointerProperty(type = BPMSceneSettings, name="BPM scene settings")
 
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
@@ -187,18 +163,11 @@ def unregister():
     del bpy.types.WindowManager.bpm_assets
     del bpy.types.WindowManager.bpm_shots
 
-    del bpy.types.SceneSequence.bpm_isshot
-    del bpy.types.SceneSequence.bpm_displaymarkers
-    del bpy.types.SceneSequence.bpm_shotstate
-    del bpy.types.SceneSequence.bpm_shotassets # test prop test TODO
+    del bpy.types.WindowManager.bpm_generalsettings
 
-    del bpy.types.Scene.bpm_extraui
-    del bpy.types.Scene.bpm_displayshotstrip
-    del bpy.types.Scene.bpm_displaymarkers
-    del bpy.types.Scene.bpm_displaymarkernames
-    del bpy.types.Scene.bpm_displaymarkerboxes
-    del bpy.types.Scene.bpm_displaymarkerlimit
-    del bpy.types.Scene.bpm_displayshotupdatewarning
+    del bpy.types.SceneSequence.bpm_shotsettings
+
+    del bpy.types.Scene.bpm_scenesettings
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)

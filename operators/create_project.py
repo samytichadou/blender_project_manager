@@ -36,7 +36,7 @@ class BpmCreateProject(bpy.types.Operator):
         winman = context.window_manager
         if not winman.bpm_datas:
             winman.bpm_datas.add()
-        datas = winman.bpm_datas[0]
+        datas = winman.bpm_datas
 
         # find project dir and project file
         project_dir = os.path.dirname(absolutePath(bpy.data.filepath))
@@ -57,7 +57,7 @@ class BpmCreateProject(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
-        datas = context.window_manager.bpm_datas[0]
+        datas = context.window_manager.bpm_datas
 
         layout = self.layout
         split = layout.split(align=True)
@@ -72,7 +72,7 @@ class BpmCreateProject(bpy.types.Operator):
         
     def execute(self, context):
         winman = context.window_manager
-        datas = winman.bpm_datas[0]
+        datas = winman.bpm_datas
 
         if winman.bpm_debug: print(saving_to_json_statement) #debug
 

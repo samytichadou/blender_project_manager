@@ -12,14 +12,14 @@ class BPMOpenShot(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        keyword = context.window_manager.bpm_datas[0].edit_scene_keyword
+        keyword = context.window_manager.bpm_datas.edit_scene_keyword
         if context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT':
             if keyword in context.scene.name:
                 if context.scene.sequence_editor.active_strip:
                     active = context.scene.sequence_editor.active_strip
                     if not active.lock:
                         try:
-                            if active.bpm_isshot and active.scene.library:
+                            if active.bpm_shotsettings.is_shot and active.scene.library:
                                 return True
                         except AttributeError:
                             pass

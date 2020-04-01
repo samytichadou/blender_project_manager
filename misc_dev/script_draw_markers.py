@@ -29,9 +29,9 @@ def draw_callback_px():
     region = bpy.context.region
     frame = scn.frame_current
 
-    if not scn.bpm_displaymarkers : return()
+    if not scn.bpm_scenesettings.display_markers : return()
     for strip in sequencer.sequences_all:
-        if strip.bpm_isshot and strip.scene:
+        if strip.bpm_shotsettings.is_shot and strip.scene:
             for m in getMarkerFrameFromShotStrip(strip):
                 x, y = region.view2d.view_to_region(m[1] - 0.5, strip.channel, clip=False)
                 x2, y2 = region.view2d.view_to_region(m[1] + 0.5, strip.channel + 0.25, clip=False)

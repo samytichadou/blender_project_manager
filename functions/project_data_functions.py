@@ -77,7 +77,7 @@ def chekIfBpmProject(winman, project_data_file):
 def createProjectDatas(winman, project_data_file):
     if winman.bpm_debug: print(loading_statement + project_data_file) #debug
 
-    datas = winman.bpm_datas.add()
+    datas = winman.bpm_datas
     dataset = read_json(project_data_file)
 
     # set datas

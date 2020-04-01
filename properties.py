@@ -1,6 +1,9 @@
 import bpy
 
 
+from .functions.filebrowser_update_function import updateFilebrowserPath
+
+
 asset_type_items = [
         ('CHARACTER', 'Character', ""),
         ('PROP', 'Prop', ""),
@@ -23,6 +26,7 @@ shot_state_items = [
         ('COMPOSITING', 'Compositing', ""),
         ]
 
+
 # project settings
 class BPMProjectSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
@@ -41,10 +45,12 @@ class BPMProjectSettings(bpy.types.PropertyGroup) :
     shot_start_frame : bpy.props.IntProperty(name = "Shot Start Frame", default = 100)
     default_shot_length : bpy.props.IntProperty(name = "Default Shot Length", default = 100)
 
+
 # custom project folders
 class BPMCustomFolders(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     filepath : bpy.props.StringProperty(name = "Filepath")
+
 
 # asset settings
 class BPMAssetSettings(bpy.types.PropertyGroup) :
@@ -52,8 +58,53 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
     asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER')
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
 
+
 # shot settings
 class BPMShotSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
-    # asset list : pointer to assets
+    is_shot : bpy.props.BoolProperty(default=False)
+    display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
     shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD')
+    shot_version : bpy.props.IntProperty(name = "Shot version", default = 1)
+
+
+# scene settings
+class BPMSceneSettings(bpy.types.PropertyGroup) :
+    '''name : StringProperty() '''
+    extra_ui : bpy.props.BoolProperty(name = "Extra UI", default=True)
+    display_shot_strip : bpy.props.BoolProperty(name = "Shot strips", default=True)
+    display_marker_items = [
+        ('NONE', 'None', ""),
+        ('SELECTED', 'Selected', ""),
+        ('PERSTRIP', 'Per strip', ""),
+        ('ALL', 'All', ""),
+        ]
+    display_markers : bpy.props.EnumProperty(name = "Shot markers", items = display_marker_items, default = 'ALL')
+    display_marker_name_items = [
+        ('NONE', 'None', ""),
+        ('CURRENT', 'Current', ""),
+        ('ALL', 'All', ""),
+        ]
+    display_marker_names : bpy.props.EnumProperty(name = "Marker names", items = display_marker_name_items, default = 'ALL')
+    display_marker_boxes : bpy.props.BoolProperty(name = "Marker boxes", default=True)
+    display_marker_limit : bpy.props.IntProperty(name = "Marker text limit", default = 15)
+    display_shot_update_warning : bpy.props.BoolProperty(name = "Shot update warning", default=True)
+
+
+# general settings
+class BPMGeneralSettings(bpy.types.PropertyGroup) :
+    '''name : StringProperty() '''
+    is_project : bpy.props.BoolProperty(default=False)
+    file_type = [
+        ('EDIT', 'Edit', ""),
+        ('SHOT', 'Shot', ""),
+        ('ASSET', 'Asset', ""),
+        ('NONE', 'None', ""),
+        ]
+    file_type : bpy.props.EnumProperty(items = file_type, default='NONE')
+    debug : bpy.props.BoolProperty(default=True)
+    custom_folders_index : bpy.props.IntProperty(update = updateFilebrowserPath)
+    project_folder : bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
+    project_datas : bpy.props.CollectionProperty(type = BPMProjectSettings)
+    custom_folders_list : bpy.props.CollectionProperty(type = BPMCustomFolders)
+    assets_list : bpy.props.CollectionProperty(type = BPMAssetSettings)

@@ -32,14 +32,14 @@ class BPMUpdateShotDuration(bpy.types.Operator):
     
     @classmethod
     def poll(cls, context):
-        keyword = context.window_manager.bpm_datas[0].edit_scene_keyword
+        keyword = context.window_manager.bpm_datas.edit_scene_keyword
         winman = context.window_manager
         if winman.bpm_isproject and winman.bpm_filetype == 'EDIT' and keyword in context.scene.name:
             if context.scene.sequence_editor.active_strip:
                 active = context.scene.sequence_editor.active_strip
                 if not active.lock:
                     try:
-                        if active.bpm_isshot and active.scene.library:
+                        if active.bpm_shotsettings.is_shot and active.scene.library:
                             return True
                     except AttributeError:
                         pass
@@ -54,7 +54,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
         selected_strips = returnSelectedStrips(context.scene.sequence_editor)
         for strip in selected_strips:
             try:
-                if strip.bpm_isshot and strip.scene.library:
+                if strip.bpm_shotsettings.is_shot and strip.scene.library:
                     if winman.bpm_debug: print(checking_update_shot_statement + strip.name) #debug
                     
                     strip_scene = strip.scene
