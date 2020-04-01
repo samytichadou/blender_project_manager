@@ -17,3 +17,6 @@ def clearLibraryUsers(lib):
     lib.use_fake_user = False
     while lib.users != 0:
         lib.user_clear()
+    for datas in lib.users_id:
+        datas.use_fake_user = False
+        datas.user_clear()

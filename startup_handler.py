@@ -69,12 +69,12 @@ def bpmStartupHandler(scene):
         # load ui if needed
         enableSequencerCallback()
 
-        # check for unused libraries and clear them
-        if winman.bpm_debug: print(checking_unused_libraries_statement + lib.name) #debug
+        # # check for unused libraries and clear them
+        # if winman.bpm_debug: print(checking_unused_libraries_statement) #debug
 
-        for lib in findUnusedLibraries():
-            clearLibraryUsers(lib)
-            if winman.bpm_debug: print(library_cleared_statement + lib.name) #debug
+        # for lib in findUnusedLibraries():
+        #     clearLibraryUsers(lib)
+        #     if winman.bpm_debug: print(library_cleared_statement + lib.name) #debug
 
     else:
         # unload ui if needed
