@@ -13,7 +13,7 @@ class BPMOpenShot(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         keyword = context.window_manager.bpm_datas.edit_scene_keyword
-        if context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT':
+        if context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT':
             if keyword in context.scene.name:
                 if context.scene.sequence_editor.active_strip:
                     active = context.scene.sequence_editor.active_strip
@@ -28,7 +28,7 @@ class BPMOpenShot(bpy.types.Operator):
         winman = context.window_manager
         filepath = absolutePath(context.scene.sequence_editor.active_strip.scene.library.filepath)
 
-        if winman.bpm_debug: print(opening_statement + filepath) #debug
+        if winman.bpm_generalsettings.debug: print(opening_statement + filepath) #debug
 
         # save
         bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)

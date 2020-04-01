@@ -19,10 +19,10 @@ def returnDatasetProperties(dataset):
 def setPropertiesFromJsonDataset(datasetin, datasetout, winman):
     for prop in datasetin:
         try:
-            if winman.bpm_debug: print(setting_prop_statement + prop) ###debug
+            if winman.bpm_generalsettings.debug: print(setting_prop_statement + prop) ###debug
             setattr(datasetout, '%s' % prop, datasetin[prop])
         except (KeyError, AttributeError):
-            if winman.bpm_debug: print(setting_prop_error_statement + prop) ###debug
+            if winman.bpm_generalsettings.debug: print(setting_prop_error_statement + prop) ###debug
             pass
 
 # set attributes between 2 dataset
@@ -30,8 +30,8 @@ def setPropertiesFromDataset(datasetin, datasetout, winman):
     for prop in datasetin.bl_rna.properties:
         if not prop.is_readonly:
             try:
-                if winman.bpm_debug: print(setting_prop_statement + prop.identifier) ###debug
+                if winman.bpm_generalsettings.debug: print(setting_prop_statement + prop.identifier) ###debug
                 setattr(datasetout, '%s' % prop.identifier, getattr(datasetin, prop.identifier))
             except (KeyError, AttributeError):
-                if winman.bpm_debug: print(setting_prop_error_statement + prop.identifier) ###debug
+                if winman.bpm_generalsettings.debug: print(setting_prop_error_statement + prop.identifier) ###debug
                 pass

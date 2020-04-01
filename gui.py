@@ -21,11 +21,12 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT'
+        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT'
 
     def draw(self, context):
         winman = context.window_manager
-        project_data = winman.bpm_datas
+        project_data = context.window_manager.bpm_datas
+        general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
 
@@ -41,10 +42,10 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         drawOperatorAndHelp(layout, 'bpm.create_asset', 'Create-Asset-Operator')
 
         layout.separator()
-        layout.prop(winman, 'bpm_debug', text = "Debug")
-        if winman.bpm_debug:
-            layout.prop(winman, 'bpm_isproject')
-            layout.prop(winman, 'bpm_filetype')
+        layout.prop(general_settings, 'debug', text = "Debug")
+        if general_settings.debug:
+            layout.prop(general_settings, 'is_project')
+            layout.prop(general_settings, 'file_type')
 
 
 # sequencer UI panel
@@ -91,11 +92,12 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
                     chk_isshot = True
             except AttributeError:
                 return False
-        return context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT' and chk_isshot
+        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT' and chk_isshot
 
     def draw(self, context):
         winman = context.window_manager
         active = context.scene.sequence_editor.active_strip
+        general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
 
@@ -109,22 +111,22 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         layout.prop(active.bpm_shotsettings, 'display_markers')
         layout.prop(active.bpm_shotsettings, 'shot_state')
 
-        if winman.bpm_debug: #debug:
+        if general_settings.debug: #debug:
             layout.prop(active.bpm_shotsettings, 'is_shot')
 
 
 # bpm function topbar back/open operators
 def bpmTopbarFunction(self, context):
     if context.region.alignment == 'RIGHT':
-        winman = context.window_manager
+        general_settings = context.window_manager.bpm_generalsettings
 
-        if winman.bpm_isproject:
+        if general_settings.is_project:
 
-            if winman.bpm_filetype in {'SHOT', 'ASSET'}:
+            if general_settings.file_type in {'SHOT', 'ASSET'}:
 
                 drawOperatorAndHelp(self.layout, 'bpm.back_to_edit', 'Open-Shot-and-Back-to-Edit')
 
-            elif winman.bpm_filetype == 'EDIT':
+            elif general_settings.file_type == 'EDIT':
 
                 drawOperatorAndHelp(self.layout, 'bpm.open_shot', 'Open-Shot-and-Back-to-Edit')
 
@@ -142,10 +144,11 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
 
     def draw(self, context):
         winman = context.window_manager
+        general_settings = context.window_manager.general_settings
 
         layout = self.layout
         
-        if not winman.bpm_isproject:
+        if not general_settings.is_project:
             layout.operator('bpm.create_project')  
         
         else:
@@ -157,10 +160,10 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             layout.separator()
 
             #debug
-            layout.prop(winman, 'bpm_debug', text = "Debug")
-            if winman.bpm_debug:
-                layout.prop(winman, 'bpm_isproject')
-                layout.prop(winman, 'bpm_filetype')
+            layout.prop(general_settings, 'debug', text = "Debug")
+            if general_settings.debug:
+                layout.prop(general_settings, 'is_project')
+                layout.prop(general_settings, 'file_type')
 
 
 # project folder ui list
@@ -184,6 +187,7 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
     
     def draw(self, context):
         winman = context.window_manager
+        general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
-        layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_folders", winman, "bpm_foldersindex", rows=4)
+        layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_folders", general_settings, "custom_folders_index", rows=4)

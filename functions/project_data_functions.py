@@ -28,14 +28,12 @@ def getProjectDataFile(winman):
 
         # edit file
         if os.path.isfile(edit_project_data_file):
-            #winman.bpm_isproject = True
-            winman.bpm_filetype = 'EDIT'
+            winman.bpm_generalsettings.file_type = 'EDIT'
             return edit_project_data_file, parent_folder
 
         # shot file
         elif os.path.isfile(shot_project_data_file):
-            #winman.bpm_isproject = True
-            winman.bpm_filetype = 'SHOT'
+            winman.bpm_generalsettings.file_type = 'SHOT'
             return shot_project_data_file, subsubparent_folder
 
         else:
@@ -46,36 +44,38 @@ def getProjectDataFile(winman):
 
 # check if project name match json project
 def chekIfBpmProject(winman, project_data_file):
+    general_settings = winman.bpm_generalsettings
     dataset = read_json(project_data_file)
     blend_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
+    file_type = winman.bpm_generalsettings.file_type
     # edit
-    if winman.bpm_filetype == 'EDIT':
+    if file_type == 'EDIT':
         pattern = dataset['edit_file_pattern']
         # print(pattern)
         # print(blend_name)
         if pattern == blend_name:
-            winman.bpm_isproject = True
+            general_settings.is_project = True
             return True
         elif pattern in blend_name:
             try:
                 int(blend_name.split(pattern)[1])
-                winman.bpm_isproject = True
+                general_settings.is_project = True
                 return True
             except (ValueError, IndexError):
                 return False
     # shot
-    elif winman.bpm_filetype == 'SHOT':
+    elif file_type == 'SHOT':
         pattern1 = dataset['project_prefix'] + "_" + dataset['shot_prefix']
         pattern2 = "_" + dataset['shot_version_suffix']
         if pattern1 in blend_name and pattern2 in blend_name:
-            winman.bpm_isproject = True
+            general_settings.is_project = True
             return True
     return False
 
 
 # load datas
 def createProjectDatas(winman, project_data_file):
-    if winman.bpm_debug: print(loading_statement + project_data_file) #debug
+    if winman.bpm_generalsettings.debug: print(loading_statement + project_data_file) #debug
 
     datas = winman.bpm_datas
     dataset = read_json(project_data_file)
@@ -88,7 +88,7 @@ def createProjectDatas(winman, project_data_file):
 
 # get custom folders file
 def getCustomFoldersFile(winman):
-    project_folder = winman.bpm_projectfolder
+    project_folder = winman.bpm_generalsettings.project_folder
     folders_file = os.path.join(project_folder, custom_folders_file)
     if os.path.isfile(folders_file):
         return folders_file, True
@@ -98,7 +98,7 @@ def getCustomFoldersFile(winman):
 
 # get asset file
 def getAssetFile(winman):
-    project_folder = winman.bpm_projectfolder
+    project_folder = winman.bpm_generalsettings.project_folder
     asset_folder_path = os.path.join(project_folder, asset_folder)
     asset_file_path = os.path.join(asset_folder_path, asset_file)
     if os.path.isfile(asset_file_path):

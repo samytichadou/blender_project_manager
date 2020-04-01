@@ -41,7 +41,7 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         keyword = context.window_manager.bpm_datas.edit_scene_keyword
-        if context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT':
+        if context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT':
             if keyword in context.scene.name:
                 return True
 
@@ -50,6 +50,7 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
         self.permanently_delete = False
 
         winman = context.window_manager
+        general_settings = context.window_manager.bpm_generalsettings
 
         project_datas = winman.bpm_datas
         project_prefix = project_datas.project_prefix
@@ -57,27 +58,27 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
         self.project_prefix = project_prefix
         self.shot_prefix = project_datas.shot_prefix
 
-        self.shot_folder_path = os.path.join(winman.bpm_projectfolder, shot_folder)
+        self.shot_folder_path = os.path.join(general_settings.project_folder, shot_folder)
         sequencer = context.scene.sequence_editor
 
         # get used shot
         timeline_shots, used_libraries = getListSequencerShots(sequencer)
 
-        if winman.bpm_debug: print(used_shots_list_statement + str(timeline_shots)) #debug
+        if general_settings.debug: print(used_shots_list_statement + str(timeline_shots)) #debug
 
         # get all existing shot
         existing_shots = getAvailableShotsList(self.shot_folder_path, self.project_prefix)
 
-        if winman.bpm_debug: print(existing_shots_list_statement + str(existing_shots)) #debug
+        if general_settings.debug: print(existing_shots_list_statement + str(existing_shots)) #debug
 
         # find difference
         self.shots_to_remove = listDifference(existing_shots, timeline_shots)
 
-        if winman.bpm_debug: print(unused_shots_list_statement + str(self.shots_to_remove)) #debug
+        if general_settings.debug: print(unused_shots_list_statement + str(self.shots_to_remove)) #debug
 
         if len(self.shots_to_remove) == 0:
             self.report({'INFO'}, no_unused_shots_message)
-            if winman.bpm_debug: print(no_unused_shots_statement) #debug
+            if general_settings.debug: print(no_unused_shots_statement) #debug
             return {'FINISHED'}
 
         return context.window_manager.invoke_props_dialog(self)
@@ -91,18 +92,19 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
 
     def execute(self, context):
         winman = context.window_manager
+        general_settings = context.window_manager.bpm_generalsettings
 
-        if winman.bpm_debug: print(starting_delete_shots_statement) #debug
+        if general_settings.debug: print(starting_delete_shots_statement) #debug
 
         # move shots
         for shot in self.shots_to_remove:
             
-            if winman.bpm_debug: print(starting_delete_specific_shot_statement + shot) #debug
+            if general_settings.debug: print(starting_delete_specific_shot_statement + shot) #debug
 
             # delete corresponding scene if exists
             for s in bpy.data.scenes:
                 if s.name == shot:
-                    if winman.bpm_debug: print(deleting_scene_statement + s.name) #debug
+                    if general_settings.debug: print(deleting_scene_statement + s.name) #debug
 
                     bpy.data.scenes.remove(s, do_unlink = True)
             
@@ -110,8 +112,8 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
             folder = os.path.join(self.shot_folder_path, shot_folder_name)
             # move
             if not self.permanently_delete:
-                old_shot_folder = os.path.join(winman.bpm_projectfolder, old_folder)
-                if winman.bpm_debug: print(starting_moving_folder + shot_folder_name + " to " + old_shot_folder) #debug
+                old_shot_folder = os.path.join(general_settings.project_folder, old_folder)
+                if general_settings.debug: print(starting_moving_folder + shot_folder_name + " to " + old_shot_folder) #debug
 
                 old_shot_path = os.path.join(old_shot_folder, shot_folder)
                 temp_dir_path = os.path.join(old_shot_path, shot_folder_name)
@@ -129,12 +131,12 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
 
                 shutil.move(folder, dir_path)
 
-                if winman.bpm_debug: print(moved_folder_statement) #debug
+                if general_settings.debug: print(moved_folder_statement) #debug
             # delete
             else:
-                if winman.bpm_debug: print(starting_deleting_folder + shot_folder_name) #debug
+                if general_settings.debug: print(starting_deleting_folder + shot_folder_name) #debug
                 shutil.rmtree(folder)
-                if winman.bpm_debug: print(deleted_folder_statement) #debug
+                if general_settings.debug: print(deleted_folder_statement) #debug
 
             # remove libraries
             lib = findLibFromShot(shot_folder_name)

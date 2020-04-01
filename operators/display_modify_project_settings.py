@@ -10,11 +10,12 @@ from ..global_variables import file_project, reading_json_statement
 def reloadProjectSettingsFromJson(self, context):
     if not self.modify:
         winman = context.window_manager
+        general_settings = context.window_manager.bpm_generalsettings
 
         datas = winman.bpm_datas
-        json_project_file = os.path.join(winman.bpm_projectfolder, file_project)
+        json_project_file = os.path.join(general_settings.project_folder, file_project)
 
-        if winman.bpm_debug: print(reading_json_statement + json_project_file) #debug
+        if winman.bpm_generalsettings.debug: print(reading_json_statement + json_project_file) #debug
 
         json_dataset = read_json(json_project_file)
 
@@ -30,7 +31,7 @@ class BpmDisplayModifyProjectSettings(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_isproject
+        return context.window_manager.bpm_generalsettings.is_project
     
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)

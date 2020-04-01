@@ -35,7 +35,7 @@ class BPMCreateAsset(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-            return context.window_manager.bpm_isproject
+            return context.window_manager.bpm_generalsettings.is_project
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
@@ -53,7 +53,7 @@ class BPMCreateAsset(bpy.types.Operator):
         winman = context.window_manager
         asset_collection = winman.bpm_assets
 
-        if winman.bpm_debug: print(creating_asset_statement + self.name) #debug
+        if winman.bpm_generalsettings.debug: print(creating_asset_statement + self.name) #debug
 
         # create asset blend and get the link TODO
 
@@ -72,7 +72,7 @@ class BPMCreateAsset(bpy.types.Operator):
 
         if is_asset_file:
 
-            if winman.bpm_debug: print(reading_json_statement + asset_file_path) #debug
+            if winman.bpm_generalsettings.debug: print(reading_json_statement + asset_file_path) #debug
 
             datas = read_json(asset_file_path)
 
@@ -80,17 +80,17 @@ class BPMCreateAsset(bpy.types.Operator):
                 if asset['name']==self.name:
                     # error message because dupe name
                     self.report({'INFO'}, dupe_asset_name_message)
-                    if winman.bpm_debug: print(dupe_asset_name_statement) #debug
+                    if winman.bpm_generalsettings.debug: print(dupe_asset_name_statement) #debug
                     return {'FINISHED'}
 
             # remove json
             suppressExistingFile(asset_file_path)
-            if winman.bpm_debug: print(deleted_file_statement + asset_file_path) #debug
+            if winman.bpm_generalsettings.debug: print(deleted_file_statement + asset_file_path) #debug
             
 
         else:
 
-            if winman.bpm_debug: print(initialize_json_statement + asset_file_path) #debug
+            if winman.bpm_generalsettings.debug: print(initialize_json_statement + asset_file_path) #debug
 
             datas = initializeAssetJsonDatas()
 
@@ -101,10 +101,10 @@ class BPMCreateAsset(bpy.types.Operator):
         datas['assets'].append(asset_datas_json)
 
         # write json
-        if winman.bpm_debug: print(saving_to_json_statement) #debug
+        if winman.bpm_generalsettings.debug: print(saving_to_json_statement) #debug
         create_json_file(datas, asset_file_path)
-        if winman.bpm_debug: print(saved_to_json_statement) #debug
+        if winman.bpm_generalsettings.debug: print(saved_to_json_statement) #debug
 
-        if winman.bpm_debug: print(asset_created_statement + self.name) #debug
+        if winman.bpm_generalsettings.debug: print(asset_created_statement + self.name) #debug
 
         return {'FINISHED'}

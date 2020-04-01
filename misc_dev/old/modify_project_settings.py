@@ -12,7 +12,7 @@ class BpmModifyProjectSettings(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_isproject
+        return context.window_manager.bpm_generalsettings.is_project
     
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)

@@ -33,7 +33,7 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         keyword = context.window_manager.bpm_datas.edit_scene_keyword
-        if context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT':
+        if context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT':
             if keyword in context.scene.name:
                 if context.scene.sequence_editor.active_strip:
                     active = context.scene.sequence_editor.active_strip
@@ -85,7 +85,7 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
             else:
                 behaviour = "DELETE"
         
-        if winman.bpm_debug: print(start_edit_shot_marker_statement) #debug
+        if winman.bpm_generalsettings.debug: print(start_edit_shot_marker_statement) #debug
 
         # get the filepath and the scene
         filepath = absolutePath(library.filepath)
@@ -96,18 +96,18 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
         # build command
         arguments = getArgumentForPythonScript([self.name, shot_frame, behaviour])
 
-        if winman.bpm_debug: print(editing_shot_marker_statement + behaviour + " - " + self.name + " - frame " + str(shot_frame)) #debug
+        if winman.bpm_generalsettings.debug: print(editing_shot_marker_statement + behaviour + " - " + self.name + " - frame " + str(shot_frame)) #debug
 
         # build command
         command = buildBlenderCommandBackgroundPython(add_modify_marker_file, filepath, arguments)
 
         # launch command
-        if winman.bpm_debug: print(launching_command_statement + command) #debug
+        if winman.bpm_generalsettings.debug: print(launching_command_statement + command) #debug
         launchCommand(command)
 
         # reload library
         library.reload()
 
-        if winman.bpm_debug: print(edited_shot_marker_statement) #debug
+        if winman.bpm_generalsettings.debug: print(edited_shot_marker_statement) #debug
 
         return {'FINISHED'}

@@ -25,7 +25,7 @@ class BPMEmptyRecycleBin(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         keyword = context.window_manager.bpm_datas.edit_scene_keyword
-        if context.window_manager.bpm_isproject and context.window_manager.bpm_filetype == 'EDIT':
+        if context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT':
             if keyword in context.scene.name:
                 return True
 
@@ -37,24 +37,24 @@ class BPMEmptyRecycleBin(bpy.types.Operator):
         layout.label(text = "Continue ?")
 
     def execute(self, context):
-        winman = context.window_manager
+        general_settings = context.window_manager.bpm_generalsettings
 
-        if winman.bpm_debug: print(starting_empty_recycle_bin_statement) #debug
+        if general_settings.debug: print(starting_empty_recycle_bin_statement) #debug
 
         # get folders to empty
-        old_folder_path = os.path.join(winman.bpm_projectfolder, old_folder)
+        old_folder_path = os.path.join(general_settings.project_folder, old_folder)
         for filename in os.listdir(old_folder_path):
 
             filepath = os.path.join(old_folder_path, filename)
             if os.path.isdir(filepath):
 
-                if winman.bpm_debug: print(emptying_folder_statement + filepath) #debug
+                if general_settings.debug: print(emptying_folder_statement + filepath) #debug
 
                 # empty folders
                 deleteFolderContent(filepath)
 
-                if winman.bpm_debug: print(folder_emptied_statement) #debug
+                if general_settings.debug: print(folder_emptied_statement) #debug
 
-        if winman.bpm_debug: print(empty_recycle_bin_completed_statement) #debug
+        if general_settings.debug: print(empty_recycle_bin_completed_statement) #debug
         
         return {'FINISHED'}

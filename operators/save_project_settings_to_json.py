@@ -14,7 +14,7 @@ class BpmSaveProjectSettingsToJson(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_isproject and not context.window_manager.bpm_shotsettings.is_shot
+        return context.window_manager.bpm_generalsettings.is_project and not context.window_manager.bpm_shotsettings.is_shot
     
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
@@ -25,11 +25,12 @@ class BpmSaveProjectSettingsToJson(bpy.types.Operator):
         
     def execute(self, context):
         winman = context.window_manager
+        general_settings = context.window_manager.bpm_generalsettings
         datas = winman.bpm_datas
 
-        if winman.bpm_debug: print(saving_to_json_statement)
+        if general_settings.debug: print(saving_to_json_statement)
 
-        project_file = os.path.join(winman.bpm_projectfolder, file_project)
+        project_file = os.path.join(general_settings.project_folder, file_project)
 
         # format the json dataset
         json_dataset = createJsonDatasetFromProperties(datas)
@@ -38,6 +39,6 @@ class BpmSaveProjectSettingsToJson(bpy.types.Operator):
         # create json file
         create_json_file(json_dataset, project_file)
 
-        if winman.bpm_debug: print(saved_to_json_statement)
+        if general_settings.debug: print(saved_to_json_statement)
 
         return {'FINISHED'}

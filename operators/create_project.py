@@ -29,11 +29,13 @@ class BpmCreateProject(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return not context.window_manager.bpm_isproject and bpy.data.is_saved
+        return not context.window_manager.bpm_generalsettings.is_project and bpy.data.is_saved
     
     def invoke(self, context, event):
         # create properties
         winman = context.window_manager
+        general_settings = context.window_manager.bpm_generalsettings
+
         if not winman.bpm_datas:
             winman.bpm_datas.add()
         datas = winman.bpm_datas
@@ -50,7 +52,7 @@ class BpmCreateProject(bpy.types.Operator):
             edit_file_name = file_name
 
         # set specific project properties
-        winman.bpm_projectfolder = project_dir
+        general_settings.project_folder = project_dir
         datas.edit_file_pattern = edit_file_name
         datas.name = new_project_name
 
@@ -72,11 +74,12 @@ class BpmCreateProject(bpy.types.Operator):
         
     def execute(self, context):
         winman = context.window_manager
+        general_settings = context.window_manager.bpm_generalsettings
         datas = winman.bpm_datas
 
-        if winman.bpm_debug: print(saving_to_json_statement) #debug
+        if winman.bpm_generalsettings.debug: print(saving_to_json_statement) #debug
 
-        project_folder = winman.bpm_projectfolder
+        project_folder = general_settings.project_folder
         project_file = os.path.join(project_folder, file_project)
 
         # format the json dataset
@@ -86,27 +89,27 @@ class BpmCreateProject(bpy.types.Operator):
         # create json file
         create_json_file(json_dataset, project_file)
 
-        if winman.bpm_debug: print(saved_to_json_statement) #debug
+        if winman.bpm_generalsettings.debug: print(saved_to_json_statement) #debug
 
         # set project as bpm edit project
-        winman.bpm_isproject = True
-        winman.bpm_filetype = 'EDIT'
+        general_settings.is_project = True
+        general_settings.file_type = 'EDIT'
 
         # create associated folder structure
         #shot
         shot_folder_path = os.path.join(project_folder, shot_folder)
         createFolder(shot_folder_path)
-        if winman.bpm_debug: print(folder_created_statement + shot_folder_path) #debug
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + shot_folder_path) #debug
 
         #asset
         asset_folder_path = os.path.join(project_folder, asset_folder)
         createFolder(asset_folder_path)
-        if winman.bpm_debug: print(folder_created_statement + asset_folder_path) #debug
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + asset_folder_path) #debug
 
         #render
         render_folder_path = os.path.join(project_folder, render_folder)
         createFolder(render_folder_path)
-        if winman.bpm_debug: print(folder_created_statement + render_folder_path) #debug
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_folder_path) #debug
 
         #old
         old_folder_path = os.path.join(project_folder, old_folder)
@@ -114,17 +117,17 @@ class BpmCreateProject(bpy.types.Operator):
         #old shot
         old_shot_folder_path = os.path.join(old_folder_path, shot_folder)
         createFolder(old_shot_folder_path)
-        if winman.bpm_debug: print(folder_created_statement + old_shot_folder_path) #debug
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + old_shot_folder_path) #debug
 
         #old asset
         old_asset_folder_path = os.path.join(old_folder_path, asset_folder)
         createFolder(old_asset_folder_path)
-        if winman.bpm_debug: print(folder_created_statement + old_asset_folder_path) #debug
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + old_asset_folder_path) #debug
 
         #old render
         old_render_folder_path = os.path.join(old_folder_path, render_folder)
         createFolder(old_render_folder_path)
-        if winman.bpm_debug: print(folder_created_statement + old_render_folder_path) #debug
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + old_render_folder_path) #debug
 
         enableSequencerCallback()
 

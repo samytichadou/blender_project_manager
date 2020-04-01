@@ -31,7 +31,10 @@ from .functions.utils_functions import clearLibraryUsers
 @persistent
 def bpmStartupHandler(scene):
     winman = bpy.data.window_managers[0]
-    if winman.bpm_debug: print(startup_statement) #debug
+
+    general_settings = winman.bpm_generalsettings
+
+    if winman.bpm_generalsettings.debug: print(startup_statement) #debug
 
     #load project datas
     project_data_file, project_folder = getProjectDataFile(winman)
@@ -39,42 +42,42 @@ def bpmStartupHandler(scene):
 
         if chekIfBpmProject(winman, project_data_file):
             project_datas = createProjectDatas(winman, project_data_file)
-            if winman.bpm_debug: print(loaded_datas_statement) #debug
-            winman.bpm_projectfolder = project_folder
-            if winman.bpm_debug: print(loaded_project_folder + project_folder) #debug
+            if winman.bpm_generalsettings.debug: print(loaded_datas_statement) #debug
+            general_settings.project_folder = project_folder
+            if winman.bpm_generalsettings.debug: print(loaded_project_folder + project_folder) #debug
 
             # load project custom folders
             custom_folders_file, is_folder_file = getCustomFoldersFile(winman)
             if is_folder_file:
-                if winman.bpm_debug: print(folders_loading_statement + custom_folders_file) #debug
+                if winman.bpm_generalsettings.debug: print(folders_loading_statement + custom_folders_file) #debug
                 custom_folders_coll = winman.bpm_folders
                 loadJsonInCollection(winman, custom_folders_file, custom_folders_coll, 'folders')
-                if winman.bpm_debug: print(loaded_folders_statement) #debug
+                if winman.bpm_generalsettings.debug: print(loaded_folders_statement) #debug
 
             # load available assets
             asset_file, is_asset_file = getAssetFile(winman)
             if is_asset_file:
-                if winman.bpm_debug: print(assets_loading_statement + asset_file) #debug
+                if winman.bpm_generalsettings.debug: print(assets_loading_statement + asset_file) #debug
                 asset_coll = winman.bpm_assets
                 loadJsonInCollection(winman, asset_file, asset_coll, 'assets')
-                if winman.bpm_debug: print(assets_loaded_statement) #debug
+                if winman.bpm_generalsettings.debug: print(assets_loaded_statement) #debug
 
         else:
-            if winman.bpm_debug: print(no_datas_statement) #debug
+            if winman.bpm_generalsettings.debug: print(no_datas_statement) #debug
 
     else:
-        if winman.bpm_debug: print(no_datas_statement) #debug
+        if winman.bpm_generalsettings.debug: print(no_datas_statement) #debug
         
-    if winman.bpm_isproject and winman.bpm_filetype == 'EDIT':
+    if general_settings.is_project and general_settings.file_type == 'EDIT':
         # load ui if needed
         enableSequencerCallback()
 
         # # check for unused libraries and clear them
-        # if winman.bpm_debug: print(checking_unused_libraries_statement) #debug
+        # if winman.bpm_generalsettings.debug: print(checking_unused_libraries_statement) #debug
 
         # for lib in findUnusedLibraries():
         #     clearLibraryUsers(lib)
-        #     if winman.bpm_debug: print(library_cleared_statement + lib.name) #debug
+        #     if winman.bpm_generalsettings.debug: print(library_cleared_statement + lib.name) #debug
 
     else:
         # unload ui if needed
