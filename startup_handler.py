@@ -21,6 +21,7 @@ from .global_variables import (
                             assets_loading_statement,
                             assets_loaded_statement,
                             library_cleared_statement,
+                            checking_unused_libraries_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
@@ -69,6 +70,8 @@ def bpmStartupHandler(scene):
         enableSequencerCallback()
 
         # check for unused libraries and clear them
+        if winman.bpm_debug: print(checking_unused_libraries_statement + lib.name) #debug
+
         for lib in findUnusedLibraries():
             clearLibraryUsers(lib)
             if winman.bpm_debug: print(library_cleared_statement + lib.name) #debug

@@ -42,6 +42,7 @@ setting_prop_statement = bpm_statement + "Setting property : "
 setting_prop_error_statement = bpm_statement + "Unable to set property : "
 
 library_cleared_statement = bpm_statement + "Cleaned library from user, reload file to delete it : "
+checking_unused_libraries_statement = bpm_statement + "Checking unused libraries"
 
 
 # python scripts statement
