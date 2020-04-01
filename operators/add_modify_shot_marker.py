@@ -61,7 +61,7 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
     def draw(self, context):
         layout = self.layout
         if not self.existing_marker:
-            layout.label(text = "Add :")
+            layout.label(text = "Add")
             # frame
             layout.prop(self, 'frame')
         else:
