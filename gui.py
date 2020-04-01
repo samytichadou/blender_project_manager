@@ -2,8 +2,14 @@ import bpy
 
 
 # help function
-def drawWikiHelpOperator(container, wikipage):
+def drawWikiHelp(container, wikipage):
     container.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
+
+# draw operator and help function
+def drawOperatorAndHelp(container, operator_bl_idname, wikipage):
+    row = container.row(align=True)
+    row.operator(operator_bl_idname)
+    row.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
 
 # sequencer management
 class BPM_PT_sequencer_management_panel(bpy.types.Panel):
@@ -26,19 +32,13 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         #common
         layout.label(text = project_data.name)
 
-        row = layout.row(align=True)
-        row.operator('bpm.create_shot')
-        drawWikiHelpOperator(row, 'Create-Shot-Operator')
+        drawOperatorAndHelp(layout, 'bpm.create_shot', 'Create-Shot-Operator')
 
-        row = layout.row(align=True)
-        row.operator('bpm.delete_unused_shots')
-        drawWikiHelpOperator(row, 'Delete-Unused-Shots')
+        drawOperatorAndHelp(layout, 'bpm.delete_unused_shots', 'Delete-Unused-Shots')
 
-        layout.operator('bpm.empty_recycle_bin')
+        drawOperatorAndHelp(layout, 'bpm.empty_recycle_bin', 'Empty-Recycle-Bin')
 
-        row = layout.row(align=True)
-        row.operator('bpm.create_asset')
-        drawWikiHelpOperator(row, 'Create-Asset-Operator')
+        drawOperatorAndHelp(layout, 'bpm.create_asset', 'Create-Asset-Operator')
 
         layout.separator()
         layout.prop(winman, 'bpm_debug', text = "Debug")
@@ -63,7 +63,7 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
 
         row = layout.row(align=True)
         row.prop(scn, 'bpm_extraui')
-        drawWikiHelpOperator(row, 'Extra-UI-in-Sequencer')
+        drawWikiHelp(row, 'Extra-UI-in-Sequencer')
         if scn.bpm_extraui:
             layout.prop(scn, 'bpm_displayshotstrip')
             layout.prop(scn, 'bpm_displayshotupdatewarning')
@@ -99,17 +99,11 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
         layout = self.layout
 
-        row = layout.row(align=True)
-        row.operator('bpm.open_shot')
-        drawWikiHelpOperator(row, 'Open-Shot-and-Back-to-Edit')
+        drawOperatorAndHelp(layout, 'bpm.open_shot', 'Open-Shot-and-Back-to-Edit')
 
-        row = layout.row(align=True)
-        row.operator('bpm.update_shot_duration')
-        drawWikiHelpOperator(row, 'Update-Shot-Operator')
+        drawOperatorAndHelp(layout, 'bpm.update_shot_duration', 'Update-Shot-Operator')
 
-        row = layout.row(align=True)
-        row.operator('bpm.add_modify_shot_marker')
-        drawWikiHelpOperator(row, 'Add-Modify-Shot-Marker-Operator')
+        drawOperatorAndHelp(layout, 'bpm.add_modify_shot_marker', 'Add-Modify-Shot-Marker-Operator')
 
         layout.separator()
         layout.prop(active, 'bpm_displaymarkers')
@@ -125,16 +119,14 @@ def bpmTopbarFunction(self, context):
         winman = context.window_manager
 
         if winman.bpm_isproject:
-            
-            row = self.layout.row(align=True)
 
             if winman.bpm_filetype in {'SHOT', 'ASSET'}:
-                row.operator('bpm.back_to_edit', icon = "SEQ_SEQUENCER")
-                drawWikiHelpOperator(row, 'Open-Shot-and-Back-to-Edit')
+
+                drawOperatorAndHelp(self.layout, 'bpm.back_to_edit', 'Open-Shot-and-Back-to-Edit')
 
             elif winman.bpm_filetype == 'EDIT':
-                row.operator('bpm.open_shot', icon = "SEQUENCE")
-                drawWikiHelpOperator(row, 'Open-Shot-and-Back-to-Edit')
+
+                drawOperatorAndHelp(self.layout, 'bpm.open_shot', 'Open-Shot-and-Back-to-Edit')
 
 
 # bpm function topbar file menu
@@ -155,14 +147,12 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
         
         if not winman.bpm_isproject:
             layout.operator('bpm.create_project')  
-            #drawWikiHelpOperator(row, 'Create-Project-Operator')
         
         else:
             project_data = winman.bpm_datas[0]
             layout.label(text = project_data.name)
 
             layout.operator('bpm.display_modify_project_settings')
-            #drawWikiHelpOperator(row, 'Modify-Project-Settings')
             
             layout.separator()
 
