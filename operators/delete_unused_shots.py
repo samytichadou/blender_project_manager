@@ -29,7 +29,7 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
     """Delete shots in the project not present on the timeline"""
     bl_idname = "bpm.delete_unused_shots"
     bl_label = "Delete unused shots"
-    #bl_options = {}
+    bl_options = {'REGISTER'}
 
     shots_to_remove = []
     shot_folder_path = None

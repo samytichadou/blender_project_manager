@@ -9,7 +9,7 @@ class BPMBackToEdit(bpy.types.Operator):
     """Go Back to Edit Project"""
     bl_idname = "bpm.back_to_edit"
     bl_label = "Back to Edit"
-    #bl_options = {}
+    bl_options = {'REGISTER'}
 
     @classmethod
     def poll(cls, context):

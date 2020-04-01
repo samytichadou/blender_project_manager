@@ -25,7 +25,7 @@ class BPMCreateShot(bpy.types.Operator):
     """Create Shot from Timeline"""
     bl_idname = "bpm.create_shot"
     bl_label = "Create Shot"
-    #bl_options = {}
+    bl_options = {'REGISTER'}
 
     @classmethod
     def poll(cls, context):

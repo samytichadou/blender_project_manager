@@ -28,8 +28,8 @@ class BPMUpdateShotDuration(bpy.types.Operator):
     """Update selected shot(s) duration"""
     bl_idname = "bpm.update_shot_duration"
     bl_label = "Update Shot(s) duration"
-    #bl_options = {}
-
+    bl_options = {'REGISTER'}
+    
     @classmethod
     def poll(cls, context):
         keyword = context.window_manager.bpm_datas[0].edit_scene_keyword

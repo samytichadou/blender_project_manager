@@ -26,7 +26,7 @@ class BPMCreateAsset(bpy.types.Operator):
     """Create new asset"""
     bl_idname = "bpm.create_asset"
     bl_label = "Create asset"
-    #bl_options = {}
+    bl_options = {'REGISTER'}
 
 
     name : bpy.props.StringProperty(name = "Asset name", default="Asset name")

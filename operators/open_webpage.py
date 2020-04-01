@@ -9,7 +9,7 @@ class BPMOpenWikiPage(bpy.types.Operator):
     """Find help on the wiki page"""
     bl_idname = "bpm.open_wiki_page"
     bl_label = "Help"
-    #bl_options = {}
+    bl_options = {'REGISTER'}
 
     wiki_page : bpy.props.StringProperty()
 

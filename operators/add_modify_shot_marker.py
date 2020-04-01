@@ -19,7 +19,7 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
     """Add or modify shot marker to active strip"""
     bl_idname = "bpm.add_modify_shot_marker"
     bl_label = "Add/Modify shot marker"
-    #bl_options = {}
+    bl_options = {'REGISTER'}
 
     name : bpy.props.StringProperty(name = "Marker name", default = "Marker name")
     frame : bpy.props.IntProperty(name = "Marker frame")

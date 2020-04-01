@@ -8,7 +8,7 @@ class BPMOpenShot(bpy.types.Operator):
     """Open Shot from Timeline"""
     bl_idname = "bpm.open_shot"
     bl_label = "Open Shot"
-    #bl_options = {}
+    bl_options = {'REGISTER'}
 
     @classmethod
     def poll(cls, context):
