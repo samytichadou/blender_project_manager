@@ -44,6 +44,9 @@ setting_prop_error_statement = bpm_statement + "Unable to set property : "
 library_cleared_statement = bpm_statement + "Cleaned library from user, reload file to delete it : "
 checking_unused_libraries_statement = bpm_statement + "Checking unused libraries"
 
+starting_empty_recycle_bin_statement = bpm_statement + "Emptying recycle bin"
+empty_recycle_bin_completed_statement = bpm_statement + "Recycle bin successfully emptied"
+
 
 # python scripts statement
 creating_python_script_statement = bpm_statement + "Creating python script : "
@@ -59,6 +62,8 @@ starting_moving_folder = bpm_statement + "Moving folder : "
 moved_folder_statement = bpm_statement + "Folder successfully moved"
 starting_deleting_folder = bpm_statement + "Deleting folder : "
 deleted_folder_statement = bpm_statement + "Folder successfully deleted"
+emptying_folder_statement = bpm_statement + "Emptying folder : "
+folder_emptied_statement = bpm_statement + "Folder successfully emptied"
 
 
 # timeline statements

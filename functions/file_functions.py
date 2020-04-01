@@ -1,4 +1,6 @@
-import bpy, os
+import bpy
+import os
+import shutil
 
 
 # absolute path
@@ -40,6 +42,17 @@ def getLastVersion(folder, pattern, extension):
 def suppressExistingFile(filepath) :
     if os.path.isfile(filepath) :
         os.remove(filepath)
+
+
+# delete folder content
+def deleteFolderContent(folder):
+    for filename in os.listdir(folder):
+        filepath = os.path.join(folder, filename)
+        # folder
+        if os.path.isdir(filepath):
+            shutil.rmtree(filepath)
+        else:
+            os.remove(filepath)
 
 # get next shot
 def getNextShot(winman, project_datas, pattern, shot_version, shot_folder):
