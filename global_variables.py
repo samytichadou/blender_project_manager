@@ -41,6 +41,8 @@ saved_to_json_statement = bpm_statement + "Successfully saved to json"
 setting_prop_statement = bpm_statement + "Setting property : "
 setting_prop_error_statement = bpm_statement + "Unable to set property : "
 
+library_cleared_statement = bpm_statement + "Cleaned library from user, reload file to delete it : "
+
 
 # python scripts statement
 creating_python_script_statement = bpm_statement + "Creating python script : "

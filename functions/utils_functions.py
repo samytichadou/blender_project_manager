@@ -10,3 +10,10 @@ def redrawAreas(context, area_to_redraw):
 # list difference
 def listDifference(li1, li2): 
     return (list(set(li1) - set(li2)))
+
+
+# clear lib user
+def clearLibraryUsers(lib):
+    lib.use_fake_user = False
+    while lib.users != 0:
+        lib.user_clear()

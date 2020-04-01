@@ -83,6 +83,8 @@ def createProjectDatas(winman, project_data_file):
     # set datas
     setPropertiesFromJsonDataset(dataset, datas, winman)
 
+    return datas
+
 
 # get custom folders file
 def getCustomFoldersFile(winman):
@@ -164,3 +166,16 @@ def findLibFromShot(shot_name):
             lib = l
             break
     return lib
+
+
+# find unused lib
+def findUnusedLibraries():
+    lib_list = []
+    from .strip_functions import getListSequencerShots
+    for scn in bpy.data.scenes:
+        sequencer = scn.sequence_editor
+        used_lib_list = getListSequencerShots(sequencer)[1]
+        for lib in bpy.data.libraries:
+            if lib not in used_lib_list:
+                lib_list.append(lib)
+    return lib_list

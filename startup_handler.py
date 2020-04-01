@@ -9,6 +9,7 @@ from .functions.project_data_functions import (
                                             loadJsonInCollection, 
                                             chekIfBpmProject, 
                                             getAssetFile,
+                                            findUnusedLibraries,
                                         )
 from .global_variables import (
                             startup_statement, 
@@ -18,9 +19,11 @@ from .global_variables import (
                             loaded_folders_statement, 
                             loaded_project_folder,
                             assets_loading_statement,
-                            assets_loaded_statement
+                            assets_loaded_statement,
+                            library_cleared_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
+from .functions.utils_functions import clearLibraryUsers
 
 
 ### HANDLER ###
@@ -34,7 +37,7 @@ def bpmStartupHandler(scene):
     if project_data_file is not None:
 
         if chekIfBpmProject(winman, project_data_file):
-            createProjectDatas(winman, project_data_file)
+            project_datas = createProjectDatas(winman, project_data_file)
             if winman.bpm_debug: print(loaded_datas_statement) #debug
             winman.bpm_projectfolder = project_folder
             if winman.bpm_debug: print(loaded_project_folder + project_folder) #debug
@@ -61,10 +64,15 @@ def bpmStartupHandler(scene):
     else:
         if winman.bpm_debug: print(no_datas_statement) #debug
         
-    #load ui if needed
     if winman.bpm_isproject and winman.bpm_filetype == 'EDIT':
+        # load ui if needed
         enableSequencerCallback()
-        # check for unused libraries to clear
-        
+
+        # check for unused libraries and clear them
+        for lib in findUnusedLibraries():
+            clearLibraryUsers(lib)
+            if winman.bpm_debug: print(library_cleared_statement + lib.name) #debug
+
     else:
+        # unload ui if needed
        disableSequencerCallback()

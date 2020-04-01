@@ -22,7 +22,7 @@ from ..global_variables import (
 
 from ..functions.project_data_functions import getAvailableShotsList, findLibFromShot
 from ..functions.strip_functions import getListSequencerShots
-from ..functions.utils_functions import listDifference
+from ..functions.utils_functions import listDifference, clearLibraryUsers
 
 
 class BPMDeleteUnusedShots(bpy.types.Operator):
@@ -32,7 +32,6 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
     #bl_options = {}
 
     shots_to_remove = []
-    libraries_to_unload = []
     shot_folder_path = None
     project_prefix = None
     shot_prefix = None
@@ -62,9 +61,7 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
         sequencer = context.scene.sequence_editor
 
         # get used shot
-        timeline_shots, self.libraries_to_unload = getListSequencerShots(sequencer)
-
-        print(str(self.libraries_to_unload))
+        timeline_shots, used_libraries = getListSequencerShots(sequencer)
 
         if winman.bpm_debug: print(used_shots_list_statement + str(timeline_shots)) #debug
 
@@ -131,8 +128,6 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
             # remove libraries
             lib = findLibFromShot(shot_folder_name)
             if lib is not None:
-                lib.use_fake_user = False
-                while lib.users != 0:
-                    lib.user_clear()
+                clearLibraryUsers(lib)
         
         return {'FINISHED'}
