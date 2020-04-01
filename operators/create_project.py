@@ -6,6 +6,8 @@ import re
 from ..functions.dataset_functions import returnDatasetProperties
 from ..functions.file_functions import suppressExistingFile, absolutePath, createFolder
 from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
+from ..functions.utils_functions import redrawAreas
+
 from ..global_variables import (
                             file_project,
                             saving_to_json_statement,
@@ -125,5 +127,8 @@ class BpmCreateProject(bpy.types.Operator):
         if winman.bpm_debug: print(folder_created_statement + old_render_folder_path) #debug
 
         enableSequencerCallback()
+
+        # reload vse areas
+        redrawAreas(context, 'SEQUENCE_EDITOR')
 
         return {'FINISHED'}
