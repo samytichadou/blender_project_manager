@@ -25,7 +25,7 @@ bl_info = {
  "blender": (2, 83, 0),  
  "location": "Timeline",  
  "description": "Manage small animation project from Blender",  
-  "wiki_url": "https://github.com/samytichadou/blender_project_manager",  
+  "wiki_url": "https://github.com/samytichadou/blender_project_manager/wiki",  
  "tracker_url": "https://github.com/samytichadou/blender_project_manager/issues/new",  
  "category": "Animation"}
 
