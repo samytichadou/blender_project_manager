@@ -18,7 +18,9 @@ class BPMEmptyRecycleBin(bpy.types.Operator):
     """Empty project recycle bin"""
     bl_idname = "bpm.empty_recycle_bin"
     bl_label = "Empty recycle bin"
-    #bl_options = {}
+    bl_options = {'REGISTER'}
+
+    wiki_page = "test"
 
     @classmethod
     def poll(cls, context):
