@@ -88,9 +88,14 @@ def getListSequencerShots(sequencer):
     shot_list = []
     lib_list = []
     for s in sequencer.sequences_all:
+        # get name
         try:
             if s.bpm_shotsettings.is_shot:
                 shot_list.append(s.name)
-        except AttributeError:
-            pass
+        except AttributeError: pass
+        # get lib
+        try:
+            if s.bpm_shotsettings.is_shot:
+                lib_list.append(s.scene.library)
+        except AttributeError: pass
     return shot_list, lib_list

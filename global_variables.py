@@ -53,6 +53,8 @@ checking_unused_libraries_statement = bpm_statement + "Checking unused libraries
 starting_empty_recycle_bin_statement = bpm_statement + "Emptying recycle bin"
 empty_recycle_bin_completed_statement = bpm_statement + "Recycle bin successfully emptied"
 
+scene_not_found_message = "Scene not found : "
+scene_not_found_statement = bpm_statement + scene_not_found_message
 
 # python scripts statement
 creating_python_script_statement = bpm_statement + "Creating python script : "
