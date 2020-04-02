@@ -12,7 +12,7 @@ def reloadProjectSettingsFromJson(self, context):
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
 
-        datas = winman.bpm_datas
+        datas = winman.bpm_projectdatas
         json_project_file = os.path.join(general_settings.project_folder, file_project)
 
         if winman.bpm_generalsettings.debug: print(reading_json_statement + json_project_file) #debug
@@ -37,7 +37,7 @@ class BpmDisplayModifyProjectSettings(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
-        datas = context.window_manager.bpm_datas
+        datas = context.window_manager.bpm_projectdatas
 
         layout = self.layout
         split = layout.split(align=True)

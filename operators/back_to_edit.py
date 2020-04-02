@@ -19,7 +19,7 @@ class BPMBackToEdit(bpy.types.Operator):
     def execute(self, context):
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
-        project_datas = winman.bpm_datas
+        project_datas = winman.bpm_projectdatas
         filepath = getLastVersion(general_settings.project_folder, project_datas.edit_file_pattern, ".blend")
 
         if general_settings.debug: print(back_to_edit_statement + filepath) #debug

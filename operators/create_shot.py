@@ -29,7 +29,7 @@ class BPMCreateShot(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        keyword = context.window_manager.bpm_datas.edit_scene_keyword
+        keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
         winman = context.window_manager
         return winman.bpm_generalsettings.is_project and winman.bpm_generalsettings.file_type == 'EDIT' and keyword in context.scene.name
 
@@ -40,7 +40,7 @@ class BPMCreateShot(bpy.types.Operator):
         
         if winman.bpm_generalsettings.debug: print(creating_shot_statement) #debug
         
-        project_datas = winman.bpm_datas
+        project_datas = winman.bpm_projectdatas
         shot_folder_path = os.path.join(general_settings.project_folder, shot_folder)
         next_shot_folder, next_shot_file, next_shot_number = getNextShot(winman, project_datas, getShotPattern(project_datas), 1, shot_folder_path)
 

@@ -32,7 +32,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
     
     @classmethod
     def poll(cls, context):
-        keyword = context.window_manager.bpm_datas.edit_scene_keyword
+        keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
         general_settings = context.window_manager.bpm_generalsettings
         if general_settings.is_project and general_settings.file_type == 'EDIT' and keyword in context.scene.name:
             if context.scene.sequence_editor.active_strip:

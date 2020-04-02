@@ -18,7 +18,7 @@ class BpmModifyProjectSettings(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
-        datas = context.window_manager.bpm_datas
+        datas = context.window_manager.bpm_projectdatas
 
         layout = self.layout
         split = layout.split(align=True)

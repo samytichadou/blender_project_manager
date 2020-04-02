@@ -50,7 +50,7 @@ def bpmStartupHandler(scene):
             custom_folders_file, is_folder_file = getCustomFoldersFile(winman)
             if is_folder_file:
                 if winman.bpm_generalsettings.debug: print(folders_loading_statement + custom_folders_file) #debug
-                custom_folders_coll = winman.bpm_folders
+                custom_folders_coll = winman.bpm_customfolders
                 loadJsonInCollection(winman, custom_folders_file, custom_folders_coll, 'folders')
                 if winman.bpm_generalsettings.debug: print(loaded_folders_statement) #debug
 

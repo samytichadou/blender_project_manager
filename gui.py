@@ -25,7 +25,7 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
     def draw(self, context):
         winman = context.window_manager
-        project_data = context.window_manager.bpm_datas
+        project_data = context.window_manager.bpm_projectdatas
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
@@ -152,7 +152,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             layout.operator('bpm.create_project')  
         
         else:
-            project_data = winman.bpm_datas
+            project_data = winman.bpm_projectdatas
             layout.label(text = project_data.name)
 
             layout.operator('bpm.display_modify_project_settings')
@@ -183,11 +183,11 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
     
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_folders
+        return context.window_manager.bpm_customfolders
     
     def draw(self, context):
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
-        layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_folders", general_settings, "custom_folders_index", rows=4)
+        layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)

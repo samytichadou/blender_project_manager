@@ -100,33 +100,21 @@ def register():
         register_class(cls)
 
     ### PROPERTIES ###
-    bpy.types.WindowManager.bpm_isproject = \
-        bpy.props.BoolProperty(default=False)
-    file_type = [
-        ('EDIT', 'Edit', ""),
-        ('SHOT', 'Shot', ""),
-        ('ASSET', 'Asset', ""),
-        ('NONE', 'None', ""),
-        ]
-    bpy.types.WindowManager.bpm_filetype = \
-        bpy.props.EnumProperty(items = file_type, default='NONE')
-    bpy.types.WindowManager.bpm_debug = \
-        bpy.props.BoolProperty(default=True)
-    bpy.types.WindowManager.bpm_foldersindex = \
-        bpy.props.IntProperty(update = updateFilebrowserPath)
-    bpy.types.WindowManager.bpm_projectfolder = \
-        bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
-    bpy.types.WindowManager.bpm_datas = \
-        bpy.props.PointerProperty(type = BPMProjectSettings)
-    bpy.types.WindowManager.bpm_folders = \
-        bpy.props.CollectionProperty(type = BPMCustomFolders)
-    bpy.types.WindowManager.bpm_assets = \
-        bpy.props.CollectionProperty(type = BPMAssetSettings)
-    bpy.types.WindowManager.bpm_shots = \
-        bpy.props.CollectionProperty(type = BPMShotSettings)
 
     bpy.types.WindowManager.bpm_generalsettings = \
         bpy.props.PointerProperty(type = BPMGeneralSettings, name="BPM general settings")
+
+    bpy.types.WindowManager.bpm_projectdatas = \
+        bpy.props.PointerProperty(type = BPMProjectSettings)
+
+    bpy.types.WindowManager.bpm_customfolders = \
+        bpy.props.CollectionProperty(type = BPMCustomFolders)
+
+    bpy.types.WindowManager.bpm_assets = \
+        bpy.props.CollectionProperty(type = BPMAssetSettings)
+
+    bpy.types.WindowManager.bpm_shotssettings = \
+        bpy.props.PointerProperty(type = BPMShotSettings, name="BPM shot settings")
 
     bpy.types.SceneSequence.bpm_shotsettings = \
         bpy.props.PointerProperty(type = BPMShotSettings, name="BPM shot settings")
@@ -153,19 +141,13 @@ def unregister():
         unregister_class(cls)
 
     ### PROPERTIES ###
-    del bpy.types.WindowManager.bpm_isproject
-    del bpy.types.WindowManager.bpm_filetype
-    del bpy.types.WindowManager.bpm_debug
-    del bpy.types.WindowManager.bpm_foldersindex
-    del bpy.types.WindowManager.bpm_projectfolder
-    del bpy.types.WindowManager.bpm_datas
-    del bpy.types.WindowManager.bpm_folders
-    del bpy.types.WindowManager.bpm_assets
-    del bpy.types.WindowManager.bpm_shots
-
     del bpy.types.WindowManager.bpm_generalsettings
+    del bpy.types.WindowManager.bpm_projectdatas
+    del bpy.types.WindowManager.bpm_customfolders
+    del bpy.types.WindowManager.bpm_assets
+    del bpy.types.WindowManager.bpm_shotssettings
 
-    del bpy.types.SceneSequence.bpm_shotsettings
+    del bpy.types.SceneSequence.bpm_shotssettings
 
     del bpy.types.Scene.bpm_scenesettings
 

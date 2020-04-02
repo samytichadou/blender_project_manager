@@ -26,7 +26,7 @@ class BpmSaveProjectSettingsToJson(bpy.types.Operator):
     def execute(self, context):
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
-        datas = winman.bpm_datas
+        datas = winman.bpm_projectdatas
 
         if general_settings.debug: print(saving_to_json_statement)
 

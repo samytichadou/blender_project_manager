@@ -4,7 +4,7 @@ import bpy
 #update function for filebrowser custom path
 def updateFilebrowserPath(self, context):
     winman = context.window_manager
-    folders_coll = winman.bpm_folders
+    folders_coll = winman.bpm_customfolders
     general_settings = context.window_manager.bpm_generalsettings
     
     area = context.area
