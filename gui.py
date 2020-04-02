@@ -117,6 +117,8 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         if general_settings.debug: #debug:
             layout.prop(shot_settings, 'is_shot')
             layout.prop(shot_settings, 'shot_version')
+            layout.prop(shot_settings, 'shot_last_version')
+            layout.prop(shot_settings, 'not_last_version')
 
 
 # bpm function topbar back/open operators

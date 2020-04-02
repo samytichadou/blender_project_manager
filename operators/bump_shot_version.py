@@ -25,8 +25,12 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
 
     def execute(self, context):
         # import statements and functions
-        from ..global_variables import (creating_shot_statement, 
-                                    
+        from ..global_variables import (bumping_shot_statement, 
+                                    copying_file_statement,
+                                    deleting_scene_statement,
+                                    library_cleared_statement,
+                                    scenes_linked_statement,
+                                    linked_to_strip_statement,
                                 )
         from ..functions.file_functions import absolutePath, linkExternalScenes
         from ..functions.utils_functions import clearLibraryUsers
@@ -40,10 +44,11 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         shot_lib = shot_scn.library
         shot_name = shot_scn.name
         
-        if general_settings.debug: print('Bumping shot version') #debug
+        if general_settings.debug: print(bumping_shot_statement) #debug
 
-        # bump version number
-        shot_settings.shot_version += 1
+        # bump version number and make it last version
+        shot_settings.shot_version = shot_settings.shot_last_version + 1
+        shot_settings.shot_last_version = shot_settings.shot_version
 
         # get new shot path
         old_version_shot_filepath = absolutePath(shot_lib.filepath)
@@ -55,23 +60,23 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         new_shot_path = os.path.join(shot_folder_path, new_shot_name + ".blend")
 
         # copy the shot file
-        if general_settings.debug: print('Duplicating shot to : ' + new_shot_name) #debug
+        if general_settings.debug: print(copying_file_statement + old_version_shot_filepath + " - to - " + new_shot_path) #debug
         shutil.copy(old_version_shot_filepath, new_shot_path)
 
         # delete old scene
-        if general_settings.debug: print('Deleting scene : ' + shot_name) #debug
+        if general_settings.debug: print(deleting_scene_statement + shot_name) #debug
         bpy.data.scenes.remove(shot_scn, do_unlink = True)
 
         # unlink old lib
-        if general_settings.debug: print('Unlinking library : ' + old_version_shot_filepath) #debug
         clearLibraryUsers(shot_lib)
+        if general_settings.debug: print(library_cleared_statement + old_version_shot_filepath) #debug
 
         # link new scene
-        if general_settings.debug: print('Linking new scene from : ' + new_shot_path) #debug
         linkExternalScenes(new_shot_path)
+        if general_settings.debug: print(scenes_linked_statement + new_shot_path) #debug
 
         # link strip to new scene
-        if general_settings.debug: print('Linking scene to strip : ' + shot_name) #debug
         active_strip.scene = bpy.data.scenes[shot_name]
+        if general_settings.debug: print(linked_to_strip_statement + shot_name) #debug
 
         return {'FINISHED'}

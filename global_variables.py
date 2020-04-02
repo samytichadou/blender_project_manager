@@ -20,7 +20,8 @@ no_unused_shots_message = "No unused shots"
 no_unused_shots_statement = bpm_statement + no_unused_shots_message
 starting_delete_shots_statement = bpm_statement + "Starting shot(s) deletion"
 starting_delete_specific_shot_statement = bpm_statement + "Starting to delete shot : "
-deleting_scene_statement = bpm_statement + "Starting to delete scene : "
+deleting_scene_statement = bpm_statement + "Deleting scene : "
+bumping_shot_statement = bpm_statement + "Bumping shot version"
 
 
 # project datas statements
@@ -64,12 +65,14 @@ starting_deleting_folder = bpm_statement + "Deleting folder : "
 deleted_folder_statement = bpm_statement + "Folder successfully deleted"
 emptying_folder_statement = bpm_statement + "Emptying folder : "
 folder_emptied_statement = bpm_statement + "Folder successfully emptied"
+copying_file_statement = bpm_statement + "Copying file from : "
 
 
 # timeline statements
 no_available_timeline_space_message = "No available space on timeline"
 no_available_timeline_space_statement = bpm_statement + no_available_timeline_space_message
 checking_available_timeline_space_statement = bpm_statement + "Checking on timeline for available space"
+linked_to_strip_statement = bpm_statement + "Linking to strip : "
 
 
 # shot update statement
