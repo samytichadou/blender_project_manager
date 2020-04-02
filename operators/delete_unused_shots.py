@@ -91,7 +91,6 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
         layout.label(text = "Continue ?")
 
     def execute(self, context):
-        winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
 
         if general_settings.debug: print(starting_delete_shots_statement) #debug
