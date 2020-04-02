@@ -108,7 +108,9 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.add_modify_shot_marker', 'Add-Modify-Shot-Marker-Operator')
 
-        layout.operator('bpm.bump_shot_version_edit')
+        drawOperatorAndHelp(layout, 'bpm.bump_shot_version_edit', 'Shot-Version-Management')
+
+        drawOperatorAndHelp(layout, 'bpm.change_shot_version_edit', 'Shot-Version-Management')
 
         layout.separator()
         layout.prop(shot_settings, 'display_markers')
@@ -150,7 +152,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
 
     def draw(self, context):
         winman = context.window_manager
-        general_settings = context.window_manager.general_settings
+        general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
         

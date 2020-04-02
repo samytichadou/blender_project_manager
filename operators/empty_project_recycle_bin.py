@@ -9,8 +9,6 @@ class BPMEmptyRecycleBin(bpy.types.Operator):
     bl_label = "Empty recycle bin"
     bl_options = {'REGISTER'}
 
-    wiki_page = "test"
-
     @classmethod
     def poll(cls, context):
         keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword

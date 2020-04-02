@@ -22,6 +22,11 @@ starting_delete_shots_statement = bpm_statement + "Starting shot(s) deletion"
 starting_delete_specific_shot_statement = bpm_statement + "Starting to delete shot : "
 deleting_scene_statement = bpm_statement + "Deleting scene : "
 bumping_shot_statement = bpm_statement + "Bumping shot version"
+changing_shot_version_statement = bpm_statement + "Changing shot version to version "
+invalid_shot_version_message = "Not an existing shot version"
+invalid_shot_version_statement = bpm_statement + invalid_shot_version_message
+already_loaded_shot_version_message = "Already loaded shot version"
+already_loaded_shot_version_statement = bpm_statement + already_loaded_shot_version_message
 
 
 # project datas statements
@@ -66,6 +71,8 @@ deleted_folder_statement = bpm_statement + "Folder successfully deleted"
 emptying_folder_statement = bpm_statement + "Emptying folder : "
 folder_emptied_statement = bpm_statement + "Folder successfully emptied"
 copying_file_statement = bpm_statement + "Copying file from : "
+file_does_not_exist_message = "File does not exist : "
+file_does_not_exist_statement = bpm_statement + file_does_not_exist_message
 
 
 # timeline statements

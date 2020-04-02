@@ -20,7 +20,7 @@ class BPMOpenWikiPage(bpy.types.Operator):
         
         url = wiki_url + self.wiki_page
 
-        if context.window_manager.bpm_debug: print(opening_web_page_statement + url) #debug
+        if context.window_manager.bpm_generalsettings.debug: print(opening_web_page_statement + url) #debug
         
         webbrowser.open(url)
 
