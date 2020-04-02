@@ -65,8 +65,8 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     is_shot : bpy.props.BoolProperty(default=False)
     display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
     shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD')
-    shot_version : bpy.props.IntProperty(name = "Shot version", default = 1)
-    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1)
+    shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
+    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1)
     not_last_version : bpy.props.BoolProperty(default=False)
 
 # scene settings
