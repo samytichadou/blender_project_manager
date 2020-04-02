@@ -1,4 +1,5 @@
-import bpy, os
+import bpy
+import os
 
 
 from ..global_variables import (creating_shot_statement, 
