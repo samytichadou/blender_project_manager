@@ -44,8 +44,10 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         layout.separator()
         layout.prop(general_settings, 'debug', text = "Debug")
         if general_settings.debug:
-            layout.prop(general_settings, 'is_project')
-            layout.prop(general_settings, 'file_type')
+            box = layout.box()
+            box.label(text = 'debug', icon = 'ERROR')
+            box.prop(general_settings, 'is_project')
+            box.prop(general_settings, 'file_type')
 
 
 # sequencer UI panel
@@ -113,14 +115,17 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         drawOperatorAndHelp(layout, 'bpm.change_shot_version_edit', 'Shot-Version-Management')
 
         layout.separator()
-        layout.prop(shot_settings, 'display_markers')
+        layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
         layout.prop(shot_settings, 'shot_state')
+        layout.prop(shot_settings, 'display_markers')
 
         if general_settings.debug: #debug:
-            layout.prop(shot_settings, 'is_shot')
-            layout.prop(shot_settings, 'shot_version')
-            layout.prop(shot_settings, 'shot_last_version')
-            layout.prop(shot_settings, 'not_last_version')
+            box = layout.box()
+            box.label(text = 'debug', icon = 'ERROR')
+            box.prop(shot_settings, 'is_shot')
+            box.prop(shot_settings, 'shot_version')
+            box.prop(shot_settings, 'shot_last_version')
+            box.prop(shot_settings, 'not_last_version')
 
 
 # bpm function topbar back/open operators
