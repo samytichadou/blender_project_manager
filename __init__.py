@@ -115,7 +115,7 @@ def register():
     bpy.types.WindowManager.bpm_assets = \
         bpy.props.CollectionProperty(type = BPMAssetSettings)
 
-    bpy.types.WindowManager.bpm_shotssettings = \
+    bpy.types.WindowManager.bpm_shotsettings = \
         bpy.props.PointerProperty(type = BPMShotSettings, name="BPM shot settings")
 
     bpy.types.SceneSequence.bpm_shotsettings = \
@@ -147,9 +147,9 @@ def unregister():
     del bpy.types.WindowManager.bpm_projectdatas
     del bpy.types.WindowManager.bpm_customfolders
     del bpy.types.WindowManager.bpm_assets
-    del bpy.types.WindowManager.bpm_shotssettings
+    del bpy.types.WindowManager.bpm_shotsettings
 
-    del bpy.types.SceneSequence.bpm_shotssettings
+    del bpy.types.SceneSequence.bpm_shotsettings
 
     del bpy.types.Scene.bpm_scenesettings
 
