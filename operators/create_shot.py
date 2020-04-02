@@ -31,8 +31,8 @@ class BPMCreateShot(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
-        winman = context.window_manager
-        return winman.bpm_generalsettings.is_project and winman.bpm_generalsettings.file_type == 'EDIT' and keyword in context.scene.name
+        general_settings = context.window_manager.bpm_generalsettings
+        return general_settings.is_project and general_settings.file_type == 'EDIT' and keyword in context.scene.name
 
     def execute(self, context):
         winman = context.window_manager
