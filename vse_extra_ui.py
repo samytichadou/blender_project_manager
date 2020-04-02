@@ -87,12 +87,17 @@ def getBoundingBoxCoordinates(pos, text, text_size, dpi_fac):
     return (v1, v2, v3, v4)
 
 # get warning zone of a strip
+warning_square_size = 10
+
 def getWarningZoneStrip(x, y):
-    square_size = 10
-    v1 = (x-square_size, y-square_size)
-    v2 = (x, y-square_size)
-    v3 = (x-square_size, y)
+    v1 = (x-warning_square_size, y-warning_square_size)
+    v2 = (x, y-warning_square_size)
+    v3 = (x-warning_square_size, y)
     v4 = (x, y)
+    return (v1,v2,v3,v4)
+
+def getSecondWarningZoneStrip(x, y):
+    v1, v2, v3, v4 = getWarningZoneStrip(x - warning_square_size, y)
     return (v1,v2,v3,v4)
 
 # check if a strip has to be updated
@@ -156,16 +161,21 @@ def drawBpmSequencerCallbackPx():
     vertices_e = ()
     indices_e = ()
     color_e = (0, 1, 0, 0.25)
-    # warning bpm shots
+    # warning update bpm shots
     vertices_e_w = ()
     indices_e_w = ()
     color_e_w = (1, 0, 0, 1)
+    # warning version bpm shots
+    vertices_e_v_w = ()
+    indices_e_v_w = ()
+    color_e_v_w = (0, 0, 1, 1)
 
     # iterate through strips
     bgl.glEnable(bgl.GL_BLEND) # enable transparency
 
     n_e = 0
     n_e_w = 0
+    n_e_v_w = 0
     n_m = 0
     n_m_bb = 0
 
@@ -173,7 +183,7 @@ def drawBpmSequencerCallbackPx():
     for strip in sequencer.sequences_all:
 
         if strip.type in {'SCENE'}:
-
+            display_need_update = False            
             if strip.bpm_shotsettings.is_shot:
 
                 # bpm shot
@@ -193,9 +203,22 @@ def drawBpmSequencerCallbackPx():
                 # bpm need to update
                 if scn.bpm_scenesettings.display_shot_update_warning:
                     if getStripNeedUpdate(strip):
+                        display_need_update = True
                         vertices_e_w += getWarningZoneStrip(*v4)
                         indices_e_w += ((n_e_w, n_e_w + 1, n_e_w + 2), (n_e_w + 2, n_e_w + 1, n_e_w + 3))
                         n_e_w += 4
+
+                # bpm not last version
+                if scn.bpm_scenesettings.display_shot_version_warning:
+                    if strip.bpm_shotsettings.not_last_version:
+                        if display_need_update:
+                            vertices_e_v_w += getSecondWarningZoneStrip(*v4)
+                            indices_e_v_w += ((n_e_v_w, n_e_v_w + 1, n_e_v_w + 2), (n_e_v_w + 2, n_e_v_w + 1, n_e_v_w + 3))
+                            n_e_v_w += 4
+                        else:
+                            vertices_e_v_w += getWarningZoneStrip(*v4)
+                            indices_e_v_w += ((n_e_v_w, n_e_v_w + 1, n_e_v_w + 2), (n_e_v_w + 2, n_e_v_w + 1, n_e_v_w + 3))
+                            n_e_v_w += 4
 
                 if strip.scene:
 
@@ -245,6 +268,14 @@ def drawBpmSequencerCallbackPx():
         BPM_extra_warning_shaders.bind()
         BPM_extra_warning_shaders.uniform_float("color", color_e_w)
         BMP_extra_warning_batch.draw(BPM_extra_warning_shaders,)
+
+    # version warning
+    if scn.bpm_scenesettings.display_shot_version_warning:
+        BPM_extra_warning_version_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
+        BMP_extra_warning_version_batch = batch_for_shader(BPM_extra_warning_version_shaders, 'TRIS', {"pos": vertices_e_v_w}, indices=indices_e_v_w)
+        BPM_extra_warning_version_shaders.bind()
+        BPM_extra_warning_version_shaders.uniform_float("color", color_e_v_w)
+        BMP_extra_warning_version_batch.draw(BPM_extra_warning_version_shaders,)
 
     # markers
     if m_display != 'NONE' :
