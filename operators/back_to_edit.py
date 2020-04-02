@@ -1,10 +1,6 @@
 import bpy
 
 
-from ..functions.file_functions import absolutePath, getLastVersion
-from ..global_variables import back_to_edit_statement
-
-
 class BPMBackToEdit(bpy.types.Operator):
     """Go Back to Edit Project"""
     bl_idname = "bpm.back_to_edit"
@@ -17,6 +13,10 @@ class BPMBackToEdit(bpy.types.Operator):
             return True
 
     def execute(self, context):
+        # import statement and functions
+        from ..functions.file_functions import absolutePath, getLastVersion
+        from ..global_variables import back_to_edit_statement
+
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
         project_datas = winman.bpm_projectdatas

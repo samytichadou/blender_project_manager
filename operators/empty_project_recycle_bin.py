@@ -3,17 +3,6 @@ import os
 import shutil
 
 
-from ..global_variables import (
-                            old_folder,
-                            starting_empty_recycle_bin_statement,
-                            emptying_folder_statement,
-                            folder_emptied_statement,
-                            empty_recycle_bin_completed_statement,
-                        )
-
-from ..functions.file_functions import deleteFolderContent
-
-
 class BPMEmptyRecycleBin(bpy.types.Operator):
     """Empty project recycle bin"""
     bl_idname = "bpm.empty_recycle_bin"
@@ -37,6 +26,16 @@ class BPMEmptyRecycleBin(bpy.types.Operator):
         layout.label(text = "Continue ?")
 
     def execute(self, context):
+        # import variables and functions
+        from ..global_variables import (
+                            old_folder,
+                            starting_empty_recycle_bin_statement,
+                            emptying_folder_statement,
+                            folder_emptied_statement,
+                            empty_recycle_bin_completed_statement,
+                        )
+        from ..functions.file_functions import deleteFolderContent
+
         general_settings = context.window_manager.bpm_generalsettings
 
         if general_settings.debug: print(starting_empty_recycle_bin_statement) #debug

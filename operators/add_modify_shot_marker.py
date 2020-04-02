@@ -1,20 +1,6 @@
 import bpy
 
 
-from ..functions.file_functions import absolutePath
-from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
-from ..functions.project_data_functions import getArgumentForPythonScript
-from ..functions.strip_functions import getShotMarkerPosition
-from ..global_variables import (
-                            launching_command_statement,
-                            add_modify_marker_file,
-                            start_edit_shot_marker_statement,
-                            editing_shot_marker_statement,
-                            edited_shot_marker_statement,
-                        )
-from ..vse_extra_ui import getMarkerFrameFromShotStrip
-
-
 class BPMAddModifyShotMarker(bpy.types.Operator):
     """Add or modify shot marker to active strip"""
     bl_idname = "bpm.add_modify_shot_marker"
@@ -46,6 +32,8 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
                             return False
 
     def invoke(self, context, event):
+        from ..vse_extra_ui import getMarkerFrameFromShotStrip
+
         scn = context.scene
         self.frame = context.scene.frame_current
 
@@ -72,6 +60,19 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
             layout.prop(self, 'name', text='')
 
     def execute(self, context):
+        # import statements and functions
+        from ..functions.file_functions import absolutePath
+        from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
+        from ..functions.project_data_functions import getArgumentForPythonScript
+        from ..functions.strip_functions import getShotMarkerPosition
+        from ..global_variables import (
+                                    launching_command_statement,
+                                    add_modify_marker_file,
+                                    start_edit_shot_marker_statement,
+                                    editing_shot_marker_statement,
+                                    edited_shot_marker_statement,
+                                )
+
         winman = context.window_manager
         active = context.scene.sequence_editor.active_strip
         strip_scn = active.scene

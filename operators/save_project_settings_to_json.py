@@ -1,11 +1,6 @@
 import bpy, os
 
 
-from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
-from ..functions.file_functions import suppressExistingFile
-from ..global_variables import file_project, saving_to_json_statement, saved_to_json_statement
-
-
 # display project settings
 class BpmSaveProjectSettingsToJson(bpy.types.Operator):
     """Save Project Settings to json"""
@@ -24,6 +19,11 @@ class BpmSaveProjectSettingsToJson(bpy.types.Operator):
         layout.label(text="Save Project Settings to json file ?")
         
     def execute(self, context):
+        # import statements and functions
+        from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
+        from ..functions.file_functions import suppressExistingFile
+        from ..global_variables import file_project, saving_to_json_statement, saved_to_json_statement
+
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
         datas = winman.bpm_projectdatas

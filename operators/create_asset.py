@@ -2,32 +2,13 @@ import bpy
 import os
 
 
-from ..properties import asset_state_items, asset_type_items
-from ..global_variables import(
-                        asset_folder,
-                        asset_file,
-                        reading_json_statement,
-                        saving_to_json_statement,
-                        saved_to_json_statement,
-                        deleted_file_statement,
-                        creating_asset_statement,
-                        asset_created_statement,
-                        dupe_asset_name_message,
-                        dupe_asset_name_statement,
-                        initialize_json_statement,
-                        )
-from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
-from ..functions.file_functions import suppressExistingFile
-from ..functions.dataset_functions import setPropertiesFromDataset
-from ..functions.project_data_functions import getAssetFile
-
-
 class BPMCreateAsset(bpy.types.Operator):
     """Create new asset"""
     bl_idname = "bpm.create_asset"
     bl_label = "Create asset"
     bl_options = {'REGISTER'}
 
+    from ..properties import asset_state_items, asset_type_items
 
     name : bpy.props.StringProperty(name = "Asset name", default="Asset name")
     asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER')
@@ -50,6 +31,25 @@ class BPMCreateAsset(bpy.types.Operator):
         layout.prop(self, 'asset_state')
 
     def execute(self, context):
+        # import statements and functions
+        from ..global_variables import(
+                                asset_folder,
+                                asset_file,
+                                reading_json_statement,
+                                saving_to_json_statement,
+                                saved_to_json_statement,
+                                deleted_file_statement,
+                                creating_asset_statement,
+                                asset_created_statement,
+                                dupe_asset_name_message,
+                                dupe_asset_name_statement,
+                                initialize_json_statement,
+                                )
+        from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
+        from ..functions.file_functions import suppressExistingFile
+        from ..functions.dataset_functions import setPropertiesFromDataset
+        from ..functions.project_data_functions import getAssetFile
+
         winman = context.window_manager
         asset_collection = winman.bpm_assets
 

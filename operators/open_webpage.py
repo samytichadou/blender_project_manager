@@ -2,9 +2,6 @@ import bpy
 import webbrowser
 
 
-from ..global_variables import opening_web_page_statement, wiki_url
-
-
 class BPMOpenWikiPage(bpy.types.Operator):
     """Find help on the wiki page"""
     bl_idname = "bpm.open_wiki_page"
@@ -18,6 +15,8 @@ class BPMOpenWikiPage(bpy.types.Operator):
         return True
 
     def execute(self, context):
+        # import statements and functions
+        from ..global_variables import opening_web_page_statement, wiki_url
         
         url = wiki_url + self.wiki_page
 

@@ -1,9 +1,6 @@
 import bpy
 
 
-from ..functions.file_functions import absolutePath
-from ..global_variables import opening_statement
-
 class BPMOpenShot(bpy.types.Operator):
     """Open Shot from Timeline"""
     bl_idname = "bpm.open_shot"
@@ -25,6 +22,10 @@ class BPMOpenShot(bpy.types.Operator):
                             pass
 
     def execute(self, context):
+        # import statements and functions
+        from ..functions.file_functions import absolutePath
+        from ..global_variables import opening_statement
+
         winman = context.window_manager
         filepath = absolutePath(context.scene.sequence_editor.active_strip.scene.library.filepath)
 

@@ -3,27 +3,6 @@ import os
 import shutil
 
 
-from ..global_variables import (creating_shot_statement, 
-                            creating_shot_folder_statement, 
-                            python_temp, 
-                            shot_setup_file, 
-                            launching_command_statement, 
-                            creating_python_script_statement,
-                            python_script_created_statement,
-                            deleted_file_statement,
-                            scenes_linked_statement,
-                            no_available_timeline_space_message,
-                            no_available_timeline_space_statement,
-                            checking_available_timeline_space_statement,
-                            shot_folder,
-                        )
-from ..functions.file_functions import absolutePath, linkExternalScenes
-from ..functions.utils_functions import clearLibraryUsers
-
-from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
-from ..functions.strip_functions import returnAvailablePositionStripChannel
-
-
 class BPMBumpShotVersionFromEdit(bpy.types.Operator):
     """Create a new version of active shot"""
     bl_idname = "bpm.bump_shot_version_edit"
@@ -45,6 +24,13 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
                             pass
 
     def execute(self, context):
+        # import statements and functions
+        from ..global_variables import (creating_shot_statement, 
+                                    
+                                )
+        from ..functions.file_functions import absolutePath, linkExternalScenes
+        from ..functions.utils_functions import clearLibraryUsers
+
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
         active_strip = context.scene.sequence_editor.active_strip

@@ -3,24 +3,6 @@ import os
 import re
 
 
-from ..functions.dataset_functions import returnDatasetProperties
-from ..functions.file_functions import suppressExistingFile, absolutePath, createFolder
-from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
-from ..functions.utils_functions import redrawAreas
-
-from ..global_variables import (
-                            file_project,
-                            saving_to_json_statement,
-                            saved_to_json_statement,
-                            new_project_name,
-                            shot_folder,
-                            asset_folder,
-                            render_folder,
-                            folder_created_statement,
-                            old_folder,
-                        )
-from ..vse_extra_ui import enableSequencerCallback
-
 # display project settings
 class BpmCreateProject(bpy.types.Operator):
     """Create new Blender Project Manager Project"""
@@ -32,6 +14,9 @@ class BpmCreateProject(bpy.types.Operator):
         return not context.window_manager.bpm_generalsettings.is_project and bpy.data.is_saved
     
     def invoke(self, context, event):
+        from ..functions.file_functions import absolutePath
+        from ..global_variables import new_project_name
+
         # create properties
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
@@ -59,6 +44,7 @@ class BpmCreateProject(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
+        from ..functions.dataset_functions import returnDatasetProperties
         datas = context.window_manager.bpm_projectdatas
 
         layout = self.layout
@@ -73,6 +59,22 @@ class BpmCreateProject(bpy.types.Operator):
             box.prop(datas, '%s' % p[0].identifier, text='')
         
     def execute(self, context):
+        # import statements and functions
+        from ..functions.file_functions import suppressExistingFile, absolutePath, createFolder
+        from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
+        from ..functions.utils_functions import redrawAreas
+        from ..global_variables import (
+                                    file_project,
+                                    saving_to_json_statement,
+                                    saved_to_json_statement,
+                                    shot_folder,
+                                    asset_folder,
+                                    render_folder,
+                                    folder_created_statement,
+                                    old_folder,
+                                )
+        from ..vse_extra_ui import enableSequencerCallback
+
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
         datas = winman.bpm_projectdatas
