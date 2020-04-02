@@ -9,6 +9,12 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
     bl_label = "Bump shot version"
     bl_options = {'REGISTER'}
 
+    file_to_copy_items = [
+        ('CURRENT', 'Current version', ""),
+        ('LAST', 'Last version', ""),
+        ]
+    file_to_copy : bpy.props.EnumProperty(name = "Create from", items = file_to_copy_items, default = 'CURRENT')
+
     @classmethod
     def poll(cls, context):
         keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
@@ -23,7 +29,21 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
                         except AttributeError:
                             pass
 
+    def invoke(self, context, event):
+        self.file_to_copy = 'CURRENT'
+        shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
+        if shot_settings.shot_version != shot_settings.shot_last_version:
+            return context.window_manager.invoke_props_dialog(self)
+        else:
+            return self.execute(context)
+ 
+    def draw(self, context):
+        layout = self.layout
+        layout.label(text = "Which version to bump from : ")
+        layout.prop(self, 'file_to_copy', expand = True)
+
     def execute(self, context):
+        print(self.file_to_copy)
         # import statements and functions
         from ..global_variables import (bumping_shot_statement, 
                                     copying_file_statement,
@@ -46,10 +66,8 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         
         if general_settings.debug: print(bumping_shot_statement) #debug
 
-        # bump version number and make it last version
+        # bump version number
         shot_settings.shot_version = shot_settings.shot_last_version + 1
-        shot_settings.shot_last_version = shot_settings.shot_version
-        shot_settings.not_last_version = False
 
         # get new shot path
         old_version_shot_filepath = absolutePath(shot_lib.filepath)
@@ -59,6 +77,14 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         shot_pattern = old_version_shot_name[:-(proj_datas.shot_version_digits)]
         new_shot_name = shot_pattern + str(shot_settings.shot_version).zfill(proj_datas.shot_version_digits)
         new_shot_path = os.path.join(shot_folder_path, new_shot_name + ".blend")
+
+        if self.file_to_copy == 'LAST':
+            last_version_name = shot_pattern + str(shot_settings.shot_last_version).zfill(proj_datas.shot_version_digits)
+            old_version_shot_filepath = os.path.join(shot_folder_path, last_version_name + ".blend")
+
+        # bump shot last version number and make it last version
+        shot_settings.shot_last_version = shot_settings.shot_version
+        shot_settings.not_last_version = False
 
         # copy the shot file
         if general_settings.debug: print(copying_file_statement + old_version_shot_filepath + " - to - " + new_shot_path) #debug
