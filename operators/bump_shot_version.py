@@ -36,7 +36,7 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         from ..functions.utils_functions import clearLibraryUsers
 
         winman = context.window_manager
-        general_settings = context.window_manager.bpm_generalsettings
+        general_settings = winman.bpm_generalsettings
         active_strip = context.scene.sequence_editor.active_strip
         shot_settings = active_strip.bpm_shotsettings
         proj_datas = winman.bpm_projectdatas
@@ -49,6 +49,7 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         # bump version number and make it last version
         shot_settings.shot_version = shot_settings.shot_last_version + 1
         shot_settings.shot_last_version = shot_settings.shot_version
+        shot_settings.not_last_version = False
 
         # get new shot path
         old_version_shot_filepath = absolutePath(shot_lib.filepath)
