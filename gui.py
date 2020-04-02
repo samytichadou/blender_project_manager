@@ -98,6 +98,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         winman = context.window_manager
         active = context.scene.sequence_editor.active_strip
         general_settings = context.window_manager.bpm_generalsettings
+        shot_settings = active.bpm_shotsettings
 
         layout = self.layout
 
@@ -107,12 +108,15 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.add_modify_shot_marker', 'Add-Modify-Shot-Marker-Operator')
 
+        layout.operator('bpm.bump_shot_version_edit')
+
         layout.separator()
-        layout.prop(active.bpm_shotsettings, 'display_markers')
-        layout.prop(active.bpm_shotsettings, 'shot_state')
+        layout.prop(shot_settings, 'display_markers')
+        layout.prop(shot_settings, 'shot_state')
 
         if general_settings.debug: #debug:
-            layout.prop(active.bpm_shotsettings, 'is_shot')
+            layout.prop(shot_settings, 'is_shot')
+            layout.prop(shot_settings, 'shot_version')
 
 
 # bpm function topbar back/open operators

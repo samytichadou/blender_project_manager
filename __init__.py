@@ -49,6 +49,7 @@ from .operators.open_webpage import *
 from .operators.add_modify_shot_marker import *
 from .operators.delete_unused_shots import *
 from .operators.empty_project_recycle_bin import *
+from .operators.bump_shot_version import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -73,6 +74,7 @@ classes = (BPMOpenShot,
             BPMAddModifyShotMarker,
             BPMDeleteUnusedShots,
             BPMEmptyRecycleBin,
+            BPMBumpShotVersionFromEdit,
 
             BPMOpenWikiPage,
 
