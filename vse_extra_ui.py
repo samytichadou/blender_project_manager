@@ -126,10 +126,11 @@ def drawBpmSequencerCallbackPx():
     context = bpy.context
 
     scn = context.scene
-    m_display = scn.bpm_scenesettings.display_markers
-    mn_display = scn.bpm_scenesettings.display_marker_names
+    scene_settings = scn.bpm_scenesettings
+    m_display = scene_settings.display_markers
+    mn_display = scene_settings.display_marker_names
     
-    if not scn.bpm_scenesettings.extra_ui: return
+    if not scene_settings.extra_ui: return
 
     sequencer = scn.sequence_editor
     region = context.region
@@ -195,13 +196,13 @@ def drawBpmSequencerCallbackPx():
                 v3 = region.view2d.view_to_region(x1, y2, clip=False)
                 v4 = region.view2d.view_to_region(x2, y2, clip=False)
 
-                if scn.bpm_scenesettings.display_shot_strip:
+                if scene_settings.display_shot_strip:
                     vertices_e += (v1, v2, v3, v4)
                     indices_e += ((n_e, n_e + 1, n_e + 2), (n_e + 2, n_e + 1, n_e + 3))
                     n_e += 4
 
                 # bpm need to update
-                if scn.bpm_scenesettings.display_shot_update_warning:
+                if scene_settings.display_shot_update_warning:
                     if getStripNeedUpdate(strip):
                         display_need_update = True
                         vertices_e_w += getWarningZoneStrip(*v4)
@@ -209,7 +210,7 @@ def drawBpmSequencerCallbackPx():
                         n_e_w += 4
 
                 # bpm not last version
-                if scn.bpm_scenesettings.display_shot_version_warning:
+                if scene_settings.display_shot_version_warning:
                     if strip.bpm_shotsettings.not_last_version:
                         if display_need_update:
                             vertices_e_v_w += getSecondWarningZoneStrip(*v4)
@@ -237,12 +238,12 @@ def drawBpmSequencerCallbackPx():
                                 if (mn_display == "ALL") \
                                 or (mn_display == "CURRENT" and scn.frame_current == m[1]):
                                     text = m[0]
-                                    if len(text) > scn.bpm_scenesettings.display_marker_limit:
-                                        text = text[0:scn.bpm_scenesettings.display_marker_limit - 3] + "..."
+                                    if len(text) > scene_settings.display_marker_limit:
+                                        text = text[0:scene_settings.display_marker_limit - 3] + "..."
                                     marker_texts.append((coord[1], text))
 
                                     # marker box
-                                    if scn.bpm_scenesettings.display_marker_boxes:
+                                    if scene_settings.display_marker_boxes:
                                         vertices_m_bb += getBoundingBoxCoordinates(coord[1], text, text_size, dpi_fac)
                                         indices_m_bb += ((n_m_bb, n_m_bb + 1, n_m_bb + 2), (n_m_bb + 2, n_m_bb + 1, n_m_bb + 3))
                                         n_m_bb += 4
@@ -251,7 +252,7 @@ def drawBpmSequencerCallbackPx():
 
     
     # extras
-    if scn.bpm_scenesettings.display_shot_strip:
+    if scene_settings.display_shot_strip:
         bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE)
         BPM_extra_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
         BMP_extra_batch = batch_for_shader(BPM_extra_shaders, 'TRIS', {"pos": vertices_e}, indices=indices_e)
@@ -262,7 +263,7 @@ def drawBpmSequencerCallbackPx():
         bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE_MINUS_SRC_ALPHA)
 
     # update warning
-    if scn.bpm_scenesettings.display_shot_update_warning:
+    if scene_settings.display_shot_update_warning:
         BPM_extra_warning_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
         BMP_extra_warning_batch = batch_for_shader(BPM_extra_warning_shaders, 'TRIS', {"pos": vertices_e_w}, indices=indices_e_w)
         BPM_extra_warning_shaders.bind()
@@ -270,7 +271,7 @@ def drawBpmSequencerCallbackPx():
         BMP_extra_warning_batch.draw(BPM_extra_warning_shaders,)
 
     # version warning
-    if scn.bpm_scenesettings.display_shot_version_warning:
+    if scene_settings.display_shot_version_warning:
         BPM_extra_warning_version_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
         BMP_extra_warning_version_batch = batch_for_shader(BPM_extra_warning_version_shaders, 'TRIS', {"pos": vertices_e_v_w}, indices=indices_e_v_w)
         BPM_extra_warning_version_shaders.bind()
@@ -281,7 +282,7 @@ def drawBpmSequencerCallbackPx():
     if m_display != 'NONE' :
 
         # markers bounding boxes
-        if mn_display != "NONE" and scn.bpm_scenesettings.display_marker_boxes:
+        if mn_display != "NONE" and scene_settings.display_marker_boxes:
             BPM_marker_bb_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
             BMP_marker_bb_batch = batch_for_shader(BPM_marker_bb_shader, 'TRIS', {"pos": vertices_m_bb}, indices=indices_m_bb)
             BPM_marker_bb_shader.bind()
