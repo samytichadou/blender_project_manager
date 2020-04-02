@@ -105,7 +105,3 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
     debug : bpy.props.BoolProperty(default=True)
     custom_folders_index : bpy.props.IntProperty(update = updateFilebrowserPath)
     project_folder : bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
-
-    project_datas : bpy.props.CollectionProperty(type = BPMProjectSettings) # to replace in code TODO
-    custom_folders_list : bpy.props.CollectionProperty(type = BPMCustomFolders) # to replace in code TODO
-    assets_list : bpy.props.CollectionProperty(type = BPMAssetSettings) # to replace in code TODO
