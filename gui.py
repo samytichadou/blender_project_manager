@@ -41,6 +41,8 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.create_asset', 'Create-Asset-Operator')
 
+        layout.operator('bpm.synchronize_audio_edit')
+
         layout.separator()
         layout.prop(general_settings, 'debug', text = "Debug")
         if general_settings.debug:

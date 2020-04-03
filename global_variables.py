@@ -44,6 +44,8 @@ initialize_json_statement = bpm_statement + "Initializing json : "
 saving_to_json_statement = bpm_statement + "Saving to json"
 saved_to_json_statement = bpm_statement + "Successfully saved to json"
 
+adding_dataset_to_json = bpm_statement + "Adding dataset to json : "
+
 setting_prop_statement = bpm_statement + "Setting property : "
 setting_prop_error_statement = bpm_statement + "Unable to set property : "
 prop_avoided_statement = bpm_statement + "Property avoided : "
@@ -56,6 +58,10 @@ empty_recycle_bin_completed_statement = bpm_statement + "Recycle bin successfull
 
 scene_not_found_message = "Scene not found : "
 scene_not_found_statement = bpm_statement + scene_not_found_message
+
+starting_audio_sync_file_statement = bpm_statement + "Starting creation of audio sync file"
+audio_sync_file_created_statement = bpm_statement + "Audio sync file successfully created"
+
 
 # python scripts statement
 creating_python_script_statement = bpm_statement + "Creating python script : "
@@ -127,6 +133,8 @@ opening_web_page_statement = bpm_statement + "Opening web page : "
 file_project = "project_data.json"
 asset_file = "project_assets.json"
 custom_folders_file = "project_custom_folders.json"
+audio_sync_file = "project_audio_sync.json"
+
 python_temp = "python_temp.py"
 
 script_file = os.path.realpath(__file__)
