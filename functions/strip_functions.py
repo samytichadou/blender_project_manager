@@ -99,3 +99,9 @@ def getListSequencerShots(sequencer):
                 lib_list.append(s.scene.library)
         except AttributeError: pass
     return shot_list, lib_list
+
+
+# delete all strips
+def deleteAllSequencerStrips(sequencer):
+    for strip in sequencer.sequences_all:
+        sequencer.sequences.remove(strip)

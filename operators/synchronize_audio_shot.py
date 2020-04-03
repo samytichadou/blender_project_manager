@@ -18,6 +18,7 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
         from ..functions.file_functions import absolutePath
         from ..functions.json_functions import read_json
         from ..functions.dataset_functions import setPropertiesFromJsonDataset
+        from ..functions.strip_functions import deleteAllSequencerStrips
         from ..global_variables import (
                                     audio_sync_file,
                                 )
@@ -32,10 +33,13 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
         filepath = absolutePath(os.path.join(general_settings.project_folder, audio_sync_file))
         scn = context.scene
         sequencer = scn.sequence_editor
+        offset = 0
 
         if not os.path.isfile(filepath):
-            if debug: print("Synchronizing shot audio") #debug
+            if debug: print("No synchronization file") #debug
             return {'FINISHED'}
+
+        if debug: print("Synchronizing shot audio") #debug
 
         # create sequencer if none
         if sequencer is None:
@@ -45,8 +49,7 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
         else:
             # delete existing strips
             if debug: print("Removing existing strips") #debug
-            for strip in scn.sequence_editor.sequences_all:
-                sequencer.sequences.remove(strip)
+            deleteAllSequencerStrips(sequencer)
 
         # iterate through the strips
         if debug: print() #debug
@@ -70,12 +73,12 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
 
             if debug: print("Creating strip : " + s['name']) #debug
 
-            new_strip = sequencer.sequences.new_sound(s['name'], fp, s['channel'], s['frame_start'])
+            new_strip = sequencer.sequences.new_sound(s['name'], fp, s['channel'], s['frame_start']+offset)
             new_strip.sound = bpy.data.sounds[s['sound']]
 
             new_strip.frame_offset_start = s['frame_offset_start']
             new_strip.frame_offset_end = s['frame_offset_end']
-            new_strip.frame_final_start = s['frame_final_start']
+            new_strip.frame_final_start = s['frame_final_start']+offset
             new_strip.frame_final_duration = s['frame_final_duration']
             
             setPropertiesFromJsonDataset(s, new_strip, debug, ("frame", "animation"))
