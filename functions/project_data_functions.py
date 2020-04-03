@@ -65,7 +65,10 @@ def chekIfBpmProject(winman, project_data_file):
                 return False
     # shot
     elif file_type == 'SHOT':
-        pattern1 = dataset['project_prefix'] + "_" + dataset['shot_prefix']
+        prefix = dataset['project_prefix']
+        if not prefix.endswith("_"):
+            prefix += "_"
+        pattern1 = prefix + dataset['shot_prefix']
         pattern2 = "_" + dataset['shot_version_suffix']
         if pattern1 in blend_name and pattern2 in blend_name:
             general_settings.is_project = True
