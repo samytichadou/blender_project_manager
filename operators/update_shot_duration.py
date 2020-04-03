@@ -14,14 +14,15 @@ class BPMUpdateShotDuration(bpy.types.Operator):
         keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
         general_settings = context.window_manager.bpm_generalsettings
         if general_settings.is_project and general_settings.file_type == 'EDIT' and keyword in context.scene.name:
-            if context.scene.sequence_editor.active_strip:
-                active = context.scene.sequence_editor.active_strip
-                if not active.lock:
-                    try:
-                        if active.bpm_shotsettings.is_shot and active.scene.library:
-                            return True
-                    except AttributeError:
-                        pass
+            if context.scene.sequence_editor:
+                if context.scene.sequence_editor.active_strip:
+                    active = context.scene.sequence_editor.active_strip
+                    if not active.lock:
+                        try:
+                            if active.bpm_shotsettings.is_shot and active.scene.library:
+                                return True
+                        except AttributeError:
+                            pass
 
     def execute(self, context):
         # import statements and functions

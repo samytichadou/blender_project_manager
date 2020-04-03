@@ -90,13 +90,14 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
     @classmethod
     def poll(cls, context):
         chk_isshot = False
-        if context.scene.sequence_editor.active_strip:
-            active = context.scene.sequence_editor.active_strip
-            try:
-                if active.bpm_shotsettings.is_shot:
-                    chk_isshot = True
-            except AttributeError:
-                return False
+        if context.scene.sequence_editor:
+            if context.scene.sequence_editor.active_strip:
+                active = context.scene.sequence_editor.active_strip
+                try:
+                    if active.bpm_shotsettings.is_shot:
+                        chk_isshot = True
+                except AttributeError:
+                    return False
         return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT' and chk_isshot
 
     def draw(self, context):
@@ -144,7 +145,7 @@ def bpmTopbarFunction(self, context):
                 drawOperatorAndHelp(self.layout, 'bpm.back_to_edit', 'Open-Shot-and-Back-to-Edit')
 
                 if general_settings.file_type == 'SHOT':
-                    
+
                     drawOperatorAndHelp(self.layout, 'bpm.synchronize_audio_shot', 'Shot-Audio-Synchronization')
 
             elif general_settings.file_type == 'EDIT':
