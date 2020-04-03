@@ -41,7 +41,7 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.create_asset', 'Create-Asset-Operator')
 
-        layout.operator('bpm.synchronize_audio_edit')
+        drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', 'Shot-Audio-Synchronization')
 
         layout.separator()
         layout.prop(general_settings, 'debug', text = "Debug")
@@ -121,6 +121,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
         layout.prop(shot_settings, 'shot_state')
         layout.prop(shot_settings, 'display_markers')
+        layout.prop(shot_settings, 'audio_sync')
 
         if general_settings.debug: #debug:
             box = layout.box()

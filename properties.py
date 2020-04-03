@@ -68,6 +68,7 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
     shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1)
     not_last_version : bpy.props.BoolProperty(default=False)
+    audio_sync : bpy.props.BoolProperty(name = "Audio synchronization", default=False)
 
 # scene settings
 class BPMSceneSettings(bpy.types.PropertyGroup) :

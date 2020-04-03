@@ -134,6 +134,7 @@ file_project = "project_data.json"
 asset_file = "project_assets.json"
 custom_folders_file = "project_custom_folders.json"
 audio_sync_file = "project_audio_sync.json"
+shot_file = "shot_settings.json"
 
 python_temp = "python_temp.py"
 
