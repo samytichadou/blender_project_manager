@@ -19,7 +19,7 @@ def reloadProjectSettingsFromJson(self, context):
 
         json_dataset = read_json(json_project_file)
 
-        setPropertiesFromJsonDataset(json_dataset, datas, winman)
+        setPropertiesFromJsonDataset(json_dataset, datas, winman, ())
 
 # display project settings
 class BpmDisplayModifyProjectSettings(bpy.types.Operator):

@@ -81,7 +81,7 @@ def createProjectDatas(winman, project_data_file):
     dataset = read_json(project_data_file)
 
     # set datas
-    setPropertiesFromJsonDataset(dataset, datas, winman)
+    setPropertiesFromJsonDataset(dataset, datas, winman, ())
 
     return datas
 
@@ -112,7 +112,7 @@ def loadJsonInCollection(winman, json_file, collection, json_coll_name):
     dataset = read_json(json_file)
     for f in dataset[json_coll_name]:
         new = collection.add()
-        setPropertiesFromJsonDataset(f, new, winman)
+        setPropertiesFromJsonDataset(f, new, winman, ())
 
 
 # get shot pattern

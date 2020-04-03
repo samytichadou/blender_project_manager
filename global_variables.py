@@ -46,6 +46,7 @@ saved_to_json_statement = bpm_statement + "Successfully saved to json"
 
 setting_prop_statement = bpm_statement + "Setting property : "
 setting_prop_error_statement = bpm_statement + "Unable to set property : "
+prop_avoided_statement = bpm_statement + "Property avoided : "
 
 library_cleared_statement = bpm_statement + "Cleaned library from user, reload file to delete it : "
 checking_unused_libraries_statement = bpm_statement + "Checking unused libraries"
