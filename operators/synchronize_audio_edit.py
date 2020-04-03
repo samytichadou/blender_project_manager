@@ -39,7 +39,7 @@ class BPMSynchronizeAudioEdit(bpy.types.Operator):
         # init json datas
         if general_settings.debug: print(initialize_json_statement + filepath) #debug
 
-        datas = initializeAssetJsonDatas({'sounds', 'strips'})
+        datas = initializeAssetJsonDatas({'sounds', 'sound_strips', 'shot_strips'})
 
         sound_list = []
 
@@ -61,7 +61,17 @@ class BPMSynchronizeAudioEdit(bpy.types.Operator):
                 # strip datas
                 strip_datas = createJsonDatasetFromProperties(strip)
                 strip_datas['sound'] = sound.name    
-                datas['strips'].append(strip_datas)
+                datas['sound_strips'].append(strip_datas)
+
+            else:
+                # shot datas
+                try:
+                    if strip.bpm_shotsettings.is_shot:
+                        shot_datas = createJsonDatasetFromProperties(strip)
+                        datas['shot_strips'].append(shot_datas)
+
+                except AttributeError:
+                    pass
         
         if general_settings.debug: print(saving_to_json_statement) #debug
 

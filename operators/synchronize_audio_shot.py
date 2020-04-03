@@ -69,7 +69,7 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
         fp = datas['sounds'][0]['filepath']
 
         # strips
-        for s in datas['strips']:
+        for s in datas['sound_strips']:
 
             if debug: print("Creating strip : " + s['name']) #debug
 
