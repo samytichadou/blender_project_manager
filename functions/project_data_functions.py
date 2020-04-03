@@ -75,13 +75,14 @@ def chekIfBpmProject(winman, project_data_file):
 
 # load datas
 def createProjectDatas(winman, project_data_file):
-    if winman.bpm_generalsettings.debug: print(loading_statement + project_data_file) #debug
+    debug = winman.bpm_generalsettings.debug
+    if debug: print(loading_statement + project_data_file) #debug
 
     datas = winman.bpm_projectdatas
     dataset = read_json(project_data_file)
 
     # set datas
-    setPropertiesFromJsonDataset(dataset, datas, winman, ())
+    setPropertiesFromJsonDataset(dataset, datas, debug, ())
 
     return datas
 
@@ -109,10 +110,11 @@ def getAssetFile(winman):
 
 # load json in collection
 def loadJsonInCollection(winman, json_file, collection, json_coll_name):
+    debug = winman.bpm_generalsettings.debug
     dataset = read_json(json_file)
     for f in dataset[json_coll_name]:
         new = collection.add()
-        setPropertiesFromJsonDataset(f, new, winman, ())
+        setPropertiesFromJsonDataset(f, new, debug, ())
 
 
 # get shot pattern

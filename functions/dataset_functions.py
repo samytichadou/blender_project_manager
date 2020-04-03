@@ -16,7 +16,7 @@ def returnDatasetProperties(dataset):
         return properties_list
 
 # set attributes from json
-def setPropertiesFromJsonDataset(datasetin, datasetout, winman, avoid_list):
+def setPropertiesFromJsonDataset(datasetin, datasetout, debug, avoid_list):
     for prop in datasetin:
         chk_avoid = False
         for a in avoid_list:
@@ -24,13 +24,13 @@ def setPropertiesFromJsonDataset(datasetin, datasetout, winman, avoid_list):
                 chk_avoid = True
         if not chk_avoid:
             try:
-                if winman.bpm_generalsettings.debug: print(setting_prop_statement + prop) ###debug
+                if debug: print(setting_prop_statement + prop) ###debug
                 setattr(datasetout, '%s' % prop, datasetin[prop])
-            except (KeyError, AttributeError):
-                if winman.bpm_generalsettings.debug: print(setting_prop_error_statement + prop) ###debug
+            except (KeyError, AttributeError, TypeError):
+                if debug: print(setting_prop_error_statement + prop) ###debug
                 pass
         else:
-            if winman.bpm_generalsettings.debug: print(prop_avoided_statement + prop)
+            if debug: print(prop_avoided_statement + prop)
 
 # set attributes between 2 dataset
 def setPropertiesFromDataset(datasetin, datasetout, winman):

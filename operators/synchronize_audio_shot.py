@@ -24,22 +24,32 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
 
         general_settings = context.window_manager.bpm_generalsettings
         sequencer = context.scene.sequence_editor
+        debug = general_settings.debug
 
-        if general_settings.debug: print() #debug
+        if debug: print() #debug
 
         # get audio sync filepath
         filepath = absolutePath(os.path.join(general_settings.project_folder, audio_sync_file))
-        sequencer = context.scene.sequence_editor
+        scn = context.scene
+        sequencer = scn.sequence_editor
+
+        if not os.path.isfile(filepath):
+            if debug: print("Synchronizing shot audio") #debug
+            return {'FINISHED'}
 
         # create sequencer if none
+        if sequencer is None:
+            if debug: print("Creating sequencer")
+            scn.sequence_editor_create()
 
-
-        # delete existing strips
-        if general_settings.debug: print() #debug
-
+        else:
+            # delete existing strips
+            if debug: print("Removing existing strips") #debug
+            for strip in scn.sequence_editor.sequences_all:
+                sequencer.sequences.remove(strip)
 
         # iterate through the strips
-        if general_settings.debug: print() #debug
+        if debug: print() #debug
         datas = read_json(filepath)
 
         # sounds
@@ -47,18 +57,18 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
             try:
                 bpy.data.sounds[s['name']]
             except KeyError:
-                if general_settings.debug: print() #debug
+                if debug: print("Loading sound : " + s['name']) #debug
 
                 sound = bpy.data.sounds.load(s['filepath'])
-                setPropertiesFromJsonDataset(s, sound)
+                setPropertiesFromJsonDataset(s, sound, debug, ())
 
-        # get random filepath
+        # get random filepath for strip creation
         fp = datas['sounds'][0]['filepath']
 
         # strips
         for s in datas['strips']:
 
-            if general_settings.debug: print() #debug
+            if debug: print("Creating strip : " + s['name']) #debug
 
             new_strip = sequencer.sequences.new_sound(s['name'], fp, s['channel'], s['frame_start'])
             new_strip.sound = bpy.data.sounds[s['sound']]
@@ -68,8 +78,10 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
             new_strip.frame_final_start = s['frame_final_start']
             new_strip.frame_final_duration = s['frame_final_duration']
             
-            setPropertiesFromJsonDataset(s, new_strip, ("frame", "animation"))
+            setPropertiesFromJsonDataset(s, new_strip, debug, ("frame", "animation"))
 
-        if general_settings.debug: print() #debug
+            new_strip.lock = True
+
+        if debug: print('Audio synchronized') #debug
         
         return {'FINISHED'}

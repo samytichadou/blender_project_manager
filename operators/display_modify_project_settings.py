@@ -11,15 +11,16 @@ def reloadProjectSettingsFromJson(self, context):
     if not self.modify:
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
+        debug = winman.bpm_generalsettings.debug
 
         datas = winman.bpm_projectdatas
         json_project_file = os.path.join(general_settings.project_folder, file_project)
 
-        if winman.bpm_generalsettings.debug: print(reading_json_statement + json_project_file) #debug
+        if debug: print(reading_json_statement + json_project_file) #debug
 
         json_dataset = read_json(json_project_file)
 
-        setPropertiesFromJsonDataset(json_dataset, datas, winman, ())
+        setPropertiesFromJsonDataset(json_dataset, datas, debug, ())
 
 # display project settings
 class BpmDisplayModifyProjectSettings(bpy.types.Operator):
