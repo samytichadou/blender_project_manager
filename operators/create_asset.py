@@ -92,7 +92,7 @@ class BPMCreateAsset(bpy.types.Operator):
 
             if winman.bpm_generalsettings.debug: print(initialize_json_statement + asset_file_path) #debug
 
-            datas = initializeAssetJsonDatas()
+            datas = initializeAssetJsonDatas({"assets"})
 
         # format new asset datas
         asset_datas_json = createJsonDatasetFromProperties(asset_prop)

@@ -11,24 +11,33 @@ def read_json(filepath):
         dataset = json.load(read_file)
     return dataset
 
+# check if serializable
+def isSerializable(x):
+    try:
+        json.dumps(x)
+        return True
+    except (TypeError, OverflowError):
+        return False
+
 # create json dataset
 def createJsonDatasetFromProperties(datasetin):
     json_dataset = {}
     for p in datasetin.bl_rna.properties:
         if not p.is_readonly:
-            json_dataset[p.identifier] = getattr(datasetin, p.identifier)
+            if isSerializable(getattr(datasetin, p.identifier)):
+                json_dataset[p.identifier] = getattr(datasetin, p.identifier)
     return json_dataset
 
 # initialize json asset datas
-def initializeAssetJsonDatas () :
+def initializeAssetJsonDatas (data_list) :
     datas = {}
-    datas['assets'] = []
+    for d in data_list:
+        print(d)
+        datas[d] = []
     return datas
 
 
-
 ### OLD FONT SELECTOR ####
-
 
 # add fonts to json datas
 def appendDatasToJson(to_append, json_datas) :
