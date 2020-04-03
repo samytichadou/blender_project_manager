@@ -143,6 +143,10 @@ def bpmTopbarFunction(self, context):
 
                 drawOperatorAndHelp(self.layout, 'bpm.back_to_edit', 'Open-Shot-and-Back-to-Edit')
 
+                if general_settings.file_type == 'SHOT':
+                    
+                    drawOperatorAndHelp(self.layout, 'bpm.synchronize_audio_shot', 'Shot-Audio-Synchronization')
+
             elif general_settings.file_type == 'EDIT':
 
                 drawOperatorAndHelp(self.layout, 'bpm.open_shot', 'Open-Shot-and-Back-to-Edit')

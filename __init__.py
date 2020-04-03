@@ -52,6 +52,7 @@ from .operators.empty_project_recycle_bin import *
 from .operators.bump_shot_version import *
 from .operators.change_shot_version import *
 from .operators.synchronize_audio_edit import *
+from .operators.synchronize_audio_shot import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -79,6 +80,7 @@ classes = (BPMOpenShot,
             BPMBumpShotVersionFromEdit,
             BPMBumpChangeShotVersionFromEdit,
             BPMSynchronizeAudioEdit,
+            BPMSynchronizeAudioShot,
 
             BPMOpenWikiPage,
 
