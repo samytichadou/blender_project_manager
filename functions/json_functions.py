@@ -32,7 +32,6 @@ def createJsonDatasetFromProperties(datasetin):
 def initializeAssetJsonDatas (data_list) :
     datas = {}
     for d in data_list:
-        print(d)
         datas[d] = []
     return datas
 
