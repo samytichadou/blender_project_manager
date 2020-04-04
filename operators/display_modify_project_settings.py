@@ -41,6 +41,9 @@ class BpmDisplayModifyProjectSettings(bpy.types.Operator):
         datas = context.window_manager.bpm_projectdatas
 
         layout = self.layout
+
+        
+
         split = layout.split(align=True)
         col1 = split.column(align=True)
         col2 = split.column(align=True)
@@ -54,6 +57,8 @@ class BpmDisplayModifyProjectSettings(bpy.types.Operator):
             else:
                 box = col2.box()
                 box.prop(datas, '%s' % p[0].identifier, text='')
+
+        layout.operator('bpm.open_wiki_page', text="Help", icon='QUESTION').wiki_page = "Project-Settings"
 
         if not self.modify:
             layout.prop(self, 'modify', icon = 'GREASEPENCIL')

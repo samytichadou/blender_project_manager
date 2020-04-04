@@ -152,13 +152,7 @@ def bpmTopbarFunction(self, context):
         layout.menu('BPM_MT_topbar_menu')
 
 
-# bpm function topbar file menu
-def bpmFileMenuFunction(self, context):
-    self.layout.separator()
-    self.layout.menu('BPM_MT_topbar_menu')
-
-
-# topbar file menu function
+# topbar file menu
 class BPM_MT_topbar_menu(bpy.types.Menu):
     bl_label = "BPM"
     bl_idname = "BPM_MT_topbar_menu"
@@ -182,7 +176,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
                 layout.operator('bpm.display_modify_project_settings')
 
             elif general_settings.file_type == 'SHOT':
-
+                
                 drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', 'Shot-Audio-Synchronization')                
 
 

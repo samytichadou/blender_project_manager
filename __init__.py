@@ -135,7 +135,6 @@ def register():
 
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.prepend(bpmTopbarFunction)
-    bpy.types.TOPBAR_MT_file.prepend(bpmFileMenuFunction)
 
 
 def unregister():
@@ -164,4 +163,3 @@ def unregister():
 
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.remove(bpmTopbarFunction)
-    bpy.types.TOPBAR_MT_file.remove(bpmFileMenuFunction)
