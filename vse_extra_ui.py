@@ -238,8 +238,12 @@ def drawBpmSequencerCallbackPx():
                                 if (mn_display == "ALL") \
                                 or (mn_display == "CURRENT" and scn.frame_current == m[1]):
                                     text = m[0]
-                                    if len(text) > scene_settings.display_marker_limit:
-                                        text = text[0:scene_settings.display_marker_limit - 3] + "..."
+                                    limit = scene_settings.display_marker_text_limit
+                                    if len(text) > limit and limit != 0:
+                                        if limit > 4:
+                                            text = text[0:limit - 3] + "..."
+                                        else:
+                                            text = text[0:limit]
                                     marker_texts.append((coord[1], text))
 
                                     # marker box

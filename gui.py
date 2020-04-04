@@ -80,7 +80,7 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
             layout.prop(scn_settings, 'display_markers')
             layout.prop(scn_settings, 'display_marker_names')
             layout.prop(scn_settings, 'display_marker_boxes')
-            layout.prop(scn_settings, 'display_marker_limit')
+            layout.prop(scn_settings, 'display_marker_text_limit')
 
 
 # sequencer shot panel

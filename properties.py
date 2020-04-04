@@ -101,7 +101,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
         ]
     display_marker_names : bpy.props.EnumProperty(name = "Marker names", items = display_marker_name_items, default = 'ALL')
     display_marker_boxes : bpy.props.BoolProperty(name = "Marker boxes", default=True)
-    display_marker_limit : bpy.props.IntProperty(name = "Marker text limit", default = 15)
+    display_marker_text_limit : bpy.props.IntProperty(name = "Marker text limit", default = 15, min = 0)
     display_shot_update_warning : bpy.props.BoolProperty(name = "Shot update warning", default=True)
     display_shot_version_warning : bpy.props.BoolProperty(name = "Shot version warning", default=True)
 
