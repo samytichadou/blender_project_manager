@@ -9,7 +9,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
     bl_label = "Change shot version"
     bl_options = {'REGISTER'}
 
-    version_number = bpy.props.IntProperty(name = "Version number", min = 1, default = 1)
+    version_number : bpy.props.IntProperty(name = "Version number", min = 1, default = 1)
     shot_last_version = 1
 
     @classmethod
