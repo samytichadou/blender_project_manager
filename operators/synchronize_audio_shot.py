@@ -84,7 +84,7 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
 
         # strips
         for s in datas['sound_strips']:
-            
+
             # check if strip overlaps
             overlap = checkStripInTargetSpaceOnSequencer(s['frame_final_start'], s['frame_final_end'], current_shot_strip['frame_final_start'], current_shot_strip['frame_final_end'])
 
@@ -95,8 +95,6 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
                 new_strip = sequencer.sequences.new_sound(s['name'], fp, s['channel'], s['frame_start'] + offset)
                 new_strip.sound = bpy.data.sounds[s['sound']]
 
-                new_strip.frame_offset_start = s['frame_offset_start']
-                new_strip.frame_offset_end = s['frame_offset_end']
                 new_strip.frame_final_start = s['frame_final_start'] + offset
                 new_strip.frame_final_duration = s['frame_final_duration']
                 
