@@ -26,6 +26,10 @@ from .global_variables import (
                             shot_loading_statement,
                             shot_loaded_statement,
                             missing_shot_file_statement,
+                            starting_shot_audio_sync_statement,
+                            sync_file_not_found_statement,
+                            audio_sync_file,
+                            shot_audio_synced_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
@@ -78,8 +82,12 @@ def bpmStartupHandler(scene):
 
                     # synchronize audio if needed
                     if shot_settings.auto_audio_sync:
-                        if winman.bpm_generalsettings.debug: print("Audio sync started") #debug TODO
-
+                        audio_sync_json = os.path.join(project_folder, audio_sync_file)
+                        if os.path.isfile(audio_sync_json):
+                            if winman.bpm_generalsettings.debug: print(starting_shot_audio_sync_statement) #debug
+                            if winman.bpm_generalsettings.debug: print(shot_audio_synced_statement) #debug
+                        else:
+                            if winman.bpm_generalsettings.debug: print(sync_file_not_found_statement) #debug
 
                 # no json error
                 else: 
