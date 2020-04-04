@@ -1,8 +1,22 @@
 import bpy
+import os
 
 
 from .dataset_functions import setPropertiesFromJsonDataset
-from .strip_functions import checkStripInTargetSpaceOnSequencer
+from .strip_functions import checkStripInTargetSpaceOnSequencer, deleteAllSequencerStrips, createSequencer
+from .json_functions import read_json
+from ..global_variables import (
+                            audio_sync_file, 
+                            starting_shot_audio_sync_statement,
+                            shot_audio_synced_statement,
+                            sync_file_not_found_statement,
+                            cleaning_timeline_statement,
+                            creating_sequencer_statement,
+                            reading_json_statement,
+                            shot_not_used_statement,
+                            loaded_sounds_statement,
+                            created_sound_strips_statement,
+                        )
 
 
 # find a shot strip offset from the audio sync file
@@ -56,3 +70,48 @@ def createSoundStripsFromSyncFile(datas, sequencer, shot_strip_datas, offset):
             new_strip.lock = True
     
     return sound_strip_list
+
+
+# sync audio shot function for startup handler
+def autoSyncAudioShot(debug, project_folder, scene):
+
+    audio_sync_json = os.path.join(project_folder, audio_sync_file)
+    if not os.path.isfile(audio_sync_json):
+        if debug: print(sync_file_not_found_statement) #debug
+        return 'SYNC_FILE_MISSING'
+
+    if debug: print(starting_shot_audio_sync_statement) #debug
+
+    # create sequencer if none
+    created_sequencer = createSequencer(scene)
+    if not created_sequencer:
+        # delete existing strips
+        if debug: print(cleaning_timeline_statement) #debug
+        deleteAllSequencerStrips(scene.sequence_editor)
+    else:
+        if debug: print(creating_sequencer_statement)
+
+    # get json datas
+    if debug: print(reading_json_statement + audio_sync_json) #debug
+    datas = read_json(audio_sync_json)
+
+    # find shot offset
+    current_shot_datas, offset = findShotOffsetFromSyncFile(datas, scene.name, scene.frame_start)
+
+    # if shot strip not found in timeline
+    if current_shot_datas is None:      
+        if debug: print(shot_not_used_statement) #debug
+        return 'SHOT_NOT_USED'
+
+    # iterate through sounds and strips
+    # load sounds
+    sound_list = loadSoundsFromSyncFile(datas)
+    if debug: print(loaded_sounds_statement + str(sound_list)) #debug
+
+    # strips
+    sound_strip_list = createSoundStripsFromSyncFile(datas, scene.sequence_editor, current_shot_datas, offset)
+    if debug: print(created_sound_strips_statement + str(sound_strip_list)) #debug
+
+    if debug: print(shot_audio_synced_statement) #debug
+
+    return 'FINISHED'

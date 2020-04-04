@@ -60,11 +60,12 @@ scene_not_found_message = "Scene not found : "
 scene_not_found_statement = bpm_statement + scene_not_found_message
 
 starting_audio_sync_file_statement = bpm_statement + "Starting creation of audio sync file"
-audio_sync_file_created_statement = bpm_statement + "Audio sync file successfully created"
+audio_sync_file_created_statement = bpm_statement + "Audio synchronization file successfully created"
 
-starting_shot_audio_sync_statement = "Audio synchronization of the shot started"
-shot_audio_synced_statement = "Shot audio successfully synchronized"
-sync_file_not_found_statement = "Audio synchronization file not found"
+starting_shot_audio_sync_statement = bpm_statement + "Audio synchronization started"
+shot_audio_synced_statement = bpm_statement + "Shot audio successfully synchronized"
+sync_file_not_found_message = "Audio synchronization file not found"
+sync_file_not_found_statement = bpm_statement + sync_file_not_found_message
 
 
 # python scripts statement
