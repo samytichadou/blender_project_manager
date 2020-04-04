@@ -167,6 +167,7 @@ new_project_name = "Project_name"
 asset_folder = "01_assets"
 shot_folder = "02_shots"
 render_folder = "03_renders"
+ressources_folder = "04_ressources"
 old_folder = "zz_old"
 
 

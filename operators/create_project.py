@@ -70,8 +70,9 @@ class BpmCreateProject(bpy.types.Operator):
                                     shot_folder,
                                     asset_folder,
                                     render_folder,
-                                    folder_created_statement,
+                                    ressources_folder,
                                     old_folder,
+                                    folder_created_statement,
                                 )
         from ..vse_extra_ui import enableSequencerCallback
 
@@ -119,6 +120,11 @@ class BpmCreateProject(bpy.types.Operator):
         createFolder(render_folder_path)
         if winman.bpm_generalsettings.debug: print(folder_created_statement + render_folder_path) #debug
 
+        #ressources
+        ressources_folder_path = os.path.join(project_folder, ressources_folder)
+        createFolder(ressources_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + ressources_folder_path) #debug
+
         #old
         old_folder_path = os.path.join(project_folder, old_folder)
 
@@ -136,6 +142,11 @@ class BpmCreateProject(bpy.types.Operator):
         old_render_folder_path = os.path.join(old_folder_path, render_folder)
         createFolder(old_render_folder_path)
         if winman.bpm_generalsettings.debug: print(folder_created_statement + old_render_folder_path) #debug
+
+        #old ressources
+        old_ressources_folder_path = os.path.join(old_folder_path, ressources_folder)
+        createFolder(old_ressources_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + old_ressources_folder_path) #debug
 
         enableSequencerCallback()
 
