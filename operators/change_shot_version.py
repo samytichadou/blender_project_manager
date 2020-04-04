@@ -10,7 +10,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
     bl_options = {'REGISTER'}
 
     version_number : bpy.props.IntProperty(name = "Version number", min = 1, default = 1)
-    shot_last_version = 1
+    go_to_last_version : bpy.props.BoolProperty(default=False)
 
     @classmethod
     def poll(cls, context):
@@ -30,18 +30,26 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
 
     def invoke(self, context, event):
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-        self.shot_last_version = shot_settings.shot_last_version
+
+        if self.go_to_last_version:
+            self.version_number = shot_settings.shot_last_version
+            self.go_to_last_version = False
+            return self.execute(context)
+
         self.version_number = shot_settings.shot_version
+
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
-        current = context.scene.sequence_editor.active_strip.bpm_shotsettings.shot_version
+        shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
+        current = shot_settings.shot_version
+        last = shot_settings.shot_last_version
 
         layout = self.layout
         layout.label(text="Current : " + str(current))
-        layout.label(text="Last : " + str(self.shot_last_version))
+        layout.label(text="Last : " + str(last))
         layout.prop(self, 'version_number')
-        if self.version_number > self.shot_last_version:
+        if self.version_number > last:
             layout.label(text="Not an existing version", icon = 'ERROR')
         elif self.version_number == current:
             layout.label(text="Already loaded version", icon = 'ERROR')
@@ -77,7 +85,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
         shot_name = shot_scn.name
 
         # check for invalid shot version number or already loaded version
-        if self.version_number > self.shot_last_version:
+        if self.version_number > shot_settings.shot_last_version:
             self.report({'INFO'}, invalid_shot_version_message)
             if general_settings.debug: print(invalid_shot_version_statement) #debug
             return {'FINISHED'}

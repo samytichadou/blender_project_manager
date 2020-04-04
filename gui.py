@@ -6,10 +6,14 @@ def drawWikiHelp(container, wikipage):
     container.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
 
 # draw operator and help function
-def drawOperatorAndHelp(container, operator_bl_idname, wikipage):
+def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
     row = container.row(align=True)
-    row.operator(operator_bl_idname)
+    if icon != '':
+        row.operator(operator_bl_idname, icon = icon)
+    else:
+        row.operator(operator_bl_idname)
     row.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
+
 
 # sequencer management
 class BPM_PT_sequencer_management_panel(bpy.types.Panel):
@@ -33,15 +37,15 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         #common
         layout.label(text = project_data.name)
 
-        drawOperatorAndHelp(layout, 'bpm.create_shot', 'Create-Shot-Operator')
+        drawOperatorAndHelp(layout, 'bpm.create_shot', '', 'Create-Shot-Operator')
 
-        drawOperatorAndHelp(layout, 'bpm.delete_unused_shots', 'Delete-Unused-Shots')
+        drawOperatorAndHelp(layout, 'bpm.delete_unused_shots', '', 'Delete-Unused-Shots')
 
-        drawOperatorAndHelp(layout, 'bpm.empty_recycle_bin', 'Empty-Recycle-Bin')
+        drawOperatorAndHelp(layout, 'bpm.empty_recycle_bin', '', 'Empty-Recycle-Bin')
 
-        drawOperatorAndHelp(layout, 'bpm.create_asset', 'Create-Asset-Operator')
+        drawOperatorAndHelp(layout, 'bpm.create_asset', '', 'Create-Asset-Operator')
 
-        drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', 'Shot-Audio-Synchronization')
+        drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
 
         layout.separator()
         layout.prop(general_settings, 'debug', text = "Debug")
@@ -108,15 +112,19 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
         layout = self.layout
 
-        drawOperatorAndHelp(layout, 'bpm.open_shot', 'Open-Shot-and-Back-to-Edit')
+        drawOperatorAndHelp(layout, 'bpm.open_shot', '', 'Open-Shot-and-Back-to-Edit')
 
-        drawOperatorAndHelp(layout, 'bpm.update_shot_duration', 'Update-Shot-Operator')
+        drawOperatorAndHelp(layout, 'bpm.update_shot_duration', '', 'Update-Shot-Operator')
 
-        drawOperatorAndHelp(layout, 'bpm.add_modify_shot_marker', 'Add-Modify-Shot-Marker-Operator')
+        drawOperatorAndHelp(layout, 'bpm.add_modify_shot_marker', '', 'Add-Modify-Shot-Marker-Operator')
 
-        drawOperatorAndHelp(layout, 'bpm.bump_shot_version_edit', 'Shot-Version-Management')
+        drawOperatorAndHelp(layout, 'bpm.bump_shot_version_edit', '', 'Shot-Version-Management')
 
-        drawOperatorAndHelp(layout, 'bpm.change_shot_version_edit', 'Shot-Version-Management')
+        drawOperatorAndHelp(layout, 'bpm.change_shot_version_edit', '', 'Shot-Version-Management')
+
+        row = layout.row(align=True)
+        row.operator('bpm.change_shot_version_edit', text = "Last shot version").go_to_last_version = True
+        row.operator('bpm.open_wiki_page', text='', icon='QUESTION').wiki_page = 'Shot-Version-Management'
 
         layout.separator()
         layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
@@ -143,11 +151,11 @@ def bpmTopbarFunction(self, context):
 
             if general_settings.file_type in {'SHOT', 'ASSET'}:
 
-                drawOperatorAndHelp(layout, 'bpm.back_to_edit', 'Open-Shot-and-Back-to-Edit')
+                drawOperatorAndHelp(layout, 'bpm.back_to_edit', '', 'Open-Shot-and-Back-to-Edit')
 
             elif general_settings.file_type == 'EDIT':
 
-                drawOperatorAndHelp(layout, 'bpm.open_shot', 'Open-Shot-and-Back-to-Edit')
+                drawOperatorAndHelp(layout, 'bpm.open_shot', '', 'Open-Shot-and-Back-to-Edit')
 
         layout.menu('BPM_MT_topbar_menu')
 
@@ -177,7 +185,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
 
             elif general_settings.file_type == 'SHOT':
                 
-                drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', 'Shot-Audio-Synchronization')                
+                drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')                
 
 
 # project folder ui list
