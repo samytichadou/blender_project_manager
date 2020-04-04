@@ -97,6 +97,12 @@ class BpmCreateProject(bpy.types.Operator):
         general_settings.is_project = True
         general_settings.file_type = 'EDIT'
 
+        # set scene
+        scn = bpy.context.scene
+        scn.render.fps = datas.framerate
+        scn.render.resolution_x = datas.resolution_x
+        scn.render.resolution_y = datas.resolution_y
+
         # create associated folder structure
         #shot
         shot_folder_path = os.path.join(project_folder, shot_folder)
