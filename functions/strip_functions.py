@@ -18,7 +18,7 @@ def getStripNewTiming(strip) :
     return start, end
 
 
-# check if strip is in target timing on the timeline
+# check if strip is in target timing on the timeline, careful with end frame (-1)
 def checkStripInTargetSpaceOnSequencer(start, end, target_start, target_end):
     if target_start >= start and target_start <= end:
         return True
