@@ -136,21 +136,20 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 # bpm function topbar back/open operators
 def bpmTopbarFunction(self, context):
     if context.region.alignment == 'RIGHT':
+        layout = self.layout
         general_settings = context.window_manager.bpm_generalsettings
 
         if general_settings.is_project:
 
             if general_settings.file_type in {'SHOT', 'ASSET'}:
 
-                drawOperatorAndHelp(self.layout, 'bpm.back_to_edit', 'Open-Shot-and-Back-to-Edit')
-
-                if general_settings.file_type == 'SHOT':
-
-                    drawOperatorAndHelp(self.layout, 'bpm.synchronize_audio_shot', 'Shot-Audio-Synchronization')
+                drawOperatorAndHelp(layout, 'bpm.back_to_edit', 'Open-Shot-and-Back-to-Edit')
 
             elif general_settings.file_type == 'EDIT':
 
-                drawOperatorAndHelp(self.layout, 'bpm.open_shot', 'Open-Shot-and-Back-to-Edit')
+                drawOperatorAndHelp(layout, 'bpm.open_shot', 'Open-Shot-and-Back-to-Edit')
+
+        layout.menu('BPM_MT_topbar_menu')
 
 
 # bpm function topbar file menu
@@ -174,18 +173,17 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             layout.operator('bpm.create_project')  
         
         else:
+
             project_data = winman.bpm_projectdatas
             layout.label(text = project_data.name)
 
-            layout.operator('bpm.display_modify_project_settings')
-            
-            layout.separator()
+            if general_settings.file_type == 'EDIT':
 
-            #debug
-            layout.prop(general_settings, 'debug', text = "Debug")
-            if general_settings.debug:
-                layout.prop(general_settings, 'is_project')
-                layout.prop(general_settings, 'file_type')
+                layout.operator('bpm.display_modify_project_settings')
+
+            elif general_settings.file_type == 'SHOT':
+
+                drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', 'Shot-Audio-Synchronization')                
 
 
 # project folder ui list
