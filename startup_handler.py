@@ -76,8 +76,10 @@ def bpmStartupHandler(scene):
                     loadJsonDataToDataset(winman, shot_settings, shot_json, ())
                     if winman.bpm_generalsettings.debug: print(shot_loaded_statement) #debug
 
-
                     # synchronize audio if needed
+                    if shot_settings.auto_audio_sync:
+                        if winman.bpm_generalsettings.debug: print("Audio sync started") #debug TODO
+
 
                 # no json error
                 else: 

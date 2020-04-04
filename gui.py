@@ -130,7 +130,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
         layout.prop(shot_settings, 'shot_state')
         layout.prop(shot_settings, 'display_markers')
-        layout.prop(shot_settings, 'audio_sync')
+        layout.prop(shot_settings, 'auto_audio_sync')
 
         if general_settings.debug: #debug:
             box = layout.box()
