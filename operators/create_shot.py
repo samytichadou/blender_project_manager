@@ -29,11 +29,15 @@ class BPMCreateShot(bpy.types.Operator):
                                     no_available_timeline_space_statement,
                                     checking_available_timeline_space_statement,
                                     shot_folder,
+                                    shot_file,
+                                    saving_to_json_statement,
+                                    saved_to_json_statement,
                                 )
         from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile, linkExternalScenes
         from ..functions.project_data_functions import getShotPattern, getScriptReplacementListShotCreation
         from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
         from ..functions.strip_functions import returnAvailablePositionStripChannel
+        from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
 
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
@@ -63,6 +67,19 @@ class BPMCreateShot(bpy.types.Operator):
         # create shot dir
         createDirectory(next_shot_folder)
         if winman.bpm_generalsettings.debug: print(creating_shot_folder_statement + next_shot_folder) #debug
+
+
+        # create the json file
+        if winman.bpm_generalsettings.debug: print(saving_to_json_statement) #debug
+
+        shot_json = os.path.join(next_shot_folder, shot_file)
+        # format the json dataset
+        json_dataset = createJsonDatasetFromProperties(winman.bpm_shotsettings)
+        # create json file
+        create_json_file(json_dataset, shot_json)
+
+        if winman.bpm_generalsettings.debug: print(saved_to_json_statement) #debug
+
 
         # modify and copy python script
         replacement_list = getScriptReplacementListShotCreation(project_datas, next_shot_folder, next_shot_file, next_shot_number)

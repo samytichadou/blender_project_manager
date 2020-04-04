@@ -87,6 +87,7 @@ classes = (BPMOpenShot,
             BPMProjectSettings,
             BPMCustomFolders,
             BPMAssetSettings,
+            BPMShotSettingsStrips,
             BPMShotSettings,
             BPMSceneSettings,
             BPMGeneralSettings,
@@ -125,7 +126,7 @@ def register():
         bpy.props.PointerProperty(type = BPMShotSettings, name="BPM shot settings")
 
     bpy.types.SceneSequence.bpm_shotsettings = \
-        bpy.props.PointerProperty(type = BPMShotSettings, name="BPM shot settings")
+        bpy.props.PointerProperty(type = BPMShotSettingsStrips, name="BPM shot settings")
 
     bpy.types.Scene.bpm_scenesettings = \
         bpy.props.PointerProperty(type = BPMSceneSettings, name="BPM scene settings")

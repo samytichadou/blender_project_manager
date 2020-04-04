@@ -184,7 +184,7 @@ def findUnusedLibraries():
 
 
 # get shot settings file
-def getShotSettingsFile():
+def getShotSettingsFileFromBlend():
     parent_folder = os.path.dirname(bpy.data.filepath)
     shot_json = os.path.join(parent_folder, shot_file)
     if os.path.isfile(shot_json):

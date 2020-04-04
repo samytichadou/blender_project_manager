@@ -10,7 +10,7 @@ from .functions.project_data_functions import (
                                             chekIfBpmProject, 
                                             getAssetFile,
                                             findUnusedLibraries,
-                                            getShotSettingsFile,
+                                            getShotSettingsFileFromBlend,
                                         )
 from .global_variables import (
                             startup_statement, 
@@ -23,6 +23,9 @@ from .global_variables import (
                             assets_loaded_statement,
                             library_cleared_statement,
                             checking_unused_libraries_statement,
+                            shot_loading_statement,
+                            shot_loaded_statement,
+                            missing_shot_file_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
@@ -65,18 +68,20 @@ def bpmStartupHandler(scene):
 
             # load shot settings
             if general_settings.file_type == 'SHOT':
-                shot_json = getShotSettingsFile()
+                shot_json = getShotSettingsFileFromBlend()
                 if shot_json is not None:
+                    if winman.bpm_generalsettings.debug: print(shot_loading_statement + shot_json) #debug
                     # load json in props
                     shot_settings = winman.bpm_shotsettings
                     loadJsonDataToDataset(winman, shot_settings, shot_json, ())
-                    print('ok')
+                    if winman.bpm_generalsettings.debug: print(shot_loaded_statement) #debug
+
 
                     # synchronize audio if needed
 
                 # no json error
                 else: 
-                    print('no')
+                    if winman.bpm_generalsettings.debug: print(missing_shot_file_statement) #debug
 
         else:
             if winman.bpm_generalsettings.debug: print(no_datas_statement) #debug

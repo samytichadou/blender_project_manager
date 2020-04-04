@@ -101,6 +101,10 @@ no_update_needed_statement = bpm_statement + "No update needed"
 shot_update_impossible_message = "Impossible to update shot (negative shot start frame)"
 shot_update_impossible_statement = bpm_statement + shot_update_impossible_message
 
+shot_loading_statement = bpm_statement + "Loading shot settings from : "
+shot_loaded_statement = bpm_statement + "Shot settings loaded"
+missing_shot_file_statement = "Shot settings file missing"
+
 
 # marker statements
 start_edit_shot_marker_statement = bpm_statement + "Starting editing shot marker"

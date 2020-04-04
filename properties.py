@@ -2,6 +2,7 @@ import bpy
 
 
 from .functions.filebrowser_update_function import updateFilebrowserPath
+from .functions.shot_settings_json_update_function import updateShotSettingsStripsProperties
 
 
 asset_type_items = [
@@ -58,6 +59,17 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
     asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER')
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
 
+
+# shot settings
+class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
+    '''name : StringProperty() '''
+    is_shot : bpy.props.BoolProperty(default=False)
+    display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
+    shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsStripsProperties)
+    shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
+    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = updateShotSettingsStripsProperties)
+    not_last_version : bpy.props.BoolProperty(default=False)
+    audio_sync : bpy.props.BoolProperty(name = "Audio synchronization", default=False, update = updateShotSettingsStripsProperties)
 
 # shot settings
 class BPMShotSettings(bpy.types.PropertyGroup) :
