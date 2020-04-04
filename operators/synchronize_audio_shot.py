@@ -17,8 +17,8 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
         # import statements and functions
         from ..functions.file_functions import absolutePath
         from ..functions.json_functions import read_json
-        from ..functions.dataset_functions import setPropertiesFromJsonDataset
-        from ..functions.strip_functions import deleteAllSequencerStrips, checkStripInTargetSpaceOnSequencer
+        from ..functions.strip_functions import deleteAllSequencerStrips, createSequencer
+        from ..functions.audio_sync_functions import findShotOffsetFromSyncFile, loadSoundsFromSyncFile, createSoundStripsFromSyncFile
         from ..global_variables import (
                                     audio_sync_file,
                                     sync_file_not_found_statement,
@@ -27,9 +27,10 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
                                     cleaning_timeline_statement,
                                     shot_not_used_message,
                                     shot_not_used_statement,
-                                    loading_sound_statement,
-                                    creating_strip_statement,
+                                    loaded_sounds_statement,
+                                    created_sound_strips_statement,
                                     shot_audio_synced_statement,
+                                    reading_json_statement,
                                 )
 
         general_settings = context.window_manager.bpm_generalsettings
@@ -42,8 +43,6 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
         filepath = absolutePath(os.path.join(general_settings.project_folder, audio_sync_file))
         scn = context.scene
         sequencer = scn.sequence_editor
-        current_shot_strip = None
-        offset = 0
 
         if not os.path.isfile(filepath):
             if debug: print(sync_file_not_found_statement) #debug
@@ -52,65 +51,35 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
         if debug: print(starting_shot_audio_sync_statement) #debug
 
         # create sequencer if none
-        if sequencer is None:
-            if debug: print(creating_sequencer_statement)
-            scn.sequence_editor_create()
-
-        else:
+        created_sequencer = createSequencer(scn)
+        if not created_sequencer:
             # delete existing strips
             if debug: print(cleaning_timeline_statement) #debug
             deleteAllSequencerStrips(sequencer)
+        else:
+            if debug: print(creating_sequencer_statement)
 
         # get json datas
-        if debug: print() #debug
+        if debug: print(reading_json_statement + filepath) #debug
         datas = read_json(filepath)
 
         # find shot offset
-        for strip in datas['shot_strips']:
-            if strip['name'] == scn.name: # TODO use blend name for startup
-                current_shot_strip = strip
-                offset = -strip['frame_start'] + scn.frame_start
-                break
+        current_shot_datas, offset = findShotOffsetFromSyncFile(datas, scn.name, scn.frame_start)
 
         # if shot strip not find in timeline
-        if current_shot_strip is None:
+        if current_shot_datas is None:
             self.report({'INFO'}, shot_not_used_message)
             if debug: print(shot_not_used_statement) #debug
             return {'FINISHED'}
 
-        # iterate through the strips
-        # sounds
-        for s in datas['sounds']:
-            try:
-                bpy.data.sounds[s['name']]
-            except KeyError:
-                if debug: print(loading_sound_statement + s['name']) #debug
-
-                sound = bpy.data.sounds.load(s['filepath'])
-                setPropertiesFromJsonDataset(s, sound, debug, ())
-
-        # get random filepath for strip creation
-        fp = datas['sounds'][0]['filepath']
+        # iterate through sounds and strips
+        # load sounds
+        sound_list = loadSoundsFromSyncFile(datas)
+        if debug: print(loaded_sounds_statement + str(sound_list)) #debug
 
         # strips
-        for s in datas['sound_strips']:
-
-            # check if strip overlaps
-            overlap = checkStripInTargetSpaceOnSequencer(s['frame_final_start'], s['frame_final_end']-1, current_shot_strip['frame_final_start'], current_shot_strip['frame_final_end']-1)
-
-            if overlap:
-
-                if debug: print(creating_strip_statement + s['name']) #debug
-
-                new_strip = sequencer.sequences.new_sound(s['name'], fp, s['channel'], s['frame_start'] + offset)
-                new_strip.sound = bpy.data.sounds[s['sound']]
-
-                new_strip.frame_final_start = s['frame_final_start'] + offset
-                new_strip.frame_final_duration = s['frame_final_duration']
-                
-                setPropertiesFromJsonDataset(s, new_strip, debug, ("frame", "animation"))
-
-                new_strip.lock = True
+        sound_strip_list = createSoundStripsFromSyncFile(datas, sequencer, current_shot_datas, offset)
+        if debug: print(created_sound_strips_statement + str(sound_strip_list)) #debug
 
         if debug: print(shot_audio_synced_statement) #debug
         

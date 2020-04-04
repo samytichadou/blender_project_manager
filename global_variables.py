@@ -97,8 +97,8 @@ creating_sequencer_statement = bpm_statement + "Creating scene sequence editor"
 cleaning_timeline_statement = bpm_statement + "Removing existing strips"
 shot_not_used_message = "Shot not used in project timeline"
 shot_not_used_statement = bpm_statement + shot_not_used_message
-loading_sound_statement = bpm_statement + "Loading sound : "
-creating_strip_statement = bpm_statement + "Creating strip : "
+loaded_sounds_statement = bpm_statement + "Sounds loaded : "
+created_sound_strips_statement = bpm_statement + "Created sound strips : "
 
 
 # shot update statement

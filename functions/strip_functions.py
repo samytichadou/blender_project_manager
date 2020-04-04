@@ -105,3 +105,11 @@ def getListSequencerShots(sequencer):
 def deleteAllSequencerStrips(sequencer):
     for strip in sequencer.sequences_all:
         sequencer.sequences.remove(strip)
+
+
+# create sequencer if none
+def createSequencer(scene):
+    if scene.sequence_editor is None:
+        scene.sequence_editor_create()
+        return True
+    return False

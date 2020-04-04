@@ -85,7 +85,7 @@ def loadJsonDataToDataset(winman, dataset, json_file, avoid_list):
     datasetin = read_json(json_file)
 
     # set datas
-    setPropertiesFromJsonDataset(datasetin, dataset, debug, (avoid_list))
+    setPropertiesFromJsonDataset(datasetin, dataset, False, (avoid_list))
 
 
 # get custom folders file
@@ -115,7 +115,7 @@ def loadJsonInCollection(winman, json_file, collection, json_coll_name):
     dataset = read_json(json_file)
     for f in dataset[json_coll_name]:
         new = collection.add()
-        setPropertiesFromJsonDataset(f, new, debug, ())
+        setPropertiesFromJsonDataset(f, new, False, ())
 
 
 # get shot pattern
