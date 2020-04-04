@@ -62,6 +62,10 @@ scene_not_found_statement = bpm_statement + scene_not_found_message
 starting_audio_sync_file_statement = bpm_statement + "Starting creation of audio sync file"
 audio_sync_file_created_statement = bpm_statement + "Audio sync file successfully created"
 
+starting_shot_audio_sync_statement = "Audio synchronization of the shot started"
+shot_audio_synced_statement = "Shot audio successfully synchronized"
+sync_file_not_found_statement = "Audio synchronization file not found"
+
 
 # python scripts statement
 creating_python_script_statement = bpm_statement + "Creating python script : "
@@ -89,6 +93,12 @@ no_available_timeline_space_message = "No available space on timeline"
 no_available_timeline_space_statement = bpm_statement + no_available_timeline_space_message
 checking_available_timeline_space_statement = bpm_statement + "Checking on timeline for available space"
 linked_to_strip_statement = bpm_statement + "Linking to strip : "
+creating_sequencer_statement = bpm_statement + "Creating scene sequence editor"
+cleaning_timeline_statement = bpm_statement + "Removing existing strips"
+shot_not_used_message = "Shot not used in project timeline"
+shot_not_used_statement = bpm_statement + shot_not_used_message
+loading_sound_statement = bpm_statement + "Loading sound : "
+creating_strip_statement = bpm_statement + "Creating strip : "
 
 
 # shot update statement
