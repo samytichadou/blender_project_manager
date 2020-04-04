@@ -4,12 +4,13 @@ from bpy.app.handlers import persistent
 
 from .functions.project_data_functions import (
                                             getProjectDataFile, 
-                                            createProjectDatas, 
+                                            loadJsonDataToDataset, 
                                             getCustomFoldersFile, 
                                             loadJsonInCollection, 
                                             chekIfBpmProject, 
                                             getAssetFile,
                                             findUnusedLibraries,
+                                            getShotSettingsFile,
                                         )
 from .global_variables import (
                             startup_statement, 
@@ -41,7 +42,7 @@ def bpmStartupHandler(scene):
     if project_data_file is not None:
 
         if chekIfBpmProject(winman, project_data_file):
-            project_datas = createProjectDatas(winman, project_data_file)
+            loadJsonDataToDataset(winman, winman.bpm_projectdatas, project_data_file, ())
             if winman.bpm_generalsettings.debug: print(loaded_datas_statement) #debug
             general_settings.project_folder = project_folder
             if winman.bpm_generalsettings.debug: print(loaded_project_folder + project_folder) #debug
@@ -61,6 +62,21 @@ def bpmStartupHandler(scene):
                 asset_coll = winman.bpm_assets
                 loadJsonInCollection(winman, asset_file, asset_coll, 'assets')
                 if winman.bpm_generalsettings.debug: print(assets_loaded_statement) #debug
+
+            # load shot settings
+            if general_settings.file_type == 'SHOT':
+                shot_json = getShotSettingsFile()
+                if shot_json is not None:
+                    # load json in props
+                    shot_settings = winman.bpm_shotsettings
+                    loadJsonDataToDataset(winman, shot_settings, shot_json, ())
+                    print('ok')
+
+                    # synchronize audio if needed
+
+                # no json error
+                else: 
+                    print('no')
 
         else:
             if winman.bpm_generalsettings.debug: print(no_datas_statement) #debug

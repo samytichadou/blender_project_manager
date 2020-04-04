@@ -10,6 +10,7 @@ from ..global_variables import (
                             bpm_statement,
                             asset_folder,
                             asset_file,
+                            shot_file,
                         )
 from .json_functions import read_json
 from .file_functions import absolutePath
@@ -77,17 +78,14 @@ def chekIfBpmProject(winman, project_data_file):
 
 
 # load datas
-def createProjectDatas(winman, project_data_file):
+def loadJsonDataToDataset(winman, dataset, json_file, avoid_list):
     debug = winman.bpm_generalsettings.debug
-    if debug: print(loading_statement + project_data_file) #debug
+    if debug: print(loading_statement + json_file) #debug
 
-    datas = winman.bpm_projectdatas
-    dataset = read_json(project_data_file)
+    datasetin = read_json(json_file)
 
     # set datas
-    setPropertiesFromJsonDataset(dataset, datas, debug, ())
-
-    return datas
+    setPropertiesFromJsonDataset(datasetin, dataset, debug, (avoid_list))
 
 
 # get custom folders file
@@ -183,3 +181,11 @@ def findUnusedLibraries():
             if lib not in used_lib_list:
                 lib_list.append(lib)
     return lib_list
+
+
+# get shot settings file
+def getShotSettingsFile():
+    parent_folder = os.path.dirname(bpy.data.filepath)
+    shot_json = os.path.join(parent_folder, shot_file)
+    if os.path.isfile(shot_json):
+        return shot_json
