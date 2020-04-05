@@ -53,6 +53,7 @@ from .operators.bump_shot_version import *
 from .operators.change_shot_version import *
 from .operators.synchronize_audio_edit import *
 from .operators.synchronize_audio_shot import *
+from .operators.collect_shot_datas import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -81,6 +82,7 @@ classes = (BPMOpenShot,
             BPMBumpChangeShotVersionFromEdit,
             BPMSynchronizeAudioEdit,
             BPMSynchronizeAudioShot,
+            BPMCollectShotDatas,
 
             BPMOpenWikiPage,
 

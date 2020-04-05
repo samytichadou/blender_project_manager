@@ -6,13 +6,20 @@ from ..global_variables import (
                             saving_to_json_statement,
                             saved_to_json_statement,
                             shot_file,
+                            bypass_shot_settings_update_statement,
                         )
 from .json_functions import create_json_file, createJsonDatasetFromProperties
+
 
 #update function for filebrowser custom path
 def updateShotSettingsStripsProperties(self, context):
     strip = context.scene.sequence_editor.active_strip
-    debug = context.window_manager.bpm_generalsettings.debug
+    winman = context.window_manager
+    debug = winman.bpm_generalsettings.debug
+
+    if winman.bpm_generalsettings.bypass_update_tag:
+        if debug: print(bypass_shot_settings_update_statement) #debug
+        return
 
     # create the json file
     if debug: print(saving_to_json_statement) #debug

@@ -47,6 +47,8 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
 
+        drawOperatorAndHelp(layout, 'bpm.collect_shot_datas', '', '')
+
         layout.separator()
         layout.prop(general_settings, 'debug', text = "Debug")
         if general_settings.debug:

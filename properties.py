@@ -123,3 +123,4 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
     debug : bpy.props.BoolProperty(default=True)
     custom_folders_index : bpy.props.IntProperty(update = updateFilebrowserPath)
     project_folder : bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
+    bypass_update_tag : bpy.props.BoolProperty(default=False)

@@ -27,6 +27,7 @@ invalid_shot_version_message = "Not an existing shot version"
 invalid_shot_version_statement = bpm_statement + invalid_shot_version_message
 already_loaded_shot_version_message = "Already loaded shot version"
 already_loaded_shot_version_statement = bpm_statement + already_loaded_shot_version_message
+bypass_shot_settings_update_statement = bpm_statement + "Bypassing shot settings update"
 
 
 # project datas statements
