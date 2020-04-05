@@ -17,18 +17,24 @@ def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
 
 
 # draw all props for debug
-def drawDebugPanel(container, dataset, debug):
-    if not debug:
+def drawDebugPanel(container, dataset, general_settings):
+    if not general_settings.debug:
         return
     
-    container.separator()
     box = container.box()
-    box.label(text = 'Debug', icon='ERROR')
-    col = box.column(align=True)
-    for p in dataset.bl_rna.properties:
-        if not p.is_readonly and p.identifier != 'name':
-            row = col.row()
-            row.prop(dataset, '%s' % p.identifier)
+
+    if general_settings.show_debug_props: icon = 'TRIA_DOWN'
+    else: icon = 'TRIA_RIGHT'
+
+
+    box.prop(general_settings, 'show_debug_props', icon = icon, emboss = False)
+    if general_settings.show_debug_props:
+        box.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
+        #col = box.column(align=True)
+        for p in dataset.bl_rna.properties:
+            if not p.is_readonly and p.identifier != 'name':
+                row = box.row()
+                row.prop(dataset, '%s' % p.identifier)
 
 
 # sequencer management
@@ -39,7 +45,7 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
     bl_idname = "BPM_PT_sequencer_management_panel"
     bl_category = "BPM"
 
-    debug_open : bpy.props.BoolProperty()
+    debug_open : bpy.props.BoolProperty(name = 'Debug', default = False)
 
     @classmethod
     def poll(cls, context):
@@ -66,8 +72,8 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
 
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
-
-        drawDebugPanel(layout, general_settings, general_settings.debug) #debug
+                
+        drawDebugPanel(layout, general_settings, general_settings)#debug
 
 
 # sequencer UI panel
@@ -151,7 +157,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'auto_audio_sync')
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
 
-        drawDebugPanel(layout, shot_settings, general_settings.debug) #debug
+        drawDebugPanel(layout, shot_settings, general_settings)#debug
 
 
 # shot settings panel
@@ -181,8 +187,8 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
-
-        drawDebugPanel(layout, shot_settings, general_settings.debug) #debug
+        
+        drawDebugPanel(layout, shot_settings, general_settings) #debug
 
 
 # bpm function topbar back/open operators
