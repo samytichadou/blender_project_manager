@@ -70,7 +70,7 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
     shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = updateShotSettingsProperties)
     not_last_version : bpy.props.BoolProperty(default=False)
-    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=False, update = updateShotSettingsProperties)
+    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = updateShotSettingsProperties)
     shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
 
 # shot settings file
@@ -82,7 +82,7 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
     shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1)
     not_last_version : bpy.props.BoolProperty(default=False)
-    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=False, update = updateShotSettingsProperties)
+    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = updateShotSettingsProperties)
     shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
 
 # scene settings
