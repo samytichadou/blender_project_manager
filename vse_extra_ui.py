@@ -22,11 +22,13 @@ markers_font = {
     "font_id": 0,
 }
 
+
 # initialize fonts
 def initializeExternalFontId(font_id, file_font):
     winman = bpy.context.window_manager
     if winman.bpm_generalsettings.debug: print(load_font_statement + file_font) #debug
     font_id["font_id"] = blf.load(file_font)
+
 
 # unload external font
 def unloadExternalFontId(font_id, file_font):
@@ -34,6 +36,7 @@ def unloadExternalFontId(font_id, file_font):
     if winman.bpm_generalsettings.debug: print(unload_font_statement + file_font) #debug
     font_id["font_id"] = 0
     blf.unload(file_font)
+
 
 # get link scene marker fram
 def getMarkerFrameFromShotStrip(strip):
@@ -45,6 +48,7 @@ def getMarkerFrameFromShotStrip(strip):
         if marker_frame >= strip.frame_final_start and marker_frame < strip.frame_final_end:
             marker_list.append((marker.name, marker_frame))
     return marker_list
+
 
 # get marker coordinates
 def getMarkerCoordinates(frame, channel, region, dpi_fac):
@@ -60,6 +64,7 @@ def getMarkerCoordinates(frame, channel, region, dpi_fac):
     v4 = (x + t_pos_x, y + t_pos_y)
     return ((v1, v2, v3), v4)
 
+
 # get strip rectangle
 def getStripRectangle(strip):
     x_offset = 0.05
@@ -69,6 +74,7 @@ def getStripRectangle(strip):
     y1 = strip.channel + y_offset
     y2 = strip.channel + 1 - y_offset
     return [x1, y1, x2, y2]
+
 
 # get text bounding box
 def getBoundingBoxCoordinates(pos, text, text_size, dpi_fac):
@@ -86,6 +92,7 @@ def getBoundingBoxCoordinates(pos, text, text_size, dpi_fac):
 
     return (v1, v2, v3, v4)
 
+
 # get warning zone of a strip
 warning_square_size = 10
 
@@ -100,6 +107,7 @@ def getSecondWarningZoneStrip(x, y):
     v1, v2, v3, v4 = getWarningZoneStrip(x - warning_square_size, y)
     return (v1,v2,v3,v4)
 
+
 # check if a strip has to be updated
 def getStripNeedUpdate(strip):
     if strip.frame_start != strip.frame_final_start:
@@ -109,10 +117,12 @@ def getStripNeedUpdate(strip):
     else:
         return False
 
+
 # draw text
 def drawText(location, text, f_id):
     blf.position(f_id, location[0], location[1], 0)   
     blf.draw(f_id, text)
+
 
 # get dpi factor from context
 def getDpiFactorFromContext(context):
@@ -120,6 +130,16 @@ def getDpiFactorFromContext(context):
     dpi = context.preferences.system.dpi
     dpi_fac = pixel_size * dpi / 72
     return dpi_fac
+
+
+# draw shader
+def drawShader(vertices, indices, color):
+    BPM_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
+    BMP_batch = batch_for_shader(BPM_shader, 'TRIS', {"pos": vertices}, indices=indices)
+    BPM_shader.bind()
+    BPM_shader.uniform_float("color", color)
+    BMP_batch.draw(BPM_shader,)
+
    
 # ui draw callback
 def drawBpmSequencerCallbackPx():
@@ -158,14 +178,22 @@ def drawBpmSequencerCallbackPx():
     color_m_bb = (0, 0, 0, 0.5)
 
     # setup extras
+
     # bpm shots
-    vertices_e = ()
-    indices_e = ()
-    color_e = (0, 1, 0, 0.25)
+    vertices_e_s = ()
+    indices_e_s = ()
+    color_e_s = (0, 1, 0, 0.25)
+
+    # bpm shots state
+    vertices_e_st = ()
+    indices_e_st = ()
+    color_e_st = (0, 1, 0, 0.25)
+
     # warning update bpm shots
     vertices_e_w = ()
     indices_e_w = ()
     color_e_w = (1, 0, 0, 1)
+
     # warning version bpm shots
     vertices_e_v_w = ()
     indices_e_v_w = ()
@@ -174,7 +202,8 @@ def drawBpmSequencerCallbackPx():
     # iterate through strips
     bgl.glEnable(bgl.GL_BLEND) # enable transparency
 
-    n_e = 0
+    n_e_s = 0
+    n_e_st = 0
     n_e_w = 0
     n_e_v_w = 0
     n_m = 0
@@ -188,18 +217,34 @@ def drawBpmSequencerCallbackPx():
             if strip.bpm_shotsettings.is_shot:
 
                 # bpm shot
-                x1, y1, x2, y2 = getStripRectangle(strip)
-                y1 += 0.5
-
-                v1 = region.view2d.view_to_region(x1, y1, clip=False)
-                v2 = region.view2d.view_to_region(x2, y1, clip=False)
-                v3 = region.view2d.view_to_region(x1, y2, clip=False)
-                v4 = region.view2d.view_to_region(x2, y2, clip=False)
-
                 if scene_settings.display_shot_strip:
-                    vertices_e += (v1, v2, v3, v4)
-                    indices_e += ((n_e, n_e + 1, n_e + 2), (n_e + 2, n_e + 1, n_e + 3))
-                    n_e += 4
+                    x1, y1, x2, y2 = getStripRectangle(strip)
+                    y1 += 0.6
+
+                    v1 = region.view2d.view_to_region(x1, y1, clip=False)
+                    v2 = region.view2d.view_to_region(x2, y1, clip=False)
+                    v3 = region.view2d.view_to_region(x1, y2, clip=False)
+                    v4 = region.view2d.view_to_region(x2, y2, clip=False)
+
+                    if scene_settings.display_shot_strip:
+                        vertices_e_s += (v1, v2, v3, v4)
+                        indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
+                        n_e_s += 4
+
+                # bpm shot state
+                if scene_settings.display_shot_state:
+                    y1 += 0.6
+
+                    v1 = region.view2d.view_to_region(x1, y1, clip=False)
+                    v2 = region.view2d.view_to_region(x2, y1, clip=False)
+                    v3 = region.view2d.view_to_region(x1, y2, clip=False)
+                    v4 = region.view2d.view_to_region(x2, y2, clip=False)
+
+                    if scene_settings.display_shot_strip:
+                        vertices_e_st += (v1, v2, v3, v4)
+                        indices_e_st += ((n_e_st, n_e_st + 1, n_e_st + 2), (n_e_st + 2, n_e_st + 1, n_e_st + 3))
+                        n_e_st += 4
+
 
                 # bpm need to update
                 if scene_settings.display_shot_update_warning:
@@ -258,47 +303,28 @@ def drawBpmSequencerCallbackPx():
     # extras
     if scene_settings.display_shot_strip:
         bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE)
-        BPM_extra_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-        BMP_extra_batch = batch_for_shader(BPM_extra_shaders, 'TRIS', {"pos": vertices_e}, indices=indices_e)
-        BPM_extra_shaders.bind()
-        BPM_extra_shaders.uniform_float("color", color_e)
-        BMP_extra_batch.draw(BPM_extra_shaders,)
+        drawShader(vertices_e_s, indices_e_s, color_e_s)
 
         bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE_MINUS_SRC_ALPHA)
 
     # update warning
     if scene_settings.display_shot_update_warning:
-        BPM_extra_warning_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-        BMP_extra_warning_batch = batch_for_shader(BPM_extra_warning_shaders, 'TRIS', {"pos": vertices_e_w}, indices=indices_e_w)
-        BPM_extra_warning_shaders.bind()
-        BPM_extra_warning_shaders.uniform_float("color", color_e_w)
-        BMP_extra_warning_batch.draw(BPM_extra_warning_shaders,)
+        drawShader(vertices_e_w, indices_e_w, color_e_w)
 
     # version warning
     if scene_settings.display_shot_version_warning:
-        BPM_extra_warning_version_shaders = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-        BMP_extra_warning_version_batch = batch_for_shader(BPM_extra_warning_version_shaders, 'TRIS', {"pos": vertices_e_v_w}, indices=indices_e_v_w)
-        BPM_extra_warning_version_shaders.bind()
-        BPM_extra_warning_version_shaders.uniform_float("color", color_e_v_w)
-        BMP_extra_warning_version_batch.draw(BPM_extra_warning_version_shaders,)
+        drawShader(vertices_e_v_w, indices_e_v_w, color_e_v_w)
 
     # markers
     if m_display != 'NONE' :
 
         # markers bounding boxes
         if mn_display != "NONE" and scene_settings.display_marker_boxes:
-            BPM_marker_bb_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-            BMP_marker_bb_batch = batch_for_shader(BPM_marker_bb_shader, 'TRIS', {"pos": vertices_m_bb}, indices=indices_m_bb)
-            BPM_marker_bb_shader.bind()
-            BPM_marker_bb_shader.uniform_float("color", color_m_bb)
-            BMP_marker_bb_batch.draw(BPM_marker_bb_shader,)
+            drawShader(vertices_m_bb, indices_m_bb, color_m_bb)
 
         # markers
-        BPM_marker_shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-        BMP_marker_batch = batch_for_shader(BPM_marker_shader, 'TRIS', {"pos": vertices_m}, indices=indices_m)
-        BPM_marker_shader.bind()
-        BPM_marker_shader.uniform_float("color", color_m)
-        BMP_marker_batch.draw(BPM_marker_shader,)
+        drawShader(vertices_m, indices_m, color_m)
+
 
         # draw marker texts
         if mn_display != "NONE":
