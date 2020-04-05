@@ -282,7 +282,7 @@ def drawBpmSequencerCallbackPx():
         # bpm shot state
         if scene_settings.display_shot_state:
 
-            y1st = y1 + 0.55
+            y1st = y1 + 0.5
             y2st = y2 - 0.3
 
             v1st = region.view2d.view_to_region(x1, y1st, clip=False)
