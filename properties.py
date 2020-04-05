@@ -2,7 +2,7 @@ import bpy
 
 
 from .functions.filebrowser_update_function import updateFilebrowserPath
-from .functions.shot_settings_json_update_function import updateShotSettingsStripsProperties
+from .functions.shot_settings_json_update_function import updateShotSettingsProperties
 
 
 asset_type_items = [
@@ -66,22 +66,24 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_shot : bpy.props.BoolProperty(default=False)
     display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
-    shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsStripsProperties)
+    shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsProperties)
     shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
-    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = updateShotSettingsStripsProperties)
+    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = updateShotSettingsProperties)
     not_last_version : bpy.props.BoolProperty(default=False)
-    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=False, update = updateShotSettingsStripsProperties)
+    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=False, update = updateShotSettingsProperties)
+    shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
 
 # shot settings file
 class BPMShotSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_shot : bpy.props.BoolProperty(default=False)
     display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
-    shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD')
+    shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsProperties)
     shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
     shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1)
     not_last_version : bpy.props.BoolProperty(default=False)
-    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=False)
+    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=False, update = updateShotSettingsProperties)
+    shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
 
 # scene settings
 class BPMSceneSettings(bpy.types.PropertyGroup) :

@@ -74,7 +74,11 @@ def bpmStartupHandler(scene):
                     if winman.bpm_generalsettings.debug: print(shot_loading_statement + shot_json) #debug
                     # load json in props
                     shot_settings = winman.bpm_shotsettings
+
+                    general_settings.bypass_update_tag = True
                     loadJsonDataToDataset(winman, shot_settings, shot_json, ())
+                    general_settings.bypass_update_tag = False
+                    
                     if winman.bpm_generalsettings.debug: print(shot_loaded_statement) #debug
 
                     # synchronize audio if needed

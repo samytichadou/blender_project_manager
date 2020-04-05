@@ -14,6 +14,20 @@ def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
         row.operator(operator_bl_idname)
     row.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
 
+# draw all props for debug
+def drawDebugPanel(container, dataset, debug):
+    if not debug:
+        return
+    
+    container.separator()
+    box = container.box()
+    box.label(text = 'Debug', icon='ERROR')
+    col = box.column(align=True)
+    for p in dataset.bl_rna.properties:
+        if not p.is_readonly and p.identifier != 'name':
+            row = col.row()
+            row.prop(dataset, '%s' % p.identifier)
+
 
 # sequencer management
 class BPM_PT_sequencer_management_panel(bpy.types.Panel):
@@ -22,6 +36,8 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
     bl_label = "Management"
     bl_idname = "BPM_PT_sequencer_management_panel"
     bl_category = "BPM"
+
+    debug_open : bpy.props.BoolProperty()
 
     @classmethod
     def poll(cls, context):
@@ -47,15 +63,9 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
 
-        drawOperatorAndHelp(layout, 'bpm.collect_shot_datas', '', '')
+        drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', '')
 
-        layout.separator()
-        layout.prop(general_settings, 'debug', text = "Debug")
-        if general_settings.debug:
-            box = layout.box()
-            box.label(text = 'debug', icon = 'ERROR')
-            box.prop(general_settings, 'is_project')
-            box.prop(general_settings, 'file_type')
+        drawDebugPanel(layout, general_settings, general_settings.debug) #debug
 
 
 # sequencer UI panel
@@ -139,13 +149,36 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'auto_audio_sync')
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
 
-        if general_settings.debug: #debug:
-            box = layout.box()
-            box.label(text = 'debug', icon = 'ERROR')
-            box.prop(shot_settings, 'is_shot')
-            box.prop(shot_settings, 'shot_version')
-            box.prop(shot_settings, 'shot_last_version')
-            box.prop(shot_settings, 'not_last_version')
+        drawDebugPanel(layout, shot_settings, general_settings.debug) #debug
+
+
+# shot settings panel
+class BPM_PT_properties_shot_panel(bpy.types.Panel):
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = "scene"
+    bl_label = "BPM Shot settings"
+    bl_idname = "BPM_PT_properties_shot_panel"
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'SHOT'
+
+    def draw(self, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        shot_settings = winman.bpm_shotsettings
+
+        layout = self.layout
+
+        drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
+
+        layout.prop(shot_settings, 'shot_state')
+        row = layout.row(align=True)
+        row.prop(shot_settings, 'auto_audio_sync')
+        drawWikiHelp(row, 'Shot-Audio-Synchronization')
+
+        drawDebugPanel(layout, shot_settings, general_settings.debug) #debug
 
 
 # bpm function topbar back/open operators
@@ -189,10 +222,9 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             if general_settings.file_type == 'EDIT':
 
                 layout.operator('bpm.display_modify_project_settings')
-
-            elif general_settings.file_type == 'SHOT':
-                
-                drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')                
+            
+            layout.prop(general_settings, 'debug')
+                                
 
 
 # project folder ui list

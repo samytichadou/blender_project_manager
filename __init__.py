@@ -53,7 +53,7 @@ from .operators.bump_shot_version import *
 from .operators.change_shot_version import *
 from .operators.synchronize_audio_edit import *
 from .operators.synchronize_audio_shot import *
-from .operators.collect_shot_datas import *
+from .operators.refresh_shot_datas import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -82,7 +82,7 @@ classes = (BPMOpenShot,
             BPMBumpChangeShotVersionFromEdit,
             BPMSynchronizeAudioEdit,
             BPMSynchronizeAudioShot,
-            BPMCollectShotDatas,
+            BPMRefreshShotDatasEdit,
 
             BPMOpenWikiPage,
 
@@ -97,6 +97,7 @@ classes = (BPMOpenShot,
             BPM_PT_sequencer_management_panel,
             BPM_PT_sequencer_shot_panel,
             BPM_PT_sequencer_ui_panel,
+            BPM_PT_properties_shot_panel,
             BPM_MT_topbar_menu,
             BPM_UL_Folders_Uilist,
             BPM_PT_FileBrowser_Panel,

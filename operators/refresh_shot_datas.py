@@ -2,10 +2,10 @@ import bpy
 import os
 
 
-class BPMCollectShotDatas(bpy.types.Operator):
-    """Collect shot datas from edit"""
-    bl_idname = "bpm.collect_shot_datas"
-    bl_label = "Collect shot datas"
+class BPMRefreshShotDatasEdit(bpy.types.Operator):
+    """Refresh shot datas from edit"""
+    bl_idname = "bpm.refresh_shot_datas_edit"
+    bl_label = "Refresh shot datas"
     bl_options = {'REGISTER'}
 
 
