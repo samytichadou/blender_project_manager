@@ -4,6 +4,7 @@ import bpy
 # help function
 def drawWikiHelp(container, wikipage):
     container.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
+    
 
 # draw operator and help function
 def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
@@ -13,6 +14,7 @@ def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
     else:
         row.operator(operator_bl_idname)
     row.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
+
 
 # draw all props for debug
 def drawDebugPanel(container, dataset, debug):
