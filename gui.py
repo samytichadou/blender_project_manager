@@ -30,7 +30,6 @@ def drawDebugPanel(container, dataset, general_settings):
     box.prop(general_settings, 'show_debug_props', icon = icon, emboss = False)
     if general_settings.show_debug_props:
         box.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
-        #col = box.column(align=True)
         for p in dataset.bl_rna.properties:
             if not p.is_readonly and p.identifier != 'name':
                 row = box.row()
