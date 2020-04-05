@@ -20,14 +20,10 @@ def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
 def drawDebugPanel(container, dataset, general_settings):
     if not general_settings.debug:
         return
-    
+ 
     box = container.box()
 
-    if general_settings.show_debug_props: icon = 'TRIA_DOWN'
-    else: icon = 'TRIA_RIGHT'
-
-
-    box.prop(general_settings, 'show_debug_props', icon = icon, emboss = False)
+    box.prop(general_settings, 'show_debug_props', text = "Show debug props", icon = 'TOOL_SETTINGS')
     if general_settings.show_debug_props:
         box.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
         for p in dataset.bl_rna.properties:
@@ -56,9 +52,6 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
-
-        #common
-        layout.label(text = project_data.name)
 
         drawOperatorAndHelp(layout, 'bpm.create_shot', '', 'Create-Shot-Operator')
 
@@ -93,14 +86,38 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
         row.prop(scn_settings, 'extra_ui')
         drawWikiHelp(row, 'Extra-UI-in-Sequencer')
         if scn_settings.extra_ui:
-            layout.prop(scn_settings, 'display_shot_strip')
+            row = layout.row()
+            row.prop(scn_settings, 'display_shot_strip')
+            row.prop(scn_settings, 'color_shot_strip', text="")
+
             layout.prop(scn_settings, 'display_shot_state')
-            layout.prop(scn_settings, 'display_audio_sync')
-            layout.prop(scn_settings, 'display_shot_update_warning')
-            layout.prop(scn_settings, 'display_shot_version_warning')
-            layout.prop(scn_settings, 'display_markers')
-            layout.prop(scn_settings, 'display_marker_names')
-            layout.prop(scn_settings, 'display_marker_boxes')
+
+            row = layout.row()
+            row.prop(scn_settings, 'display_audio_sync')
+            row.prop(scn_settings, 'color_audio_sync', text="")
+
+            row = layout.row()
+            row.prop(scn_settings, 'display_shot_update_warning')
+            row.prop(scn_settings, 'color_update_warning', text="")
+
+            row = layout.row()
+            row.prop(scn_settings, 'display_shot_version_warning')
+            row.prop(scn_settings, 'color_version_warning', text="")
+
+            # markers
+            row = layout.row()
+            row.label(text = "Markers")
+            row.prop(scn_settings, 'display_markers', text = "")
+            row.prop(scn_settings, 'color_markers', text="")
+
+            row = layout.row()
+            row.label(text = "Markers names")
+            row.prop(scn_settings, 'display_marker_names', text = "")
+
+            row = layout.row()
+            row.prop(scn_settings, 'display_marker_boxes')
+            row.prop(scn_settings, 'color_marker_boxes', text="")
+
             layout.prop(scn_settings, 'display_marker_text_limit')
 
 

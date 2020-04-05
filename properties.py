@@ -89,9 +89,22 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
 class BPMSceneSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     extra_ui : bpy.props.BoolProperty(name = "Extra UI", default=True)
+
     display_shot_strip : bpy.props.BoolProperty(name = "Shot strips", default=True)
+    color_shot_strip : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 1, 0, 0.25), min=0.0, max=1.0, size=4)
+
     display_shot_state : bpy.props.BoolProperty(name = "Shot state", default=True)
+    color_state_storyboard : bpy.props.FloatVectorProperty(name="shot state Storyboard", subtype='COLOR', default=(0.996, 0.898, 0.0, 1), min=0.0, max=1.0, size=4)
+    color_state_layout : bpy.props.FloatVectorProperty(name="shot state Layout", subtype='COLOR', default=(0.996, 0.431, 0.0, 1), min=0.0, max=1.0, size=4)
+    color_state_animation : bpy.props.FloatVectorProperty(name="shot state Animation", subtype='COLOR', default=(0.413, 0.002, 0.006, 1), min=0.0, max=1.0, size=4)
+    color_state_lighting : bpy.props.FloatVectorProperty(name="shot state Lighting", subtype='COLOR', default=(0.0, 0.996, 0.98, 1), min=0.0, max=1.0, size=4)
+    color_state_rendering : bpy.props.FloatVectorProperty(name="shot state Rendering", subtype='COLOR', default=(0.0, 0.424, 0.996, 1), min=0.0, max=1.0, size=4)
+    color_state_compositing : bpy.props.FloatVectorProperty(name="shot state Compositing", subtype='COLOR', default=(0.0, 0.0, 0.25, 1), min=0.0, max=1.0, size=4)
+    color_state_finished : bpy.props.FloatVectorProperty(name="shot state Finished", subtype='COLOR', default=(0.0, 0.386, 0.0, 1), min=0.0, max=1.0, size=4)
+
     display_audio_sync : bpy.props.BoolProperty(name = "Shot audio sync", default=True)
+    color_audio_sync : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1.0, 0.0, 0.924, 1.0), min=0.0, max=1.0, size=4)
+
     display_marker_items = [
         ('NONE', 'None', ""),
         ('SELECTED', 'Selected', ""),
@@ -99,16 +112,25 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
         ('ALL', 'All', ""),
         ]
     display_markers : bpy.props.EnumProperty(name = "Shot markers", items = display_marker_items, default = 'ALL')
+    color_markers : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1, 1, 1, 1), min=0.0, max=1.0, size=4)
+
     display_marker_name_items = [
         ('NONE', 'None', ""),
         ('CURRENT', 'Current', ""),
         ('ALL', 'All', ""),
         ]
     display_marker_names : bpy.props.EnumProperty(name = "Marker names", items = display_marker_name_items, default = 'ALL')
+
     display_marker_boxes : bpy.props.BoolProperty(name = "Marker boxes", default=True)
+    color_marker_boxes : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 0, 0, 0.5), min=0.0, max=1.0, size=4)
+
     display_marker_text_limit : bpy.props.IntProperty(name = "Marker text limit", default = 15, min = 0)
+
     display_shot_update_warning : bpy.props.BoolProperty(name = "Shot update warning", default=True)
+    color_update_warning : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1, 0, 0, 1), min=0.0, max=1.0, size=4)
+
     display_shot_version_warning : bpy.props.BoolProperty(name = "Shot version warning", default=True)
+    color_version_warning : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 0, 1, 1), min=0.0, max=1.0, size=4)
 
 
 # general settings

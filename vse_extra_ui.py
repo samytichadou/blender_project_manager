@@ -171,7 +171,8 @@ def drawBpmSequencerCallbackPx():
     # setup markers
     vertices_m = ()
     indices_m = ()
-    color_m = (1, 1, 1, 1)
+    #color_m = (1, 1, 1, 1)
+    color_m = scene_settings.color_markers
     n_m = 0
 
     # setup markers text
@@ -185,7 +186,8 @@ def drawBpmSequencerCallbackPx():
     # setup markers bounding box
     vertices_m_bb = ()
     indices_m_bb = ()
-    color_m_bb = (0, 0, 0, 0.5)
+    #color_m_bb = (0, 0, 0, 0.5)
+    color_m_bb = scene_settings.color_marker_boxes
     n_m_bb = 0
 
     # setup extras
@@ -193,63 +195,81 @@ def drawBpmSequencerCallbackPx():
     # bpm shots
     vertices_e_s = ()
     indices_e_s = ()
-    color_e_s = (0, 1, 0, 0.25)
+    #color_e_s = (0, 1, 0, 0.25)
+    color_e_s = scene_settings.color_shot_strip
     n_e_s = 0
 
     # bpm shots state
-    state_alpha = 1.0
+    #state_alpha = 1.0
+
     #storyboard
     vertices_e_st_st = ()
     indices_e_st_st = ()
-    color_e_st_st = (0.996, 0.898, 0.0, state_alpha)
+    #color_e_st_st = (0.996, 0.898, 0.0, state_alpha)
+    color_e_st_st = scene_settings.color_state_storyboard
     n_e_st_st = 0
+
     #layout
     vertices_e_st_la = ()
     indices_e_st_la = ()
-    color_e_st_la = (0.996, 0.431, 0.0, state_alpha)
+    #color_e_st_la = (0.996, 0.431, 0.0, state_alpha)
+    color_e_st_la = scene_settings.color_state_layout
     n_e_st_la = 0
+
     #animation
     vertices_e_st_an = ()
     indices_e_st_an = ()
-    color_e_st_an = (0.413, 0.002, 0.006, state_alpha)
+    #color_e_st_an = (0.413, 0.002, 0.006, state_alpha)
+    color_e_st_an = scene_settings.color_state_animation
     n_e_st_an = 0
+
     #lighting
     vertices_e_st_li = ()
     indices_e_st_li = ()
-    color_e_st_li = (0.0, 0.996, 0.98, state_alpha)
+    #color_e_st_li = (0.0, 0.996, 0.98, state_alpha)
+    color_e_st_li = scene_settings.color_state_lighting
     n_e_st_li = 0
+
     #rendering
     vertices_e_st_re = ()
     indices_e_st_re = ()
-    color_e_st_re = (0.0, 0.424, 0.996, state_alpha)
+    #color_e_st_re = (0.0, 0.424, 0.996, state_alpha)
+    color_e_st_re = scene_settings.color_state_rendering
     n_e_st_re = 0
+
     #compositing
     vertices_e_st_co = ()
     indices_e_st_co = ()
-    color_e_st_co = (0.0, 0.0, 0.25, state_alpha)
+    #color_e_st_co = (0.0, 0.0, 0.25, state_alpha)
+    color_e_st_co = scene_settings.color_state_compositing
     n_e_st_co = 0
+
     #finished
     vertices_e_st_fi = ()
     indices_e_st_fi = ()
-    color_e_st_fi = (0.0, 0.386, 0.0, state_alpha)
+    #color_e_st_fi = (0.0, 0.386, 0.0, state_alpha)
+    color_e_st_fi = scene_settings.color_state_finished
     n_e_st_fi = 0
 
     # info shot audio sync
     vertices_e_au = ()
     indices_e_au = ()
-    color_e_au = (1.0, 0.0, 0.924, 1.0)
+    #color_e_au = (1.0, 0.0, 0.924, 1.0)
+    color_e_au = scene_settings.color_audio_sync
     n_e_au = 0
 
     # warning update bpm shots
     vertices_e_w = ()
     indices_e_w = ()
-    color_e_w = (1, 0, 0, 1)
+    #color_e_w = (1, 0, 0, 1)
+    color_e_w = scene_settings.color_update_warning
     n_e_w = 0
 
     # warning version bpm shots
     vertices_e_v_w = ()
     indices_e_v_w = ()
-    color_e_v_w = (0, 0, 1, 1)
+    #color_e_v_w = (0, 0, 1, 1)
+    color_e_v_w = scene_settings.color_version_warning
     n_e_v_w = 0
 
     # iterate through strips
