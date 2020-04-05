@@ -9,8 +9,9 @@ class BPMBackToEdit(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
-            return True
+        if context.window_manager.bpm_generalsettings.is_project:
+            if context.window_manager.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
+                return True
 
     def execute(self, context):
         # import statement and functions

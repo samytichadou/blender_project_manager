@@ -175,6 +175,8 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
 
+        drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
+
         layout.prop(shot_settings, 'shot_state')
         row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')

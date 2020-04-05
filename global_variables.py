@@ -117,7 +117,8 @@ shot_update_impossible_statement = bpm_statement + shot_update_impossible_messag
 
 shot_loading_statement = bpm_statement + "Loading shot settings from : "
 shot_loaded_statement = bpm_statement + "Shot settings loaded"
-missing_shot_file_statement = "Shot settings file missing"
+missing_shot_file_message = "Shot settings file missing"
+missing_shot_file_statement = bpm_statement + missing_shot_file_message
 
 
 # marker statements

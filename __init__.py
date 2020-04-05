@@ -83,6 +83,7 @@ classes = (BPMOpenShot,
             BPMSynchronizeAudioEdit,
             BPMSynchronizeAudioShot,
             BPMRefreshShotDatasEdit,
+            BPMRefreshShotDatasShot,
 
             BPMOpenWikiPage,
 
