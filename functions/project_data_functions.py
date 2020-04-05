@@ -15,6 +15,7 @@ from ..global_variables import (
 from .json_functions import read_json
 from .file_functions import absolutePath
 from .dataset_functions import setPropertiesFromJsonDataset
+from .strip_functions import returnShotStrips, getListSequencerShots
 
 
 # get project data file
@@ -173,7 +174,6 @@ def findLibFromShot(shot_name):
 # find unused lib
 def findUnusedLibraries():
     lib_list = []
-    from .strip_functions import getListSequencerShots
     for scn in bpy.data.scenes:
         sequencer = scn.sequence_editor
         used_lib_list = getListSequencerShots(sequencer)[1]
@@ -189,3 +189,22 @@ def getShotSettingsFileFromBlend():
     shot_json = os.path.join(parent_folder, shot_file)
     if os.path.isfile(shot_json):
         return shot_json
+
+
+# refresh all shot strips in timeline from json shot files
+def refreshTimelineShotDatas(winman, sequencer):
+    general_settings = winman.bpm_generalsettings
+    avoid_list = ('is_shot', 'shot_version', 'shot_last_version', 'not_last_version')
+
+    general_settings.bypass_update_tag = True
+    # iterate through timeline strips
+    for strip in returnShotStrips(sequencer):
+
+        # get json path
+        shot_folder = os.path.dirname(strip.scene.library.filepath)
+        shot_json = os.path.join(shot_folder, shot_file)
+
+        # set json datas
+        if os.path.isfile(shot_json):
+            loadJsonDataToDataset(winman, strip.bpm_shotsettings, shot_json, avoid_list)
+    general_settings.bypass_update_tag = False

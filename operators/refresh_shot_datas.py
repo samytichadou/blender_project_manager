@@ -16,7 +16,7 @@ class BPMRefreshShotDatasEdit(bpy.types.Operator):
     def execute(self, context):
         # import statements and functions
         from ..functions.json_functions import read_json
-        from ..functions.project_data_functions import loadJsonDataToDataset
+        from ..functions.project_data_functions import loadJsonDataToDataset, refreshTimelineShotDatas
         from ..functions.strip_functions import returnShotStrips
         from ..global_variables import (
                                     refreshing_timeline_shot_datas_statement,
@@ -25,26 +25,12 @@ class BPMRefreshShotDatasEdit(bpy.types.Operator):
                                 )
 
         winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        avoid_list = ('is_shot', 'shot_version', 'shot_last_version', 'not_last_version')
+        debug = winman.bpm_generalsettings.debug
 
-        if general_settings.debug: print(refreshing_timeline_shot_datas_statement) #debug
+        if debug: print(refreshing_timeline_shot_datas_statement) #debug
 
-        general_settings.bypass_update_tag = True
+        refreshTimelineShotDatas(winman, context.scene.sequence_editor)
 
-        # iterate through timeline strips
-        for strip in returnShotStrips(context.scene.sequence_editor):
-
-            # get json path
-            shot_folder = os.path.dirname(strip.scene.library.filepath)
-            shot_json = os.path.join(shot_folder, shot_file)
-
-            # set json datas
-            if os.path.isfile(shot_json):
-                loadJsonDataToDataset(winman, strip.bpm_shotsettings, shot_json, avoid_list)
-
-        general_settings.bypass_update_tag = False
-
-        if general_settings.debug: print(refreshed_timeline_shot_datas_statement) #debug
+        if debug: print(refreshed_timeline_shot_datas_statement) #debug
 
         return {'FINISHED'}

@@ -4,7 +4,7 @@ import bpy
 # help function
 def drawWikiHelp(container, wikipage):
     container.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
-    
+
 
 # draw operator and help function
 def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
@@ -65,7 +65,7 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
 
-        drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', '')
+        drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
 
         drawDebugPanel(layout, general_settings, general_settings.debug) #debug
 

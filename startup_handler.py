@@ -11,6 +11,7 @@ from .functions.project_data_functions import (
                                             getAssetFile,
                                             findUnusedLibraries,
                                             getShotSettingsFileFromBlend,
+                                            refreshTimelineShotDatas,
                                         )
 from .global_variables import (
                             startup_statement, 
@@ -26,6 +27,8 @@ from .global_variables import (
                             shot_loading_statement,
                             shot_loaded_statement,
                             missing_shot_file_statement,
+                            refreshing_timeline_shot_datas_statement,
+                            refreshed_timeline_shot_datas_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
@@ -39,7 +42,7 @@ def bpmStartupHandler(scene):
 
     general_settings = winman.bpm_generalsettings
 
-    if winman.bpm_generalsettings.debug: print(startup_statement) #debug
+    if general_settings.debug: print(startup_statement) #debug
 
     #load project datas
     project_data_file, project_folder = getProjectDataFile(winman)
@@ -47,64 +50,74 @@ def bpmStartupHandler(scene):
 
         if chekIfBpmProject(winman, project_data_file):
             loadJsonDataToDataset(winman, winman.bpm_projectdatas, project_data_file, ())
-            if winman.bpm_generalsettings.debug: print(loaded_datas_statement) #debug
+            if general_settings.debug: print(loaded_datas_statement) #debug
             general_settings.project_folder = project_folder
-            if winman.bpm_generalsettings.debug: print(loaded_project_folder + project_folder) #debug
+            if general_settings.debug: print(loaded_project_folder + project_folder) #debug
 
             # load project custom folders
             custom_folders_file, is_folder_file = getCustomFoldersFile(winman)
             if is_folder_file:
-                if winman.bpm_generalsettings.debug: print(folders_loading_statement + custom_folders_file) #debug
+                if general_settings.debug: print(folders_loading_statement + custom_folders_file) #debug
                 custom_folders_coll = winman.bpm_customfolders
                 loadJsonInCollection(winman, custom_folders_file, custom_folders_coll, 'folders')
-                if winman.bpm_generalsettings.debug: print(loaded_folders_statement) #debug
+                if general_settings.debug: print(loaded_folders_statement) #debug
 
             # load available assets
             asset_file, is_asset_file = getAssetFile(winman)
             if is_asset_file:
-                if winman.bpm_generalsettings.debug: print(assets_loading_statement + asset_file) #debug
+                if general_settings.debug: print(assets_loading_statement + asset_file) #debug
                 asset_coll = winman.bpm_assets
                 loadJsonInCollection(winman, asset_file, asset_coll, 'assets')
-                if winman.bpm_generalsettings.debug: print(assets_loaded_statement) #debug
+                if general_settings.debug: print(assets_loaded_statement) #debug
+
+            # load edit settings
+            if general_settings.file_type == 'EDIT':
+                
+                # refresh timeline shots strips datas
+                if general_settings.debug: print(refreshing_timeline_shot_datas_statement) #debug
+
+                refreshTimelineShotDatas(winman, bpy.context.scene.sequence_editor)
+
+                if general_settings.debug: print(refreshed_timeline_shot_datas_statement) #debug
 
             # load shot settings
-            if general_settings.file_type == 'SHOT':
+            elif general_settings.file_type == 'SHOT':
                 shot_json = getShotSettingsFileFromBlend()
                 if shot_json is not None:
-                    if winman.bpm_generalsettings.debug: print(shot_loading_statement + shot_json) #debug
+                    if general_settings.debug: print(shot_loading_statement + shot_json) #debug
                     # load json in props
                     shot_settings = winman.bpm_shotsettings
 
                     general_settings.bypass_update_tag = True
                     loadJsonDataToDataset(winman, shot_settings, shot_json, ())
                     general_settings.bypass_update_tag = False
-                    
-                    if winman.bpm_generalsettings.debug: print(shot_loaded_statement) #debug
+
+                    if general_settings.debug: print(shot_loaded_statement) #debug
 
                     # synchronize audio if needed
                     if shot_settings.auto_audio_sync:
-                        autoSyncAudioShot(winman.bpm_generalsettings.debug, project_folder, bpy.context.scene)
+                        autoSyncAudioShot(general_settings.debug, project_folder, bpy.context.scene)
 
                 # no json error
                 else: 
-                    if winman.bpm_generalsettings.debug: print(missing_shot_file_statement) #debug
+                    if general_settings.debug: print(missing_shot_file_statement) #debug
 
         else:
-            if winman.bpm_generalsettings.debug: print(no_datas_statement) #debug
+            if general_settings.debug: print(no_datas_statement) #debug
 
     else:
-        if winman.bpm_generalsettings.debug: print(no_datas_statement) #debug
+        if general_settings.debug: print(no_datas_statement) #debug
         
     if general_settings.is_project and general_settings.file_type == 'EDIT':
         # load ui if needed
         enableSequencerCallback()
 
         # # check for unused libraries and clear them
-        # if winman.bpm_generalsettings.debug: print(checking_unused_libraries_statement) #debug
+        # if general_settings.debug: print(checking_unused_libraries_statement) #debug
 
         # for lib in findUnusedLibraries():
         #     clearLibraryUsers(lib)
-        #     if winman.bpm_generalsettings.debug: print(library_cleared_statement + lib.name) #debug
+        #     if general_settings.debug: print(library_cleared_statement + lib.name) #debug
 
     else:
         # unload ui if needed
