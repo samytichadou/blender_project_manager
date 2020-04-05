@@ -89,6 +89,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     extra_ui : bpy.props.BoolProperty(name = "Extra UI", default=True)
     display_shot_strip : bpy.props.BoolProperty(name = "Shot strips", default=True)
     display_shot_state : bpy.props.BoolProperty(name = "Shot state", default=True)
+    display_audio_sync : bpy.props.BoolProperty(name = "Shot audio sync", default=True)
     display_marker_items = [
         ('NONE', 'None', ""),
         ('SELECTED', 'Selected', ""),

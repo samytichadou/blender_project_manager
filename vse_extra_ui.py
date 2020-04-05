@@ -94,7 +94,7 @@ def getBoundingBoxCoordinates(pos, text, text_size, dpi_fac):
 
 
 # get warning zone of a strip
-warning_square_size = 10
+warning_square_size = 8
 
 def getWarningZoneStrip(x, y):
     v1 = (x-warning_square_size, y-warning_square_size)
@@ -105,6 +105,14 @@ def getWarningZoneStrip(x, y):
 
 def getSecondWarningZoneStrip(x, y):
     v1, v2, v3, v4 = getWarningZoneStrip(x - warning_square_size, y)
+    return (v1,v2,v3,v4)
+
+# get info zone of a strip
+def getInfoZoneStrip(x, y):
+    v1 = (x - warning_square_size, y)
+    v2 = (x, y)
+    v3 = (x - warning_square_size, y + warning_square_size)
+    v4 = (x, y + warning_square_size)
     return (v1,v2,v3,v4)
 
 
@@ -225,6 +233,12 @@ def drawBpmSequencerCallbackPx():
     color_e_st_fi = (0.0, 0.386, 0.0, state_alpha)
     n_e_st_fi = 0
 
+    # info shot audio sync
+    vertices_e_au = ()
+    indices_e_au = ()
+    color_e_au = (1.0, 0.0, 0.924, 1.0)
+    n_e_au = 0
+
     # warning update bpm shots
     vertices_e_w = ()
     indices_e_w = ()
@@ -249,17 +263,20 @@ def drawBpmSequencerCallbackPx():
 
                 x1, y1, x2, y2 = getStripRectangle(strip)
 
+                v1 = region.view2d.view_to_region(x1, y1, clip=False)
+                v2 = region.view2d.view_to_region(x2, y1, clip=False)
+                v3 = region.view2d.view_to_region(x1, y2, clip=False)
+                v4 = region.view2d.view_to_region(x2, y2, clip=False)
+
                 # bpm shot
                 if scene_settings.display_shot_strip:
                         
                     y1s = y1 + 0.6
 
-                    v1 = region.view2d.view_to_region(x1, y1s, clip=False)
-                    v2 = region.view2d.view_to_region(x2, y1s, clip=False)
-                    v3 = region.view2d.view_to_region(x1, y2, clip=False)
-                    v4 = region.view2d.view_to_region(x2, y2, clip=False)
+                    v1s = region.view2d.view_to_region(x1, y1s, clip=False)
+                    v2s = region.view2d.view_to_region(x2, y1s, clip=False)
 
-                    vertices_e_s += (v1, v2, v3, v4)
+                    vertices_e_s += (v1s, v2s, v3, v4)
                     indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
                     n_e_s += 4
 
@@ -269,41 +286,47 @@ def drawBpmSequencerCallbackPx():
                     y1st = y1 + 0.55
                     y2st = y2 - 0.3
 
-                    v1 = region.view2d.view_to_region(x1, y1st, clip=False)
-                    v2 = region.view2d.view_to_region(x2, y1st, clip=False)
-                    v3 = region.view2d.view_to_region(x1, y2st, clip=False)
-                    v4 = region.view2d.view_to_region(x2, y2st, clip=False)
+                    v1st = region.view2d.view_to_region(x1, y1st, clip=False)
+                    v2st = region.view2d.view_to_region(x2, y1st, clip=False)
+                    v3st = region.view2d.view_to_region(x1, y2st, clip=False)
+                    v4st = region.view2d.view_to_region(x2, y2st, clip=False)
 
                     if strip.bpm_shotsettings.shot_state == 'STORYBOARD':
-                        vertices_e_st_st += (v1, v2, v3, v4)
+                        vertices_e_st_st += (v1st, v2st, v3st, v4st)
                         indices_e_st_st += ((n_e_st_st, n_e_st_st + 1, n_e_st_st + 2), (n_e_st_st + 2, n_e_st_st + 1, n_e_st_st + 3))
                         n_e_st_st += 4
                     elif strip.bpm_shotsettings.shot_state == 'LAYOUT':
-                        vertices_e_st_la += (v1, v2, v3, v4)
+                        vertices_e_st_la += (v1st, v2st, v3st, v4st)
                         indices_e_st_la += ((n_e_st_la, n_e_st_la + 1, n_e_st_la + 2), (n_e_st_la + 2, n_e_st_la + 1, n_e_st_la + 3))
                         n_e_st_la += 4
                     elif strip.bpm_shotsettings.shot_state == 'ANIMATION':
-                        vertices_e_st_an += (v1, v2, v3, v4)
+                        vertices_e_st_an += (v1st, v2st, v3st, v4st)
                         indices_e_st_an += ((n_e_st_an, n_e_st_an + 1, n_e_st_an + 2), (n_e_st_an + 2, n_e_st_an + 1, n_e_st_an + 3))
                         n_e_st_an += 4
                     elif strip.bpm_shotsettings.shot_state == 'LIGHTING':
-                        vertices_e_st_li += (v1, v2, v3, v4)
+                        vertices_e_st_li += (v1st, v2st, v3st, v4st)
                         indices_e_st_li += ((n_e_st_li, n_e_st_li + 1, n_e_st_li + 2), (n_e_st_li + 2, n_e_st_li + 1, n_e_st_li + 3))
                         n_e_st_li += 4
                     elif strip.bpm_shotsettings.shot_state == 'RENDERING':
-                        vertices_e_st_re += (v1, v2, v3, v4)
+                        vertices_e_st_re += (v1st, v2st, v3st, v4st)
                         indices_e_st_re += ((n_e_st_re, n_e_st_re + 1, n_e_st_re + 2), (n_e_st_re + 2, n_e_st_re + 1, n_e_st_re + 3))
                         n_e_st_re += 4
                     elif strip.bpm_shotsettings.shot_state == 'COMPOSITING':
-                        vertices_e_st_co += (v1, v2, v3, v4)
+                        vertices_e_st_co += (v1st, v2st, v3st, v4st)
                         indices_e_st_co += ((n_e_st_co, n_e_st_co + 1, n_e_st_co + 2), (n_e_st_co + 2, n_e_st_co + 1, n_e_st_co + 3))
                         n_e_st_co += 4
                     elif strip.bpm_shotsettings.shot_state == 'FINISHED':
-                        vertices_e_st_fi += (v1, v2, v3, v4)
+                        vertices_e_st_fi += (v1st, v2st, v3st, v4st)
                         indices_e_st_fi += ((n_e_st_fi, n_e_st_fi + 1, n_e_st_fi + 2), (n_e_st_fi + 2, n_e_st_fi + 1, n_e_st_fi + 3))
                         n_e_st_fi += 4
 
-
+                # bpm shot audio sync
+                if scene_settings.display_audio_sync:
+                    if strip.bpm_shotsettings.auto_audio_sync:
+                        vertices_e_au += getInfoZoneStrip(*v2)
+                        indices_e_au += ((n_e_au, n_e_au + 1, n_e_au + 2), (n_e_au + 2, n_e_au + 1, n_e_au + 3))
+                        n_e_au += 4
+                        
                 # bpm need to update
                 if scene_settings.display_shot_update_warning:
                     if getStripNeedUpdate(strip):
@@ -374,6 +397,10 @@ def drawBpmSequencerCallbackPx():
         drawShader(vertices_e_st_re, indices_e_st_re, color_e_st_re)
         drawShader(vertices_e_st_co, indices_e_st_co, color_e_st_co)
         drawShader(vertices_e_st_fi, indices_e_st_fi, color_e_st_fi)
+
+    # audio sync info
+    if scene_settings.display_audio_sync:
+        drawShader(vertices_e_au, indices_e_au, color_e_au)
 
     # update warning
     if scene_settings.display_shot_update_warning:
