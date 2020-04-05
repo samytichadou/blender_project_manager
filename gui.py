@@ -75,6 +75,7 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
         drawWikiHelp(row, 'Extra-UI-in-Sequencer')
         if scn_settings.extra_ui:
             layout.prop(scn_settings, 'display_shot_strip')
+            layout.prop(scn_settings, 'display_shot_state')
             layout.prop(scn_settings, 'display_shot_update_warning')
             layout.prop(scn_settings, 'display_shot_version_warning')
             layout.prop(scn_settings, 'display_markers')

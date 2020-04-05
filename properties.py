@@ -25,6 +25,7 @@ shot_state_items = [
         ('LIGHTING', 'Lighting', ""),
         ('RENDERING', 'Rendering', ""),
         ('COMPOSITING', 'Compositing', ""),
+        ('FINISHED', 'Finished', ""),
         ]
 
 
@@ -60,7 +61,7 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
 
 
-# shot settings
+# shot settings strips
 class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_shot : bpy.props.BoolProperty(default=False)
@@ -71,7 +72,7 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     not_last_version : bpy.props.BoolProperty(default=False)
     auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=False, update = updateShotSettingsStripsProperties)
 
-# shot settings
+# shot settings file
 class BPMShotSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_shot : bpy.props.BoolProperty(default=False)
@@ -87,6 +88,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     extra_ui : bpy.props.BoolProperty(name = "Extra UI", default=True)
     display_shot_strip : bpy.props.BoolProperty(name = "Shot strips", default=True)
+    display_shot_state : bpy.props.BoolProperty(name = "Shot state", default=True)
     display_marker_items = [
         ('NONE', 'None', ""),
         ('SELECTED', 'Selected', ""),

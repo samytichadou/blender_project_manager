@@ -163,6 +163,7 @@ def drawBpmSequencerCallbackPx():
     vertices_m = ()
     indices_m = ()
     color_m = (1, 1, 1, 1)
+    n_m = 0
 
     # setup markers text
     #text_size = int(12 * dpi_fac)
@@ -176,6 +177,7 @@ def drawBpmSequencerCallbackPx():
     vertices_m_bb = ()
     indices_m_bb = ()
     color_m_bb = (0, 0, 0, 0.5)
+    n_m_bb = 0
 
     # setup extras
 
@@ -183,31 +185,60 @@ def drawBpmSequencerCallbackPx():
     vertices_e_s = ()
     indices_e_s = ()
     color_e_s = (0, 1, 0, 0.25)
+    n_e_s = 0
 
     # bpm shots state
-    vertices_e_st = ()
-    indices_e_st = ()
-    color_e_st = (0, 1, 0, 0.25)
+    state_alpha = 1.0
+    #storyboard
+    vertices_e_st_st = ()
+    indices_e_st_st = ()
+    color_e_st_st = (0.996, 0.898, 0.0, state_alpha)
+    n_e_st_st = 0
+    #layout
+    vertices_e_st_la = ()
+    indices_e_st_la = ()
+    color_e_st_la = (0.996, 0.431, 0.0, state_alpha)
+    n_e_st_la = 0
+    #animation
+    vertices_e_st_an = ()
+    indices_e_st_an = ()
+    color_e_st_an = (0.413, 0.002, 0.006, state_alpha)
+    n_e_st_an = 0
+    #lighting
+    vertices_e_st_li = ()
+    indices_e_st_li = ()
+    color_e_st_li = (0.0, 0.996, 0.98, state_alpha)
+    n_e_st_li = 0
+    #rendering
+    vertices_e_st_re = ()
+    indices_e_st_re = ()
+    color_e_st_re = (0.0, 0.424, 0.996, state_alpha)
+    n_e_st_re = 0
+    #compositing
+    vertices_e_st_co = ()
+    indices_e_st_co = ()
+    color_e_st_co = (0.0, 0.0, 0.25, state_alpha)
+    n_e_st_co = 0
+    #finished
+    vertices_e_st_fi = ()
+    indices_e_st_fi = ()
+    color_e_st_fi = (0.0, 0.386, 0.0, state_alpha)
+    n_e_st_fi = 0
 
     # warning update bpm shots
     vertices_e_w = ()
     indices_e_w = ()
     color_e_w = (1, 0, 0, 1)
+    n_e_w = 0
 
     # warning version bpm shots
     vertices_e_v_w = ()
     indices_e_v_w = ()
     color_e_v_w = (0, 0, 1, 1)
+    n_e_v_w = 0
 
     # iterate through strips
     bgl.glEnable(bgl.GL_BLEND) # enable transparency
-
-    n_e_s = 0
-    n_e_st = 0
-    n_e_w = 0
-    n_e_v_w = 0
-    n_m = 0
-    n_m_bb = 0
 
     ### COMPUTE TIMELINE ###
     for strip in sequencer.sequences_all:
@@ -216,34 +247,61 @@ def drawBpmSequencerCallbackPx():
             display_need_update = False            
             if strip.bpm_shotsettings.is_shot:
 
+                x1, y1, x2, y2 = getStripRectangle(strip)
+
                 # bpm shot
                 if scene_settings.display_shot_strip:
-                    x1, y1, x2, y2 = getStripRectangle(strip)
-                    y1 += 0.6
+                        
+                    y1s = y1 + 0.6
 
-                    v1 = region.view2d.view_to_region(x1, y1, clip=False)
-                    v2 = region.view2d.view_to_region(x2, y1, clip=False)
+                    v1 = region.view2d.view_to_region(x1, y1s, clip=False)
+                    v2 = region.view2d.view_to_region(x2, y1s, clip=False)
                     v3 = region.view2d.view_to_region(x1, y2, clip=False)
                     v4 = region.view2d.view_to_region(x2, y2, clip=False)
 
-                    if scene_settings.display_shot_strip:
-                        vertices_e_s += (v1, v2, v3, v4)
-                        indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
-                        n_e_s += 4
+                    vertices_e_s += (v1, v2, v3, v4)
+                    indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
+                    n_e_s += 4
 
                 # bpm shot state
                 if scene_settings.display_shot_state:
-                    y1 += 0.6
 
-                    v1 = region.view2d.view_to_region(x1, y1, clip=False)
-                    v2 = region.view2d.view_to_region(x2, y1, clip=False)
-                    v3 = region.view2d.view_to_region(x1, y2, clip=False)
-                    v4 = region.view2d.view_to_region(x2, y2, clip=False)
+                    y1st = y1 + 0.55
+                    y2st = y2 - 0.3
 
-                    if scene_settings.display_shot_strip:
-                        vertices_e_st += (v1, v2, v3, v4)
-                        indices_e_st += ((n_e_st, n_e_st + 1, n_e_st + 2), (n_e_st + 2, n_e_st + 1, n_e_st + 3))
-                        n_e_st += 4
+                    v1 = region.view2d.view_to_region(x1, y1st, clip=False)
+                    v2 = region.view2d.view_to_region(x2, y1st, clip=False)
+                    v3 = region.view2d.view_to_region(x1, y2st, clip=False)
+                    v4 = region.view2d.view_to_region(x2, y2st, clip=False)
+
+                    if strip.bpm_shotsettings.shot_state == 'STORYBOARD':
+                        vertices_e_st_st += (v1, v2, v3, v4)
+                        indices_e_st_st += ((n_e_st_st, n_e_st_st + 1, n_e_st_st + 2), (n_e_st_st + 2, n_e_st_st + 1, n_e_st_st + 3))
+                        n_e_st_st += 4
+                    elif strip.bpm_shotsettings.shot_state == 'LAYOUT':
+                        vertices_e_st_la += (v1, v2, v3, v4)
+                        indices_e_st_la += ((n_e_st_la, n_e_st_la + 1, n_e_st_la + 2), (n_e_st_la + 2, n_e_st_la + 1, n_e_st_la + 3))
+                        n_e_st_la += 4
+                    elif strip.bpm_shotsettings.shot_state == 'ANIMATION':
+                        vertices_e_st_an += (v1, v2, v3, v4)
+                        indices_e_st_an += ((n_e_st_an, n_e_st_an + 1, n_e_st_an + 2), (n_e_st_an + 2, n_e_st_an + 1, n_e_st_an + 3))
+                        n_e_st_an += 4
+                    elif strip.bpm_shotsettings.shot_state == 'LIGHTING':
+                        vertices_e_st_li += (v1, v2, v3, v4)
+                        indices_e_st_li += ((n_e_st_li, n_e_st_li + 1, n_e_st_li + 2), (n_e_st_li + 2, n_e_st_li + 1, n_e_st_li + 3))
+                        n_e_st_li += 4
+                    elif strip.bpm_shotsettings.shot_state == 'RENDERING':
+                        vertices_e_st_re += (v1, v2, v3, v4)
+                        indices_e_st_re += ((n_e_st_re, n_e_st_re + 1, n_e_st_re + 2), (n_e_st_re + 2, n_e_st_re + 1, n_e_st_re + 3))
+                        n_e_st_re += 4
+                    elif strip.bpm_shotsettings.shot_state == 'COMPOSITING':
+                        vertices_e_st_co += (v1, v2, v3, v4)
+                        indices_e_st_co += ((n_e_st_co, n_e_st_co + 1, n_e_st_co + 2), (n_e_st_co + 2, n_e_st_co + 1, n_e_st_co + 3))
+                        n_e_st_co += 4
+                    elif strip.bpm_shotsettings.shot_state == 'FINISHED':
+                        vertices_e_st_fi += (v1, v2, v3, v4)
+                        indices_e_st_fi += ((n_e_st_fi, n_e_st_fi + 1, n_e_st_fi + 2), (n_e_st_fi + 2, n_e_st_fi + 1, n_e_st_fi + 3))
+                        n_e_st_fi += 4
 
 
                 # bpm need to update
@@ -299,13 +357,23 @@ def drawBpmSequencerCallbackPx():
     
     ### DRAW SHADERS ###
 
+    bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE)
     
-    # extras
+    #shot strips
     if scene_settings.display_shot_strip:
-        bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE)
         drawShader(vertices_e_s, indices_e_s, color_e_s)
 
-        bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE_MINUS_SRC_ALPHA)
+    bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE_MINUS_SRC_ALPHA)
+
+    #shot state
+    if scene_settings.display_shot_state:
+        drawShader(vertices_e_st_st, indices_e_st_st, color_e_st_st)
+        drawShader(vertices_e_st_la, indices_e_st_la, color_e_st_la)
+        drawShader(vertices_e_st_an, indices_e_st_an, color_e_st_an)
+        drawShader(vertices_e_st_li, indices_e_st_li, color_e_st_li)
+        drawShader(vertices_e_st_re, indices_e_st_re, color_e_st_re)
+        drawShader(vertices_e_st_co, indices_e_st_co, color_e_st_co)
+        drawShader(vertices_e_st_fi, indices_e_st_fi, color_e_st_fi)
 
     # update warning
     if scene_settings.display_shot_update_warning:
