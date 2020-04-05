@@ -5,6 +5,7 @@ import bgl
 from gpu_extras.batch import batch_for_shader
 
 
+from .functions.strip_functions import returnShotStrips
 from .global_variables import (
                             font_file, 
                             add_extra_ui_statement, 
@@ -255,128 +256,126 @@ def drawBpmSequencerCallbackPx():
     bgl.glEnable(bgl.GL_BLEND) # enable transparency
 
     ### COMPUTE TIMELINE ###
-    for strip in sequencer.sequences_all:
+    for strip in returnShotStrips(sequencer):
 
-        if strip.type in {'SCENE'}:
-            display_need_update = False            
-            if strip.bpm_shotsettings.is_shot:
+        display_need_update = False                       
 
-                x1, y1, x2, y2 = getStripRectangle(strip)
+        x1, y1, x2, y2 = getStripRectangle(strip)
 
-                v1 = region.view2d.view_to_region(x1, y1, clip=False)
-                v2 = region.view2d.view_to_region(x2, y1, clip=False)
-                v3 = region.view2d.view_to_region(x1, y2, clip=False)
-                v4 = region.view2d.view_to_region(x2, y2, clip=False)
+        v1 = region.view2d.view_to_region(x1, y1, clip=False)
+        v2 = region.view2d.view_to_region(x2, y1, clip=False)
+        v3 = region.view2d.view_to_region(x1, y2, clip=False)
+        v4 = region.view2d.view_to_region(x2, y2, clip=False)
 
-                # bpm shot
-                if scene_settings.display_shot_strip:
-                        
-                    y1s = y1 + 0.6
+        # bpm shot
+        if scene_settings.display_shot_strip:
+                
+            y1s = y1 + 0.6
 
-                    v1s = region.view2d.view_to_region(x1, y1s, clip=False)
-                    v2s = region.view2d.view_to_region(x2, y1s, clip=False)
+            v1s = region.view2d.view_to_region(x1, y1s, clip=False)
+            v2s = region.view2d.view_to_region(x2, y1s, clip=False)
 
-                    vertices_e_s += (v1s, v2s, v3, v4)
-                    indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
-                    n_e_s += 4
+            vertices_e_s += (v1s, v2s, v3, v4)
+            indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
+            n_e_s += 4
 
-                # bpm shot state
-                if scene_settings.display_shot_state:
+        # bpm shot state
+        if scene_settings.display_shot_state:
 
-                    y1st = y1 + 0.55
-                    y2st = y2 - 0.3
+            y1st = y1 + 0.55
+            y2st = y2 - 0.3
 
-                    v1st = region.view2d.view_to_region(x1, y1st, clip=False)
-                    v2st = region.view2d.view_to_region(x2, y1st, clip=False)
-                    v3st = region.view2d.view_to_region(x1, y2st, clip=False)
-                    v4st = region.view2d.view_to_region(x2, y2st, clip=False)
+            v1st = region.view2d.view_to_region(x1, y1st, clip=False)
+            v2st = region.view2d.view_to_region(x2, y1st, clip=False)
+            v3st = region.view2d.view_to_region(x1, y2st, clip=False)
+            v4st = region.view2d.view_to_region(x2, y2st, clip=False)
 
-                    if strip.bpm_shotsettings.shot_state == 'STORYBOARD':
-                        vertices_e_st_st += (v1st, v2st, v3st, v4st)
-                        indices_e_st_st += ((n_e_st_st, n_e_st_st + 1, n_e_st_st + 2), (n_e_st_st + 2, n_e_st_st + 1, n_e_st_st + 3))
-                        n_e_st_st += 4
-                    elif strip.bpm_shotsettings.shot_state == 'LAYOUT':
-                        vertices_e_st_la += (v1st, v2st, v3st, v4st)
-                        indices_e_st_la += ((n_e_st_la, n_e_st_la + 1, n_e_st_la + 2), (n_e_st_la + 2, n_e_st_la + 1, n_e_st_la + 3))
-                        n_e_st_la += 4
-                    elif strip.bpm_shotsettings.shot_state == 'ANIMATION':
-                        vertices_e_st_an += (v1st, v2st, v3st, v4st)
-                        indices_e_st_an += ((n_e_st_an, n_e_st_an + 1, n_e_st_an + 2), (n_e_st_an + 2, n_e_st_an + 1, n_e_st_an + 3))
-                        n_e_st_an += 4
-                    elif strip.bpm_shotsettings.shot_state == 'LIGHTING':
-                        vertices_e_st_li += (v1st, v2st, v3st, v4st)
-                        indices_e_st_li += ((n_e_st_li, n_e_st_li + 1, n_e_st_li + 2), (n_e_st_li + 2, n_e_st_li + 1, n_e_st_li + 3))
-                        n_e_st_li += 4
-                    elif strip.bpm_shotsettings.shot_state == 'RENDERING':
-                        vertices_e_st_re += (v1st, v2st, v3st, v4st)
-                        indices_e_st_re += ((n_e_st_re, n_e_st_re + 1, n_e_st_re + 2), (n_e_st_re + 2, n_e_st_re + 1, n_e_st_re + 3))
-                        n_e_st_re += 4
-                    elif strip.bpm_shotsettings.shot_state == 'COMPOSITING':
-                        vertices_e_st_co += (v1st, v2st, v3st, v4st)
-                        indices_e_st_co += ((n_e_st_co, n_e_st_co + 1, n_e_st_co + 2), (n_e_st_co + 2, n_e_st_co + 1, n_e_st_co + 3))
-                        n_e_st_co += 4
-                    elif strip.bpm_shotsettings.shot_state == 'FINISHED':
-                        vertices_e_st_fi += (v1st, v2st, v3st, v4st)
-                        indices_e_st_fi += ((n_e_st_fi, n_e_st_fi + 1, n_e_st_fi + 2), (n_e_st_fi + 2, n_e_st_fi + 1, n_e_st_fi + 3))
-                        n_e_st_fi += 4
+            if strip.bpm_shotsettings.shot_state == 'STORYBOARD':
+                vertices_e_st_st += (v1st, v2st, v3st, v4st)
+                indices_e_st_st += ((n_e_st_st, n_e_st_st + 1, n_e_st_st + 2), (n_e_st_st + 2, n_e_st_st + 1, n_e_st_st + 3))
+                n_e_st_st += 4
+            elif strip.bpm_shotsettings.shot_state == 'LAYOUT':
+                vertices_e_st_la += (v1st, v2st, v3st, v4st)
+                indices_e_st_la += ((n_e_st_la, n_e_st_la + 1, n_e_st_la + 2), (n_e_st_la + 2, n_e_st_la + 1, n_e_st_la + 3))
+                n_e_st_la += 4
+            elif strip.bpm_shotsettings.shot_state == 'ANIMATION':
+                vertices_e_st_an += (v1st, v2st, v3st, v4st)
+                indices_e_st_an += ((n_e_st_an, n_e_st_an + 1, n_e_st_an + 2), (n_e_st_an + 2, n_e_st_an + 1, n_e_st_an + 3))
+                n_e_st_an += 4
+            elif strip.bpm_shotsettings.shot_state == 'LIGHTING':
+                vertices_e_st_li += (v1st, v2st, v3st, v4st)
+                indices_e_st_li += ((n_e_st_li, n_e_st_li + 1, n_e_st_li + 2), (n_e_st_li + 2, n_e_st_li + 1, n_e_st_li + 3))
+                n_e_st_li += 4
+            elif strip.bpm_shotsettings.shot_state == 'RENDERING':
+                vertices_e_st_re += (v1st, v2st, v3st, v4st)
+                indices_e_st_re += ((n_e_st_re, n_e_st_re + 1, n_e_st_re + 2), (n_e_st_re + 2, n_e_st_re + 1, n_e_st_re + 3))
+                n_e_st_re += 4
+            elif strip.bpm_shotsettings.shot_state == 'COMPOSITING':
+                vertices_e_st_co += (v1st, v2st, v3st, v4st)
+                indices_e_st_co += ((n_e_st_co, n_e_st_co + 1, n_e_st_co + 2), (n_e_st_co + 2, n_e_st_co + 1, n_e_st_co + 3))
+                n_e_st_co += 4
+            elif strip.bpm_shotsettings.shot_state == 'FINISHED':
+                vertices_e_st_fi += (v1st, v2st, v3st, v4st)
+                indices_e_st_fi += ((n_e_st_fi, n_e_st_fi + 1, n_e_st_fi + 2), (n_e_st_fi + 2, n_e_st_fi + 1, n_e_st_fi + 3))
+                n_e_st_fi += 4
 
-                # bpm shot audio sync
-                if scene_settings.display_audio_sync:
-                    if strip.bpm_shotsettings.auto_audio_sync:
-                        vertices_e_au += getInfoZoneStrip(*v2)
-                        indices_e_au += ((n_e_au, n_e_au + 1, n_e_au + 2), (n_e_au + 2, n_e_au + 1, n_e_au + 3))
-                        n_e_au += 4
-                        
-                # bpm need to update
-                if scene_settings.display_shot_update_warning:
-                    if getStripNeedUpdate(strip):
-                        display_need_update = True
-                        vertices_e_w += getWarningZoneStrip(*v4)
-                        indices_e_w += ((n_e_w, n_e_w + 1, n_e_w + 2), (n_e_w + 2, n_e_w + 1, n_e_w + 3))
-                        n_e_w += 4
+        # bpm shot audio sync
+        if scene_settings.display_audio_sync:
+            if strip.bpm_shotsettings.auto_audio_sync:
+                vertices_e_au += getInfoZoneStrip(*v2)
+                indices_e_au += ((n_e_au, n_e_au + 1, n_e_au + 2), (n_e_au + 2, n_e_au + 1, n_e_au + 3))
+                n_e_au += 4
+                
+        # bpm need to update
+        if scene_settings.display_shot_update_warning:
+            if getStripNeedUpdate(strip):
+                display_need_update = True
+                vertices_e_w += getWarningZoneStrip(*v4)
+                indices_e_w += ((n_e_w, n_e_w + 1, n_e_w + 2), (n_e_w + 2, n_e_w + 1, n_e_w + 3))
+                n_e_w += 4
 
-                # bpm not last version
-                if scene_settings.display_shot_version_warning:
-                    if strip.bpm_shotsettings.not_last_version:
-                        if display_need_update:
-                            vertices_e_v_w += getSecondWarningZoneStrip(*v4)
-                            indices_e_v_w += ((n_e_v_w, n_e_v_w + 1, n_e_v_w + 2), (n_e_v_w + 2, n_e_v_w + 1, n_e_v_w + 3))
-                            n_e_v_w += 4
-                        else:
-                            vertices_e_v_w += getWarningZoneStrip(*v4)
-                            indices_e_v_w += ((n_e_v_w, n_e_v_w + 1, n_e_v_w + 2), (n_e_v_w + 2, n_e_v_w + 1, n_e_v_w + 3))
-                            n_e_v_w += 4
+        # bpm not last version
+        if scene_settings.display_shot_version_warning:
+            if strip.bpm_shotsettings.not_last_version:
+                if display_need_update:
+                    vertices_e_v_w += getSecondWarningZoneStrip(*v4)
+                    indices_e_v_w += ((n_e_v_w, n_e_v_w + 1, n_e_v_w + 2), (n_e_v_w + 2, n_e_v_w + 1, n_e_v_w + 3))
+                    n_e_v_w += 4
+                else:
+                    vertices_e_v_w += getWarningZoneStrip(*v4)
+                    indices_e_v_w += ((n_e_v_w, n_e_v_w + 1, n_e_v_w + 2), (n_e_v_w + 2, n_e_v_w + 1, n_e_v_w + 3))
+                    n_e_v_w += 4
 
-                if strip.scene:
+        if strip.scene:
 
-                    # markers
-                    if m_display != 'NONE' :
-                        if (m_display == 'SELECTED' and strip.select) \
-                        or (m_display == 'PERSTRIP' and strip.bpm_shotsettings.display_markers) \
-                        or (m_display == 'ALL'):
-                            for m in getMarkerFrameFromShotStrip(strip):
-                                coord = getMarkerCoordinates(m[1], strip.channel, region, dpi_fac)
-                                vertices_m += coord[0]
-                                indices_m += ((n_m, n_m + 1, n_m + 2),)
-                                n_m += 3   
+            # markers
+            if m_display != 'NONE' :
+                if (m_display == 'SELECTED' and strip.select) \
+                or (m_display == 'PERSTRIP' and strip.bpm_shotsettings.display_markers) \
+                or (m_display == 'ALL'):
+                    for m in getMarkerFrameFromShotStrip(strip):
+                        coord = getMarkerCoordinates(m[1], strip.channel, region, dpi_fac)
+                        vertices_m += coord[0]
+                        indices_m += ((n_m, n_m + 1, n_m + 2),)
+                        n_m += 3   
 
-                                # markers text
-                                if (mn_display == "ALL") \
-                                or (mn_display == "CURRENT" and scn.frame_current == m[1]):
-                                    text = m[0]
-                                    limit = scene_settings.display_marker_text_limit
-                                    if len(text) > limit and limit != 0:
-                                        if limit > 4:
-                                            text = text[0:limit - 3] + "..."
-                                        else:
-                                            text = text[0:limit]
-                                    marker_texts.append((coord[1], text))
+                        # markers text
+                        if (mn_display == "ALL") \
+                        or (mn_display == "CURRENT" and scn.frame_current == m[1]):
+                            text = m[0]
+                            limit = scene_settings.display_marker_text_limit
+                            if len(text) > limit and limit != 0:
+                                if limit > 4:
+                                    text = text[0:limit - 3] + "..."
+                                else:
+                                    text = text[0:limit]
+                            marker_texts.append((coord[1], text))
 
-                                    # marker box
-                                    if scene_settings.display_marker_boxes:
-                                        vertices_m_bb += getBoundingBoxCoordinates(coord[1], text, text_size, dpi_fac)
-                                        indices_m_bb += ((n_m_bb, n_m_bb + 1, n_m_bb + 2), (n_m_bb + 2, n_m_bb + 1, n_m_bb + 3))
-                                        n_m_bb += 4
+                            # marker box
+                            if scene_settings.display_marker_boxes:
+                                vertices_m_bb += getBoundingBoxCoordinates(coord[1], text, text_size, dpi_fac)
+                                indices_m_bb += ((n_m_bb, n_m_bb + 1, n_m_bb + 2), (n_m_bb + 2, n_m_bb + 1, n_m_bb + 3))
+                                n_m_bb += 4
     
     ### DRAW SHADERS ###
 

@@ -83,7 +83,7 @@ def getShotMarkerPosition(marker_frame, shot_strip, marker_scn):
     return shot_frame
 
 
-# get list of sequencer shot and libs
+# get list of sequencer shots names and libs
 def getListSequencerShots(sequencer):
     shot_list = []
     lib_list = []
@@ -113,3 +113,13 @@ def createSequencer(scene):
         scene.sequence_editor_create()
         return True
     return False
+
+
+# return all shot strips in sequencer
+def returnShotStrips(sequencer):
+    shot_list = []
+    for strip in sequencer.sequences_all:
+        if strip.type in {'SCENE'}:
+            if strip.bpm_shotsettings.is_shot:
+                shot_list.append(strip)
+    return shot_list

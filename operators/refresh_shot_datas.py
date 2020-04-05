@@ -17,6 +17,7 @@ class BPMRefreshShotDatasEdit(bpy.types.Operator):
         # import statements and functions
         from ..functions.json_functions import read_json
         from ..functions.project_data_functions import loadJsonDataToDataset
+        from ..functions.strip_functions import returnShotStrips
         from ..global_variables import (
                                     shot_file,
                                 )
@@ -29,20 +30,15 @@ class BPMRefreshShotDatasEdit(bpy.types.Operator):
         general_settings.bypass_update_tag = True
 
         # iterate through timeline strips
-        for strip in scn.sequence_editor.sequences_all:
+        for strip in returnShotStrips(scn.sequence_editor):
 
-            if strip.type in {'SCENE'}:
-                shot_settings = strip.bpm_shotsettings
+            # get json path
+            shot_folder = os.path.dirname(strip.scene.library.filepath)
+            shot_json = os.path.join(shot_folder, shot_file)
 
-                if shot_settings.is_shot:
-
-                    # get json path
-                    shot_folder = os.path.dirname(strip.scene.library.filepath)
-                    shot_json = os.path.join(shot_folder, shot_file)
-
-                    # set json datas
-                    if os.path.isfile(shot_json):
-                        loadJsonDataToDataset(winman, shot_settings, shot_json, avoid_list)
+            # set json datas
+            if os.path.isfile(shot_json):
+                loadJsonDataToDataset(winman, strip.bpm_shotsettings, shot_json, avoid_list)
 
         general_settings.bypass_update_tag = False
 
