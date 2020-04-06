@@ -135,6 +135,12 @@ def register():
     bpy.types.Scene.bpm_scenesettings = \
         bpy.props.PointerProperty(type = BPMSceneSettings, name="BPM scene settings")
 
+    bpy.types.Collection.bpm_isasset = \
+        bpy.props.BoolProperty(default = False)
+
+    bpy.types.ShaderNodeTree.bpm_isasset = \
+        bpy.props.BoolProperty(default = False)
+
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
 
@@ -162,6 +168,10 @@ def unregister():
     del bpy.types.SceneSequence.bpm_shotsettings
 
     del bpy.types.Scene.bpm_scenesettings
+
+    del bpy.types.Collection.bpm_isasset
+
+    del bpy.types.ShaderNodeTree.bpm_isasset
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
