@@ -159,9 +159,22 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
         ('NONE', 'None', ""),
         ]
     file_type : bpy.props.EnumProperty(items = file_type, default='NONE')
+    project_folder : bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
+
     debug : bpy.props.BoolProperty(default=True)
     show_debug_props : bpy.props.BoolProperty(name = 'Debug properties', default=False)
-    custom_folders_index : bpy.props.IntProperty(update = updateFilebrowserPath)
-    project_folder : bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
-    ui_shot_state_subpanel : bpy.props.BoolProperty(name = "Display state colors", default=False)
+
     bypass_update_tag : bpy.props.BoolProperty(default=False)
+
+    custom_folders_index : bpy.props.IntProperty(update = updateFilebrowserPath)
+
+    ui_shot_state_subpanel : bpy.props.BoolProperty(name = "Display state colors", default=False)
+
+    asset_type_display_items = [
+        ('ALL', 'All', ""),
+        ('CHARACTER', 'Character', ""),
+        ('PROP', 'Prop', ""),
+        ('SET', 'Set', ""),
+        ('SHADER', 'Shader', ""),
+        ]
+    shot_panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL')

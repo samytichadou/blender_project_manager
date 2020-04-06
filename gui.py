@@ -163,7 +163,6 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT' and chk_isshot
 
     def draw(self, context):
-        winman = context.window_manager
         active = context.scene.sequence_editor.active_strip
         general_settings = context.window_manager.bpm_generalsettings
         shot_settings = active.bpm_shotsettings
@@ -194,6 +193,49 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
 
         drawDebugPanel(layout, shot_settings, general_settings)#debug
+
+
+# sequencer shot assets panel
+class BPM_PT_sequencer_shot_asset_panel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "Shot Assets"
+    bl_idname = "BPM_PT_sequencer_shot_asset_panel"
+    bl_category = "BPM"
+    #bl_parent_id = "BPM_PT_sequencer_shot_panel"
+
+    @classmethod
+    def poll(cls, context):
+        chk_isshot = False
+        if context.scene.sequence_editor:
+            if context.scene.sequence_editor.active_strip:
+                active = context.scene.sequence_editor.active_strip
+                try:
+                    if active.bpm_shotsettings.is_shot:
+                        chk_isshot = True
+                except AttributeError:
+                    return False
+        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT' and chk_isshot
+
+    def draw(self, context):
+        winman = context.window_manager
+        active = context.scene.sequence_editor.active_strip
+        general_settings = winman.bpm_generalsettings
+        asset_list = winman.bpm_assets
+
+        layout = self.layout
+        layout.prop(general_settings, 'shot_panel_asset_display', text="")
+
+        for asset in asset_list:
+            if general_settings.shot_panel_asset_display == 'ALL':
+                row = layout.row(align=True)
+                row.label(text = asset.name)
+                row.label(text = asset.asset_type)
+            else:
+                if asset.asset_type == general_settings.shot_panel_asset_display:
+                    row = layout.row(align=True)
+                    row.label(text = asset.name)
+                    row.label(text = asset.asset_type)
 
 
 # shot settings panel
@@ -255,7 +297,8 @@ class BPM_PT_properties_asset_panel(bpy.types.Panel):
             target_prop = 'asset_material'
 
         layout.prop(asset_settings, target_prop, text='')
-
+        
+        #debug
         box = layout.box()
 
         box.label(text = 'Debug', icon = 'ERROR')
