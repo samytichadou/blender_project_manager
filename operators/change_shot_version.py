@@ -102,8 +102,8 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
         shot_folder_path = os.path.dirname(old_version_shot_filepath)
         old_version_shot_file = os.path.basename(old_version_shot_filepath)
         old_version_shot_name = os.path.splitext(old_version_shot_file)[0]
-        shot_pattern = old_version_shot_name[:-(proj_datas.shot_version_digits)]
-        target_shot_name = shot_pattern + str(self.version_number).zfill(proj_datas.shot_version_digits)
+        shot_pattern = old_version_shot_name[:-(proj_datas.version_digits)]
+        target_shot_name = shot_pattern + str(self.version_number).zfill(proj_datas.version_digits)
         target_shot_path = os.path.join(shot_folder_path, target_shot_name + ".blend")
 
         if not os.path.isfile(target_shot_path):

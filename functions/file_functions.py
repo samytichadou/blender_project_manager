@@ -57,8 +57,8 @@ def deleteFolderContent(folder):
 # get next shot
 def getNextShot(winman, project_datas, pattern, shot_version, shot_folder):
     shot_digits = project_datas.shot_digits
-    version_suffix = project_datas.shot_version_suffix
-    version_digits = project_datas.shot_version_digits
+    version_suffix = project_datas.version_suffix
+    version_digits = project_datas.version_digits
 
     version = ""
     if not pattern.endswith("_"):

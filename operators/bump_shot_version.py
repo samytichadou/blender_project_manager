@@ -78,12 +78,12 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         shot_folder_path = os.path.dirname(old_version_shot_filepath)
         old_version_shot_file = os.path.basename(old_version_shot_filepath)
         old_version_shot_name = os.path.splitext(old_version_shot_file)[0]
-        shot_pattern = old_version_shot_name[:-(proj_datas.shot_version_digits)]
-        new_shot_name = shot_pattern + str(shot_settings.shot_version).zfill(proj_datas.shot_version_digits)
+        shot_pattern = old_version_shot_name[:-(proj_datas.version_digits)]
+        new_shot_name = shot_pattern + str(shot_settings.shot_version).zfill(proj_datas.version_digits)
         new_shot_path = os.path.join(shot_folder_path, new_shot_name + ".blend")
 
         if self.file_to_copy == 'LAST':
-            last_version_name = shot_pattern + str(shot_settings.shot_last_version).zfill(proj_datas.shot_version_digits)
+            last_version_name = shot_pattern + str(shot_settings.shot_last_version).zfill(proj_datas.version_digits)
             old_version_shot_filepath = os.path.join(shot_folder_path, last_version_name + ".blend")
 
         # bump shot last version number and make it last version
