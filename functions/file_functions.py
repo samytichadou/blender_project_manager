@@ -116,3 +116,10 @@ def createFolder(dir_path) :
     path = absolutePath(dir_path)
     if not os.path.isdir(path):
             os.makedirs(path)
+
+
+# get blend name
+def getBlendName():
+    file_name = os.path.basename(bpy.data.filepath)
+    name = os.path.splitext(file_name)[0]
+    return name

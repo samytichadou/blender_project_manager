@@ -33,6 +33,7 @@ from .global_variables import (
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
 from .functions.audio_sync_functions import autoSyncAudioShot
+from .functions.file_functions import getBlendName
 
 
 ### HANDLER ###
@@ -53,6 +54,9 @@ def bpmStartupHandler(scene):
             general_settings.project_folder = project_folder
             if general_settings.debug: print(loaded_project_folder + project_folder) #debug
 
+
+            ### common loading ###
+
             # load project custom folders
             custom_folders_file, is_folder_file = getCustomFoldersFile(winman)
             if is_folder_file:
@@ -62,12 +66,16 @@ def bpmStartupHandler(scene):
                 if general_settings.debug: print(loaded_folders_statement) #debug
 
             # load available assets
-            asset_file, is_asset_file = getAssetFile(winman)
-            if is_asset_file:
-                if general_settings.debug: print(assets_loading_statement + asset_file) #debug
-                asset_coll = winman.bpm_assets
-                loadJsonInCollection(winman, asset_file, asset_coll, 'assets')
-                if general_settings.debug: print(assets_loaded_statement) #debug
+            if general_settings.file_type in {'EDIT', 'SHOT'}:
+                asset_file = getAssetFile(winman)
+                if asset_file is not None:
+                    if general_settings.debug: print(assets_loading_statement + asset_file) #debug
+                    asset_coll = winman.bpm_assets
+                    loadJsonInCollection(winman, asset_file, asset_coll, 'assets')
+                    if general_settings.debug: print(assets_loaded_statement) #debug
+
+
+            ### specific loading ###
 
             # load edit settings
             if general_settings.file_type == 'EDIT':
@@ -100,6 +108,11 @@ def bpmStartupHandler(scene):
                 # no json error
                 else: 
                     if general_settings.debug: print(missing_shot_file_statement) #debug
+
+            # load asset settings
+            elif general_settings.file_type == 'ASSET':
+                asset_settings = winman.bpm_assetsettings
+                asset_settings.name = getBlendName()
 
         else:
             if general_settings.debug: print(no_datas_statement) #debug

@@ -3,7 +3,7 @@ import bpy
 
 from .functions.filebrowser_update_function import updateFilebrowserPath
 from .functions.shot_settings_json_update_function import updateShotSettingsProperties
-from .functions.asset_assigning_update_function import updateAssetAssigning, updateChangingAssetType
+from .functions.asset_assigning_update_function import updateAssetAssigning, updateChangingAssetType, saveAssetToJson
 
 
 asset_type_items = [
@@ -61,13 +61,15 @@ class BPMAssetList(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER')
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
+    asset_collection : bpy.props.StringProperty(name="Asset collection name")
+    asset_material : bpy.props.StringProperty(name="Asset material name")
 
 
 # asset settings
 class BPMAssetSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER', update = updateChangingAssetType)
-    asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
+    asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT', update = saveAssetToJson)
     asset_collection : bpy.props.PointerProperty(name="Asset collection", type=bpy.types.Collection, update = updateAssetAssigning)
     asset_material : bpy.props.PointerProperty(name="Asset material", type=bpy.types.Material, update = updateAssetAssigning)
     

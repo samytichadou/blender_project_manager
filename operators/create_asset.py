@@ -57,11 +57,11 @@ class BPMCreateAsset(bpy.types.Operator):
         if general_settings.debug: print(creating_asset_statement + self.name) #debug
 
         # get json file path
-        asset_file_path, is_asset_file = getAssetFile(winman)
+        asset_file_path = getAssetFile(winman)
 
         # check json file if existing and get datas
 
-        if is_asset_file:
+        if asset_file_path is not None:
 
             if general_settings.debug: print(reading_json_statement + asset_file_path) #debug
 
