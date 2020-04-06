@@ -46,7 +46,6 @@ class BPMCreateAsset(bpy.types.Operator):
                                 initialize_json_statement,
                                 )
         from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
-        from ..functions.file_functions import suppressExistingFile
         from ..functions.dataset_functions import setPropertiesFromDataset
         from ..functions.project_data_functions import getAssetFile
 
@@ -82,11 +81,6 @@ class BPMCreateAsset(bpy.types.Operator):
                     self.report({'INFO'}, dupe_asset_name_message)
                     if winman.bpm_generalsettings.debug: print(dupe_asset_name_statement) #debug
                     return {'FINISHED'}
-
-            # remove json
-            suppressExistingFile(asset_file_path)
-            if winman.bpm_generalsettings.debug: print(deleted_file_statement + asset_file_path) #debug
-            
 
         else:
 
