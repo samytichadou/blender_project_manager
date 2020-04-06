@@ -96,7 +96,9 @@ class BPMCreateAsset(bpy.types.Operator):
 
         # write json
         if winman.bpm_generalsettings.debug: print(saving_to_json_statement) #debug
+
         create_json_file(datas, asset_file_path)
+        
         if winman.bpm_generalsettings.debug: print(saved_to_json_statement) #debug
 
         if winman.bpm_generalsettings.debug: print(asset_created_statement + self.name) #debug
