@@ -48,13 +48,40 @@ class BPMCreateAsset(bpy.types.Operator):
         from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
         from ..functions.dataset_functions import setPropertiesFromDataset
         from ..functions.project_data_functions import getAssetFile
+        from ..functions.file_functions import createDirectory
 
         winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
         asset_collection = winman.bpm_assets
 
-        if winman.bpm_generalsettings.debug: print(creating_asset_statement + self.name) #debug
+        if general_settings.debug: print(creating_asset_statement + self.name) #debug
 
-        # create asset blend and get the link TODO
+        # get json file path
+        asset_file_path, is_asset_file = getAssetFile(winman)
+
+        # check json file if existing and get datas
+
+        if is_asset_file:
+
+            if general_settings.debug: print(reading_json_statement + asset_file_path) #debug
+
+            datas = read_json(asset_file_path)
+
+            for asset in datas['assets']:
+
+                if asset['name']==self.name:
+
+                    # error message because dupe name
+                    self.report({'INFO'}, dupe_asset_name_message)
+                    if general_settings.debug: print(dupe_asset_name_statement) #debug
+
+                    return {'FINISHED'}
+
+        else:
+
+            if general_settings.debug: print(initialize_json_statement + asset_file_path) #debug
+
+            datas = initializeAssetJsonDatas({"assets"})
 
         # create asset datas
         asset_prop = asset_collection.add()
@@ -64,30 +91,6 @@ class BPMCreateAsset(bpy.types.Operator):
         asset_prop.asset_type = self.asset_type
         asset_prop.asset_state = self.asset_state
 
-        # get json file path
-        asset_file_path, is_asset_file = getAssetFile(winman)
-
-        # check json file if existing and get datas
-
-        if is_asset_file:
-
-            if winman.bpm_generalsettings.debug: print(reading_json_statement + asset_file_path) #debug
-
-            datas = read_json(asset_file_path)
-
-            for asset in datas['assets']:
-                if asset['name']==self.name:
-                    # error message because dupe name
-                    self.report({'INFO'}, dupe_asset_name_message)
-                    if winman.bpm_generalsettings.debug: print(dupe_asset_name_statement) #debug
-                    return {'FINISHED'}
-
-        else:
-
-            if winman.bpm_generalsettings.debug: print(initialize_json_statement + asset_file_path) #debug
-
-            datas = initializeAssetJsonDatas({"assets"})
-
         # format new asset datas
         asset_datas_json = createJsonDatasetFromProperties(asset_prop)
 
@@ -95,12 +98,19 @@ class BPMCreateAsset(bpy.types.Operator):
         datas['assets'].append(asset_datas_json)
 
         # write json
-        if winman.bpm_generalsettings.debug: print(saving_to_json_statement) #debug
+        if general_settings.debug: print(saving_to_json_statement) #debug
 
         create_json_file(datas, asset_file_path)
-        
-        if winman.bpm_generalsettings.debug: print(saved_to_json_statement) #debug
 
-        if winman.bpm_generalsettings.debug: print(asset_created_statement + self.name) #debug
+        if general_settings.debug: print(saved_to_json_statement) #debug
+
+        # create asset blend and get the link
+        
+        # create the folder
+        asset_folder_path = os.path.join(general_settings.project_folder, asset_folder)
+        new_asset_folder_path = os.path.join(asset_folder_path, self.name)
+        createDirectory(new_asset_folder_path)
+
+        if general_settings.debug: print(asset_created_statement + self.name) #debug
 
         return {'FINISHED'}
