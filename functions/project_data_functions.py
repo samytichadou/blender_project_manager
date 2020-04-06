@@ -9,6 +9,7 @@ from ..global_variables import (
                             custom_folders_file, 
                             bpm_statement,
                             asset_folder,
+                            shot_folder
                             asset_file,
                             shot_file,
                         )
@@ -26,17 +27,21 @@ def getProjectDataFile(winman):
         subparent_folder = os.path.dirname(parent_folder)
         subsubparent_folder = os.path.dirname(subparent_folder)
         edit_project_data_file = os.path.join(parent_folder, file_project)
-        shot_project_data_file = os.path.join(subsubparent_folder, file_project)
+        shot_asset_project_data_file = os.path.join(subsubparent_folder, file_project)
 
         # edit file
         if os.path.isfile(edit_project_data_file):
             winman.bpm_generalsettings.file_type = 'EDIT'
             return edit_project_data_file, parent_folder
 
-        # shot file
-        elif os.path.isfile(shot_project_data_file):
-            winman.bpm_generalsettings.file_type = 'SHOT'
-            return shot_project_data_file, subsubparent_folder
+        # shot or asset file
+        elif os.path.isfile(shot_asset_project_data_file):
+            if os.path.basename(subparent_folder) == asset_folder:
+                winman.bpm_generalsettings.file_type = 'ASSET'
+            elif os.path.basename(subparent_folder) == shot_folder:
+                winman.bpm_generalsettings.file_type = 'SHOT'
+
+            return shot_asset_project_data_file, subsubparent_folder
 
         else:
             return None, None
