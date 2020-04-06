@@ -40,19 +40,26 @@ def updateAssetAssigning(self, context):
 #update function for changing asset type
 def updateChangingAssetType(self, context):
     winman = context.window_manager
-    debug = winman.bpm_generalsettings.debug
+    general_settings = winman.bpm_generalsettings
+    debug = general_settings.debug
 
-    if winman.bpm_generalsettings.bypass_update_tag:
+    if general_settings.bypass_update_tag:
         if debug: print(bypass_shot_settings_update_statement) #debug
         return
     
+    general_settings.bypass_update_tag = True
+
     if self.asset_type != 'SHADER':
-        print('coll')
+        self.asset_material = None
         to_clear = bpy.data.materials
     else:
-        print('shader')
+        self.asset_collection = None
         to_clear = bpy.data.collections
+
+    general_settings.bypass_update_tag = False
 
     # clear old assets
     for i in to_clear:
         i.bpm_isasset = False
+
+    if debug: print(cleared_old_asset_statement)
