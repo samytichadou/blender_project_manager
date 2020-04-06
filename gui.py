@@ -227,6 +227,54 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         drawDebugPanel(layout, shot_settings, general_settings) #debug
 
 
+# asset settings panel
+class BPM_PT_properties_asset_panel(bpy.types.Panel):
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = "scene"
+    bl_label = "BPM Asset settings"
+    bl_idname = "BPM_PT_properties_asset_panel"
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'ASSET'
+
+    def draw(self, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        asset_settings = winman.bpm_assetsettings
+
+        layout = self.layout
+
+        layout.prop(asset_settings, 'asset_type')
+        layout.prop(asset_settings, 'asset_state')
+
+        if asset_settings.asset_type != 'SHADER':
+            target_prop = 'asset_collection'
+        else:
+            target_prop = 'asset_material'
+
+        layout.prop(asset_settings, target_prop, text='')
+
+        box = layout.box()
+
+        box.label(text = 'Debug', icon = 'ERROR')
+
+        box.label(text = 'Collections', icon = 'GROUP')
+        col = box.column(align=True)
+        for i in bpy.data.collections:
+            row = col.row(align=True)
+            row.prop(i, 'bpm_isasset', text=i.name)
+
+        box.label(text = 'Materials', icon = 'MATERIAL')
+        col = box.column(align=True)
+        for i in bpy.data.materials:
+            row = col.row(align=True)
+            row.prop(i, 'bpm_isasset', text=i.name)
+        
+        drawDebugPanel(layout, asset_settings, general_settings) #debug
+
+
 # bpm function topbar back/open operators
 def bpmTopbarFunction(self, context):
     if context.region.alignment == 'RIGHT':

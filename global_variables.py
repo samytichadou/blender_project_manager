@@ -141,6 +141,8 @@ dupe_asset_name_message = "Asset name already exists"
 dupe_asset_name_statement = bpm_statement + dupe_asset_name_message
 assets_loading_statement = bpm_statement + "Loading assets from : "
 assets_loaded_statement = bpm_statement + "Assets loaded"
+cleared_old_asset_statement = bpm_statement + "Old asset cleared"
+set_asset_statement = bpm_statement + "Asset set to : "
 
 
 # help statements

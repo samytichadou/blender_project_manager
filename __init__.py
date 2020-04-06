@@ -89,6 +89,7 @@ classes = (BPMOpenShot,
 
             BPMProjectSettings,
             BPMCustomFolders,
+            BPMAssetList,
             BPMAssetSettings,
             BPMShotSettingsStrips,
             BPMShotSettings,
@@ -99,6 +100,7 @@ classes = (BPMOpenShot,
             BPM_PT_sequencer_shot_panel,
             BPM_PT_sequencer_ui_panel,
             BPM_PT_properties_shot_panel,
+            BPM_PT_properties_asset_panel,
             BPM_MT_topbar_menu,
             BPM_UL_Folders_Uilist,
             BPM_PT_FileBrowser_Panel,
@@ -124,7 +126,10 @@ def register():
         bpy.props.CollectionProperty(type = BPMCustomFolders)
 
     bpy.types.WindowManager.bpm_assets = \
-        bpy.props.CollectionProperty(type = BPMAssetSettings)
+        bpy.props.CollectionProperty(type = BPMAssetList)
+
+    bpy.types.WindowManager.bpm_assetsettings = \
+        bpy.props.PointerProperty(type = BPMAssetSettings, name="BPM asset settings")
 
     bpy.types.WindowManager.bpm_shotsettings = \
         bpy.props.PointerProperty(type = BPMShotSettings, name="BPM shot settings")
@@ -138,7 +143,7 @@ def register():
     bpy.types.Collection.bpm_isasset = \
         bpy.props.BoolProperty(default = False)
 
-    bpy.types.ShaderNodeTree.bpm_isasset = \
+    bpy.types.Material.bpm_isasset = \
         bpy.props.BoolProperty(default = False)
 
     ### HANDLER ###
@@ -171,7 +176,7 @@ def unregister():
 
     del bpy.types.Collection.bpm_isasset
 
-    del bpy.types.ShaderNodeTree.bpm_isasset
+    del bpy.types.Material.bpm_isasset
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
