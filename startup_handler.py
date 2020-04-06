@@ -47,7 +47,6 @@ def bpmStartupHandler(scene):
     #load project datas
     project_data_file, project_folder = getProjectDataFile(winman)
     if project_data_file is not None:
-
         if chekIfBpmProject(winman, project_data_file):
             loadJsonDataToDataset(winman, winman.bpm_projectdatas, project_data_file, ())
             if general_settings.debug: print(loaded_datas_statement) #debug

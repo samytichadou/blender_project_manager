@@ -9,7 +9,7 @@ from ..global_variables import (
                             custom_folders_file, 
                             bpm_statement,
                             asset_folder,
-                            shot_folder
+                            shot_folder,
                             asset_file,
                             shot_file,
                         )
@@ -46,7 +46,7 @@ def getProjectDataFile(winman):
         else:
             return None, None
     else:
-        return None, None    
+        return None, None
 
 
 # check if project name match json project
@@ -55,6 +55,7 @@ def chekIfBpmProject(winman, project_data_file):
     dataset = read_json(project_data_file)
     blend_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
     file_type = winman.bpm_generalsettings.file_type
+
     # edit
     if file_type == 'EDIT':
         pattern = dataset['edit_file_pattern']
@@ -70,6 +71,7 @@ def chekIfBpmProject(winman, project_data_file):
                 return True
             except (ValueError, IndexError):
                 return False
+
     # shot
     elif file_type == 'SHOT':
         prefix = dataset['project_prefix']
@@ -80,6 +82,11 @@ def chekIfBpmProject(winman, project_data_file):
         if pattern1 in blend_name and pattern2 in blend_name:
             general_settings.is_project = True
             return True
+
+    # asset
+    elif file_type == 'ASSET':
+        return True
+        
     return False
 
 
