@@ -85,8 +85,9 @@ def chekIfBpmProject(winman, project_data_file):
 
     # asset
     elif file_type == 'ASSET':
+        general_settings.is_project = True
         return True
-        
+
     return False
 
 
