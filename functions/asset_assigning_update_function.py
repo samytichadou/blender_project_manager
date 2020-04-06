@@ -9,6 +9,8 @@ from ..global_variables import (
                             bypass_shot_settings_update_statement,
                             cleared_old_asset_statement,
                             set_asset_statement,
+                            saving_to_json_statement,
+                            saved_to_json_statement,
                         )
 
 
@@ -20,6 +22,8 @@ def saveAssetToJson(self, context):
     debug = winman.bpm_generalsettings.debug
 
     datas = read_json(assets_json_file)
+
+    if debug: print(saving_to_json_statement) #debug
 
     # remove old asset settings
     n = 0
@@ -42,6 +46,8 @@ def saveAssetToJson(self, context):
 
     #create json
     create_json_file(datas, assets_json_file)
+
+    if debug: print(saved_to_json_statement) #debug
 
 
 # update function for assigning asset through pointer
