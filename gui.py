@@ -79,7 +79,7 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
 
     def draw(self, context):
         scn_settings = context.scene.bpm_scenesettings
-
+        general_settings = context.window_manager.bpm_generalsettings
         layout = self.layout
 
         row = layout.row(align=True)
@@ -90,7 +90,27 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
             row.prop(scn_settings, 'display_shot_strip')
             row.prop(scn_settings, 'color_shot_strip', text="")
 
-            layout.prop(scn_settings, 'display_shot_state')
+            row = layout.row()
+            row.prop(scn_settings, 'display_shot_state')
+            row.prop(general_settings, 'ui_shot_state_subpanel', icon='COLORSET_04_VEC')
+
+            if general_settings.ui_shot_state_subpanel:
+                box = layout.box()
+                col = box.column(align=True)
+                row = col.row()
+                row.prop(scn_settings, 'color_state_storyboard')
+                row = col.row()
+                row.prop(scn_settings, 'color_state_layout')
+                row = col.row()
+                row.prop(scn_settings, 'color_state_animation')
+                row = col.row()
+                row.prop(scn_settings, 'color_state_lighting')
+                row = col.row()
+                row.prop(scn_settings, 'color_state_rendering')
+                row = col.row()
+                row.prop(scn_settings, 'color_state_compositing')
+                row = col.row()
+                row.prop(scn_settings, 'color_state_finished')
 
             row = layout.row()
             row.prop(scn_settings, 'display_audio_sync')
