@@ -12,6 +12,7 @@ from ..global_variables import (
                             shot_folder,
                             asset_file,
                             shot_file,
+                            missing_shot_file_statement,
                         )
 from .json_functions import read_json
 from .file_functions import absolutePath
@@ -210,12 +211,14 @@ def refreshTimelineShotDatas(winman, sequencer):
     general_settings.bypass_update_tag = True
     # iterate through timeline strips
     for strip in returnShotStrips(sequencer):
-
         # get json path
         shot_folder = os.path.dirname(strip.scene.library.filepath)
-        shot_json = os.path.join(shot_folder, shot_file)
+        shot_json = absolutePath(os.path.join(shot_folder, shot_file))
 
         # set json datas
         if os.path.isfile(shot_json):
             loadJsonDataToDataset(winman, strip.bpm_shotsettings, shot_json, avoid_list)
+        else:
+            if general_settings.debug: print(missing_shot_file_statement + " for " + strip.name) #debug
+
     general_settings.bypass_update_tag = False
