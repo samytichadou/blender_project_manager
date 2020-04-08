@@ -125,6 +125,7 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
 
             # unlink old lib
             clearLibraryUsers(shot_lib)
+            bpy.data.orphans_purge()
             if general_settings.debug: print(library_cleared_statement + old_version_shot_filepath) #debug
 
         return {'FINISHED'}

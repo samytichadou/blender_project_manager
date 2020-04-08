@@ -148,5 +148,6 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
             lib = findLibFromShot(shot_folder_name)
             if lib is not None:
                 clearLibraryUsers(lib)
+                bpy.data.orphans_purge()
         
         return {'FINISHED'}
