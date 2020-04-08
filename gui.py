@@ -261,10 +261,13 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
 
-        layout.prop(shot_settings, 'shot_state')
+        layout.prop(shot_settings, 'shot_state', text = "")
+
         row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
+
+        layout.prop(general_settings, 'asset_choose')
         
         drawDebugPanel(layout, shot_settings, general_settings) #debug
 

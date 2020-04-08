@@ -30,6 +30,17 @@ shot_state_items = [
         ]
 
 
+# return asset list
+def assetListCallback(scene, context):
+
+    items = []
+    for a in context.window_manager.bpm_assets:
+        name = a.name
+        items.append((name.upper(), name.lower(), ""))
+
+    return items
+
+
 # project settings
 class BPMProjectSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
@@ -169,6 +180,8 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
     custom_folders_index : bpy.props.IntProperty(update = updateFilebrowserPath)
 
     ui_shot_state_subpanel : bpy.props.BoolProperty(name = "Display state colors", default=False)
+
+    asset_choose : bpy.props.EnumProperty(name = "Asset", items = assetListCallback)
 
     asset_type_display_items = [
         ('ALL', 'All', ""),
