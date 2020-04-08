@@ -130,3 +130,25 @@ def getBlendName():
     file_name = os.path.basename(bpy.data.filepath)
     name = os.path.splitext(file_name)[0]
     return name
+
+
+# link asset libraries
+def linkAssetLibrary(filepath, asset_type):
+    try: #debug
+
+        with bpy.data.libraries.load(filepath, link=True) as (data_from, data_to):
+
+            # collections
+            if asset_type != "SHADER":
+                for c in data_from.collections:
+                    if c.bpm_isasset:
+                        data_to.collections = c
+
+            # shader
+            else:
+                for m in data_from.materials:
+                    if m.bpm_isasset:
+                        data_to.materials = m
+                        
+    except OSError as err: #debug
+        print("OS error: {0}".format(err)) #debug
