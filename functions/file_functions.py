@@ -8,6 +8,7 @@ def absolutePath(path):
     apath = os.path.abspath(bpy.path.abspath(path))
     return apath
 
+
 # get last version of file
 def getLastVersion(folder, pattern, extension):
     # print("DEBUG --- folder : "+folder) #debug
@@ -38,6 +39,7 @@ def getLastVersion(folder, pattern, extension):
 
     return filepath
 
+
 # suppress existing file
 def suppressExistingFile(filepath) :
     if os.path.isfile(filepath) :
@@ -53,6 +55,7 @@ def deleteFolderContent(folder):
             shutil.rmtree(filepath)
         else:
             os.remove(filepath)
+
 
 # get next shot
 def getNextShot(winman, project_datas, pattern, shot_version, shot_folder):
@@ -85,10 +88,12 @@ def getNextShot(winman, project_datas, pattern, shot_version, shot_folder):
 
     return [next_shot_folder, next_shot_file, next_shot_number]
 
+
 # create directory if doesn't exist
 def createDirectory(dir_path):
     if os.path.isdir(dir_path) == False :
         os.makedirs(dir_path)
+
 
 # replace content in py scripts with a list ([to_replace, replacement])
 def replaceContentInPythonScript(python_script_in, python_script_out, replacement_list):
@@ -103,6 +108,7 @@ def replaceContentInPythonScript(python_script_in, python_script_out, replacemen
     with open(python_script_out, 'w') as file:
         file.write(python_code)
 
+
 # link all scenes as libraries
 def linkExternalScenes(filepath):
     try: #debug
@@ -110,6 +116,7 @@ def linkExternalScenes(filepath):
             data_to.scenes = data_from.scenes
     except OSError as err: #debug
         print("OS error: {0}".format(err)) #debug
+
 
 # create folder if doesn't exist
 def createFolder(dir_path) :
