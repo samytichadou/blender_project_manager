@@ -133,23 +133,57 @@ def getBlendName():
 
 
 # link asset libraries
-def linkAssetLibrary(filepath, asset_type):
+def linkAssetLibrary(filepath, asset_type, debug):
+    from .utils_functions import clearLibraryUsers
+    from ..global_variables import(
+                                library_cleared_statement,
+                                asset_linked_statement,
+                            )
+
+
+    blend_name = os.path.basename(filepath)
+
+    imported = []
+    lib = bpy.data.libraries.load(filepath, link=True, relative=True)
 
     if asset_type != "SHADER":
         master_collection = bpy.context.scene.collection
 
-        with bpy.data.libraries.load(filepath, link=True, relative=True) as (data_from, data_to):
+        with lib as (data_from, data_to):
             data_to.collections = data_from.collections
 
         for new_coll in data_to.collections:
             if new_coll.bpm_isasset:
+
+                if debug: print(asset_linked_statement + new_coll.name) #debug
+
                 instance = bpy.data.objects.new(new_coll.name, None)
                 instance.instance_type = 'COLLECTION'
                 instance.instance_collection = new_coll
                 master_collection.objects.link(instance)
 
+                imported.append(instance)
+
     elif asset_type == "SHADER":
-        with bpy.data.libraries.load(filepath, link=True, relative=True) as (data_from, data_to):
+        with lib as (data_from, data_to):
             data_to.materials = data_from.materials
 
-            # TODO remove not asset materials
+        for new_mat in data_to.materials:
+            imported.append(new_mat)
+            if not new_mat.bpm_isasset:
+                bpy.data.materials.remove(bpy.data.materials[new_mat.name])
+            else:
+                if debug: print(asset_linked_statement + new_mat.name) #debug
+
+    # remove lib if nothing imported
+    if len(imported) == 0:
+
+        clearLibraryUsers(bpy.data.libraries[blend_name])
+        bpy.data.orphans_purge()
+
+        if debug: print(library_cleared_statement + blend_name) #debug
+
+        return False
+
+    else:
+        return True
