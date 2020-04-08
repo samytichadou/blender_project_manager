@@ -268,6 +268,7 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
 
         layout.prop(general_settings, 'asset_choose')
+        layout.operator('bpm.import_asset')
         
         drawDebugPanel(layout, shot_settings, general_settings) #debug
 

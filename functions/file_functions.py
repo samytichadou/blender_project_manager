@@ -112,7 +112,7 @@ def replaceContentInPythonScript(python_script_in, python_script_out, replacemen
 # link all scenes as libraries
 def linkExternalScenes(filepath):
     try: #debug
-        with bpy.data.libraries.load(filepath, link=True) as (data_from, data_to):
+        with bpy.data.libraries.load(filepath, link=True, relative=True) as (data_from, data_to):
             data_to.scenes = data_from.scenes
     except OSError as err: #debug
         print("OS error: {0}".format(err)) #debug
@@ -134,21 +134,22 @@ def getBlendName():
 
 # link asset libraries
 def linkAssetLibrary(filepath, asset_type):
-    try: #debug
 
-        with bpy.data.libraries.load(filepath, link=True) as (data_from, data_to):
+    if asset_type != "SHADER":
+        master_collection = bpy.context.scene.collection
 
-            # collections
-            if asset_type != "SHADER":
-                for c in data_from.collections:
-                    if c.bpm_isasset:
-                        data_to.collections = c
+        with bpy.data.libraries.load(filepath, link=True, relative=True) as (data_from, data_to):
+            data_to.collections = data_from.collections
 
-            # shader
-            else:
-                for m in data_from.materials:
-                    if m.bpm_isasset:
-                        data_to.materials = m
-                        
-    except OSError as err: #debug
-        print("OS error: {0}".format(err)) #debug
+        for new_coll in data_to.collections:
+            if new_coll.bpm_isasset:
+                instance = bpy.data.objects.new(new_coll.name, None)
+                instance.instance_type = 'COLLECTION'
+                instance.instance_collection = new_coll
+                master_collection.objects.link(instance)
+
+    elif asset_type == "SHADER":
+        with bpy.data.libraries.load(filepath, link=True, relative=True) as (data_from, data_to):
+            data_to.materials = data_from.materials
+
+            # TODO remove not asset materials

@@ -36,7 +36,7 @@ def assetListCallback(scene, context):
     items = []
     for a in context.window_manager.bpm_assets:
         name = a.name
-        items.append((name.upper(), name.lower(), ""))
+        items.append((name, name, ""))
 
     return items
 

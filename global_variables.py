@@ -143,6 +143,12 @@ assets_loading_statement = bpm_statement + "Loading assets from : "
 assets_loaded_statement = bpm_statement + "Assets loaded"
 cleared_old_asset_statement = bpm_statement + "Old asset cleared"
 set_asset_statement = bpm_statement + "Asset set to : "
+importing_asset_statement = bpm_statement + "Importing asset : "
+asset_not_existing_message = "Asset not existing : "
+asset_not_existing_statement = bpm_statement + asset_not_existing_message
+asset_file_not_found_message = "Asset file not found : "
+asset_file_not_found_statement = bpm_statement + asset_file_not_found_message
+asset_imported_statement = bpm_statement + "Asset successfully imported"
 
 
 # help statements
