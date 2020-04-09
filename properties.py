@@ -11,6 +11,7 @@ asset_type_items = [
         ('PROP', 'Prop', ""),
         ('SET', 'Set', ""),
         ('SHADER', 'Shader', ""),
+        ('FX', 'FX', ""),
         ]
 
 asset_state_items = [
@@ -189,5 +190,6 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
         ('PROP', 'Prop', ""),
         ('SET', 'Set', ""),
         ('SHADER', 'Shader', ""),
+        ('FX', 'FX', ""),
         ]
     shot_panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL')
