@@ -224,15 +224,15 @@ class BPM_PT_sequencer_shot_asset_panel(bpy.types.Panel):
         asset_list = winman.bpm_assets
 
         layout = self.layout
-        layout.prop(general_settings, 'shot_panel_asset_display', text="")
+        layout.prop(general_settings, 'panel_asset_display', text="")
 
         for asset in asset_list:
-            if general_settings.shot_panel_asset_display == 'ALL':
+            if general_settings.panel_asset_display == 'ALL':
                 row = layout.row(align=True)
                 row.label(text = asset.name)
                 row.label(text = asset.asset_type)
             else:
-                if asset.asset_type == general_settings.shot_panel_asset_display:
+                if asset.asset_type == general_settings.panel_asset_display:
                     row = layout.row(align=True)
                     row.label(text = asset.name)
                     row.label(text = asset.asset_type)
