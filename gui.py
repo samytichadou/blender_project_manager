@@ -59,8 +59,6 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.empty_recycle_bin', '', 'Empty-Recycle-Bin')
 
-        drawOperatorAndHelp(layout, 'bpm.create_asset', '', 'Create-Asset-Operator')
-
         drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
 
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
@@ -196,34 +194,30 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
 
 # sequencer shot assets panel
-class BPM_PT_sequencer_shot_asset_panel(bpy.types.Panel):
+class BPM_PT_sequencer_asset_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
-    bl_label = "Shot Assets"
-    bl_idname = "BPM_PT_sequencer_shot_asset_panel"
+    bl_label = "Assets"
+    bl_idname = "BPM_PT_sequencer_asset_panel"
     bl_category = "BPM"
     #bl_parent_id = "BPM_PT_sequencer_shot_panel"
 
     @classmethod
     def poll(cls, context):
-        chk_isshot = False
-        if context.scene.sequence_editor:
-            if context.scene.sequence_editor.active_strip:
-                active = context.scene.sequence_editor.active_strip
-                try:
-                    if active.bpm_shotsettings.is_shot:
-                        chk_isshot = True
-                except AttributeError:
-                    return False
-        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT' and chk_isshot
+        if context.window_manager.bpm_generalsettings.is_project:
+            if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
+                if context.window_manager.bpm_projectdatas.edit_scene_keyword in context.scene.name:
+                    return True
 
     def draw(self, context):
         winman = context.window_manager
-        active = context.scene.sequence_editor.active_strip
         general_settings = winman.bpm_generalsettings
         asset_list = winman.bpm_assets
 
         layout = self.layout
+
+        drawOperatorAndHelp(layout, 'bpm.create_asset', '', 'Create-Asset-Operator')
+
         layout.prop(general_settings, 'panel_asset_display', text="")
 
         for asset in asset_list:
