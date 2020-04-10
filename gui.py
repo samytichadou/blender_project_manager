@@ -302,24 +302,25 @@ class BPM_PT_properties_asset_panel(bpy.types.Panel):
 
         layout.prop(asset_settings, target_prop, text='')
         
-        #debug
-        box = layout.box()
-
-        box.label(text = 'Debug', icon = 'ERROR')
-
-        box.label(text = 'Collections', icon = 'GROUP')
-        col = box.column(align=True)
-        for i in bpy.data.collections:
-            row = col.row(align=True)
-            row.prop(i, 'bpm_isasset', text=i.name)
-
-        box.label(text = 'Materials', icon = 'MATERIAL')
-        col = box.column(align=True)
-        for i in bpy.data.materials:
-            row = col.row(align=True)
-            row.prop(i, 'bpm_isasset', text=i.name)
-        
         drawDebugPanel(layout, asset_settings, general_settings) #debug
+        
+        if general_settings.show_debug_props:
+            #debug
+            box = layout.box()
+
+            box.label(text = 'Debug', icon = 'ERROR')
+
+            box.label(text = 'Collections', icon = 'GROUP')
+            col = box.column(align=True)
+            for i in bpy.data.collections:
+                row = col.row(align=True)
+                row.prop(i, 'bpm_isasset', text=i.name)
+
+            box.label(text = 'Materials', icon = 'MATERIAL')
+            col = box.column(align=True)
+            for i in bpy.data.materials:
+                row = col.row(align=True)
+                row.prop(i, 'bpm_isasset', text=i.name)
 
 
 # bpm function topbar back/open operators
