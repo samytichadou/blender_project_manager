@@ -123,3 +123,9 @@ def returnShotStrips(sequencer):
             if strip.bpm_shotsettings.is_shot:
                 shot_list.append(strip)
     return shot_list
+
+# deselect all strips
+def deselectAllStrips(sequencer):
+    for strip in sequencer.sequences_all:
+        if strip.select:
+            strip.select = False
