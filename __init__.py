@@ -58,6 +58,7 @@ from .operators.import_asset import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
+from .operators.display_modify_render_settings import *
 
 from .properties import *
 from .gui import *
@@ -74,6 +75,7 @@ classes = (BPMOpenShot,
             BpmCreateProject,
             BPMUpdateShotDuration,
             BpmDisplayModifyProjectSettings,
+            BpmDisplayModifyRenderSettings,
             BpmSaveProjectSettingsToJson,
             BPMCreateAsset,
             BPMAddModifyShotMarker,

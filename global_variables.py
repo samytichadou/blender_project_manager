@@ -39,7 +39,7 @@ loading_statement = bpm_statement + "Project datas found, loading from "
 folders_loading_statement = bpm_statement + "Project folders found, loading from "
 currently_loading_statement = bpm_statement + "Currently loading "
 
-reading_json_statement = bpm_statement + "Reading project datas from json file : "
+reading_json_statement = bpm_statement + "Reading datas from json file : "
 initialize_json_statement = bpm_statement + "Initializing json : "
 
 saving_to_json_statement = bpm_statement + "Saving to json"

@@ -139,6 +139,8 @@ def getRenderSettingsFile(winman):
 
 # load json in collection
 def loadJsonInCollection(winman, json_file, collection, json_coll_name):
+    # remove existing in collection
+    collection.clear()
     debug = winman.bpm_generalsettings.debug
     dataset = read_json(json_file)
     for f in dataset[json_coll_name]:
