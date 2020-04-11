@@ -40,9 +40,7 @@ class BpmDisplayModifyProjectSettings(bpy.types.Operator):
     def draw(self, context):
         datas = context.window_manager.bpm_projectdatas
 
-        layout = self.layout
-
-        
+        layout = self.layout      
 
         split = layout.split(align=True)
         col1 = split.column(align=True)
