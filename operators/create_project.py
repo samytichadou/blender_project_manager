@@ -73,6 +73,11 @@ class BpmCreateProject(bpy.types.Operator):
                                     ressources_folder,
                                     old_folder,
                                     folder_created_statement,
+                                    render_shots_folder,
+                                    render_dailies_folder,
+                                    render_draft_folder,
+                                    render_render_folder,
+                                    render_final_folder,
                                 )
         from ..vse_extra_ui import enableSequencerCallback
 
@@ -119,6 +124,46 @@ class BpmCreateProject(bpy.types.Operator):
         render_folder_path = os.path.join(project_folder, render_folder)
         createFolder(render_folder_path)
         if winman.bpm_generalsettings.debug: print(folder_created_statement + render_folder_path) #debug
+
+        #shot render
+        render_shot_folder_path = os.path.join(render_folder_path, render_shots_folder)
+        createFolder(render_shot_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_shot_folder_path) #debug
+
+        #draft shot render
+        render_shot_draft_folder_path = os.path.join(render_shot_folder_path, render_draft_folder)
+        createFolder(render_shot_draft_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_shot_draft_folder_path) #debug
+
+        #render shot render
+        render_shot_render_folder_path = os.path.join(render_shot_folder_path, render_render_folder)
+        createFolder(render_shot_render_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_shot_render_folder_path) #debug
+
+        #final shot render
+        render_shot_final_folder_path = os.path.join(render_shot_folder_path, render_final_folder)
+        createFolder(render_shot_final_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_shot_final_folder_path) #debug
+
+        #dailies render
+        render_dailies_folder_path = os.path.join(render_folder_path, render_dailies_folder)
+        createFolder(render_dailies_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_dailies_folder_path) #debug
+
+        #draft dailies render
+        render_dailies_draft_folder_path = os.path.join(render_dailies_folder_path, render_draft_folder)
+        createFolder(render_dailies_draft_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_dailies_draft_folder_path) #debug
+
+        #render dailies render
+        render_dailies_render_folder_path = os.path.join(render_dailies_folder_path, render_render_folder)
+        createFolder(render_dailies_render_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_dailies_render_folder_path) #debug
+
+        #final dailies render
+        render_dailies_final_folder_path = os.path.join(render_dailies_folder_path, render_final_folder)
+        createFolder(render_dailies_final_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_dailies_final_folder_path) #debug
 
         #ressources
         ressources_folder_path = os.path.join(project_folder, ressources_folder)
