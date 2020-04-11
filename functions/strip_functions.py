@@ -124,6 +124,7 @@ def returnShotStrips(sequencer):
                 shot_list.append(strip)
     return shot_list
 
+
 # deselect all strips
 def deselectAllStrips(sequencer):
     for strip in sequencer.sequences_all:

@@ -38,7 +38,7 @@ class BPMCreateShot(bpy.types.Operator):
         from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile, linkExternalScenes, absolutePath
         from ..functions.project_data_functions import getShotPattern, getScriptReplacementListShotCreation
         from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
-        from ..functions.strip_functions import returnAvailablePositionStripChannel
+        from ..functions.strip_functions import returnAvailablePositionStripChannel, deselectAllStrips
         from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
         from ..functions.audio_sync_functions import syncAudioEdit
 
@@ -120,6 +120,10 @@ class BPMCreateShot(bpy.types.Operator):
         linked_strip.bpm_shotsettings.is_shot = True
         linked_strip.bpm_shotsettings.shot_folder = next_shot_folder
         sequencer.active_strip = linked_strip
+
+        # select created strip
+        deselectAllStrips(sequencer)
+        linked_strip.select = True
 
         # update audio sync if existing
         audio_sync_filepath = os.path.join(project_folder, audio_sync_file)
