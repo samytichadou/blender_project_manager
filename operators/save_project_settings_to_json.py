@@ -21,7 +21,6 @@ class BpmSaveProjectSettingsToJson(bpy.types.Operator):
     def execute(self, context):
         # import statements and functions
         from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
-        from ..functions.file_functions import suppressExistingFile
         from ..global_variables import file_project, saving_to_json_statement, saved_to_json_statement
 
         winman = context.window_manager
@@ -34,8 +33,7 @@ class BpmSaveProjectSettingsToJson(bpy.types.Operator):
 
         # format the json dataset
         json_dataset = createJsonDatasetFromProperties(datas)
-        # delete previous file
-        suppressExistingFile(project_file)
+
         # create json file
         create_json_file(json_dataset, project_file)
 

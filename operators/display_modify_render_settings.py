@@ -77,8 +77,7 @@ class BpmDisplayModifyRenderSettings(bpy.types.Operator):
         else:
             row = layout.row(align=True)
             row.prop(self, 'modify', text='Cancel', icon = 'LOOP_BACK')
-            #row.operator('bpm.save_project_settings_json', icon = 'FILE_TICK')
-            row.label(text="Save")
+            row.operator('bpm.save_render_settings_json', icon = 'FILE_TICK')
         
     def execute(self, context):
         return {'FINISHED'}
