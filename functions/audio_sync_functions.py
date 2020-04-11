@@ -4,7 +4,8 @@ import os
 
 from .dataset_functions import setPropertiesFromJsonDataset
 from .strip_functions import checkStripInTargetSpaceOnSequencer, deleteAllSequencerStrips, createSequencer
-from .json_functions import read_json
+from .json_functions import read_json, createJsonDatasetFromProperties, initializeAssetJsonDatas, create_json_file
+from .file_functions import absolutePath
 from ..global_variables import (
                             audio_sync_file, 
                             starting_shot_audio_sync_statement,
@@ -16,6 +17,12 @@ from ..global_variables import (
                             shot_not_used_statement,
                             loaded_sounds_statement,
                             created_sound_strips_statement,
+                            starting_audio_sync_file_statement,
+                            initialize_json_statement,
+                            adding_dataset_to_json,
+                            saving_to_json_statement,
+                            saved_to_json_statement,
+                            audio_sync_file_created_statement,
                         )
 
 
@@ -73,9 +80,9 @@ def createSoundStripsFromSyncFile(datas, sequencer, shot_strip_datas, offset):
 
 
 # sync audio shot function for startup handler
-def autoSyncAudioShot(debug, project_folder, scene):
+def syncAudioShot(debug, project_folder, scene):
 
-    audio_sync_json = os.path.join(project_folder, audio_sync_file)
+    audio_sync_json = absolutePath(os.path.join(project_folder, audio_sync_file))
     if not os.path.isfile(audio_sync_json):
         if debug: print(sync_file_not_found_statement) #debug
         return 'SYNC_FILE_MISSING'
@@ -113,5 +120,62 @@ def autoSyncAudioShot(debug, project_folder, scene):
     if debug: print(created_sound_strips_statement + str(sound_strip_list)) #debug
 
     if debug: print(shot_audio_synced_statement) #debug
+
+    return 'FINISHED'
+
+# sync audio edit function
+def syncAudioEdit(debug, project_folder, scene):
+
+    if debug: print(starting_audio_sync_file_statement) #debug
+
+
+    # get audio sync filepath
+    filepath = absolutePath(os.path.join(project_folder, audio_sync_file))
+    sequencer = scene.sequence_editor
+
+    # init json datas
+    if debug: print(initialize_json_statement + filepath) #debug
+
+    datas = initializeAssetJsonDatas({'sounds', 'sound_strips', 'shot_strips'})
+
+    sound_list = []
+
+    # iterate through strips
+    for strip in sequencer.sequences_all:
+
+        if strip.type == 'SOUND':
+
+            if debug: print(adding_dataset_to_json + strip.name) #debug
+            
+            # sound datas
+            sound = strip.sound
+            if sound not in sound_list:
+                sound_list.append(sound)
+                sound_datas = createJsonDatasetFromProperties(sound)
+                sound_datas['filepath'] = absolutePath(sound.filepath)
+                datas['sounds'].append(sound_datas)
+
+            # strip datas
+            strip_datas = createJsonDatasetFromProperties(strip)
+            strip_datas['sound'] = sound.name    
+            datas['sound_strips'].append(strip_datas)
+
+        else:
+            # shot datas
+            try:
+                if strip.bpm_shotsettings.is_shot:
+                    shot_datas = createJsonDatasetFromProperties(strip)
+                    datas['shot_strips'].append(shot_datas)
+
+            except AttributeError:
+                pass
+    
+    if debug: print(saving_to_json_statement) #debug
+
+    create_json_file(datas, filepath)
+
+    if debug: print(saved_to_json_statement) #debug
+
+    if debug: print(audio_sync_file_created_statement) #debug
 
     return 'FINISHED'

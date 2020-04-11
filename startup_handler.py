@@ -32,7 +32,7 @@ from .global_variables import (
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
-from .functions.audio_sync_functions import autoSyncAudioShot
+from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
 
 
@@ -103,7 +103,7 @@ def bpmStartupHandler(scene):
 
                     # synchronize audio if needed
                     if shot_settings.auto_audio_sync:
-                        autoSyncAudioShot(general_settings.debug, project_folder, bpy.context.scene)
+                        syncAudioShot(general_settings.debug, project_folder, bpy.context.scene)
 
                 # no json error
                 else: 

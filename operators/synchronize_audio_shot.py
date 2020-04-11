@@ -15,21 +15,15 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
 
     def execute(self, context):
         # import statements and functions
-        from ..functions.file_functions import absolutePath
-        from ..functions.json_functions import read_json
-        from ..functions.strip_functions import deleteAllSequencerStrips, createSequencer
-        from ..functions.audio_sync_functions import findShotOffsetFromSyncFile, loadSoundsFromSyncFile, createSoundStripsFromSyncFile, autoSyncAudioShot
+        from ..functions.audio_sync_functions import syncAudioShot
         from ..global_variables import (
                                     sync_file_not_found_message,
                                     shot_not_used_message,
-                                    shot_not_used_statement,
                                 )
 
         general_settings = context.window_manager.bpm_generalsettings
-        scn = context.scene
-        debug = general_settings.debug
 
-        state = autoSyncAudioShot(debug, general_settings.project_folder, scn)
+        state = syncAudioShot(general_settings.debug, general_settings.project_folder, context.scene)
         if state == 'SYNC_FILE_MISSING':
             self.report({'INFO'}, sync_file_not_found_message)
         elif state == 'SHOT_NOT_USED':
