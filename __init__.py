@@ -97,6 +97,7 @@ classes = (BPMOpenShot,
             BPMShotSettings,
             BPMSceneSettings,
             BPMGeneralSettings,
+            BPMRenderSettings,
 
             BPM_PT_sequencer_management_panel,
             BPM_PT_sequencer_shot_panel,
@@ -137,6 +138,9 @@ def register():
     bpy.types.WindowManager.bpm_shotsettings = \
         bpy.props.PointerProperty(type = BPMShotSettings, name="BPM shot settings")
 
+    bpy.types.WindowManager.bpm_rendersettings = \
+        bpy.props.CollectionProperty(type = BPMRenderSettings)
+
     bpy.types.SceneSequence.bpm_shotsettings = \
         bpy.props.PointerProperty(type = BPMShotSettingsStrips, name="BPM shot settings")
 
@@ -172,6 +176,7 @@ def unregister():
     del bpy.types.WindowManager.bpm_customfolders
     del bpy.types.WindowManager.bpm_assets
     del bpy.types.WindowManager.bpm_shotsettings
+    del bpy.types.WindowManager.bpm_rendersettings
 
     del bpy.types.SceneSequence.bpm_shotsettings
 

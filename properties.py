@@ -193,3 +193,42 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
         ('FX', 'FX', ""),
         ]
     panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL')
+
+
+# render settings
+class BPMRenderSettings(bpy.types.PropertyGroup) :
+    '''name : StringProperty() '''
+
+    file_format_items = [
+        ('OPEN_EXR', 'Open EXR', ""),
+        ]
+    file_format : bpy.props.EnumProperty(name = "File format", items = file_format_items, default='OPEN_EXR')
+
+    color_mode_items = [
+        ('BW', 'Black and white', ""),
+        ('RGB', 'RGB', ""),
+        ('RGBA', 'RGB Alpha', ""),
+        ]
+    color_mode : bpy.props.EnumProperty(name = "Color mode", items = color_mode_items, default='RGBA')
+
+    color_depth_items = [
+        ('16', '16 Bits', ""),
+        ('32', '32 Bits', ""),
+        ]
+    color_depth : bpy.props.EnumProperty(name = "Color depth", items = color_depth_items, default='16')
+
+    exr_codec_items = [
+        ('NONE', 'None', ""),
+        ('PXR24', 'Pxr24 (lossy)', ""),
+        ('ZIP', 'ZIP (lossless)', ""),
+        ('PIZ', 'PIZ (lossless)', ""),
+        ('RLE', 'RLE (lossless)', ""),
+        ('ZIPS', 'ZIPS (lossless)', ""),
+        ('B44', 'B44 (lossy)', ""),
+        ('B44A', 'B44A (lossy)', ""),
+        ('DWAA', 'DWAA (lossy)', ""),
+        ]
+    exr_codec : bpy.props.EnumProperty(name = "Codec", items = exr_codec_items, default='ZIP')
+
+    use_zbuffer : bpy.props.BoolProperty(name = 'Z Buffer', default=False)
+    use_preview : bpy.props.BoolProperty(name = 'Preview', default=False)
