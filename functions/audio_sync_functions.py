@@ -82,7 +82,7 @@ def createSoundStripsFromSyncFile(datas, sequencer, shot_strip_datas, offset):
 # sync audio shot function for startup handler
 def syncAudioShot(debug, project_folder, scene):
 
-    audio_sync_json = absolutePath(os.path.join(project_folder, audio_sync_file))
+    audio_sync_json = os.path.join(project_folder, audio_sync_file)
     if not os.path.isfile(audio_sync_json):
         if debug: print(sync_file_not_found_statement) #debug
         return 'SYNC_FILE_MISSING'
@@ -130,7 +130,7 @@ def syncAudioEdit(debug, project_folder, scene):
 
 
     # get audio sync filepath
-    filepath = absolutePath(os.path.join(project_folder, audio_sync_file))
+    filepath = os.path.join(project_folder, audio_sync_file)
     sequencer = scene.sequence_editor
 
     # init json datas
