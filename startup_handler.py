@@ -67,8 +67,8 @@ def bpmStartupHandler(scene):
 
             # load available assets
             if general_settings.file_type in {'EDIT', 'SHOT'}:
-                asset_file = getAssetFile(winman)
-                if asset_file is not None:
+                asset_file, asset_file_exist = getAssetFile(winman)
+                if asset_file_exist:
                     if general_settings.debug: print(assets_loading_statement + asset_file) #debug
                     asset_coll = winman.bpm_assets
                     loadJsonInCollection(winman, asset_file, asset_coll, 'assets')

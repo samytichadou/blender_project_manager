@@ -17,10 +17,10 @@ from ..global_variables import (
 # save asset to json
 def saveAssetToJson(self, context):
     winman = context.window_manager
-    assets_json_file = getAssetFile(winman)
+    assets_json_file, asset_file_exist = getAssetFile(winman)
     asset_settings = winman.bpm_assetsettings
     debug = winman.bpm_generalsettings.debug
-
+    
     datas = read_json(assets_json_file)
 
     if debug: print(saving_to_json_statement) #debug

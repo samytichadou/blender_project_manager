@@ -119,7 +119,9 @@ def getAssetFile(winman):
     asset_folder_path = os.path.join(project_folder, asset_folder)
     asset_file_path = os.path.join(asset_folder_path, asset_file)
     if os.path.isfile(asset_file_path):
-        return asset_file_path
+        return asset_file_path, True
+    else:
+        return asset_file_path, False
 
 
 # load json in collection
