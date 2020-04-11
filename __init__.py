@@ -128,13 +128,13 @@ def register():
         bpy.props.PointerProperty(type = BPMGeneralSettings, name="BPM general settings")
 
     bpy.types.WindowManager.bpm_projectdatas = \
-        bpy.props.PointerProperty(type = BPMProjectSettings)
+        bpy.props.PointerProperty(type = BPMProjectSettings, name="BPM preoject datas")
 
     bpy.types.WindowManager.bpm_customfolders = \
-        bpy.props.CollectionProperty(type = BPMCustomFolders)
+        bpy.props.CollectionProperty(type = BPMCustomFolders, name="BPM custom folders")
 
     bpy.types.WindowManager.bpm_assets = \
-        bpy.props.CollectionProperty(type = BPMAssetList)
+        bpy.props.CollectionProperty(type = BPMAssetList, name="BPM assets")
 
     bpy.types.WindowManager.bpm_assetsettings = \
         bpy.props.PointerProperty(type = BPMAssetSettings, name="BPM asset settings")
@@ -143,7 +143,7 @@ def register():
         bpy.props.PointerProperty(type = BPMShotSettings, name="BPM shot settings")
 
     bpy.types.WindowManager.bpm_rendersettings = \
-        bpy.props.CollectionProperty(type = BPMRenderSettings)
+        bpy.props.CollectionProperty(type = BPMRenderSettings, name="BPM render settings")
 
     bpy.types.SceneSequence.bpm_shotsettings = \
         bpy.props.PointerProperty(type = BPMShotSettingsStrips, name="BPM shot settings")
