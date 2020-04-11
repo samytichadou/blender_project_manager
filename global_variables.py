@@ -189,7 +189,7 @@ render_shots_folder = "01_shots"
 render_dailies_folder = "02_dailies"
 render_draft_folder = "01_draft"
 render_render_folder = "02_render"
-render_final_folder = "03_draft"
+render_final_folder = "03_final"
 ressources_folder = "04_ressources"
 old_folder = "zz_old"
 
