@@ -44,7 +44,6 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         layout.prop(self, 'file_to_copy', expand = True)
 
     def execute(self, context):
-        print(self.file_to_copy)
         # import statements and functions
         from ..global_variables import (bumping_shot_statement, 
                                     copying_file_statement,
@@ -102,13 +101,14 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         scene_to_link = None
         for s in bpy.data.scenes:
             if s.library:
-                if s.library.filepath == new_shot_path:
+                if absolutePath(s.library.filepath) == new_shot_path:
                     if s.name == shot_name:
                         scene_to_link = s
                         break
         if scene_to_link is not None:
             active_strip.scene = scene_to_link
             if general_settings.debug: print(linked_to_strip_statement + new_shot_path) #debug
+
         # error message if scene not found
         else:
             self.report({'INFO'}, scene_not_found_message + shot_name)
