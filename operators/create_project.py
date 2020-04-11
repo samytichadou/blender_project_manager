@@ -218,7 +218,6 @@ class BpmCreateProject(bpy.types.Operator):
         if winman.bpm_generalsettings.debug: print(saving_to_json_statement) #debug
 
         render_filepath = os.path.join(render_folder_path, render_file)
-        print(render_filepath)
         create_json_file(json_render_dataset, render_filepath)
 
         if winman.bpm_generalsettings.debug: print(saved_to_json_statement) #debug
