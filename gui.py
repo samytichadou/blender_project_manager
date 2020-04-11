@@ -193,7 +193,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         drawDebugPanel(layout, shot_settings, general_settings)#debug
 
 
-# sequencer shot assets panel
+# sequencer assets panel
 class BPM_PT_sequencer_asset_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
