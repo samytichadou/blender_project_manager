@@ -126,7 +126,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
         scene_to_link = None
         for s in bpy.data.scenes:
             if s.library:
-                if s.library.filepath == target_shot_path:
+                if absolutePath(s.library.filepath) == target_shot_path:
                     if s.name == shot_name:
                         scene_to_link = s
                         break
