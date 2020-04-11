@@ -60,8 +60,8 @@ class BpmCreateProject(bpy.types.Operator):
         
     def execute(self, context):
         # import statements and functions
-        from ..functions.file_functions import suppressExistingFile, absolutePath, createFolder
-        from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
+        from ..functions.file_functions import absolutePath, createFolder
+        from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
         from ..functions.utils_functions import redrawAreas
         from ..global_variables import (
                                     file_project,
@@ -78,11 +78,16 @@ class BpmCreateProject(bpy.types.Operator):
                                     render_draft_folder,
                                     render_render_folder,
                                     render_final_folder,
+                                    render_draft_folder,
+                                    render_render_folder,
+                                    render_final_folder,
+                                    render_file,
                                 )
         from ..vse_extra_ui import enableSequencerCallback
 
         winman = context.window_manager
-        general_settings = context.window_manager.bpm_generalsettings
+        general_settings = winman.bpm_generalsettings
+        render_settings = winman.bpm_rendersettings
         datas = winman.bpm_projectdatas
 
         if winman.bpm_generalsettings.debug: print(saving_to_json_statement) #debug
@@ -90,13 +95,11 @@ class BpmCreateProject(bpy.types.Operator):
         project_folder = general_settings.project_folder
         project_file = os.path.join(project_folder, file_project)
 
-        # format the json dataset
+        # format the project datas json dataset
         json_dataset = createJsonDatasetFromProperties(datas)
-        # delete previous file
-        suppressExistingFile(project_file)
+
         # create json file
         create_json_file(json_dataset, project_file)
-
         if winman.bpm_generalsettings.debug: print(saved_to_json_statement) #debug
 
         # set project as bpm edit project
@@ -193,6 +196,35 @@ class BpmCreateProject(bpy.types.Operator):
         createFolder(old_ressources_folder_path)
         if winman.bpm_generalsettings.debug: print(folder_created_statement + old_ressources_folder_path) #debug
 
+
+        # create render settings
+        #draft
+        new_render = render_settings.add()
+        new_render.name = render_draft_folder
+        #render
+        new_render = render_settings.add()
+        new_render.name = render_render_folder
+        #final
+        new_render = render_settings.add()
+        new_render.name = render_final_folder
+
+        # save render settings as json 
+        json_render_dataset = initializeAssetJsonDatas({"render_settings"})
+        for r in render_settings:
+            r_datas = createJsonDatasetFromProperties(r)
+            json_render_dataset['render_settings'].append(r_datas)
+
+        # create json file
+        if winman.bpm_generalsettings.debug: print(saving_to_json_statement) #debug
+
+        render_filepath = os.path.join(render_folder_path, render_file)
+        print(render_filepath)
+        create_json_file(json_render_dataset, render_filepath)
+
+        if winman.bpm_generalsettings.debug: print(saved_to_json_statement) #debug
+
+        
+        # add extra ui
         enableSequencerCallback()
 
         # reload vse areas

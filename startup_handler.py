@@ -9,6 +9,7 @@ from .functions.project_data_functions import (
                                             loadJsonInCollection, 
                                             chekIfBpmProject, 
                                             getAssetFile,
+                                            getRenderSettingsFile,
                                             findUnusedLibraries,
                                             getShotSettingsFileFromBlend,
                                             refreshTimelineShotDatas,
@@ -22,6 +23,9 @@ from .global_variables import (
                             loaded_project_folder,
                             assets_loading_statement,
                             assets_loaded_statement,
+                            render_settings_loading_statement,
+                            render_settings_loaded_statement,
+                            missing_render_file_statement,
                             library_cleared_statement,
                             checking_unused_libraries_statement,
                             shot_loading_statement,
@@ -65,8 +69,9 @@ def bpmStartupHandler(scene):
                 loadJsonInCollection(winman, custom_folders_file, custom_folders_coll, 'folders')
                 if general_settings.debug: print(loaded_folders_statement) #debug
 
-            # load available assets
             if general_settings.file_type in {'EDIT', 'SHOT'}:
+                
+                # load available assets
                 asset_file, asset_file_exist = getAssetFile(winman)
                 if asset_file_exist:
                     if general_settings.debug: print(assets_loading_statement + asset_file) #debug
@@ -74,6 +79,18 @@ def bpmStartupHandler(scene):
                     loadJsonInCollection(winman, asset_file, asset_coll, 'assets')
                     if general_settings.debug: print(assets_loaded_statement) #debug
 
+                # load render settings
+                render_filepath, render_file_exist = getRenderSettingsFile(winman)
+                if render_file_exist:
+                    if general_settings.debug: print(render_settings_loading_statement + render_filepath) #debug
+                    render_settings = winman.bpm_rendersettings
+                    loadJsonInCollection(winman, render_filepath, render_settings, 'render_settings')
+                    if general_settings.debug: print(render_settings_loaded_statement) #debug
+
+                # no render file error
+                else:
+                    if general_settings.debug: print(missing_render_file_statement) #debug
+                
 
             ### specific loading ###
 

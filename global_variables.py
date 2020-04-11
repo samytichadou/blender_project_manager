@@ -68,6 +68,10 @@ shot_audio_synced_statement = bpm_statement + "Shot audio successfully synchroni
 sync_file_not_found_message = "Audio synchronization file not found"
 sync_file_not_found_statement = bpm_statement + sync_file_not_found_message
 
+render_settings_loading_statement = bpm_statement + "Render settings loading from : "
+render_settings_loaded_statement = bpm_statement + "Render settings successfully loaded"
+missing_render_file_statement = bpm_statement + "Render settings file missing"
+
 
 # python scripts statement
 creating_python_script_statement = bpm_statement + "Creating python script : "
@@ -163,6 +167,7 @@ asset_file = "project_assets.json"
 custom_folders_file = "project_custom_folders.json"
 audio_sync_file = "project_audio_sync.json"
 shot_file = "shot_settings.json"
+render_file = "render_settings.json"
 
 python_temp = "python_temp.py"
 

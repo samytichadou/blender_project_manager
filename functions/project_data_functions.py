@@ -12,6 +12,8 @@ from ..global_variables import (
                             shot_folder,
                             asset_file,
                             shot_file,
+                            render_folder,
+                            render_file,
                             missing_shot_file_statement,
                         )
 from .json_functions import read_json
@@ -122,6 +124,17 @@ def getAssetFile(winman):
         return asset_file_path, True
     else:
         return asset_file_path, False
+
+
+# get render settings file
+def getRenderSettingsFile(winman):
+    project_folder = winman.bpm_generalsettings.project_folder
+    render_folder_path = os.path.join(project_folder, render_folder)
+    render_filepath = os.path.join(render_folder_path, render_file)
+    if os.path.isfile(render_filepath):
+        return render_filepath, True
+    else:
+        return render_filepath, False
 
 
 # load json in collection
