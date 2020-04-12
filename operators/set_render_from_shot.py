@@ -33,6 +33,8 @@ class BPMSetRenderShot(bpy.types.Operator):
                                     render_shots_folder,
                                     setting_prop_statement,
                                     setting_prop_error_statement,
+                                    emptying_folder_statement,
+                                    folder_emptied_statement,
                                 )
 
         winman = context.window_manager
@@ -51,13 +53,11 @@ class BPMSetRenderShot(bpy.types.Operator):
         shot_folder_path = os.path.join(spec_render_folder_path, shot_name)
         output_filepath = os.path.join(shot_folder_path, shot_name + "_#####")
 
-        # create render folder if needed
-        if not os.path.isdir(shot_folder_path):
-            createDirectory(shot_folder_path)
-
         # clear previous if needed
-        else:
+        if os.path.isdir(shot_folder_path):
+            if debug: print(emptying_folder_statement + shot_folder_path) #debug
             deleteFolderContent(shot_folder_path)
+            if debug: print(folder_emptied_statement) #debug
 
         # set render
 
