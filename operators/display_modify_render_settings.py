@@ -49,7 +49,7 @@ class BpmDisplayModifyRenderSettings(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
-        datas = context.window_manager.bpm_rendersettings[self.render_settings]
+        render_settings = context.window_manager.bpm_rendersettings[self.render_settings]
 
         layout = self.layout     
 
@@ -59,8 +59,8 @@ class BpmDisplayModifyRenderSettings(bpy.types.Operator):
         col1 = split.column(align=True)
         col2 = split.column(align=True)
 
-        for p in returnDatasetProperties(datas):
-            if p[0].identifier != "name":
+        for p in returnDatasetProperties(render_settings):
+            if p[0].identifier != 'name':
                 box = col1.box()
                 box.label(text=p[0].name)
                 if not self.modify:
@@ -68,7 +68,7 @@ class BpmDisplayModifyRenderSettings(bpy.types.Operator):
                     box.label(text=str(p[1]))
                 else:
                     box = col2.box()
-                    box.prop(datas, '%s' % p[0].identifier, text='')
+                    box.prop(render_settings, '%s' % p[0].identifier, text='')
 
         layout.operator('bpm.open_wiki_page', text="Help", icon='QUESTION').wiki_page = "Render-Settings"
 

@@ -199,23 +199,25 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
 class BPMRenderSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
 
+    ### image settings ###
+
     file_format_items = [
         ('OPEN_EXR', 'Open EXR', ""),
         ]
-    file_format : bpy.props.EnumProperty(name = "File format", items = file_format_items, default='OPEN_EXR')
+    is_file_format : bpy.props.EnumProperty(name = "File format", items = file_format_items, default='OPEN_EXR')
 
     color_mode_items = [
         ('BW', 'Black and white', ""),
         ('RGB', 'RGB', ""),
         ('RGBA', 'RGB Alpha', ""),
         ]
-    color_mode : bpy.props.EnumProperty(name = "Color mode", items = color_mode_items, default='RGBA')
+    is_color_mode : bpy.props.EnumProperty(name = "Color mode", items = color_mode_items, default='RGBA')
 
     color_depth_items = [
         ('16', '16 Bits', ""),
         ('32', '32 Bits', ""),
         ]
-    color_depth : bpy.props.EnumProperty(name = "Color depth", items = color_depth_items, default='16')
+    is_color_depth : bpy.props.EnumProperty(name = "Color depth", items = color_depth_items, default='16')
 
     exr_codec_items = [
         ('NONE', 'None', ""),
@@ -228,7 +230,41 @@ class BPMRenderSettings(bpy.types.PropertyGroup) :
         ('B44A', 'B44A (lossy)', ""),
         ('DWAA', 'DWAA (lossy)', ""),
         ]
-    exr_codec : bpy.props.EnumProperty(name = "Codec", items = exr_codec_items, default='ZIP')
+    is_exr_codec : bpy.props.EnumProperty(name = "Codec", items = exr_codec_items, default='ZIP')
 
-    use_zbuffer : bpy.props.BoolProperty(name = 'Z Buffer', default=False)
-    use_preview : bpy.props.BoolProperty(name = 'Preview', default=False)
+    is_use_zbuffer : bpy.props.BoolProperty(name = 'Z Buffer', default=False)
+    is_use_preview : bpy.props.BoolProperty(name = 'Preview', default=False)
+
+
+    ### render settings ###
+
+    rd_resolution_percentage : bpy.props.IntProperty(name = "Resolution percentage", default = 100)
+
+    rd_film_transparent : bpy.props.BoolProperty(name = "Transparent background", default = False)
+    
+    rd_use_motion_blur : bpy.props.BoolProperty(name = "Motion blur", default = False)
+
+    rd_tile_x : bpy.props.IntProperty(name = "Cycles tiles X size", default = 64)
+    rd_tile_y : bpy.props.IntProperty(name = "Cycles tiles Y size", default = 64)
+
+    engine_items = [
+        ('BLENDER_EEVEE', 'Eevee', ""),
+        ('CYCLES', 'Cycles', ""),
+        ]
+    rd_engine : bpy.props.EnumProperty(name = "Render engine", items = engine_items, default='BLENDER_EEVEE')
+
+
+    ### eevee settings ###
+
+    ee_taa_render_samples : bpy.props.IntProperty(name = "EEVEE render samples", default = 64)
+
+
+    ### cycles settings ###
+
+    cy_samples : bpy.props.IntProperty(name = "Cycles render samples", default = 128)
+
+    device_items = [
+        ('GPU', 'GPU Compute', ""),
+        ('CPU', 'CPU', ""),
+        ]
+    cy_device : bpy.props.EnumProperty(name = "Cycles render device", items = device_items, default='CPU')

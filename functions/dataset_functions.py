@@ -12,8 +12,9 @@ def returnDatasetProperties(dataset):
         if not p.is_readonly:
             value = getattr(dataset, p.identifier)
             properties_list.append([p, value])
-    if len(properties_list) != 0:
-        return properties_list
+
+    return properties_list
+
 
 # set attributes from json
 def setPropertiesFromJsonDataset(datasetin, datasetout, debug, avoid_list):
