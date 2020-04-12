@@ -184,6 +184,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         layout.separator()
         layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
         layout.prop(shot_settings, 'shot_state')
+        layout.prop(shot_settings, 'shot_render_state', text = "Render")
         layout.prop(shot_settings, 'display_markers')
 
         row = layout.row(align=True)
@@ -256,6 +257,8 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
 
         layout.prop(shot_settings, 'shot_state', text = "")
+
+        layout.prop(shot_settings, 'shot_render_state', text = "Render")
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')

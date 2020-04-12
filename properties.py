@@ -5,6 +5,12 @@ from .functions.filebrowser_update_function import updateFilebrowserPath
 from .functions.shot_settings_json_update_function import updateShotSettingsProperties
 from .functions.asset_assigning_update_function import updateAssetAssigning, updateChangingAssetType, saveAssetToJson
 
+from .global_variables import (
+                            render_draft_folder,
+                            render_render_folder,
+                            render_final_folder,
+                        )
+
 
 asset_type_items = [
         ('CHARACTER', 'Character', ""),
@@ -28,6 +34,12 @@ shot_state_items = [
         ('RENDERING', 'Rendering', ""),
         ('COMPOSITING', 'Compositing', ""),
         ('FINISHED', 'Finished', ""),
+        ]
+
+shot_render_state_items = [
+        (render_draft_folder, render_draft_folder, ""),
+        (render_render_folder, render_render_folder, ""),
+        (render_final_folder, render_final_folder, ""),
         ]
 
 
@@ -92,6 +104,7 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     is_shot : bpy.props.BoolProperty(default=False)
     display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
     shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsProperties)
+    shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = render_draft_folder , update = updateShotSettingsProperties)
     shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
     shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = updateShotSettingsProperties)
     not_last_version : bpy.props.BoolProperty(default=False)
@@ -105,6 +118,7 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     is_shot : bpy.props.BoolProperty(default=False)
     display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
     shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsProperties)
+    shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = render_draft_folder , update = updateShotSettingsProperties)
     shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
     shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1)
     not_last_version : bpy.props.BoolProperty(default=False)
@@ -242,7 +256,7 @@ class BPMRenderSettings(bpy.types.PropertyGroup) :
 
     rd_film_transparent : bpy.props.BoolProperty(name = "Transparent background", default = False)
     
-    rd_use_motion_blur : bpy.props.BoolProperty(name = "Motion blur", default = False)
+    rd_use_motion_blur : bpy.props.BoolProperty(name = "Cycles motion blur", default = False)
 
     rd_tile_x : bpy.props.IntProperty(name = "Cycles tiles X size", default = 64)
     rd_tile_y : bpy.props.IntProperty(name = "Cycles tiles Y size", default = 64)
@@ -253,10 +267,18 @@ class BPMRenderSettings(bpy.types.PropertyGroup) :
         ]
     rd_engine : bpy.props.EnumProperty(name = "Render engine", items = engine_items, default='BLENDER_EEVEE')
 
+    rd_use_overwrite : bpy.props.BoolProperty(name = "Overwrite output", default = True)
+
+    rd_use_file_extension : bpy.props.BoolProperty(name = "File extensions output", default = True)
+
+    rd_use_placeholder : bpy.props.BoolProperty(name = "Placeholders output", default = True)
+
 
     ### eevee settings ###
 
     ee_taa_render_samples : bpy.props.IntProperty(name = "EEVEE render samples", default = 64)
+
+    ee_use_motion_blur : bpy.props.BoolProperty(name = "EEVEE motion blur", default = False)
 
 
     ### cycles settings ###

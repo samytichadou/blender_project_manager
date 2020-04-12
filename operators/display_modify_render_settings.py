@@ -3,6 +3,7 @@ import bpy, os
 
 from ..functions.dataset_functions import returnDatasetProperties
 from ..functions.project_data_functions import loadJsonInCollection
+from ..properties import shot_render_state_items
 from ..global_variables import reading_json_statement, render_folder, render_file
 
 
@@ -21,24 +22,13 @@ def reloadRenderSettingsFromJson(self, context):
         loadJsonInCollection(winman, render_filepath, winman.bpm_rendersettings, 'render_settings')
 
 
-# return render settings list
-def renderSettingsListCallback(scene, context):
-
-    items = []
-    for a in context.window_manager.bpm_rendersettings:
-        name = a.name
-        items.append((name, name, ""))
-
-    return items
-
-
 # display project settings
 class BpmDisplayModifyRenderSettings(bpy.types.Operator):
     """Display and Render Settings"""
     bl_idname = "bpm.display_modify_render_settings"
     bl_label = "Display/Modify Render Settings"
 
-    render_settings : bpy.props.EnumProperty(name = "Render settings", items = renderSettingsListCallback)
+    render_settings : bpy.props.EnumProperty(name = "Render settings", items = shot_render_state_items)
     modify: bpy.props.BoolProperty(name = "Modify", default = False, update = reloadRenderSettingsFromJson)
 
     @classmethod

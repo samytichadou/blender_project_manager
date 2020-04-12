@@ -2,7 +2,7 @@ import bpy
 import os
 
 
-from .display_modify_render_settings import renderSettingsListCallback
+from ..properties import shot_render_state_items
 
 
 class BPMSetRenderShot(bpy.types.Operator):
@@ -11,14 +11,15 @@ class BPMSetRenderShot(bpy.types.Operator):
     bl_label = "Set render"
     bl_options = {'REGISTER'}
 
-    render_settings : bpy.props.EnumProperty(name = "Render settings", items = renderSettingsListCallback)
+    render_settings : bpy.props.EnumProperty(name = "Render settings", items = shot_render_state_items)
 
     @classmethod
     def poll(cls, context):
         general_settings = context.window_manager.bpm_generalsettings
         return general_settings.is_project and general_settings.file_type == 'SHOT'
 
-    def invoke(self, context, event):
+    def invoke(self, context, event):       
+        self.render_settings = context.window_manager.bpm_shotsettings.shot_render_state
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
