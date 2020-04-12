@@ -1,3 +1,4 @@
+import bpy
 import os
 
 ### STATEMENTS ###
@@ -154,13 +155,14 @@ asset_file_not_found_message = "Asset file not found : "
 asset_file_not_found_statement = bpm_statement + asset_file_not_found_message
 asset_imported_statement = bpm_statement + "Asset successfully imported"
 asset_linked_statement = bpm_statement + "Asset linked : "
+asset_file_creation_statement = bpm_statement + "Asset file creation : "
 
 
 # help statements
 opening_web_page_statement = bpm_statement + "Opening web page : "
 
 
-### FILES ###
+### FILES AND PATHS ###
 
 file_project = "project_data.json"
 asset_file = "project_assets.json"
@@ -168,6 +170,10 @@ custom_folders_file = "project_custom_folders.json"
 audio_sync_file = "project_audio_sync.json"
 shot_file = "shot_settings.json"
 render_file = "render_settings.json"
+
+user_path = bpy.utils.resource_path('USER')
+config_path = os.path.join(user_path, "config")
+startup_filepath = os.path.join(config_path, "startup.blend")
 
 python_temp = "python_temp.py"
 

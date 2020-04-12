@@ -1,5 +1,6 @@
 import bpy
 import os
+import shutil
 
 
 class BPMCreateAsset(bpy.types.Operator):
@@ -44,6 +45,8 @@ class BPMCreateAsset(bpy.types.Operator):
                                 dupe_asset_name_message,
                                 dupe_asset_name_statement,
                                 initialize_json_statement,
+                                startup_filepath,
+                                asset_file_creation_statement,
                                 )
         from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
         from ..functions.dataset_functions import setPropertiesFromDataset
@@ -103,13 +106,18 @@ class BPMCreateAsset(bpy.types.Operator):
         create_json_file(datas, asset_file_path)
 
         if general_settings.debug: print(saved_to_json_statement) #debug
-
-        # create asset blend and get the link
         
         # create the folder
         asset_folder_path = os.path.join(general_settings.project_folder, asset_folder)
         new_asset_folder_path = os.path.join(asset_folder_path, self.name)
         createDirectory(new_asset_folder_path)
+        
+        new_asset_file_path = os.path.join(new_asset_folder_path, self.name + ".blend")
+
+        if general_settings.debug: print(asset_file_creation_statement + new_asset_file_path) #debug        
+
+        # create asset blend and get the link
+        shutil.copy(startup_filepath, new_asset_file_path)
 
         if general_settings.debug: print(asset_created_statement + self.name) #debug
 
