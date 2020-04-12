@@ -9,9 +9,10 @@ from ..global_variables import (
                             bypass_shot_settings_update_statement,
                         )
 from .json_functions import create_json_file, createJsonDatasetFromProperties
+from .set_render_shot_update_function import setRenderShot
 
 
-#update function for filebrowser custom path
+#update function for shot settings props general
 def updateShotSettingsProperties(self, context):
     winman = context.window_manager
     debug = winman.bpm_generalsettings.debug
@@ -30,3 +31,11 @@ def updateShotSettingsProperties(self, context):
     create_json_file(json_dataset, shot_json)
 
     if debug: print(saved_to_json_statement) #debug
+
+
+#update function for shot render state prop
+def updateShotRenderState(self, context):
+    # save json
+    updateShotSettingsProperties(self, context)
+    # set render settings
+    setRenderShot(context)

@@ -27,7 +27,7 @@ class BPMSetRenderShot(bpy.types.Operator):
         layout.prop(self, 'render_settings', text='') 
 
     def execute(self, context):
-        from ..functions.file_functions import createDirectory, deleteFolderContent
+        from ..functions.file_functions import deleteFolderContent
         from ..global_variables import (
                                     render_folder,
                                     render_shots_folder,

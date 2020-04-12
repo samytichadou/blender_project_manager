@@ -73,6 +73,9 @@ render_settings_loading_statement = bpm_statement + "Render settings loading fro
 render_settings_loaded_statement = bpm_statement + "Render settings successfully loaded"
 missing_render_file_statement = bpm_statement + "Render settings file missing"
 
+setting_render_statement = bpm_statement + "Setting render"
+render_set_statement = bpm_statement + "Render set"
+
 
 # python scripts statement
 creating_python_script_statement = bpm_statement + "Creating python script : "
