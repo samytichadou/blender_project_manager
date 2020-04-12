@@ -55,6 +55,7 @@ from .operators.synchronize_audio_edit import *
 from .operators.synchronize_audio_shot import *
 from .operators.refresh_shot_datas import *
 from .operators.import_asset import *
+from .operators.set_render_from_shot import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -90,6 +91,7 @@ classes = (BPMOpenShot,
             BPMRefreshShotDatasEdit,
             BPMRefreshShotDatasShot,
             BPMImportAsset,
+            BPMSetRenderShot,
 
             BPMOpenWikiPage,
 

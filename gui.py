@@ -263,6 +263,8 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
 
         layout.prop(general_settings, 'asset_choose')
         layout.operator('bpm.import_asset')
+
+        drawOperatorAndHelp(layout, 'bpm.set_render_shot', '', 'Render-Settings')
         
         drawDebugPanel(layout, shot_settings, general_settings) #debug
 
