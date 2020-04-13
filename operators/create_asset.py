@@ -121,4 +121,7 @@ class BPMCreateAsset(bpy.types.Operator):
 
         if general_settings.debug: print(asset_created_statement + self.name) #debug
 
+        # select asset
+        for idx, 
+
         return {'FINISHED'}

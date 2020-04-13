@@ -57,32 +57,6 @@ shot_render_state_items = [
         ]
 
 
-# return asset list
-def assetListCallback(scene, context):
-    items = []
-    winman = context.window_manager
-    display = winman.bpm_generalsettings.panel_asset_display
-
-    n = 0
-
-    for a in winman.bpm_assets:
-        name = a.name
-        icon = getAssetIcon(a.asset_type)
-        if display == 'ALL':
-            items.append((name, name, "", icon, n))
-            n += 1
-        else:
-            if a.asset_type == display:
-                items.append((name, name, "", icon, n))
-                n += 1
-
-    # no items
-    if len(items) == 0:
-        items.append(("NONE", "None", "", getAssetIcon('NONE'), 0))
-
-    return items
-
-
 # update function for asset display type to change index
 def updateAssetDisplayType(self, context):
     assets = context.window_manager.bpm_assets
@@ -246,7 +220,7 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
     asset_type_display_items.append(('ALL', 'All', "", "", 0))   
 
     panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL', update = updateAssetDisplayType)
-    
+
     asset_list_index : bpy.props.IntProperty(min = -1)
 
 
