@@ -10,7 +10,8 @@ class BPMImportAsset(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'SHOT'
+        winman = context.window_manager
+        return winman.bpm_generalsettings.is_project and winman.bpm_generalsettings.file_type == 'SHOT' and winman.bpm_generalsettings.asset_choose != "NONE"
 
     def execute(self, context):
         from ..functions.file_functions import linkAssetLibrary

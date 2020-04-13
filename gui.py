@@ -221,20 +221,11 @@ class BPM_PT_sequencer_asset_panel(bpy.types.Panel):
 
         layout = self.layout
 
-        drawOperatorAndHelp(layout, 'bpm.create_asset', '', 'Create-Asset-Operator')
+        drawOperatorAndHelp(layout, 'bpm.create_asset', '', 'Asset-Management')
 
         layout.prop(general_settings, 'panel_asset_display', text="")
 
-        for asset in asset_list:
-            if general_settings.panel_asset_display == 'ALL':
-                row = layout.row(align=True)
-                row.label(text = asset.name)
-                row.label(text = asset.asset_type)
-            else:
-                if asset.asset_type == general_settings.panel_asset_display:
-                    row = layout.row(align=True)
-                    row.label(text = asset.name)
-                    row.label(text = asset.asset_type)
+        layout.prop(general_settings, 'asset_choose')
 
 
 # shot settings panel
@@ -270,6 +261,7 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'auto_audio_sync')
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
 
+        layout.prop(general_settings, 'panel_asset_display', text="")
         layout.prop(general_settings, 'asset_choose')
         layout.operator('bpm.import_asset')
         

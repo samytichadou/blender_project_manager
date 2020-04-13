@@ -46,11 +46,19 @@ shot_render_state_items = [
 # return asset list
 def assetListCallback(scene, context):
 
+    winman = context.window_manager
+    display = winman.bpm_generalsettings.panel_asset_display
     items = []
-    for a in context.window_manager.bpm_assets:
+    for a in winman.bpm_assets:
         name = a.name
-        items.append((name, name, ""))
-
+        if display == 'ALL':
+            items.append((name, name, ""))
+        else:
+            if a.asset_type == display:
+                items.append((name, name, ""))
+    # no items
+    if len(items) == 0:
+        items.append(("NONE", "None", ""))
     return items
 
 
