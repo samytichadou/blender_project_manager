@@ -159,6 +159,9 @@ def register():
     bpy.types.Material.bpm_isasset = \
         bpy.props.BoolProperty(default = False)
 
+    bpy.types.World.bpm_isasset = \
+        bpy.props.BoolProperty(default = False)
+
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
 
@@ -191,6 +194,8 @@ def unregister():
     del bpy.types.Collection.bpm_isasset
 
     del bpy.types.Material.bpm_isasset
+
+    del bpy.types.World.bpm_isasset
 
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)

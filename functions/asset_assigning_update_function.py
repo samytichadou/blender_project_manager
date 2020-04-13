@@ -46,6 +46,8 @@ def saveAssetToJson(self, context):
         asset_datas['asset_collection'] = asset_settings.asset_collection.name
     if asset_settings.asset_material is not None:
         asset_datas['asset_material'] = asset_settings.asset_material.name
+    if asset_settings.asset_world is not None:
+        asset_datas['asset_world'] = asset_settings.asset_world.name
 
     datas['assets'].append(asset_datas)
 
@@ -64,10 +66,12 @@ def updateAssetAssigning(self, context):
         if debug: print(bypass_shot_settings_update_statement) #debug
         return
     
-    if self.asset_type != 'SHADER':
+    if self.asset_type not in {'SHADER', 'WORLD'}:
         asset = self.asset_collection
-    else:
+    elif self.asset_type == 'SHADER':
         asset = self.asset_material
+    elif self.asset_type == 'WORLD':
+        asset = self.asset_world
 
     if debug: print(cleared_old_asset_statement)
 
@@ -75,6 +79,8 @@ def updateAssetAssigning(self, context):
     for i in bpy.data.collections:
         i.bpm_isasset = False
     for i in bpy.data.materials:
+        i.bpm_isasset = False
+    for i in bpy.data.worlds:
         i.bpm_isasset = False
 
     # set asset
@@ -98,17 +104,28 @@ def updateChangingAssetType(self, context):
     
     general_settings.bypass_update_tag = True
 
-    if self.asset_type != 'SHADER':
+    if self.asset_type not in {'SHADER', 'WORLD'}:
         self.asset_material = None
-        to_clear = bpy.data.materials
-    else:
+        self.asset_world = None
+        to_clear1 = bpy.data.materials
+        to_clear2 = bpy.data.worlds
+    elif self.asset_type == 'SHADER':
         self.asset_collection = None
-        to_clear = bpy.data.collections
+        self.asset_world = None
+        to_clear1 = bpy.data.collections
+        to_clear2 = bpy.data.worlds
+    elif self.asset_type == 'WORLD':
+        self.asset_collection = None
+        self.asset_material = None
+        to_clear1 = bpy.data.collections
+        to_clear2 = bpy.data.materials
 
     general_settings.bypass_update_tag = False
 
     # clear old assets
-    for i in to_clear:
+    for i in to_clear1:
+        i.bpm_isasset = False
+    for i in to_clear2:
         i.bpm_isasset = False
 
     if debug: print(cleared_old_asset_statement)

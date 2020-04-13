@@ -17,7 +17,8 @@ asset_type_items = [
         ('PROP', 'Prop', "", "MESH_CUBE", 2),
         ('SET', 'Set', "", "SCENE_DATA", 3),
         ('SHADER', 'Shader', "", "MATERIAL", 4),
-        ('FX', 'FX', "", "SHADERFX", 5),
+        ('WORLD', 'World', "", "WORLD", 5),
+        ('FX', 'FX', "", "SHADERFX", 6),
         ]
 
 asset_state_items = [
@@ -95,6 +96,7 @@ class BPMAssetList(bpy.types.PropertyGroup) :
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
     asset_collection : bpy.props.StringProperty(name="Asset collection name")
     asset_material : bpy.props.StringProperty(name="Asset material name")
+    asset_world : bpy.props.StringProperty(name="Asset world name")
 
 
 # asset settings
@@ -104,7 +106,7 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT', update = saveAssetToJson)
     asset_collection : bpy.props.PointerProperty(name="Asset collection", type=bpy.types.Collection, update = updateAssetAssigning)
     asset_material : bpy.props.PointerProperty(name="Asset material", type=bpy.types.Material, update = updateAssetAssigning)
-    
+    asset_world : bpy.props.PointerProperty(name="Asset world", type=bpy.types.World, update = updateAssetAssigning)
 
 # shot settings strips
 class BPMShotSettingsStrips(bpy.types.PropertyGroup) :

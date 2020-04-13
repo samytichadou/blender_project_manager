@@ -146,7 +146,32 @@ def linkAssetLibrary(filepath, asset_type, debug):
     imported = []
     lib = bpy.data.libraries.load(filepath, link=True, relative=True)
 
-    if asset_type != "SHADER":
+    # shader
+    if asset_type == "SHADER":
+        with lib as (data_from, data_to):
+            data_to.materials = data_from.materials
+
+        for new_mat in data_to.materials:
+            imported.append(new_mat)
+            if not new_mat.bpm_isasset:
+                bpy.data.materials.remove(bpy.data.materials[new_mat.name])
+            else:
+                if debug: print(asset_linked_statement + new_mat.name) #debug
+
+    # world
+    elif asset_type == "WORLD":
+        with lib as (data_from, data_to):
+            data_to.worlds = data_from.worlds
+
+        for new_world in data_to.worlds:
+            imported.append(new_world)
+            if not new_world.bpm_isasset:
+                bpy.data.worlds.remove(bpy.data.worlds[new_world.name])
+            else:
+                if debug: print(asset_linked_statement + new_world.name) #debug
+
+    # collections
+    else:
         master_collection = bpy.context.scene.collection
 
         with lib as (data_from, data_to):
@@ -163,17 +188,6 @@ def linkAssetLibrary(filepath, asset_type, debug):
                 master_collection.objects.link(instance)
 
                 imported.append(instance)
-
-    elif asset_type == "SHADER":
-        with lib as (data_from, data_to):
-            data_to.materials = data_from.materials
-
-        for new_mat in data_to.materials:
-            imported.append(new_mat)
-            if not new_mat.bpm_isasset:
-                bpy.data.materials.remove(bpy.data.materials[new_mat.name])
-            else:
-                if debug: print(asset_linked_statement + new_mat.name) #debug
 
     # remove lib if nothing imported
     if len(imported) == 0:

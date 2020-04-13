@@ -260,6 +260,17 @@ def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
         for m in bpy.data.materials:
             if m.name == specific_asset_datas[prop]:
                 datasetout.asset_material = m
+                m.bpm_isasset = True
+                if debug: print(setting_prop_statement + prop) ###debug
+                return
+
+    # world
+    elif specific_asset_datas['asset_type'] == "WORLD":
+        prop = 'asset_world'
+        for w in bpy.data.worlds:
+            if w.name == specific_asset_datas[prop]:
+                datasetout.asset_world = w
+                w.bpm_isasset = True
                 if debug: print(setting_prop_statement + prop) ###debug
                 return
 
@@ -269,5 +280,6 @@ def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
         for c in bpy.data.collections:
             if c.name == specific_asset_datas[prop]:
                 datasetout.asset_collection = c
+                c.bpm_isasset = True
                 if debug: print(setting_prop_statement + prop) ###debug
                 return
