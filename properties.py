@@ -11,13 +11,13 @@ from .global_variables import (
                             render_final_folder,
                         )
 
-
+# enum prop lists (identifier, name, description, icon, unique number)
 asset_type_items = [
-        ('CHARACTER', 'Character', ""),
-        ('PROP', 'Prop', ""),
-        ('SET', 'Set', ""),
-        ('SHADER', 'Shader', ""),
-        ('FX', 'FX', ""),
+        ('CHARACTER', 'Character', "", "ARMATURE_DATA", 1),
+        ('PROP', 'Prop', "", "MESH_CUBE", 2),
+        ('SET', 'Set', "", "SCENE_DATA", 3),
+        ('SHADER', 'Shader', "", "MATERIAL", 4),
+        ('FX', 'FX', "", "SHADERFX", 5),
         ]
 
 asset_state_items = [
@@ -206,14 +206,8 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
 
     asset_choose : bpy.props.EnumProperty(name = "Asset", items = assetListCallback)
 
-    asset_type_display_items = [
-        ('ALL', 'All', ""),
-        ('CHARACTER', 'Character', ""),
-        ('PROP', 'Prop', ""),
-        ('SET', 'Set', ""),
-        ('SHADER', 'Shader', ""),
-        ('FX', 'FX', ""),
-        ]
+    asset_type_display_items = asset_type_items
+    asset_type_display_items.append(('ALL', 'All', "", "", 0))   
     panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL')
 
 
