@@ -83,6 +83,21 @@ def assetListCallback(scene, context):
     return items
 
 
+# update function for asset display type to change index
+def updateAssetDisplayType(self, context):
+    assets = context.window_manager.bpm_assets
+    
+    if self.panel_asset_display == 'ALL':
+        self.asset_list_index = 0
+        return
+    else:
+        for idx, asset in enumerate(assets):
+            if asset.asset_type == self.panel_asset_display:
+                self.asset_list_index = idx
+                return
+    
+    self.asset_list_index = -1
+
 
 # project settings
 class BPMProjectSettings(bpy.types.PropertyGroup) :
@@ -227,11 +242,12 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
 
     ui_shot_state_subpanel : bpy.props.BoolProperty(name = "Display state colors", default=False)
 
-    asset_choose : bpy.props.EnumProperty(name = "Asset", items = assetListCallback)
-
     asset_type_display_items = asset_type_items
     asset_type_display_items.append(('ALL', 'All', "", "", 0))   
-    panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL')
+
+    panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL', update = updateAssetDisplayType)
+    
+    asset_list_index : bpy.props.IntProperty(min = -1)
 
 
 # render settings

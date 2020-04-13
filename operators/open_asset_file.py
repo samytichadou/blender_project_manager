@@ -11,7 +11,10 @@ class BPMOpenAssetFile(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         winman = context.window_manager
-        return winman.bpm_generalsettings.is_project and winman.bpm_generalsettings.asset_choose != "NONE"
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.asset_list_index < len(winman.bpm_assets):
+            if general_settings.asset_list_index >= 0:
+                return general_settings.is_project
 
     def execute(self, context):
         from ..global_variables import (
@@ -26,18 +29,10 @@ class BPMOpenAssetFile(bpy.types.Operator):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
         debug = general_settings.debug
-        asset_name = general_settings.asset_choose
         asset_list = winman.bpm_assets
+        asset_name = asset_list[general_settings.asset_list_index].name
 
         if debug: print(importing_asset_statement + asset_name) #debug
-
-        # check for asset in asset list
-        try:
-            asset_list[asset_name]
-        except KeyError:
-            self.report({'INFO'}, asset_not_existing_message + asset_name)
-            if debug: print(asset_not_existing_statement + asset_name) #debug
-            return {'FINISHED'}
 
         # asset filepath
         asset_folder_path = os.path.join(general_settings.project_folder, asset_folder)

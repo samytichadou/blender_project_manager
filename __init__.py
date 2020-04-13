@@ -64,6 +64,7 @@ from .operators.save_render_settings_to_json import *
 
 from .properties import *
 from .gui import *
+from .asset_ui_list import *
 
 from .vse_extra_ui import disableSequencerCallback
 
@@ -114,6 +115,7 @@ classes = (BPMOpenShot,
             BPM_MT_topbar_menu,
             BPM_UL_Folders_Uilist,
             BPM_PT_FileBrowser_Panel,
+            BPM_UL_Asset_UI_List,
             )
 
 

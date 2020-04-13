@@ -1,6 +1,9 @@
 import bpy
 
 
+from .properties import getAssetIcon
+
+
 # help function
 def drawWikiHelp(container, wikipage):
     container.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
@@ -224,7 +227,7 @@ class BPM_PT_sequencer_asset_panel(bpy.types.Panel):
 
         layout.prop(general_settings, 'panel_asset_display', text="Display")
 
-        layout.prop(general_settings, 'asset_choose')
+        layout.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
 
         drawOperatorAndHelp(layout, 'bpm.open_asset_file', '', 'Asset-Management')
 
@@ -266,7 +269,7 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         col = box.column(align=True)
         col.label(text="Assets", icon ='ASSET_MANAGER')
         col.prop(general_settings, 'panel_asset_display', text="Display")
-        col.prop(general_settings, 'asset_choose')
+        col.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
         drawOperatorAndHelp(col, 'bpm.import_asset', '', 'Asset-Management')
         drawOperatorAndHelp(col, 'bpm.open_asset_file', '', 'Asset-Management')
         
@@ -306,7 +309,7 @@ class BPM_PT_properties_asset_panel(bpy.types.Panel):
         col = box.column(align=True)
         col.label(text="Assets", icon ='ASSET_MANAGER')
         col.prop(general_settings, 'panel_asset_display', text="Display")
-        col.prop(general_settings, 'asset_choose')
+        col.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
         drawOperatorAndHelp(col, 'bpm.open_asset_file', '', 'Asset-Management')
         
         drawDebugPanel(layout, asset_settings, general_settings) #debug

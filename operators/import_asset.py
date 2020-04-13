@@ -11,7 +11,11 @@ class BPMImportAsset(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         winman = context.window_manager
-        return winman.bpm_generalsettings.is_project and winman.bpm_generalsettings.file_type == 'SHOT' and winman.bpm_generalsettings.asset_choose != "NONE"
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.asset_list_index < len(winman.bpm_assets):
+            if general_settings.asset_list_index >= 0:
+                if general_settings.is_project:
+                    return winman.bpm_generalsettings.file_type == 'SHOT'
 
     def execute(self, context):
         from ..functions.file_functions import linkAssetLibrary
@@ -28,23 +32,17 @@ class BPMImportAsset(bpy.types.Operator):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
         debug = general_settings.debug
-        asset_name = general_settings.asset_choose
         asset_list = winman.bpm_assets
-        asset = None
+        asset = asset_list[general_settings.asset_list_index]
+        asset_name = asset_list[general_settings.asset_list_index].name
+
 
         asset_folder = os.path.join(general_settings.project_folder, asset_folder)
 
         if debug: print(importing_asset_statement + asset_name) #debug
 
-        try:
-            asset = asset_list[asset_name]
-        except KeyError:
-            self.report({'INFO'}, asset_not_existing_message + asset_name)
-            if debug: print(asset_not_existing_statement + asset_name) #debug
-            return {'FINISHED'}
-
-        chosen_asset_folder = os.path.join(asset_folder, asset.name)
-        chosen_asset_file = os.path.join(chosen_asset_folder, asset.name + ".blend")
+        chosen_asset_folder = os.path.join(asset_folder, asset_name)
+        chosen_asset_file = os.path.join(chosen_asset_folder, asset_name + ".blend")
 
         if not os.path.isfile(chosen_asset_file):
             self.report({'INFO'}, asset_file_not_found_message + chosen_asset_file)
