@@ -223,7 +223,7 @@ class BPM_PT_sequencer_asset_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.create_asset', '', 'Asset-Management')
 
-        layout.prop(general_settings, 'panel_asset_display', text="")
+        layout.prop(general_settings, 'panel_asset_display', text="Display")
 
         layout.prop(general_settings, 'asset_choose')
 
@@ -256,14 +256,14 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         layout.prop(shot_settings, 'shot_state', text = "")
 
         row = layout.row(align=True)
-        row.prop(shot_settings, 'shot_render_state', text = "Render")
-        drawWikiHelp(row, 'Render-Settings')
-
-        row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
 
-        layout.prop(general_settings, 'panel_asset_display', text="")
+        row = layout.row(align=True)
+        row.prop(shot_settings, 'shot_render_state', text = "Render")
+        drawWikiHelp(row, 'Render-Settings')
+
+        layout.prop(general_settings, 'panel_asset_display', text="Display")
         layout.prop(general_settings, 'asset_choose')
         drawOperatorAndHelp(layout, 'bpm.import_asset', '', 'Asset-Management')
         drawOperatorAndHelp(layout, 'bpm.open_asset_file', '', 'Asset-Management')
