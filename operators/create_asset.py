@@ -119,9 +119,13 @@ class BPMCreateAsset(bpy.types.Operator):
         # create asset blend and get the link
         shutil.copy(startup_filepath, new_asset_file_path)
 
-        if general_settings.debug: print(asset_created_statement + self.name) #debug
+        # select asset if available
+        if general_settings.panel_asset_display in {'ALL', self.asset_type}:
+            for idx, asset in enumerate(asset_collection):
+                if asset.name == self.name:
+                    general_settings.asset_list_index = idx
+                    break
 
-        # select asset
-        for idx, 
+        if general_settings.debug: print(asset_created_statement + self.name) #debug
 
         return {'FINISHED'}
