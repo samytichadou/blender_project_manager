@@ -263,10 +263,13 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'shot_render_state', text = "Render")
         drawWikiHelp(row, 'Render-Settings')
 
-        layout.prop(general_settings, 'panel_asset_display', text="Display")
-        layout.prop(general_settings, 'asset_choose')
-        drawOperatorAndHelp(layout, 'bpm.import_asset', '', 'Asset-Management')
-        drawOperatorAndHelp(layout, 'bpm.open_asset_file', '', 'Asset-Management')
+        box = layout.box()
+        col = box.column(align=True)
+        col.label(text="Assets", icon ='ASSET_MANAGER')
+        col.prop(general_settings, 'panel_asset_display', text="Display")
+        col.prop(general_settings, 'asset_choose')
+        drawOperatorAndHelp(col, 'bpm.import_asset', '', 'Asset-Management')
+        drawOperatorAndHelp(col, 'bpm.open_asset_file', '', 'Asset-Management')
         
         drawDebugPanel(layout, shot_settings, general_settings) #debug
 
@@ -293,12 +296,18 @@ class BPM_PT_properties_asset_panel(bpy.types.Panel):
         layout.prop(asset_settings, 'asset_type')
         layout.prop(asset_settings, 'asset_state')
 
-        if asset_settings.asset_type != 'SHADER':
-            target_prop = 'asset_collection'
-        else:
-            target_prop = 'asset_material'
+        if asset_settings.asset_type != 'SHADER': target_prop = 'asset_collection'
+        else: target_prop = 'asset_material'
 
         layout.prop(asset_settings, target_prop, text='')
+        layout.label(text = "Manually update when changing collection name", icon = "INFO")
+
+        box = layout.box()
+        col = box.column(align=True)
+        col.label(text="Assets", icon ='ASSET_MANAGER')
+        col.prop(general_settings, 'panel_asset_display', text="Display")
+        col.prop(general_settings, 'asset_choose')
+        drawOperatorAndHelp(col, 'bpm.open_asset_file', '', 'Asset-Management')
         
         drawDebugPanel(layout, asset_settings, general_settings) #debug
         
