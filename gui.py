@@ -227,6 +227,8 @@ class BPM_PT_sequencer_asset_panel(bpy.types.Panel):
 
         layout.prop(general_settings, 'asset_choose')
 
+        drawOperatorAndHelp(layout, 'bpm.open_asset_file', '', 'Asset-Management')
+
 
 # shot settings panel
 class BPM_PT_properties_shot_panel(bpy.types.Panel):
@@ -263,7 +265,8 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
 
         layout.prop(general_settings, 'panel_asset_display', text="")
         layout.prop(general_settings, 'asset_choose')
-        layout.operator('bpm.import_asset')
+        drawOperatorAndHelp(layout, 'bpm.import_asset', '', 'Asset-Management')
+        drawOperatorAndHelp(layout, 'bpm.open_asset_file', '', 'Asset-Management')
         
         drawDebugPanel(layout, shot_settings, general_settings) #debug
 
