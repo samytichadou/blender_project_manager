@@ -2,7 +2,7 @@ import bpy
 import os
 
 
-from .project_data_functions import getAssetFile
+from .project_data_functions import getAssetFile, clearOldAssetBpmIsasset
 from .json_functions import read_json, createJsonDatasetFromProperties, create_json_file
 from .file_functions import getBlendName
 from ..global_variables import (
@@ -76,12 +76,7 @@ def updateAssetAssigning(self, context):
     if debug: print(cleared_old_asset_statement)
 
     # clear old assets
-    for i in bpy.data.collections:
-        i.bpm_isasset = False
-    for i in bpy.data.materials:
-        i.bpm_isasset = False
-    for i in bpy.data.worlds:
-        i.bpm_isasset = False
+    clearOldAssetBpmIsasset()
 
     # set asset
     if asset is not None:
@@ -104,29 +99,24 @@ def updateChangingAssetType(self, context):
     
     general_settings.bypass_update_tag = True
 
-    if self.asset_type not in {'SHADER', 'WORLD'}:
+    clearOldAssetBpmIsasset()
+
+    if self.asset_type not in {'SHADER', 'WORLD'}:       
         self.asset_material = None
         self.asset_world = None
-        to_clear1 = bpy.data.materials
-        to_clear2 = bpy.data.worlds
+        asset = self.asset_collection
     elif self.asset_type == 'SHADER':
         self.asset_collection = None
         self.asset_world = None
-        to_clear1 = bpy.data.collections
-        to_clear2 = bpy.data.worlds
+        asset = self.asset_material
     elif self.asset_type == 'WORLD':
         self.asset_collection = None
         self.asset_material = None
-        to_clear1 = bpy.data.collections
-        to_clear2 = bpy.data.materials
+        asset = self.asset_world
 
     general_settings.bypass_update_tag = False
 
-    # clear old assets
-    for i in to_clear1:
-        i.bpm_isasset = False
-    for i in to_clear2:
-        i.bpm_isasset = False
+    asset.bpm_isasset = True
 
     if debug: print(cleared_old_asset_statement)
 

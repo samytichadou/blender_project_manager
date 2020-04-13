@@ -49,10 +49,10 @@ class BPMImportAsset(bpy.types.Operator):
         if not os.path.isfile(chosen_asset_file):
             self.report({'INFO'}, asset_file_not_found_message + chosen_asset_file)
             if debug: print(asset_file_not_found_statement + chosen_asset_file) #debug
-            return {'FINISHED'}           
+            return {'FINISHED'} 
         
         # link asset
-        if not linkAssetLibrary(chosen_asset_file, asset.asset_type, debug):
+        if not linkAssetLibrary(chosen_asset_file, asset, debug):
             self.report({'INFO'}, asset_not_existing_message + asset_name)
             if debug: print(asset_not_existing_statement + asset_name) #debug
 

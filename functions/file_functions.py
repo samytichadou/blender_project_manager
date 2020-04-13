@@ -133,13 +133,14 @@ def getBlendName():
 
 
 # link asset libraries
-def linkAssetLibrary(filepath, asset_type, debug):
+def linkAssetLibrary(filepath, asset, debug):
     from .utils_functions import clearLibraryUsers
     from ..global_variables import(
                                 library_cleared_statement,
                                 asset_linked_statement,
                             )
 
+    asset_type = asset.asset_type
 
     blend_name = os.path.basename(filepath)
 
@@ -148,37 +149,40 @@ def linkAssetLibrary(filepath, asset_type, debug):
 
     # shader
     if asset_type == "SHADER":
+        name = asset.asset_material
         with lib as (data_from, data_to):
             data_to.materials = data_from.materials
 
         for new_mat in data_to.materials:
             imported.append(new_mat)
-            if not new_mat.bpm_isasset:
+            if not new_mat.bpm_isasset or new_mat.name != name:
                 bpy.data.materials.remove(bpy.data.materials[new_mat.name])
             else:
                 if debug: print(asset_linked_statement + new_mat.name) #debug
 
     # world
     elif asset_type == "WORLD":
+        name = asset.asset_world
         with lib as (data_from, data_to):
             data_to.worlds = data_from.worlds
 
         for new_world in data_to.worlds:
             imported.append(new_world)
-            if not new_world.bpm_isasset:
+            if not new_world.bpm_isasset or new_world.name != name:
                 bpy.data.worlds.remove(bpy.data.worlds[new_world.name])
             else:
                 if debug: print(asset_linked_statement + new_world.name) #debug
 
     # collections
     else:
+        name = asset.asset_collection
         master_collection = bpy.context.scene.collection
 
         with lib as (data_from, data_to):
             data_to.collections = data_from.collections
 
         for new_coll in data_to.collections:
-            if new_coll.bpm_isasset:
+            if new_coll.bpm_isasset and new_coll.name == name:
 
                 if debug: print(asset_linked_statement + new_coll.name) #debug
 

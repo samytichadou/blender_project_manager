@@ -252,8 +252,21 @@ def getAssetDatasFromJson(asset_datas):
             return a
 
 
+# clear old asset bpm_isasset
+def clearOldAssetBpmIsasset():
+    for i in bpy.data.collections:
+        i.bpm_isasset = False
+    for i in bpy.data.materials:
+        i.bpm_isasset = False
+    for i in bpy.data.worlds:
+        i.bpm_isasset = False
+
+
 # set asset col from specific json dataset
 def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
+    # clear old asset bpm_isasset
+    clearOldAssetBpmIsasset()
+
     # shader
     if specific_asset_datas['asset_type'] == "SHADER":
         prop = 'asset_material'
