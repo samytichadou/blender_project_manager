@@ -11,14 +11,27 @@ from .global_variables import (
                             render_final_folder,
                         )
 
+
+# get asset icon from identifier
+def getAssetIcon(identifier):
+    icon = ''
+    if identifier ==    'CHARACTER':    icon = 'ARMATURE_DATA'
+    elif identifier ==  'PROP':         icon = 'MESH_CUBE'
+    elif identifier ==  'SET':          icon = 'SCENE_DATA'
+    elif identifier ==  'SHADER':       icon = 'MATERIAL'
+    elif identifier ==  'WORLD':        icon = 'WORLD'
+    elif identifier ==  'FX':           icon = 'SHADERFX'
+    elif identifier ==  'NONE':         icon = ''
+    return icon
+
 # enum prop lists (identifier, name, description, icon, unique number)
 asset_type_items = [
-        ('CHARACTER', 'Character', "", "ARMATURE_DATA", 1),
-        ('PROP', 'Prop', "", "MESH_CUBE", 2),
-        ('SET', 'Set', "", "SCENE_DATA", 3),
-        ('SHADER', 'Shader', "", "MATERIAL", 4),
-        ('WORLD', 'World', "", "WORLD", 5),
-        ('FX', 'FX', "", "SHADERFX", 6),
+        ('CHARACTER', 'Character', "", getAssetIcon('CHARACTER'), 1),
+        ('PROP', 'Prop', "", getAssetIcon('PROP'), 2),
+        ('SET', 'Set', "", getAssetIcon('SET'), 3),
+        ('SHADER', 'Shader', "", getAssetIcon('SHADER'), 4),
+        ('WORLD', 'World', "", getAssetIcon('WORLD'), 5),
+        ('FX', 'FX', "", getAssetIcon('FX'), 6),
         ]
 
 asset_state_items = [
@@ -46,20 +59,26 @@ shot_render_state_items = [
 
 # return asset list
 def assetListCallback(scene, context):
-
     winman = context.window_manager
     display = winman.bpm_generalsettings.panel_asset_display
     items = []
+
+    #n = 0
+
     for a in winman.bpm_assets:
         name = a.name
+        #icon = getAssetIcon(a.asset_type)
         if display == 'ALL':
-            items.append((name, name, ""))
+            items.append((name, name, "")) #, icon, n))
         else:
             if a.asset_type == display:
-                items.append((name, name, ""))
+                items.append((name, name, "")) #, icon, n))
+        #n += 1
+
     # no items
     if len(items) == 0:
-        items.append(("NONE", "None", ""))
+        items.append(("NONE", "None", "")) #, getAssetIcon('NONE'), 0))
+                
     return items
 
 

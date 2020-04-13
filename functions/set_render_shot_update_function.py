@@ -2,14 +2,11 @@ import bpy
 import os
 
 
-from ..functions.file_functions import deleteFolderContent
 from ..global_variables import (
                             render_folder,
                             render_shots_folder,
                             setting_prop_statement,
                             setting_prop_error_statement,
-                            emptying_folder_statement,
-                            folder_emptied_statement,
                             setting_render_statement,
                             render_set_statement,
                         )
@@ -35,12 +32,6 @@ def setRenderShot(context):
 
     shot_folder_path = os.path.join(spec_render_folder_path, shot_name)
     output_filepath = os.path.join(shot_folder_path, shot_name + "_#####")
-
-    # clear previous if needed
-    if os.path.isdir(shot_folder_path):
-        if debug: print(emptying_folder_statement + shot_folder_path) #debug
-        deleteFolderContent(shot_folder_path)
-        if debug: print(folder_emptied_statement) #debug
 
     # set render
 
