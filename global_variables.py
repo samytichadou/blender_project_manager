@@ -35,8 +35,8 @@ bypass_shot_settings_update_statement = bpm_statement + "Bypassing shot settings
 startup_statement = bpm_statement + "Looking for project datas"
 loaded_datas_statement = bpm_statement + "Project datas loaded"
 loaded_folders_statement = bpm_statement + "Project folders loaded"
-no_datas_statement = bpm_statement + "Project datas not found"
-loading_statement = bpm_statement + "Project datas found, loading from "
+no_datas_statement = bpm_statement + "Datas not found"
+loading_statement = bpm_statement + "Datas found, loading from "
 folders_loading_statement = bpm_statement + "Project folders found, loading from "
 currently_loading_statement = bpm_statement + "Currently loading "
 
@@ -159,6 +159,9 @@ asset_file_not_found_statement = bpm_statement + asset_file_not_found_message
 asset_imported_statement = bpm_statement + "Asset successfully imported"
 asset_linked_statement = bpm_statement + "Asset linked : "
 asset_file_creation_statement = bpm_statement + "Asset file creation : "
+assets_settings_loading_statement = bpm_statement + "Loading asset settings"
+assets_settings_loaded_statement = bpm_statement + "Asset settings successfully loaded"
+asset_missing_in_list_statement = bpm_statement + "Asset not found in project asset list"
 
 
 # help statements

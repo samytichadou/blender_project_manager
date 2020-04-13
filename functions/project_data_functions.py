@@ -15,9 +15,10 @@ from ..global_variables import (
                             render_folder,
                             render_file,
                             missing_shot_file_statement,
+                            setting_prop_statement,
                         )
 from .json_functions import read_json
-from .file_functions import absolutePath
+from .file_functions import absolutePath, getBlendName
 from .dataset_functions import setPropertiesFromJsonDataset
 from .strip_functions import returnShotStrips, getListSequencerShots
 
@@ -94,7 +95,7 @@ def chekIfBpmProject(winman, project_data_file):
     return False
 
 
-# load datas
+# load json to dataset
 def loadJsonDataToDataset(winman, dataset, json_file, avoid_list):
     debug = winman.bpm_generalsettings.debug
     if debug: print(loading_statement + json_file) #debug
@@ -146,6 +147,8 @@ def loadJsonInCollection(winman, json_file, collection, json_coll_name):
     for f in dataset[json_coll_name]:
         new = collection.add()
         setPropertiesFromJsonDataset(f, new, False, ())
+
+    return dataset
 
 
 # get shot pattern
@@ -239,3 +242,32 @@ def refreshTimelineShotDatas(winman, sequencer):
             if general_settings.debug: print(missing_shot_file_statement + " for " + strip.name) #debug
 
     general_settings.bypass_update_tag = False
+
+
+# get specific asset datas from json
+def getAssetDatasFromJson(asset_datas):
+    name = getBlendName()
+    for a in asset_datas['assets']:
+        if name == a['name']:
+            return a
+
+
+# set asset col from specific json dataset
+def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
+    # shader
+    if specific_asset_datas['asset_type'] == "SHADER":
+        prop = 'asset_material'
+        for m in bpy.data.materials:
+            if m.name == specific_asset_datas[prop]:
+                datasetout.asset_material = m
+                if debug: print(setting_prop_statement + prop) ###debug
+                return
+
+    # collections
+    else:
+        prop = 'asset_collection'
+        for c in bpy.data.collections:
+            if c.name == specific_asset_datas[prop]:
+                datasetout.asset_collection = c
+                if debug: print(setting_prop_statement + prop) ###debug
+                return

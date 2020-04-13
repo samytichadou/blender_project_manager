@@ -17,9 +17,14 @@ from ..global_variables import (
 # save asset to json
 def saveAssetToJson(self, context):
     winman = context.window_manager
+    debug = winman.bpm_generalsettings.debug
+
+    if winman.bpm_generalsettings.bypass_update_tag:
+        if debug: print(bypass_shot_settings_update_statement) #debug
+        return
+
     assets_json_file, asset_file_exist = getAssetFile(winman)
     asset_settings = winman.bpm_assetsettings
-    debug = winman.bpm_generalsettings.debug
     
     datas = read_json(assets_json_file)
 

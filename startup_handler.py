@@ -13,7 +13,10 @@ from .functions.project_data_functions import (
                                             findUnusedLibraries,
                                             getShotSettingsFileFromBlend,
                                             refreshTimelineShotDatas,
+                                            getAssetDatasFromJson,
+                                            setAssetCollectionFromJsonDataset,
                                         )
+from .functions.dataset_functions import setPropertiesFromJsonDataset
 from .global_variables import (
                             startup_statement, 
                             loaded_datas_statement, 
@@ -33,6 +36,9 @@ from .global_variables import (
                             missing_shot_file_statement,
                             refreshing_timeline_shot_datas_statement,
                             refreshed_timeline_shot_datas_statement,
+                            assets_settings_loading_statement,
+                            assets_settings_loaded_statement,
+                            asset_missing_in_list_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
@@ -69,15 +75,38 @@ def bpmStartupHandler(scene):
                 loadJsonInCollection(winman, custom_folders_file, custom_folders_coll, 'folders')
                 if general_settings.debug: print(loaded_folders_statement) #debug
 
+            # load available assets
+            asset_file, asset_file_exist = getAssetFile(winman)
+            if asset_file_exist:
+                if general_settings.debug: print(assets_loading_statement + asset_file) #debug
+                asset_coll = winman.bpm_assets
+                asset_datas = loadJsonInCollection(winman, asset_file, asset_coll, 'assets')
+                if general_settings.debug: print(assets_loaded_statement) #debug
+
+                # load asset file settings
+                if general_settings.file_type == 'ASSET':
+
+                    asset_settings = winman.bpm_assetsettings
+                    specific_asset_datas = getAssetDatasFromJson(asset_datas)
+
+                    if specific_asset_datas is not None:
+                        if general_settings.debug: print(assets_settings_loading_statement) #debug
+
+                        general_settings.bypass_update_tag = True
+                        
+                        setPropertiesFromJsonDataset(specific_asset_datas, asset_settings, general_settings.debug, ('asset_collection', 'asset_material'))
+                        setAssetCollectionFromJsonDataset(asset_settings, specific_asset_datas, general_settings.debug)
+                        
+                        general_settings.bypass_update_tag = False
+
+                        if general_settings.debug: print(assets_settings_loaded_statement) #debug
+
+                    # asset does not exist in list error
+                    else:
+                        if general_settings.debug: print(asset_missing_in_list_statement) #debug
+
+
             if general_settings.file_type in {'EDIT', 'SHOT'}:
-                
-                # load available assets
-                asset_file, asset_file_exist = getAssetFile(winman)
-                if asset_file_exist:
-                    if general_settings.debug: print(assets_loading_statement + asset_file) #debug
-                    asset_coll = winman.bpm_assets
-                    loadJsonInCollection(winman, asset_file, asset_coll, 'assets')
-                    if general_settings.debug: print(assets_loaded_statement) #debug
 
                 # load render settings
                 render_filepath, render_file_exist = getRenderSettingsFile(winman)
