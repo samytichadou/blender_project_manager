@@ -217,7 +217,6 @@ class BPM_PT_sequencer_asset_panel(bpy.types.Panel):
     def draw(self, context):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
-        asset_list = winman.bpm_assets
 
         layout = self.layout
 
