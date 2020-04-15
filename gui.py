@@ -76,7 +76,7 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
     bl_label = "UI"
     bl_idname = "BPM_PT_sequencer_ui_panel"
     bl_category = "BPM"
-    bl_parent_id = "BPM_PT_sequencer_management_panel"
+    #bl_parent_id = "BPM_PT_sequencer_management_panel"
 
     def draw(self, context):
         scn_settings = context.scene.bpm_scenesettings
@@ -87,17 +87,18 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
         row.prop(scn_settings, 'extra_ui')
         drawWikiHelp(row, 'Extra-UI-in-Sequencer')
         if scn_settings.extra_ui:
-            row = layout.row()
+            box = layout.box()
+            row = box.row()
             row.prop(scn_settings, 'display_shot_strip')
             row.prop(scn_settings, 'color_shot_strip', text="")
 
-            row = layout.row()
+            row = box.row()
             row.prop(scn_settings, 'display_shot_state')
             row.prop(general_settings, 'ui_shot_state_subpanel', icon='COLORSET_04_VEC')
 
             if general_settings.ui_shot_state_subpanel:
-                box = layout.box()
-                col = box.column(align=True)
+                box2 = box.box()
+                col = box2.column(align=True)
                 row = col.row()
                 row.prop(scn_settings, 'color_state_storyboard')
                 row = col.row()
@@ -113,33 +114,34 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
                 row = col.row()
                 row.prop(scn_settings, 'color_state_finished')
 
-            row = layout.row()
+            row = box.row()
             row.prop(scn_settings, 'display_audio_sync')
             row.prop(scn_settings, 'color_audio_sync', text="")
 
-            row = layout.row()
+            row = box.row()
             row.prop(scn_settings, 'display_shot_update_warning')
             row.prop(scn_settings, 'color_update_warning', text="")
 
-            row = layout.row()
+            row = box.row()
             row.prop(scn_settings, 'display_shot_version_warning')
             row.prop(scn_settings, 'color_version_warning', text="")
 
             # markers
-            row = layout.row()
+            box = layout.box()
+            row = box.row()
             row.label(text = "Markers")
             row.prop(scn_settings, 'display_markers', text = "")
             row.prop(scn_settings, 'color_markers', text="")
 
-            row = layout.row()
-            row.label(text = "Markers names")
+            row = box.row()
+            row.label(text = "Names")
             row.prop(scn_settings, 'display_marker_names', text = "")
 
-            row = layout.row()
-            row.prop(scn_settings, 'display_marker_boxes')
+            row = box.row()
+            row.prop(scn_settings, 'display_marker_boxes', text = "Boxes")
             row.prop(scn_settings, 'color_marker_boxes', text="")
 
-            layout.prop(scn_settings, 'display_marker_text_limit')
+            box.prop(scn_settings, 'display_marker_text_limit')
 
 
 # sequencer shot panel
