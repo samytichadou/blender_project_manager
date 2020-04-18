@@ -236,9 +236,12 @@ class BPM_PT_sequencer_asset_panel(bpy.types.Panel):
 
 # shot settings panel
 class BPM_PT_properties_shot_panel(bpy.types.Panel):
-    bl_space_type = 'PROPERTIES'
-    bl_region_type = 'WINDOW'
-    bl_context = "scene"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    # bl_space_type = 'PROPERTIES'
+    # bl_region_type = 'WINDOW'
+    # bl_context = "scene"
     bl_label = "BPM Shot settings"
     bl_idname = "BPM_PT_properties_shot_panel"
 
@@ -267,9 +270,13 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'shot_render_state', text = "Render")
         drawWikiHelp(row, 'Render-Settings')
 
+        # asset lib settings
         box = layout.box()
+        box.label(text="Assets Library", icon ='ASSET_MANAGER')
+
+        drawOperatorAndHelp(box, 'bpm.create_asset', '', 'Asset-Management')
+
         col = box.column(align=True)
-        col.label(text="Assets", icon ='ASSET_MANAGER')
         col.prop(general_settings, 'panel_asset_display', text="Display")
         col.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
         drawOperatorAndHelp(col, 'bpm.import_asset', '', 'Asset-Management')
@@ -280,9 +287,12 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
 
 # asset settings panel
 class BPM_PT_properties_asset_panel(bpy.types.Panel):
-    bl_space_type = 'PROPERTIES'
-    bl_region_type = 'WINDOW'
-    bl_context = "scene"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    # bl_space_type = 'PROPERTIES'
+    # bl_region_type = 'WINDOW'
+    # bl_context = "scene"
     bl_label = "BPM Asset settings"
     bl_idname = "BPM_PT_properties_asset_panel"
 
@@ -297,19 +307,27 @@ class BPM_PT_properties_asset_panel(bpy.types.Panel):
 
         layout = self.layout
 
-        layout.prop(asset_settings, 'asset_type')
-        layout.prop(asset_settings, 'asset_state')
+        # this asset settings
+        box = layout.box()
+        box.label(text="Asset Settings", icon ='MESH_MONKEY')
+
+        box.prop(asset_settings, 'asset_type')
+        box.prop(asset_settings, 'asset_state')
 
         if asset_settings.asset_type == 'SHADER': target_prop = 'asset_material'
         elif asset_settings.asset_type == 'WORLD': target_prop = 'asset_world'
         else: target_prop = 'asset_collection'
 
-        layout.prop(asset_settings, target_prop, text='')
-        layout.label(text = "Manually update when changing collection name", icon = "INFO")
+        box.prop(asset_settings, target_prop, text='')
+        box.label(text = "Manually update when changing collection name", icon = "INFO")
 
+        # asset lib settings
         box = layout.box()
+        box.label(text="Asset Library", icon ='ASSET_MANAGER')
+        
+        drawOperatorAndHelp(box, 'bpm.create_asset', '', 'Asset-Management')
+
         col = box.column(align=True)
-        col.label(text="Assets", icon ='ASSET_MANAGER')
         col.prop(general_settings, 'panel_asset_display', text="Display")
         col.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
         drawOperatorAndHelp(col, 'bpm.open_asset_file', '', 'Asset-Management')
