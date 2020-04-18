@@ -98,7 +98,7 @@ class BPMCreateAsset(bpy.types.Operator):
         asset_prop.asset_state = self.asset_state
 
         # format new asset datas
-        asset_datas_json = createJsonDatasetFromProperties(asset_prop)
+        asset_datas_json = createJsonDatasetFromProperties(asset_prop, ("is_thisassetfile"))
 
         # add the new asset
         datas['assets'].append(asset_datas_json)

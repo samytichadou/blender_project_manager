@@ -151,12 +151,12 @@ def syncAudioEdit(debug, project_folder, scene):
             sound = strip.sound
             if sound not in sound_list:
                 sound_list.append(sound)
-                sound_datas = createJsonDatasetFromProperties(sound)
+                sound_datas = createJsonDatasetFromProperties(sound, ())
                 sound_datas['filepath'] = absolutePath(sound.filepath)
                 datas['sounds'].append(sound_datas)
 
             # strip datas
-            strip_datas = createJsonDatasetFromProperties(strip)
+            strip_datas = createJsonDatasetFromProperties(strip, ())
             strip_datas['sound'] = sound.name    
             datas['sound_strips'].append(strip_datas)
 
@@ -164,7 +164,7 @@ def syncAudioEdit(debug, project_folder, scene):
             # shot datas
             try:
                 if strip.bpm_shotsettings.is_shot:
-                    shot_datas = createJsonDatasetFromProperties(strip)
+                    shot_datas = createJsonDatasetFromProperties(strip, ())
                     datas['shot_strips'].append(shot_datas)
 
             except AttributeError:

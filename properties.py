@@ -107,6 +107,7 @@ class BPMAssetList(bpy.types.PropertyGroup) :
     asset_collection : bpy.props.StringProperty(name="Asset collection name")
     asset_material : bpy.props.StringProperty(name="Asset material name")
     asset_world : bpy.props.StringProperty(name="Asset world name")
+    is_thisassetfile : bpy.props.BoolProperty(default = False)
 
 
 # asset settings

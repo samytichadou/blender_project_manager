@@ -26,7 +26,7 @@ def updateShotSettingsProperties(self, context):
     shot_json = os.path.join(self.shot_folder, shot_file)
 
     # format the json dataset
-    json_dataset = createJsonDatasetFromProperties(self)
+    json_dataset = createJsonDatasetFromProperties(self, ())
     # create json file
     create_json_file(json_dataset, shot_json)
 

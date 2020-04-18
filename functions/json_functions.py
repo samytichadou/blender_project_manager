@@ -20,10 +20,10 @@ def isSerializable(x):
         return False
 
 # create json dataset
-def createJsonDatasetFromProperties(datasetin):
+def createJsonDatasetFromProperties(datasetin, avoid_list):
     json_dataset = {}
     for p in datasetin.bl_rna.properties:
-        if not p.is_readonly:
+        if not p.is_readonly and p.identifier not in avoid_list:
             if isSerializable(getattr(datasetin, p.identifier)):
                 json_dataset[p.identifier] = getattr(datasetin, p.identifier)
     return json_dataset

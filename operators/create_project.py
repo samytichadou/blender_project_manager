@@ -101,7 +101,7 @@ class BpmCreateProject(bpy.types.Operator):
         project_file = os.path.join(project_folder, file_project)
 
         # format the project datas json dataset
-        json_dataset = createJsonDatasetFromProperties(datas)
+        json_dataset = createJsonDatasetFromProperties(datas, ())
 
         # create json file
         create_json_file(json_dataset, project_file)
@@ -232,7 +232,7 @@ class BpmCreateProject(bpy.types.Operator):
         # save render settings as json 
         json_render_dataset = initializeAssetJsonDatas({"render_settings"})
         for r in render_settings:
-            r_datas = createJsonDatasetFromProperties(r)
+            r_datas = createJsonDatasetFromProperties(r, ())
             json_render_dataset['render_settings'].append(r_datas)
 
         # create json file

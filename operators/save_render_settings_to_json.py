@@ -36,7 +36,7 @@ class BpmSaveRenderSettingsToJson(bpy.types.Operator):
         # format the json dataset
         json_render_dataset = initializeAssetJsonDatas({"render_settings"})
         for r in render_settings:
-            r_datas = createJsonDatasetFromProperties(r)
+            r_datas = createJsonDatasetFromProperties(r, ())
             json_render_dataset['render_settings'].append(r_datas)
 
         # create json file

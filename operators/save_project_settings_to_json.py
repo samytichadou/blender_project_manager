@@ -32,7 +32,7 @@ class BpmSaveProjectSettingsToJson(bpy.types.Operator):
         project_file = os.path.join(general_settings.project_folder, file_project)
 
         # format the json dataset
-        json_dataset = createJsonDatasetFromProperties(datas)
+        json_dataset = createJsonDatasetFromProperties(datas, ())
 
         # create json file
         create_json_file(json_dataset, project_file)

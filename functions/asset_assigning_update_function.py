@@ -39,7 +39,7 @@ def saveAssetToJson(self, context):
         n += 1
     
     # get new asset datas
-    asset_datas = createJsonDatasetFromProperties(asset_settings)
+    asset_datas = createJsonDatasetFromProperties(asset_settings, ("is_thisassetfile"))
 
     # add collection and shader
     if asset_settings.asset_collection is not None:
