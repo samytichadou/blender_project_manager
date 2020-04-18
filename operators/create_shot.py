@@ -1,5 +1,6 @@
 import bpy
 import os
+import shutil
 
 
 class BPMCreateShot(bpy.types.Operator):
@@ -34,6 +35,10 @@ class BPMCreateShot(bpy.types.Operator):
                                     saved_to_json_statement,
                                     audio_sync_file,
                                     starting_shot_audio_sync_statement,
+                                    ressources_folder,
+                                    startup_files_folder,
+                                    shot_startup_file,
+                                    copying_file_statement
                                 )
         from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile, linkExternalScenes, absolutePath
         from ..functions.project_data_functions import getShotPattern, getScriptReplacementListShotCreation
@@ -50,7 +55,7 @@ class BPMCreateShot(bpy.types.Operator):
         if general_settings.debug: print(creating_shot_statement) #debug
         
         project_datas = winman.bpm_projectdatas
-        project_folder = absolutePath(general_settings.project_folder)
+        project_folder = general_settings.project_folder
         shot_folder_path = os.path.join(project_folder, shot_folder)
         next_shot_folder, next_shot_file, next_shot_number = getNextShot(winman, project_datas, getShotPattern(project_datas), 1, shot_folder_path)
 
@@ -73,6 +78,13 @@ class BPMCreateShot(bpy.types.Operator):
         createDirectory(next_shot_folder)
         if general_settings.debug: print(creating_shot_folder_statement + next_shot_folder) #debug
 
+        # copy shot file
+        ressources_folderpath = os.path.join(project_folder, ressources_folder)
+        startup_folderpath = os.path.join(ressources_folderpath, startup_files_folder)
+        shot_startup_filepath = os.path.join(startup_folderpath, shot_startup_file)
+        shutil.copy(shot_startup_filepath, next_shot_file)
+
+        if general_settings.debug: print(copying_file_statement + shot_startup_filepath) #debug
 
         # create the json file
         if general_settings.debug: print(saving_to_json_statement) #debug
@@ -97,7 +109,7 @@ class BPMCreateShot(bpy.types.Operator):
         if general_settings.debug: print(python_script_created_statement) #debug
 
         # launch the blend command
-        command = buildBlenderCommandBackgroundPython(temp_python_script, "", "")
+        command = buildBlenderCommandBackgroundPython(temp_python_script, next_shot_file, "")
         if general_settings.debug: print(launching_command_statement + command) #debug
 
         launchCommand(command)
