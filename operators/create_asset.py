@@ -45,8 +45,10 @@ class BPMCreateAsset(bpy.types.Operator):
                                 dupe_asset_name_message,
                                 dupe_asset_name_statement,
                                 initialize_json_statement,
-                                startup_filepath,
                                 asset_file_creation_statement,
+                                ressources_folder,
+                                startup_files_folder,
+                                asset_startup_file,
                                 )
         from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
         from ..functions.dataset_functions import setPropertiesFromDataset
@@ -117,7 +119,10 @@ class BPMCreateAsset(bpy.types.Operator):
         if general_settings.debug: print(asset_file_creation_statement + new_asset_file_path) #debug        
 
         # create asset blend and get the link
-        shutil.copy(startup_filepath, new_asset_file_path)
+        ressources_folder = os.path.join(general_settings.project_folder, ressources_folder)
+        startup_folder = os.path.join(ressources_folder, startup_files_folder)
+        asset_startup_filepath = os.path.join(startup_folder, asset_startup_file)
+        shutil.copy(asset_startup_filepath, new_asset_file_path)
 
         # select asset if available
         if general_settings.panel_asset_display in {'ALL', self.asset_type}:
