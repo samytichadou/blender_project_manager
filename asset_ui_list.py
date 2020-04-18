@@ -9,7 +9,10 @@ class BPM_UL_Asset_UI_List(bpy.types.UIList):
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         
-        icon = getAssetIcon(item.asset_type)        
+        icon = getAssetIcon(item.asset_type)
+        
+        if item.is_thisassetfile:
+            layout.enabled = False
 
         if self.layout_type in {'DEFAULT', 'COMPACT'}: 
             layout.label(text = item.name, icon = icon) 

@@ -86,6 +86,13 @@ def bpmStartupHandler(scene):
                 # load asset file settings
                 if general_settings.file_type == 'ASSET':
 
+                    # set this blend file asset
+                    blend_name = os.path.splitext(os.path.basename(bpy.data.filepath))[0]
+                    try:
+                        asset_coll[blend_name].is_thisassetfile = True
+                    except KeyError:
+                        if general_settings.debug: print(asset_missing_in_list_statement) #debug
+
                     asset_settings = winman.bpm_assetsettings
                     specific_asset_datas = getAssetDatasFromJson(asset_datas)
 
