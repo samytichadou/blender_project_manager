@@ -225,6 +225,11 @@ class BpmCreateProject(bpy.types.Operator):
 
 
         # create render settings
+        #playblast
+        new_render = render_settings.add()
+        new_render.name = render_playblast_folder
+
+        new_render.is_file_format = 'FFMPEG'
         #draft
         new_render = render_settings.add()
         new_render.name = render_draft_folder
@@ -234,11 +239,6 @@ class BpmCreateProject(bpy.types.Operator):
         #final
         new_render = render_settings.add()
         new_render.name = render_final_folder
-        #playblast
-        new_render = render_settings.add()
-        new_render.name = render_playblast_folder
-
-        new_render.is_file_format = 'FFMPEG'
 
 
         # save render settings as json 
