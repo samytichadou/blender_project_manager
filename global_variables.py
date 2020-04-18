@@ -177,10 +177,6 @@ audio_sync_file = "project_audio_sync.json"
 shot_file = "shot_settings.json"
 render_file = "render_settings.json"
 
-user_path = bpy.utils.resource_path('USER')
-config_path = os.path.join(user_path, "config")
-startup_filepath = os.path.join(config_path, "startup.blend")
-
 python_temp = "python_temp.py"
 
 script_file = os.path.realpath(__file__)
@@ -191,6 +187,8 @@ add_modify_marker_file = os.path.join(setup_script_folder, "add_modify_marker_co
 
 ressources_folder = os.path.join(os.path.dirname(script_file), "ressources")
 font_file = os.path.join(ressources_folder, "JetBrainsMono-Regular.ttf")
+
+base_startup_filepath = os.path.join(ressources_folder, "blank.blend")
 
 new_project_name = "Project_name"
 
@@ -204,6 +202,10 @@ render_render_folder = "02_render"
 render_final_folder = "03_final"
 ressources_folder = "04_ressources"
 old_folder = "zz_old"
+
+startup_files_folder = "01_startup_files"
+shot_startup_file = "blank_shot.blend"
+asset_startup_file = "blank_asset.blend"
 
 
 ### WEB ###

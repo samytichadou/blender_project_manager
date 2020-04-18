@@ -1,5 +1,6 @@
 import bpy
 import os
+import shutil
 import re
 
 
@@ -82,6 +83,10 @@ class BpmCreateProject(bpy.types.Operator):
                                     render_render_folder,
                                     render_final_folder,
                                     render_file,
+                                    startup_files_folder,
+                                    base_startup_filepath,
+                                    shot_startup_file,
+                                    asset_startup_file,
                                 )
         from ..vse_extra_ui import enableSequencerCallback
 
@@ -173,6 +178,11 @@ class BpmCreateProject(bpy.types.Operator):
         createFolder(ressources_folder_path)
         if winman.bpm_generalsettings.debug: print(folder_created_statement + ressources_folder_path) #debug
 
+        #startup files folder
+        project_startup_files_folder = os.path.join(ressources_folder_path, startup_files_folder)
+        createFolder(project_startup_files_folder)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + project_startup_files_folder) #debug
+
         #old
         old_folder_path = os.path.join(project_folder, old_folder)
 
@@ -195,6 +205,17 @@ class BpmCreateProject(bpy.types.Operator):
         old_ressources_folder_path = os.path.join(old_folder_path, ressources_folder)
         createFolder(old_ressources_folder_path)
         if winman.bpm_generalsettings.debug: print(folder_created_statement + old_ressources_folder_path) #debug
+
+
+        # copy startup files
+
+        #shot startup file
+        shot_startup = os.path.join(project_startup_files_folder, shot_startup_file)
+        shutil.copy(base_startup_filepath, shot_startup)
+
+        #asset startup file
+        asset_startup = os.path.join(project_startup_files_folder, asset_startup_file)
+        shutil.copy(base_startup_filepath, asset_startup)
 
 
         # create render settings
