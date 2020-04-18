@@ -14,17 +14,22 @@ resolution_x = |resolution_x
 resolution_y = |resolution_y
 
 # set scene
+
+# variables
 scn = bpy.context.scene
 scn.name = scene_name
 scn.frame_start = frame_start
 scn.frame_end = frame_end
 scn.frame_preview_start = frame_start
 scn.frame_preview_end = frame_end
-scn.use_preview_range = True
 scn.frame_current = frame_start
 scn.render.fps = framerate
 scn.render.resolution_x = resolution_x
 scn.render.resolution_y = resolution_y
+
+# constant
+scn.sync_mode = 'AUDIO_SYNC'
+scn.use_preview_range = True
 
 if debug: print(|bpm_statement + "Saving file") #debug
 
