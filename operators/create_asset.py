@@ -49,6 +49,7 @@ class BPMCreateAsset(bpy.types.Operator):
                                 ressources_folder,
                                 startup_files_folder,
                                 asset_startup_file,
+                                copying_file_statement,
                                 )
         from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
         from ..functions.dataset_functions import setPropertiesFromDataset
@@ -123,6 +124,8 @@ class BPMCreateAsset(bpy.types.Operator):
         startup_folder = os.path.join(ressources_folder, startup_files_folder)
         asset_startup_filepath = os.path.join(startup_folder, asset_startup_file)
         shutil.copy(asset_startup_filepath, new_asset_file_path)
+
+        if general_settings.debug: print(copying_file_statement + asset_startup_filepath) #debug
 
         # select asset if available
         if general_settings.panel_asset_display in {'ALL', self.asset_type}:
