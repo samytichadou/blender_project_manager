@@ -82,6 +82,7 @@ class BpmCreateProject(bpy.types.Operator):
                                     render_draft_folder,
                                     render_render_folder,
                                     render_final_folder,
+                                    render_playblast_folder,
                                     render_file,
                                     startup_files_folder,
                                     base_startup_filepath,
@@ -152,6 +153,11 @@ class BpmCreateProject(bpy.types.Operator):
         render_shot_final_folder_path = os.path.join(render_shot_folder_path, render_final_folder)
         createFolder(render_shot_final_folder_path)
         if winman.bpm_generalsettings.debug: print(folder_created_statement + render_shot_final_folder_path) #debug
+
+        #playblast shot render
+        render_playblast_folder_path = os.path.join(render_shot_folder_path, render_playblast_folder)
+        createFolder(render_playblast_folder_path)
+        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_playblast_folder_path) #debug
 
         #dailies render
         render_dailies_folder_path = os.path.join(render_folder_path, render_dailies_folder)
@@ -228,6 +234,12 @@ class BpmCreateProject(bpy.types.Operator):
         #final
         new_render = render_settings.add()
         new_render.name = render_final_folder
+        #playblast
+        new_render = render_settings.add()
+        new_render.name = render_playblast_folder
+
+        new_render.is_file_format = 'FFMPEG'
+
 
         # save render settings as json 
         json_render_dataset = initializeAssetJsonDatas({"render_settings"})

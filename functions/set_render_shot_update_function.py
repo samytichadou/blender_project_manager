@@ -55,6 +55,9 @@ def setRenderShot(context):
             # eevee
             elif "ee_" in p.identifier:
                 dataset = scn.eevee
+            # ffmpeg
+            elif "ff_" in p.identifier:
+                dataset = render.ffmpeg
 
             # set props
             try:

@@ -233,6 +233,7 @@ class BPMRenderSettings(bpy.types.PropertyGroup) :
 
     file_format_items = [
         ('OPEN_EXR', 'Open EXR', ""),
+        ('FFMPEG', 'FFmpeg video', ""),
         ]
     is_file_format : bpy.props.EnumProperty(name = "File format", items = file_format_items, default='OPEN_EXR')
 
@@ -241,7 +242,7 @@ class BPMRenderSettings(bpy.types.PropertyGroup) :
         ('RGB', 'RGB', ""),
         ('RGBA', 'RGB Alpha', ""),
         ]
-    is_color_mode : bpy.props.EnumProperty(name = "Color mode", items = color_mode_items, default='RGBA')
+    is_color_mode : bpy.props.EnumProperty(name = "Color mode", items = color_mode_items, default='RGB')
 
     color_depth_items = [
         ('16', '16 Bits', ""),
@@ -306,3 +307,21 @@ class BPMRenderSettings(bpy.types.PropertyGroup) :
         ('CPU', 'CPU', ""),
         ]
     cy_device : bpy.props.EnumProperty(name = "Cycles render device", items = device_items, default='CPU')
+
+
+    ### ffmpeg settings ###
+
+    ffmpeg_format_items = [
+        ('QUICKTIME', 'Quicktime', ""),
+        ]
+    ff_format : bpy.props.EnumProperty(name = "Container", items = ffmpeg_format_items, default='QUICKTIME')
+
+    video_codec_items = [
+        ('H264', 'H.264', ""),
+        ]
+    ff_codec : bpy.props.EnumProperty(name = "Video Codec", items = video_codec_items, default='H264')
+
+    audio_codec_items = [
+        ('AAC', 'AAC', ""),
+        ]
+    ff_audio_codec : bpy.props.EnumProperty(name = "Audio Codec", items = audio_codec_items, default='AAC')
