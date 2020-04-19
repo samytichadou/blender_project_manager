@@ -29,4 +29,4 @@ def bpmTimerFunction():
     if chk_free:
         general_settings.blend_already_opened = False
 
-    return 5.0
+    return 60.0
