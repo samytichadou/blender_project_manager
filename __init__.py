@@ -57,6 +57,8 @@ from .operators.synchronize_audio_shot import *
 from .operators.refresh_shot_datas import *
 from .operators.import_asset import *
 from .operators.open_asset_file import *
+from .operators.show_open_blend_lock_file import *
+from .operators.clear_lock_file_user import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -94,6 +96,8 @@ classes = (BPMOpenShot,
             BPMRefreshShotDatasShot,
             BPMImportAsset,
             BPMOpenAssetFile,
+            BPMShowOpenBlendLockFile,
+            BPMClearLockFileUser,
 
             BPMOpenWikiPage,
 

@@ -104,6 +104,12 @@ deleted_lock_file_statement = bpm_statement + "Lock file deleted"
 locked_file_statement = bpm_statement + "Project already opened, proceed with caution"
 
 
+# timer statements
+timer_function_added_statement = bpm_statement + "Timer function added"
+timer_function_removed_statement = bpm_statement + "Timer function removed"
+timer_function_processing_statement = bpm_statement + "Timer function processing"
+
+
 # timeline statements
 no_available_timeline_space_message = "No available space on timeline"
 no_available_timeline_space_statement = bpm_statement + no_available_timeline_space_message

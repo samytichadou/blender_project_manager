@@ -41,12 +41,15 @@ from .global_variables import (
                             asset_missing_in_list_statement,
                             created_lock_file_statement,
                             locked_file_statement,
+                            timer_function_added_statement,
+                            timer_function_removed_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
 from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
 from .functions.lock_file_functions import createLockFile, getLockFilepath
+from .timer_function import bpmTimerFunction
 
 
 ### HANDLER ###
@@ -65,6 +68,10 @@ def bpmStartupHandler(scene):
         if chekIfBpmProject(winman, project_data_file, file_type):
             
             ### bpm project ###
+
+            # setup timer
+            bpy.app.timers.register(bpmTimerFunction)
+            if general_settings.debug: print(timer_function_added_statement) #debug
 
             # check for lock file
             lock_filepath = getLockFilepath()
@@ -193,17 +200,11 @@ def bpmStartupHandler(scene):
 
     else:
         if general_settings.debug: print(no_datas_statement) #debug
-        
+    
+    # ui callback
     if general_settings.is_project and general_settings.file_type == 'EDIT':
         # load ui if needed
         enableSequencerCallback()
-
-        # # check for unused libraries and clear them
-        # if general_settings.debug: print(checking_unused_libraries_statement) #debug
-
-        # for lib in findUnusedLibraries():
-        #     clearLibraryUsers(lib)
-        #     if general_settings.debug: print(library_cleared_statement + lib.name) #debug
 
     else:
         # unload ui if needed

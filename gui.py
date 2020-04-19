@@ -37,7 +37,8 @@ def drawDebugPanel(container, dataset, general_settings):
 # draw already opened blend warning
 def drawOpenedWarning(container, general_settings):
     if general_settings.blend_already_opened:
-        container.label(text="Blend file already opened", icon='ERROR')
+        drawOperatorAndHelp(container, 'bpm.show_open_blend_lock_file', 'ERROR', "Lock-File-System")
+        #container.label(text="File already opened", icon='ERROR')
 
 
 # sequencer management
@@ -381,6 +382,9 @@ def bpmTopbarFunction(self, context):
         general_settings = context.window_manager.bpm_generalsettings
 
         if general_settings.is_project:
+
+            if general_settings.blend_already_opened:
+                drawOpenedWarning(layout, general_settings)
 
             if general_settings.file_type in {'SHOT', 'ASSET'}:
 

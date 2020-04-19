@@ -26,7 +26,7 @@ class BPMOpenShot(bpy.types.Operator):
     def execute(self, context):
         # import statements and functions
         from ..functions.file_functions import absolutePath
-        from ..global_variables import opening_statement, tempfile_extension
+        from ..global_variables import opening_statement
 
         winman = context.window_manager
         filepath = absolutePath(context.scene.sequence_editor.active_strip.scene.library.filepath)
@@ -34,8 +34,7 @@ class BPMOpenShot(bpy.types.Operator):
         if winman.bpm_generalsettings.debug: print(opening_statement + filepath) #debug
 
         # save if not temp
-        if os.path.splitext(bpy.data.filepath)[1] != tempfile_extension:
-            bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
+        bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
         # open
         bpy.ops.wm.open_mainfile(filepath=filepath)
         
