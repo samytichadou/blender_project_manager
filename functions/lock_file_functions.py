@@ -25,14 +25,14 @@ def formatJsonOpenedEntry():
     return json_dataset
 
 # create lock file
-def createLockFile():
+def setupLockFile():
     lock_filepath = getLockFilepath()
 
     if os.path.isfile(lock_filepath):
         datas = read_json(lock_filepath)
     else:
         datas = initializeAssetJsonDatas({'opened'})
-    print(datas)
+
     datas['opened'].append(formatJsonOpenedEntry())
 
     create_json_file(datas, lock_filepath)
@@ -40,7 +40,7 @@ def createLockFile():
 # delete lock file if existing
 def clearLockFile():
     lock_filepath = getLockFilepath()
-    
+
     if os.path.isfile(lock_filepath):
         pid = getCurrentPID()
         datas = read_json(lock_filepath)

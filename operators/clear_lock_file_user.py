@@ -8,7 +8,7 @@ class BPMClearLockFileUser(bpy.types.Operator):
     bl_label = "Clear user"
     bl_options = {'REGISTER', 'INTERNAL'}
 
-    pid = bpy.props.IntProperty()
+    pid_to_clear : bpy.props.IntProperty()
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
@@ -19,20 +19,52 @@ class BPMClearLockFileUser(bpy.types.Operator):
 
     def execute(self, context):
         from ..functions.json_functions import read_json, create_json_file
-        from ..functions.lock_file_functions import getLockFilepath
+        from ..functions.lock_file_functions import getLockFilepath, setupLockFile
+        from ..functions.utils_functions import getCurrentPID
+        from ..functions.file_functions import suppressExistingFile
+        from ..global_variables import (
+                                    reading_json_statement,
+                                    saving_to_json_statement,
+                                    starting_clear_user_statement,
+                                    clearing_user_statement,
+                                )
+
+        general_settings = context.window_manager.bpm_generalsettings
+
+        if general_settings.debug: print(starting_clear_user_statement) #debug
 
         lock_filepath = getLockFilepath()
+        pid = getCurrentPID()
 
         if os.path.isfile(lock_filepath):
             datas = read_json(lock_filepath)
+            if general_settings.debug: print(reading_json_statement + lock_filepath) #debug
 
+            chk_free = True
             n = 0
+
             for o in datas['opened']:
-                if o['pid'] == self.pid:
+
+                if o['pid'] == self.pid_to_clear:
                     del datas['opened'][n]
-                    break
+                    if general_settings.debug: print(clearing_user_statement + o['hostname']) #debug
+
+                elif o['pid'] != pid:
+                    chk_free = False
+
                 n += 1
 
-            create_json_file(datas, lock_filepath)
+            if general_settings.debug: print(saving_to_json_statement) #debug
+
+            # make sure this process is locked
+            if len(datas['opened']) == 0:
+                suppressExistingFile(lock_filepath)
+                setupLockFile()
+            else:
+                create_json_file(datas, lock_filepath)
+
+            # set file free if needed
+            if chk_free:
+                general_settings.blend_already_opened = False
 
         return {'FINISHED'}

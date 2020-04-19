@@ -48,7 +48,7 @@ from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
 from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
-from .functions.lock_file_functions import createLockFile, getLockFilepath
+from .functions.lock_file_functions import setupLockFile, getLockFilepath
 from .timer_function import bpmTimerFunction
 
 
@@ -81,7 +81,7 @@ def bpmStartupHandler(scene):
                 general_settings.blend_already_opened = True
             
             # setup lock file
-            createLockFile()
+            setupLockFile()
             if general_settings.debug: print(created_lock_file_statement) #debug
 
             general_settings.is_project = True

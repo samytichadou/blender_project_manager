@@ -102,6 +102,8 @@ file_does_not_exist_statement = bpm_statement + file_does_not_exist_message
 created_lock_file_statement = bpm_statement + "Lock file created"
 deleted_lock_file_statement = bpm_statement + "Lock file deleted"
 locked_file_statement = bpm_statement + "Project already opened, proceed with caution"
+starting_clear_user_statement = bpm_statement + "Starting clear lock file user"
+clearing_user_statement = bpm_statement + "Clearing lock file user : "
 
 
 # timer statements

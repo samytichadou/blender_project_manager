@@ -18,7 +18,9 @@ def bpmTimerFunction():
     datas = read_json(lock_filepath)
 
     chk_free = True
+
     for o in datas['opened']:
+
         if o['pid'] != pid:
             general_settings.blend_already_opened = True
             chk_free = False
