@@ -34,6 +34,11 @@ def drawDebugPanel(container, dataset, general_settings):
                 row = box.row()
                 row.prop(dataset, '%s' % p.identifier)
 
+# draw already opened blend warning
+def drawOpenedWarning(container, general_settings):
+    if general_settings.blend_already_opened:
+        container.label(text="Blend file already opened", icon='ERROR')
+
 
 # sequencer management
 class BPM_PT_sequencer_management_panel(bpy.types.Panel):
@@ -55,6 +60,8 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
+
+        drawOpenedWarning(layout, general_settings)
 
         drawOperatorAndHelp(layout, 'bpm.create_shot', '', 'Create-Shot-Operator')
 
@@ -81,7 +88,10 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
     def draw(self, context):
         scn_settings = context.scene.bpm_scenesettings
         general_settings = context.window_manager.bpm_generalsettings
+
         layout = self.layout
+
+        drawOpenedWarning(layout, general_settings)
 
         row = layout.row(align=True)
         row.prop(scn_settings, 'extra_ui')
@@ -172,6 +182,8 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
         layout = self.layout
 
+        drawOpenedWarning(layout, general_settings)
+
         drawOperatorAndHelp(layout, 'bpm.open_shot', '', 'Open-Shot-and-Back-to-Edit')
 
         drawOperatorAndHelp(layout, 'bpm.update_shot_duration', '', 'Update-Shot-Operator')
@@ -237,6 +249,8 @@ class BPM_PT_sequencer_asset_panel(bpy.types.Panel):
 
         layout = self.layout
 
+        drawOpenedWarning(layout, winman.bpm_generalsettings)
+
         drawAssetLibrary(layout, winman)
 
 
@@ -257,6 +271,8 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         shot_settings = winman.bpm_shotsettings
 
         layout = self.layout
+
+        drawOpenedWarning(layout, winman.bpm_generalsettings)
 
         drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
 
@@ -292,6 +308,8 @@ class BPM_PT_properties_asset_library_panel(bpy.types.Panel):
 
         layout = self.layout
 
+        drawOpenedWarning(layout, winman.bpm_generalsettings)
+
         drawAssetLibrary(layout, winman)
 
         if winman.bpm_generalsettings.file_type == 'SHOT':
@@ -316,6 +334,8 @@ class BPM_PT_properties_asset_panel(bpy.types.Panel):
         asset_settings = winman.bpm_assetsettings
 
         layout = self.layout
+
+        drawOpenedWarning(layout, general_settings)
 
         layout.prop(asset_settings, 'asset_type')
         layout.prop(asset_settings, 'asset_state')
@@ -383,6 +403,8 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
+
+        drawOpenedWarning(layout, general_settings)
         
         if not general_settings.is_project:
             layout.operator('bpm.create_project')  

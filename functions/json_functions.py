@@ -29,7 +29,7 @@ def createJsonDatasetFromProperties(datasetin, avoid_list):
     return json_dataset
 
 # initialize json asset datas
-def initializeAssetJsonDatas (data_list) :
+def initializeAssetJsonDatas(data_list) :
     datas = {}
     for d in data_list:
         datas[d] = []

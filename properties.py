@@ -224,6 +224,8 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
 
     asset_list_index : bpy.props.IntProperty(min = -1)
 
+    blend_already_opened : bpy.props.BoolProperty(default=False)
+
 
 # render settings
 class BPMRenderSettings(bpy.types.PropertyGroup) :

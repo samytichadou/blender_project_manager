@@ -19,3 +19,27 @@ def clearLibraryUsers(lib):
     for datas in lib.users_id:
         datas.use_fake_user = False
         datas.user_clear()
+
+
+# get host name
+def getHostName():
+    import socket
+    return socket.gethostname()
+
+
+# get current timestamp
+def getTimestamp():
+    import time
+    return time.time()
+
+
+# return formated timestamp^
+def returnFormatedTimestamp(timestamp):
+    import time
+    return time.ctime(timestamp)
+
+
+# get pid
+def getCurrentPID():
+    import os
+    return os.getpid()

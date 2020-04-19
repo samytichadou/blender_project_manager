@@ -25,6 +25,7 @@ class BPMOpenAssetFile(bpy.types.Operator):
                                     asset_file_not_found_message,
                                     asset_file_not_found_statement,
                                     asset_folder,
+                                    tempfile_extension,
                                 )
 
         winman = context.window_manager
@@ -46,8 +47,9 @@ class BPMOpenAssetFile(bpy.types.Operator):
             if debug: print(asset_file_not_found_statement + asset_name) #debug
             return {'FINISHED'}
 
-        # save
-        bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
+        # save if not temp
+        if os.path.splitext(bpy.data.filepath)[1] != tempfile_extension:
+            bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
         # open
         bpy.ops.wm.open_mainfile(filepath=specific_asset_filepath)
         

@@ -16,7 +16,7 @@ class BPMBackToEdit(bpy.types.Operator):
     def execute(self, context):
         # import statement and functions
         from ..functions.file_functions import absolutePath, getLastVersion
-        from ..global_variables import back_to_edit_statement
+        from ..global_variables import back_to_edit_statement, tempfile_extension
 
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
@@ -25,8 +25,9 @@ class BPMBackToEdit(bpy.types.Operator):
 
         if general_settings.debug: print(back_to_edit_statement + filepath) #debug
 
-        # save
-        bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
+        # save if not temp
+        if os.path.splitext(bpy.data.filepath)[1] != tempfile_extension:
+            bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
         # open
         bpy.ops.wm.open_mainfile(filepath=filepath)
 

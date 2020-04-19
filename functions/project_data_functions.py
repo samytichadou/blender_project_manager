@@ -35,43 +35,35 @@ def getProjectDataFile(winman):
 
         # edit file
         if os.path.isfile(edit_project_data_file):
-            winman.bpm_generalsettings.file_type = 'EDIT'
-            return edit_project_data_file, parent_folder
+            return edit_project_data_file, parent_folder, 'EDIT'
 
         # shot or asset file
         elif os.path.isfile(shot_asset_project_data_file):
             if os.path.basename(subparent_folder) == asset_folder:
-                winman.bpm_generalsettings.file_type = 'ASSET'
+                return shot_asset_project_data_file, subsubparent_folder, 'ASSET'
             elif os.path.basename(subparent_folder) == shot_folder:
-                winman.bpm_generalsettings.file_type = 'SHOT'
-
-            return shot_asset_project_data_file, subsubparent_folder
+                return shot_asset_project_data_file, subsubparent_folder, 'SHOT'
 
         else:
-            return None, None
+            return None, None, None
     else:
-        return None, None
+        return None, None, None
 
 
 # check if project name match json project
-def chekIfBpmProject(winman, project_data_file):
+def chekIfBpmProject(winman, project_data_file, file_type):
     general_settings = winman.bpm_generalsettings
     dataset = read_json(project_data_file)
     blend_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
-    file_type = winman.bpm_generalsettings.file_type
 
     # edit
     if file_type == 'EDIT':
         pattern = dataset['edit_file_pattern']
-        # print(pattern)
-        # print(blend_name)
         if pattern == blend_name:
-            general_settings.is_project = True
             return True
         elif pattern in blend_name:
             try:
-                int(blend_name.split(pattern)[1])
-                general_settings.is_project = True
+                int(blend_name.split(pattern)[1])                
                 return True
             except (ValueError, IndexError):
                 return False

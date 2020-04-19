@@ -40,12 +40,13 @@ from .global_variables import (
                             assets_settings_loaded_statement,
                             asset_missing_in_list_statement,
                             created_lock_file_statement,
+                            locked_file_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
 from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
-from .functions.lock_file_functions import createLockFile
+from .functions.lock_file_functions import createLockFile, getLockFilepath
 
 
 ### HANDLER ###
@@ -58,21 +59,31 @@ def bpmStartupHandler(scene):
     if general_settings.debug: print(startup_statement) #debug
 
     #load project datas
-    project_data_file, project_folder = getProjectDataFile(winman)
+    project_data_file, project_folder, file_type = getProjectDataFile(winman)
     if project_data_file is not None:
 
-        if chekIfBpmProject(winman, project_data_file):
+        if chekIfBpmProject(winman, project_data_file, file_type):
             
             ### bpm project ###
+
+            # check for lock file
+            lock_filepath = getLockFilepath()
+            if os.path.isfile(lock_filepath):
+                if general_settings.debug: print(locked_file_statement) #debug
+                # set already opened prop
+                general_settings.blend_already_opened = True
+            
+            # setup lock file
+            createLockFile()
+            if general_settings.debug: print(created_lock_file_statement) #debug
+
+            general_settings.is_project = True
+            general_settings.file_type = file_type
 
             loadJsonDataToDataset(winman, winman.bpm_projectdatas, project_data_file, ())
             if general_settings.debug: print(loaded_datas_statement) #debug
             general_settings.project_folder = project_folder
             if general_settings.debug: print(loaded_project_folder + project_folder) #debug
-
-            # setup lock file
-            createLockFile()
-            if general_settings.debug: print(created_lock_file_statement) #debug
 
 
             ### common loading ###

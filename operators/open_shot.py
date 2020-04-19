@@ -1,4 +1,5 @@
 import bpy
+import os
 
 
 class BPMOpenShot(bpy.types.Operator):
@@ -25,15 +26,16 @@ class BPMOpenShot(bpy.types.Operator):
     def execute(self, context):
         # import statements and functions
         from ..functions.file_functions import absolutePath
-        from ..global_variables import opening_statement
+        from ..global_variables import opening_statement, tempfile_extension
 
         winman = context.window_manager
         filepath = absolutePath(context.scene.sequence_editor.active_strip.scene.library.filepath)
 
         if winman.bpm_generalsettings.debug: print(opening_statement + filepath) #debug
 
-        # save
-        bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
+        # save if not temp
+        if os.path.splitext(bpy.data.filepath)[1] != tempfile_extension:
+            bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
         # open
         bpy.ops.wm.open_mainfile(filepath=filepath)
         

@@ -97,8 +97,11 @@ copying_file_statement = bpm_statement + "Copying file from : "
 file_does_not_exist_message = "File does not exist : "
 file_does_not_exist_statement = bpm_statement + file_does_not_exist_message
 
+
+# lock system
 created_lock_file_statement = bpm_statement + "Lock file created"
 deleted_lock_file_statement = bpm_statement + "Lock file deleted"
+locked_file_statement = bpm_statement + "Project already opened, proceed with caution"
 
 
 # timeline statements
@@ -212,6 +215,7 @@ shot_startup_file = "blank_shot.blend"
 asset_startup_file = "blank_asset.blend"
 
 lockfile_extension = ".lck"
+tempfile_extension = ".tmp"
 
 
 ### WEB ###
