@@ -30,6 +30,7 @@ def deleteLockFileExit():
     if deleteLockFile():
         print(deleted_lock_file_statement) #debug
 
+# delete on load pre
 @persistent
 def deleteLockFileHandler(scene):
     if bpy.data.window_managers[0].bpm_generalsettings.is_project:
