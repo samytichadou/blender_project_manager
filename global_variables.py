@@ -97,6 +97,9 @@ copying_file_statement = bpm_statement + "Copying file from : "
 file_does_not_exist_message = "File does not exist : "
 file_does_not_exist_statement = bpm_statement + file_does_not_exist_message
 
+created_lock_file_statement = bpm_statement + "Lock file created"
+deleted_lock_file_statement = bpm_statement + "Lock file deleted"
+
 
 # timeline statements
 no_available_timeline_space_message = "No available space on timeline"
@@ -207,6 +210,8 @@ old_folder = "zz_old"
 startup_files_folder = "01_startup_files"
 shot_startup_file = "blank_shot.blend"
 asset_startup_file = "blank_asset.blend"
+
+lockfile_extension = ".lck"
 
 
 ### WEB ###

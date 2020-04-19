@@ -39,11 +39,13 @@ from .global_variables import (
                             assets_settings_loading_statement,
                             assets_settings_loaded_statement,
                             asset_missing_in_list_statement,
+                            created_lock_file_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
 from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
+from .functions.lock_file_functions import createLockFile
 
 
 ### HANDLER ###
@@ -58,11 +60,19 @@ def bpmStartupHandler(scene):
     #load project datas
     project_data_file, project_folder = getProjectDataFile(winman)
     if project_data_file is not None:
+
         if chekIfBpmProject(winman, project_data_file):
+            
+            ### bpm project ###
+
             loadJsonDataToDataset(winman, winman.bpm_projectdatas, project_data_file, ())
             if general_settings.debug: print(loaded_datas_statement) #debug
             general_settings.project_folder = project_folder
             if general_settings.debug: print(loaded_project_folder + project_folder) #debug
+
+            # setup lock file
+            createLockFile()
+            if general_settings.debug: print(created_lock_file_statement) #debug
 
 
             ### common loading ###

@@ -44,6 +44,9 @@ def getLastVersion(folder, pattern, extension):
 def suppressExistingFile(filepath) :
     if os.path.isfile(filepath) :
         os.remove(filepath)
+        return True
+    else:
+        return False
 
 
 # delete folder content
