@@ -68,7 +68,7 @@ from .operators.save_render_settings_to_json import *
 from .properties import *
 from .gui import *
 from .asset_ui_list import *
-from .addon_prefs import *
+from .addon_prefs import BPMAddonPrefs
 
 from .vse_extra_ui import disableSequencerCallback
 

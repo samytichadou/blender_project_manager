@@ -108,6 +108,7 @@ clearing_user_statement = bpm_statement + "Clearing lock file user : "
 
 # timer statements
 timer_function_added_statement = bpm_statement + "Timer function added"
+timer_function_updated_statement = bpm_statement + "Timer function updated"
 timer_function_removed_statement = bpm_statement + "Timer function removed"
 timer_function_processing_statement = bpm_statement + "Timer function processing"
 

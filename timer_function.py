@@ -5,10 +5,13 @@ from .global_variables import timer_function_processing_statement
 from .functions.utils_functions import getCurrentPID
 from .functions.lock_file_functions import getLockFilepath
 from .functions.json_functions import read_json
+from .addon_prefs import getAddonPreferences
 
 def bpmTimerFunction():
     winman = bpy.context.window_manager
     general_settings = winman.bpm_generalsettings
+
+    interval = getAddonPreferences().timer_frequency
 
     if general_settings.debug: print(timer_function_processing_statement) #debug
 
@@ -29,4 +32,4 @@ def bpmTimerFunction():
     if chk_free:
         general_settings.blend_already_opened = False
 
-    return 60.0
+    return interval

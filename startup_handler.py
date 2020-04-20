@@ -50,6 +50,7 @@ from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
 from .functions.lock_file_functions import setupLockFile, getLockFilepath
 from .timer_function import bpmTimerFunction
+from .addon_prefs import getAddonPreferences
 
 
 ### HANDLER ###
@@ -69,9 +70,10 @@ def bpmStartupHandler(scene):
             
             ### bpm project ###
 
-            # setup timer
-            bpy.app.timers.register(bpmTimerFunction)
-            if general_settings.debug: print(timer_function_added_statement) #debug
+            # setup timer if needed
+            if getAddonPreferences().use_timer_refresh:
+                bpy.app.timers.register(bpmTimerFunction)
+                if general_settings.debug: print(timer_function_added_statement) #debug
 
             # check for lock file
             lock_filepath = getLockFilepath()
