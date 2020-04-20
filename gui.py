@@ -279,6 +279,8 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
 
+        drawOperatorAndHelp(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
+
         layout.prop(shot_settings, 'shot_state', text = "")
 
         row = layout.row(align=True)
