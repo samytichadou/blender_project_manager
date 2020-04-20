@@ -19,7 +19,7 @@ Created by Samy Tichadou (tonton)
 '''
 
 bl_info = {  
- "name": "Project Manager",  
+ "name": "BPM - Blender Project Manager",  
  "author": "Samy Tichadou (tonton)",  
  "version": (0, 1),  
  "blender": (2, 83, 0),  
@@ -68,6 +68,7 @@ from .operators.save_render_settings_to_json import *
 from .properties import *
 from .gui import *
 from .asset_ui_list import *
+from .addon_prefs import *
 
 from .vse_extra_ui import disableSequencerCallback
 
@@ -100,6 +101,8 @@ classes = (BPMOpenShot,
             BPMClearLockFileUser,
 
             BPMOpenWikiPage,
+
+            BPMAddonPrefs,
 
             BPMProjectSettings,
             BPMCustomFolders,
