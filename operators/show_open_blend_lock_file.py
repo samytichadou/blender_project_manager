@@ -5,7 +5,7 @@ import os
 from ..functions.lock_file_functions import getLockFilepath
 from ..functions.json_functions import read_json
 from ..functions.utils_functions import returnFormatedTimestamp, getCurrentPID
-
+from ..addon_prefs import getAddonPreferences
 
 class BPMShowOpenBlendLockFile(bpy.types.Operator):
     """Show list of user for this blend file"""
@@ -19,7 +19,11 @@ class BPMShowOpenBlendLockFile(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         general_settings = context.window_manager.bpm_generalsettings
-        return general_settings.is_project and general_settings.blend_already_opened and os.path.isfile(getLockFilepath())
+        if general_settings.is_project:
+            if getAddonPreferences().use_lock_file_system:
+                if general_settings.blend_already_opened:
+                    if os.path.isfile(getLockFilepath()):
+                        return True
 
     def invoke(self, context, event):
         self.lock_filepath = getLockFilepath()

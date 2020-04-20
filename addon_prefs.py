@@ -25,10 +25,31 @@ def updateTimer(self, context):
             bpy.app.timers.unregister(bpmTimerFunction)
             if debug: print(timer_function_removed_statement) #debug
 
+# update function for lock file on/off
+def updateLockFileToggle(self, context):
+    from .functions.lock_file_functions import setupLockFile, clearLockFile
+    from .global_variables import deleted_lock_file_statement, created_lock_file_statement
+
+    debug = context.window_manager.bpm_generalsettings.debug
+
+    if self.use_lock_file_system:
+        setupLockFile()
+        if debug: print(created_lock_file_statement) #debug
+    else:
+        clearLockFile()
+        if debug: print(deleted_lock_file_statement) #debug
+
 
 # addon preferences
 class BPMAddonPrefs(bpy.types.AddonPreferences):
     bl_idname = addon_name
+
+    use_lock_file_system : bpy.props.BoolProperty(
+        name = "Use lock file system",
+        default = False,
+        description = "Use lock file system for collaborative work",
+        update = updateLockFileToggle,
+        )
 
     use_timer_refresh : bpy.props.BoolProperty(
         name = "Use timer function",
@@ -50,6 +71,9 @@ class BPMAddonPrefs(bpy.types.AddonPreferences):
 
     def draw(self, context):
         layout = self.layout
+
+        row = layout.row()
+        row.prop(self, "use_lock_file_system")
 
         row = layout.row()
         row.prop(self, "use_timer_refresh")

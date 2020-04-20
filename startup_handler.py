@@ -70,21 +70,24 @@ def bpmStartupHandler(scene):
             
             ### bpm project ###
 
+            prefs = getAddonPreferences()
+
             # setup timer if needed
-            if getAddonPreferences().use_timer_refresh:
+            if prefs.use_timer_refresh:
                 bpy.app.timers.register(bpmTimerFunction)
                 if general_settings.debug: print(timer_function_added_statement) #debug
 
-            # check for lock file
-            lock_filepath = getLockFilepath()
-            if os.path.isfile(lock_filepath):
-                if general_settings.debug: print(locked_file_statement) #debug
-                # set already opened prop
-                general_settings.blend_already_opened = True
-            
-            # setup lock file
-            setupLockFile()
-            if general_settings.debug: print(created_lock_file_statement) #debug
+            if prefs.use_lock_file_system:
+                # check for lock file
+                lock_filepath = getLockFilepath()
+                if os.path.isfile(lock_filepath):
+                    if general_settings.debug: print(locked_file_statement) #debug
+                    # set already opened prop
+                    general_settings.blend_already_opened = True
+                
+                # setup lock file
+                setupLockFile()
+                if general_settings.debug: print(created_lock_file_statement) #debug
 
             general_settings.is_project = True
             general_settings.file_type = file_type
