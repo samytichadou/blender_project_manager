@@ -325,5 +325,6 @@ class BPMRenderSettings(bpy.types.PropertyGroup) :
 
     audio_codec_items = [
         ('AAC', 'AAC', ""),
+        ('NONE', 'No Audio', ""),
         ]
     ff_audio_codec : bpy.props.EnumProperty(name = "Audio Codec", items = audio_codec_items, default='AAC')
