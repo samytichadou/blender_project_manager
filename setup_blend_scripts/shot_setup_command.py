@@ -27,10 +27,6 @@ scn.render.fps = framerate
 scn.render.resolution_x = resolution_x
 scn.render.resolution_y = resolution_y
 
-# constant
-scn.sync_mode = 'AUDIO_SYNC'
-scn.use_preview_range = True
-
 if debug: print(|bpm_statement + "Saving file") #debug
 
 # save file
