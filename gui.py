@@ -227,7 +227,7 @@ def drawAssetLibrary(container, winman):
 
     container.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
 
-    drawOperatorAndHelp(container, 'bpm.open_asset_file', '', 'Asset-Management')
+    drawOperatorAndHelp(container, 'bpm.open_asset_file', 'FILE_FOLDER', 'Asset-Management')
 
 
 # sequencer assets panel
@@ -316,7 +316,7 @@ class BPM_PT_properties_asset_library_panel(bpy.types.Panel):
         drawAssetLibrary(layout, winman)
 
         if winman.bpm_generalsettings.file_type == 'SHOT':
-            drawOperatorAndHelp(layout, 'bpm.import_asset', '', 'Asset-Management')
+            drawOperatorAndHelp(layout, 'bpm.import_asset', 'IMPORT', 'Asset-Management')
 
 
 # asset settings panel
