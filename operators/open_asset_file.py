@@ -46,7 +46,7 @@ class BPMOpenAssetFile(bpy.types.Operator):
             if debug: print(asset_file_not_found_statement + asset_name) #debug
             return {'FINISHED'}
 
-        # save if not temp
+        # save
         bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
         # open
         bpy.ops.wm.open_mainfile(filepath=specific_asset_filepath)
