@@ -48,7 +48,6 @@ class BPMUpdateShotDuration(bpy.types.Operator):
         from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
         from ..functions.project_data_functions import getArgumentForPythonScript
         from ..functions.file_functions import absolutePath
-        from ..functions.utils_functions import redrawAreas
         from ..functions.audio_sync_functions import syncAudioEdit
         
         winman = context.window_manager
@@ -56,9 +55,16 @@ class BPMUpdateShotDuration(bpy.types.Operator):
         project_folder = general_settings.project_folder
         scn = context.scene
 
+        active = scn.sequence_editor.active_strip
+
         if general_settings.debug: print(start_update_shot_statement) #debug
 
         selected_strips = returnSelectedStrips(scn.sequence_editor)
+
+        # add active if not selected
+        if active not in selected_strips:
+            selected_strips.append(active)
+
         for strip in selected_strips:
             try:
                 if strip.bpm_shotsettings.is_shot and strip.scene.library:
@@ -76,7 +82,6 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
                             self.report({'INFO'}, shot_update_impossible_message)
                             if general_settings.debug: print(shot_update_impossible_statement) #debug
-                            return {'FINISHED'}
 
                         else:
 
@@ -105,13 +110,13 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
             except AttributeError:
                 pass
-        
-        # reload sequencer if needed
-        bpy.ops.sequencer.refresh_all()
 
         # update audio sync if existing
         audio_sync_filepath = os.path.join(project_folder, audio_sync_file)
         if os.path.isfile(audio_sync_filepath):
             syncAudioEdit(general_settings.debug, project_folder, scn)
+        
+        # reload sequencer if needed
+        bpy.ops.sequencer.refresh_all()
 
         return {'FINISHED'}
