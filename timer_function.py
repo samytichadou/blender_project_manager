@@ -10,26 +10,29 @@ from .addon_prefs import getAddonPreferences
 def bpmTimerFunction():
     winman = bpy.context.window_manager
     general_settings = winman.bpm_generalsettings
-
-    interval = getAddonPreferences().timer_frequency
+    prefs = getAddonPreferences()
+    interval = prefs.timer_frequency
 
     if general_settings.debug: print(timer_function_processing_statement) #debug
 
-    # check for opened blend
-    pid = getCurrentPID()
-    lock_filepath = getLockFilepath()
-    datas = read_json(lock_filepath)
+    ### lock system ###
+    if prefs.use_lock_file_system:
 
-    chk_free = True
+        # check for opened blend
+        pid = getCurrentPID()
+        lock_filepath = getLockFilepath()
+        datas = read_json(lock_filepath)
 
-    for o in datas['opened']:
+        chk_free = True
 
-        if o['pid'] != pid:
-            general_settings.blend_already_opened = True
-            chk_free = False
-            break
-    
-    if chk_free:
-        general_settings.blend_already_opened = False
+        for o in datas['opened']:
+
+            if o['pid'] != pid:
+                general_settings.blend_already_opened = True
+                chk_free = False
+                break
+        
+        if chk_free:
+            general_settings.blend_already_opened = False
 
     return interval
