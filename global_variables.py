@@ -76,6 +76,12 @@ missing_render_file_statement = bpm_statement + "Render settings file missing"
 setting_render_statement = bpm_statement + "Setting render"
 render_set_statement = bpm_statement + "Render set"
 
+setting_playblast_statement = bpm_statement + "Setting playblast render"
+starting_playblast_statement = bpm_statement + "Starting playblast render"
+playing_playblast_statement = bpm_statement + "Playing playblast render"
+setting_usual_render_statement = bpm_statement + "Setting usual render back"
+completed_playblast_statement = bpm_statement + "Playblast successfully rendered"
+
 
 # python scripts statement
 creating_python_script_statement = bpm_statement + "Creating python script : "

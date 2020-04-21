@@ -12,11 +12,11 @@ from ..global_variables import (
                         )
 
 
-def setRenderShot(context):
+def setRenderShot(context, shot_render_state):
 
     winman = context.window_manager
     general_settings = winman.bpm_generalsettings
-    shot_render_state = winman.bpm_shotsettings.shot_render_state
+    #shot_render_state = winman.bpm_shotsettings.shot_render_state
     debug = general_settings.debug
     render_settings = winman.bpm_rendersettings[shot_render_state]
     scn = context.scene
@@ -30,8 +30,11 @@ def setRenderShot(context):
     render_shot_folder_path = os.path.join(render_folder_path, render_shots_folder)
     spec_render_folder_path = os.path.join(render_shot_folder_path, shot_render_state)
 
-    shot_folder_path = os.path.join(spec_render_folder_path, shot_name)
-    output_filepath = os.path.join(shot_folder_path, shot_name + "_#####")
+    if render_settings.is_file_format == 'FFMPEG':
+        output_filepath = os.path.join(spec_render_folder_path, shot_name + "_")
+    else:
+        shot_folder_path = os.path.join(spec_render_folder_path, shot_name)
+        output_filepath = os.path.join(shot_folder_path, shot_name + "_#####")
 
     # set render
 

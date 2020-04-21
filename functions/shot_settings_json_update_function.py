@@ -38,4 +38,4 @@ def updateShotRenderState(self, context):
     # save json
     updateShotSettingsProperties(self, context)
     # set render settings
-    setRenderShot(context)
+    setRenderShot(context, context.window_manager.bpm_shotsettings.shot_render_state)
