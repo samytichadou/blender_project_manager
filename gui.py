@@ -316,7 +316,7 @@ class BPM_PT_properties_asset_library_panel(bpy.types.Panel):
         drawAssetLibrary(layout, winman)
 
         if winman.bpm_generalsettings.file_type == 'SHOT':
-            drawOperatorAndHelp(layout, 'bpm.import_asset', 'IMPORT', 'Asset-Management')
+            drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
 
 
 # asset settings panel
