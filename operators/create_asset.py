@@ -50,6 +50,7 @@ class BPMCreateAsset(bpy.types.Operator):
                                 startup_files_folder,
                                 asset_startup_file,
                                 copying_file_statement,
+                                asset_ressources_folder,
                                 )
         from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
         from ..functions.dataset_functions import setPropertiesFromDataset
@@ -117,9 +118,13 @@ class BPMCreateAsset(bpy.types.Operator):
         
         new_asset_file_path = os.path.join(new_asset_folder_path, self.name + ".blend")
 
-        if general_settings.debug: print(asset_file_creation_statement + new_asset_file_path) #debug        
+        if general_settings.debug: print(asset_file_creation_statement + new_asset_file_path) #debug    
 
-        # create asset blend and get the link
+        # create ressources folder
+        ressources_folder_path = os.path.join(new_asset_folder_path, asset_ressources_folder)
+        createDirectory(ressources_folder_path)
+
+        # create asset blend
         ressources_folder = os.path.join(general_settings.project_folder, ressources_folder)
         startup_folder = os.path.join(ressources_folder, startup_files_folder)
         asset_startup_filepath = os.path.join(startup_folder, asset_startup_file)

@@ -225,6 +225,8 @@ render_final_folder = "03_final"
 ressources_folder = "04_ressources"
 old_folder = "zz_old"
 
+asset_ressources_folder = "00_asset_ressources"
+
 startup_files_folder = "01_startup_files"
 shot_startup_file = "blank_shot.blend"
 asset_startup_file = "blank_asset.blend"
