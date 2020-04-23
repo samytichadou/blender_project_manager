@@ -446,11 +446,14 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
     
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_customfolders
+        general_settings = context.window_manager.bpm_generalsettings
+        return context.window_manager.bpm_customfolders and general_settings.is_project
     
     def draw(self, context):
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
+        #shot
+        #asset
         layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
