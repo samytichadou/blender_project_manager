@@ -2,7 +2,7 @@ import bpy
 
 
 from .properties import getAssetIcon
-from .functions.project_data_functions import getShotTaskDeadline
+from .functions.project_data_functions import getShotTaskDeadline, getShotTaskComplete
 
 
 # help function
@@ -206,7 +206,12 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
         layout.separator()
         layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
-        layout.prop(shot_settings, 'shot_state')
+
+        row = layout.row(align=True)
+        row.prop(shot_settings, 'shot_state', text="")
+        if shot_settings.shot_state != "FINISHED":
+            row.prop(shot_settings, getShotTaskComplete(shot_settings)[0], text="")
+        drawWikiHelp(row, 'Shot-Datas')
 
         row = layout.row(align=True)
         row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
@@ -292,7 +297,11 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
 
-        layout.prop(shot_settings, 'shot_state', text = "")
+        row = layout.row(align=True)
+        row.prop(shot_settings, 'shot_state', text="")
+        if shot_settings.shot_state != "FINISHED":
+            row.prop(shot_settings, getShotTaskComplete(shot_settings)[0], text="")
+        drawWikiHelp(row, 'Shot-Datas')
 
         row = layout.row(align=True)
         row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')

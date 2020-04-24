@@ -13,7 +13,7 @@ from .global_variables import (
                             load_font_statement, 
                             unload_font_statement,
                         )
-from .functions.project_data_functions import getShotTaskDeadline
+from .functions.project_data_functions import getShotTaskDeadline, getShotTaskComplete
 
 
 # compute dpi_fac on every blender startup
@@ -251,6 +251,11 @@ def drawBpmSequencerCallbackPx():
     color_e_st_fi = scene_settings.color_state_finished
     n_e_st_fi = 0
 
+    #done
+    vertices_e_st_do = ()
+    indices_e_st_do = ()
+    n_e_st_do = 0
+
     # info shot audio sync
     vertices_e_au = ()
     indices_e_au = ()
@@ -320,7 +325,15 @@ def drawBpmSequencerCallbackPx():
         # bpm shot state
         if scene_settings.display_shot_state:
 
-            y1st = y1 + 0.5
+            display_state_done = False
+
+            if getShotTaskComplete(strip.bpm_shotsettings)[1] and strip.bpm_shotsettings.shot_state != 'FINISHED':
+                display_state_done = True
+                y1st = y1 + 0.55
+
+            else:
+                y1st = y1 + 0.5
+                
             y2st = y2 - 0.3
 
             v1st = region.view2d.view_to_region(x1, y1st, clip=False)
@@ -356,6 +369,21 @@ def drawBpmSequencerCallbackPx():
                 vertices_e_st_fi += (v1st, v2st, v3st, v4st)
                 indices_e_st_fi += ((n_e_st_fi, n_e_st_fi + 1, n_e_st_fi + 2), (n_e_st_fi + 2, n_e_st_fi + 1, n_e_st_fi + 3))
                 n_e_st_fi += 4
+
+            # bpm state done
+            if display_state_done:
+                
+                y1do = y1st - 0.05
+
+                v1do = region.view2d.view_to_region(x1, y1do, clip=False)
+                v2do = region.view2d.view_to_region(x2, y1do, clip=False)
+                v3do = region.view2d.view_to_region(x1, y1st, clip=False)
+                v4do = region.view2d.view_to_region(x2, y1st, clip=False)
+
+                vertices_e_st_do += (v1do, v2do, v3do, v4do)
+                indices_e_st_do += ((n_e_st_do, n_e_st_do + 1, n_e_st_do + 2), (n_e_st_do + 2, n_e_st_do + 1, n_e_st_do + 3))
+                n_e_st_do += 4
+
 
         # bpm shot audio sync
         if scene_settings.display_audio_sync:
@@ -438,6 +466,8 @@ def drawBpmSequencerCallbackPx():
         drawShader(vertices_e_st_re, indices_e_st_re, color_e_st_re)
         drawShader(vertices_e_st_co, indices_e_st_co, color_e_st_co)
         drawShader(vertices_e_st_fi, indices_e_st_fi, color_e_st_fi)
+
+        drawShader(vertices_e_st_do, indices_e_st_do, color_e_st_fi)
 
     # audio sync info
     if scene_settings.display_audio_sync:

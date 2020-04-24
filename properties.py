@@ -141,6 +141,13 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = getDateString())
     compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = getDateString())
 
+    storyboard_done : bpy.props.BoolProperty(name = "Storyboard done", update = updateShotSettingsProperties)
+    layout_done : bpy.props.BoolProperty(name = "Layout done", update = updateShotSettingsProperties)
+    animation_done : bpy.props.BoolProperty(name = "Animation done", update = updateShotSettingsProperties)
+    lighting_done : bpy.props.BoolProperty(name = "Lighting done", update = updateShotSettingsProperties)
+    rendering_done : bpy.props.BoolProperty(name = "Rendering done", update = updateShotSettingsProperties)
+    compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = updateShotSettingsProperties)
+
 
 # shot settings file
 class BPMShotSettings(bpy.types.PropertyGroup) :
@@ -162,6 +169,13 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = getDateString())
     rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = getDateString())
     compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = getDateString())
+
+    storyboard_done : bpy.props.BoolProperty(name = "Storyboard done", update = updateShotSettingsProperties)
+    layout_done : bpy.props.BoolProperty(name = "Layout done", update = updateShotSettingsProperties)
+    animation_done : bpy.props.BoolProperty(name = "Animation done", update = updateShotSettingsProperties)
+    lighting_done : bpy.props.BoolProperty(name = "Lighting done", update = updateShotSettingsProperties)
+    rendering_done : bpy.props.BoolProperty(name = "Rendering done", update = updateShotSettingsProperties)
+    compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = updateShotSettingsProperties)
 
 
 # scene settings

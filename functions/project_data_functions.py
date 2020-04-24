@@ -290,9 +290,18 @@ def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
                 return
 
 
-# get shot task deadline return identifier, value
+# get shot task deadline, return identifier, value
 def getShotTaskDeadline(shotsettings):
     state = shotsettings.shot_state.lower()
     for p in shotsettings.bl_rna.properties:
-        if state in p.identifier:
+        if state + "_deadline" == p.identifier:
             return p.identifier, getattr(shotsettings, p.identifier)
+    return None, "None"
+
+# get shot task complete, return identifier, value
+def getShotTaskComplete(shotsettings):
+    state = shotsettings.shot_state.lower()
+    for p in shotsettings.bl_rna.properties:
+        if state + "_done" == p.identifier:
+            return p.identifier, getattr(shotsettings, p.identifier)
+    return None, None
