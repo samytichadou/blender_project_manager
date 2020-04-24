@@ -4,7 +4,7 @@ import bpy
 from .functions.filebrowser_update_function import updateFilebrowserPath
 from .functions.shot_settings_json_update_function import updateShotSettingsProperties, updateShotRenderState
 from .functions.asset_assigning_update_function import updateAssetAssigning, updateChangingAssetType, saveAssetToJson
-from .functions.date_functions import getDateString
+from .functions.date_functions import getDateString, getDateYearString, getDateMonthString, getDateDayString
 
 from .global_variables import (
                             render_draft_folder,
@@ -186,9 +186,6 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     display_shot_strip : bpy.props.BoolProperty(name = "Shot strips", default=True)
     color_shot_strip : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 1, 0, 0.25), min=0.0, max=1.0, size=4)
 
-    display_shot_todo : bpy.props.BoolProperty(name = "Shot to do", default=True)
-    color_shot_todo : bpy.props.FloatVectorProperty(name="Shot to do color", subtype='COLOR', default=(0, 0, 1, 0.5), min=0.0, max=1.0, size=4)
-
     display_shot_state : bpy.props.BoolProperty(name = "Shot state", default=True)
     color_state_storyboard : bpy.props.FloatVectorProperty(name="Storyboard", subtype='COLOR', default=(0.996, 0.898, 0.0, 1), min=0.0, max=1.0, size=4)
     color_state_layout : bpy.props.FloatVectorProperty(name="Layout", subtype='COLOR', default=(0.996, 0.431, 0.0, 1), min=0.0, max=1.0, size=4)
@@ -228,6 +225,14 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     display_shot_version_warning : bpy.props.BoolProperty(name = "Shot version warning", default=True)
     color_version_warning : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 0, 1, 1), min=0.0, max=1.0, size=4)
 
+    display_shot_todo : bpy.props.BoolProperty(name = "Shot to do", default=True)
+    color_shot_todo : bpy.props.FloatVectorProperty(name="Shot to do color", subtype='COLOR', default=(0, 0, 1, 0.5), min=0.0, max=1.0, size=4)
+
+    display_shot_deadline_preview : bpy.props.BoolProperty(name = "Deadline preview", default=False)
+    color_shot_deadline_preview : bpy.props.FloatVectorProperty(name="Deadline preview color", subtype='COLOR', default=(0.5, 0.5, 0, 1), min=0.0, max=1.0, size=4)
+    shot_deadline_preview_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString())-10, default = int(getDateYearString()))
+    shot_deadline_preview_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12, default = int(getDateMonthString()))
+    shot_deadline_preview_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31, default = int(getDateDayString()))
 
 # general settings
 class BPMGeneralSettings(bpy.types.PropertyGroup) :

@@ -325,15 +325,7 @@ def drawBpmSequencerCallbackPx():
         # bpm shot state
         if scene_settings.display_shot_state:
 
-            display_state_done = False
-
-            if getShotTaskComplete(strip.bpm_shotsettings)[1] and strip.bpm_shotsettings.shot_state != 'FINISHED':
-                display_state_done = True
-                y1st = y1 + 0.55
-
-            else:
-                y1st = y1 + 0.5
-                
+            y1st = y1 + 0.5
             y2st = y2 - 0.3
 
             v1st = region.view2d.view_to_region(x1, y1st, clip=False)
@@ -371,7 +363,7 @@ def drawBpmSequencerCallbackPx():
                 n_e_st_fi += 4
 
             # bpm state done
-            if display_state_done:
+            if getShotTaskComplete(strip.bpm_shotsettings)[1] and strip.bpm_shotsettings.shot_state != 'FINISHED':
                 
                 y1do = y1st - 0.05
 

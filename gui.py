@@ -98,15 +98,16 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
         row = layout.row(align=True)
         row.prop(scn_settings, 'extra_ui')
         drawWikiHelp(row, 'Extra-UI-in-Sequencer')
+
         if scn_settings.extra_ui:
+
             box = layout.box()
+            row = box.row()
+            row.label(text = "Shots")
+
             row = box.row()
             row.prop(scn_settings, 'display_shot_strip')
             row.prop(scn_settings, 'color_shot_strip', text="")
-
-            row = box.row()
-            row.prop(scn_settings, 'display_shot_todo')
-            row.prop(scn_settings, 'color_shot_todo', text="")
 
             row = box.row()
             row.prop(scn_settings, 'display_shot_state')
@@ -146,6 +147,8 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
             box = layout.box()
             row = box.row()
             row.label(text = "Markers")
+
+            row = box.row()
             row.prop(scn_settings, 'display_markers', text = "")
             row.prop(scn_settings, 'color_markers', text="")
 
@@ -158,6 +161,26 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
             row.prop(scn_settings, 'color_marker_boxes', text="")
 
             box.prop(scn_settings, 'display_marker_text_limit')
+
+            # preview
+            box = layout.box()
+            row = box.row()
+            row.label(text = "Scheduling")
+
+            row = box.row()
+            row.prop(scn_settings, 'display_shot_todo')
+            row.prop(scn_settings, 'color_shot_todo', text="")
+
+            row = box.row()
+            row.prop(scn_settings, 'display_shot_deadline_preview')
+            row.prop(scn_settings, 'color_shot_deadline_preview', text = "")
+
+            row = box.row(align=True)
+            if not scn_settings.display_shot_deadline_preview:
+                row.enabled = False
+            row.prop(scn_settings, 'shot_deadline_preview_yr', text = "")
+            row.prop(scn_settings, 'shot_deadline_preview_mn', text = "")
+            row.prop(scn_settings, 'shot_deadline_preview_da', text = "")
 
 
 # sequencer shot panel
