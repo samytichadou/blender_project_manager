@@ -1,6 +1,9 @@
 import bpy
 
 
+from ..functions.date_functions import getDateYearString
+
+
 class BPMModifyShotTasks(bpy.types.Operator):
     """Modify shot tasks"""
     bl_idname = "bpm.modify_shot_tasks"
@@ -8,7 +11,33 @@ class BPMModifyShotTasks(bpy.types.Operator):
     bl_options = {'REGISTER', 'INTERNAL'}
 
     shot_settings = None
-    behavior = bpy.props.StringProperty()
+    behavior : bpy.props.StringProperty()
+
+    #calendar properties
+
+    st_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString()))
+    st_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12)
+    st_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31)
+
+    la_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString()))
+    la_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12)
+    la_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31)
+
+    an_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString()))
+    an_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12)
+    an_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31)
+
+    li_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString()))
+    li_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12)
+    li_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31)
+
+    re_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString()))
+    re_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12)
+    re_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31)
+
+    co_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString()))
+    co_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12)
+    co_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31)
 
     @classmethod
     def poll(cls, context):
@@ -31,10 +60,41 @@ class BPMModifyShotTasks(bpy.types.Operator):
     def invoke(self, context, event):
         winman = context.window_manager
 
+        # set settings depending on file type
         if winman.bpm_generalsettings.file_type == 'EDIT':
             self.shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
         else:
             self.shot_settings = winman.bpm_shotsettings
+
+        # storyboard
+        self.st_yr = int(self.shot_settings.storyboard_deadline.split("-")[0])
+        self.st_mn = int(self.shot_settings.storyboard_deadline.split("-")[1])
+        self.st_da = int(self.shot_settings.storyboard_deadline.split("-")[2])
+
+        # layout
+        self.la_yr = int(self.shot_settings.layout_deadline.split("-")[0])
+        self.la_mn = int(self.shot_settings.layout_deadline.split("-")[1])
+        self.la_da = int(self.shot_settings.layout_deadline.split("-")[2])
+        
+        # animation
+        self.an_yr = int(self.shot_settings.animation_deadline.split("-")[0])
+        self.an_mn = int(self.shot_settings.animation_deadline.split("-")[1])
+        self.an_da = int(self.shot_settings.animation_deadline.split("-")[2])
+
+        # lighting
+        self.li_yr = int(self.shot_settings.lighting_deadline.split("-")[0])
+        self.li_mn = int(self.shot_settings.lighting_deadline.split("-")[1])
+        self.li_da = int(self.shot_settings.lighting_deadline.split("-")[2])
+
+        # rendering
+        self.re_yr = int(self.shot_settings.rendering_deadline.split("-")[0])
+        self.re_mn = int(self.shot_settings.rendering_deadline.split("-")[1])
+        self.re_da = int(self.shot_settings.rendering_deadline.split("-")[2])
+
+        # compositing
+        self.co_yr = int(self.shot_settings.compositing_deadline.split("-")[0])
+        self.co_mn = int(self.shot_settings.compositing_deadline.split("-")[1])
+        self.co_da = int(self.shot_settings.compositing_deadline.split("-")[2])
 
         return context.window_manager.invoke_props_dialog(self)
  
@@ -46,12 +106,47 @@ class BPMModifyShotTasks(bpy.types.Operator):
         else:
             layout.label(text = "Active strip")
 
-        layout.prop(self.shot_settings, 'storyboard_deadline', text='Storyboard')
-        layout.prop(self.shot_settings, 'layout_deadline', text='Layout')
-        layout.prop(self.shot_settings, 'animation_deadline', text='Animation')
-        layout.prop(self.shot_settings, 'lighting_deadline', text='Lighting')
-        layout.prop(self.shot_settings, 'rendering_deadline', text='Rendering')
-        layout.prop(self.shot_settings, 'compositing_deadline', text='Compositing')
+        # storyboard
+        row = layout.row(align=True)
+        row.label(text="Storyboard")
+        row.prop(self, 'st_yr', text='')
+        row.prop(self, 'st_mn', text='')
+        row.prop(self, 'st_da', text='')
+
+        # layout
+        row = layout.row(align=True)
+        row.label(text="Layout")
+        row.prop(self, 'la_yr', text='')
+        row.prop(self, 'la_mn', text='')
+        row.prop(self, 'la_da', text='')
+
+        # storyboard
+        row = layout.row(align=True)
+        row.label(text="Animation")
+        row.prop(self, 'an_yr', text='')
+        row.prop(self, 'an_mn', text='')
+        row.prop(self, 'an_da', text='')
+
+        # storyboard
+        row = layout.row(align=True)
+        row.label(text="Lighting")
+        row.prop(self, 'li_yr', text='')
+        row.prop(self, 'li_mn', text='')
+        row.prop(self, 'li_da', text='')
+
+        # storyboard
+        row = layout.row(align=True)
+        row.label(text="Rendering")
+        row.prop(self, 're_yr', text='')
+        row.prop(self, 're_mn', text='')
+        row.prop(self, 're_da', text='')
+
+        # storyboard
+        row = layout.row(align=True)
+        row.label(text="Compositing")
+        row.prop(self, 'co_yr', text='')
+        row.prop(self, 'co_mn', text='')
+        row.prop(self, 'co_da', text='')
 
     def execute(self, context):
         # import statement and functions
@@ -63,16 +158,29 @@ class BPMModifyShotTasks(bpy.types.Operator):
 
         if general_settings.debug: print(shot_deadlines_modification_statement) #debug
 
+        # format temp properties
+        st = str(self.st_yr) + "-" + str(self.st_mn).zfill(2) + "-"  + str(self.st_da).zfill(2)
+        la = str(self.la_yr) + "-" + str(self.la_mn).zfill(2) + "-"  + str(self.la_da).zfill(2)
+        an = str(self.an_yr) + "-" + str(self.an_mn).zfill(2) + "-"  + str(self.an_da).zfill(2)
+        li = str(self.li_yr) + "-" + str(self.li_mn).zfill(2) + "-"  + str(self.li_da).zfill(2)
+        re = str(self.re_yr) + "-" + str(self.re_mn).zfill(2) + "-"  + str(self.re_da).zfill(2)
+        co = str(self.co_yr) + "-" + str(self.co_mn).zfill(2) + "-"  + str(self.co_da).zfill(2)
+
+        # update active shot
+        self.shot_settings.storyboard_deadline = st
+        self.shot_settings.layout_deadline = la
+        self.shot_settings.animation_deadline = an
+        self.shot_settings.lighting_deadline = li
+        self.shot_settings.rendering_deadline = re
+        self.shot_settings.compositing_deadline = co
+
+        updateShotSettingsProperties(self.shot_settings, context)
+
+        if general_settings.debug: print(deadlines_modified_statement + "active shot") #debug
+
         if general_settings.file_type == 'EDIT' and self.behavior == "selected_strips":
 
             sequencer = context.scene.sequence_editor
-
-            st = self.shot_settings.storyboard_deadline
-            la = self.shot_settings.layout_deadline
-            an = self.shot_settings.animation_deadline
-            li = self.shot_settings.lighting_deadline
-            re = self.shot_settings.rendering_deadline
-            co = self.shot_settings.compositing_deadline
 
             for s in returnSelectedStrips(sequencer):
                 
@@ -90,10 +198,6 @@ class BPMModifyShotTasks(bpy.types.Operator):
                     updateShotSettingsProperties(shot_settings, context)
 
                     if general_settings.debug: print(deadlines_modified_statement + s.name) #debug
-
-        updateShotSettingsProperties(self.shot_settings, context)
-
-        if general_settings.debug: print(deadlines_modified_statement + "active shot") #debug
 
         # reload sequencer
         bpy.ops.sequencer.refresh_all()
