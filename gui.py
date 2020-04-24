@@ -2,6 +2,7 @@ import bpy
 
 
 from .properties import getAssetIcon
+from .functions.project_data_functions import getShotTaskDeadline
 
 
 # help function
@@ -176,7 +177,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
                     return False
         return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT' and chk_isshot
 
-    def draw(self, context):
+    def draw(self, context):        
         active = context.scene.sequence_editor.active_strip
         general_settings = context.window_manager.bpm_generalsettings
         shot_settings = active.bpm_shotsettings
@@ -206,6 +207,10 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         row = layout.row(align=True)
         row.prop(shot_settings, 'shot_render_state', text = "Render")
         drawWikiHelp(row, 'Render-Settings')
+
+        row = layout.row(align=True)
+        row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1])
+        drawWikiHelp(row, 'Shot-Task-System')
 
         layout.prop(shot_settings, 'display_markers')
 
@@ -282,6 +287,10 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         drawOperatorAndHelp(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
 
         layout.prop(shot_settings, 'shot_state', text = "")
+
+        row = layout.row(align=True)
+        row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1])
+        drawWikiHelp(row, 'Shot-Task-System')
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')

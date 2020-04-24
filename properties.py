@@ -4,6 +4,7 @@ import bpy
 from .functions.filebrowser_update_function import updateFilebrowserPath
 from .functions.shot_settings_json_update_function import updateShotSettingsProperties, updateShotRenderState
 from .functions.asset_assigning_update_function import updateAssetAssigning, updateChangingAssetType, saveAssetToJson
+from .functions.date_functions import getDateString
 
 from .global_variables import (
                             render_draft_folder,
@@ -132,6 +133,14 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = updateShotSettingsProperties)
     shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
 
+    # tasks
+    storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateString(), update = updateShotSettingsProperties)
+    layout_deadline : bpy.props.StringProperty(name = 'Layout deadline', default = getDateString(), update = updateShotSettingsProperties)
+    animation_deadline : bpy.props.StringProperty(name = 'Animation deadline', default = getDateString(), update = updateShotSettingsProperties)
+    lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = getDateString(), update = updateShotSettingsProperties)
+    rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = getDateString(), update = updateShotSettingsProperties)
+    compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = getDateString(), update = updateShotSettingsProperties)
+
 
 # shot settings file
 class BPMShotSettings(bpy.types.PropertyGroup) :
@@ -145,6 +154,14 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     not_last_version : bpy.props.BoolProperty(default=False)
     auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = updateShotSettingsProperties)
     shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
+
+    # tasks
+    storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateString(), update = updateShotSettingsProperties)
+    layout_deadline : bpy.props.StringProperty(name = 'Layout deadline', default = getDateString(), update = updateShotSettingsProperties)
+    animation_deadline : bpy.props.StringProperty(name = 'Animation deadline', default = getDateString(), update = updateShotSettingsProperties)
+    lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = getDateString(), update = updateShotSettingsProperties)
+    rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = getDateString(), update = updateShotSettingsProperties)
+    compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = getDateString(), update = updateShotSettingsProperties)
 
 
 # scene settings

@@ -288,3 +288,11 @@ def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
                 c.bpm_isasset = True
                 if debug: print(setting_prop_statement + prop) ###debug
                 return
+
+
+# get shot task deadline return identifier, value
+def getShotTaskDeadline(shotsettings):
+    state = shotsettings.shot_state.lower()
+    for p in shotsettings.bl_rna.properties:
+        if state in p.identifier:
+            return p.identifier, getattr(shotsettings, p.identifier)
