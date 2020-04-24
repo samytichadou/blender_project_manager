@@ -60,6 +60,7 @@ from .operators.open_asset_file import *
 from .operators.show_open_blend_lock_file import *
 from .operators.clear_lock_file_user import *
 from .operators.render_shot_playblast import *
+from .operators.modify_shot_tasks_operator import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -101,6 +102,7 @@ classes = (BPMOpenShot,
             BPMShowOpenBlendLockFile,
             BPMClearLockFileUser,
             BPMRenderShotPlayblast,
+            BPMModifyShotTasks,
 
             BPMOpenWikiPage,
 

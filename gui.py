@@ -205,12 +205,13 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         layout.prop(shot_settings, 'shot_state')
 
         row = layout.row(align=True)
-        row.prop(shot_settings, 'shot_render_state', text = "Render")
-        drawWikiHelp(row, 'Render-Settings')
+        row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1])
+        row.operator('bpm.modify_shot_tasks', text='', icon='GREASEPENCIL')
+        drawWikiHelp(row, 'Shot-Task-System')
 
         row = layout.row(align=True)
-        row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1])
-        drawWikiHelp(row, 'Shot-Task-System')
+        row.prop(shot_settings, 'shot_render_state', text = "Render")
+        drawWikiHelp(row, 'Render-Settings')
 
         layout.prop(shot_settings, 'display_markers')
 
@@ -290,6 +291,7 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
 
         row = layout.row(align=True)
         row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1])
+        row.operator('bpm.modify_shot_tasks', text='', icon='GREASEPENCIL')
         drawWikiHelp(row, 'Shot-Task-System')
 
         row = layout.row(align=True)
