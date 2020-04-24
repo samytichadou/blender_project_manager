@@ -85,7 +85,12 @@ completed_playblast_statement = bpm_statement + "Playblast successfully rendered
 date_set_statement = bpm_statement + "Current date set"
 
 
-# python scripts statement
+# deadlines statements
+shot_deadlines_modification_statement = bpm_statement + "Starting shot(s) deadlines modification"
+deadlines_modified_statement = bpm_statement + "Deadlines modified for "
+
+
+# python scripts statements
 creating_python_script_statement = bpm_statement + "Creating python script : "
 python_script_created_statement = bpm_statement + "Python script successfully created"
 launching_command_statement = bpm_statement + "Launching command : "

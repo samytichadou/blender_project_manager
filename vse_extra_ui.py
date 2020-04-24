@@ -13,6 +13,7 @@ from .global_variables import (
                             load_font_statement, 
                             unload_font_statement,
                         )
+from .functions.project_data_functions import getShotTaskDeadline
 
 
 # compute dpi_fac on every blender startup
@@ -156,6 +157,7 @@ def drawBpmSequencerCallbackPx():
 
     scn = context.scene
     scene_settings = scn.bpm_scenesettings
+    date = context.window_manager.bpm_generalsettings.today_date
     m_display = scene_settings.display_markers
     mn_display = scene_settings.display_marker_names
     
@@ -192,10 +194,15 @@ def drawBpmSequencerCallbackPx():
 
     # setup extras
 
+    # bpm todo
+    vertices_e_td = ()
+    indices_e_td = ()
+    color_e_td = scene_settings.color_shot_todo
+    n_e_td = 0
+
     # bpm shots
     vertices_e_s = ()
     indices_e_s = ()
-    #color_e_s = (0, 1, 0, 0.25)
     color_e_s = scene_settings.color_shot_strip
     n_e_s = 0
 
@@ -205,70 +212,60 @@ def drawBpmSequencerCallbackPx():
     #storyboard
     vertices_e_st_st = ()
     indices_e_st_st = ()
-    #color_e_st_st = (0.996, 0.898, 0.0, state_alpha)
     color_e_st_st = scene_settings.color_state_storyboard
     n_e_st_st = 0
 
     #layout
     vertices_e_st_la = ()
     indices_e_st_la = ()
-    #color_e_st_la = (0.996, 0.431, 0.0, state_alpha)
     color_e_st_la = scene_settings.color_state_layout
     n_e_st_la = 0
 
     #animation
     vertices_e_st_an = ()
     indices_e_st_an = ()
-    #color_e_st_an = (0.413, 0.002, 0.006, state_alpha)
     color_e_st_an = scene_settings.color_state_animation
     n_e_st_an = 0
 
     #lighting
     vertices_e_st_li = ()
     indices_e_st_li = ()
-    #color_e_st_li = (0.0, 0.996, 0.98, state_alpha)
     color_e_st_li = scene_settings.color_state_lighting
     n_e_st_li = 0
 
     #rendering
     vertices_e_st_re = ()
     indices_e_st_re = ()
-    #color_e_st_re = (0.0, 0.424, 0.996, state_alpha)
     color_e_st_re = scene_settings.color_state_rendering
     n_e_st_re = 0
 
     #compositing
     vertices_e_st_co = ()
     indices_e_st_co = ()
-    #color_e_st_co = (0.0, 0.0, 0.25, state_alpha)
     color_e_st_co = scene_settings.color_state_compositing
     n_e_st_co = 0
 
     #finished
     vertices_e_st_fi = ()
     indices_e_st_fi = ()
-    #color_e_st_fi = (0.0, 0.386, 0.0, state_alpha)
     color_e_st_fi = scene_settings.color_state_finished
     n_e_st_fi = 0
 
     # info shot audio sync
     vertices_e_au = ()
     indices_e_au = ()
-    #color_e_au = (1.0, 0.0, 0.924, 1.0)
     color_e_au = scene_settings.color_audio_sync
     n_e_au = 0
 
     # warning update bpm shots
     vertices_e_w = ()
     indices_e_w = ()
-    #color_e_w = (1, 0, 0, 1)
     color_e_w = scene_settings.color_update_warning
     n_e_w = 0
 
     # warning version bpm shots
     vertices_e_v_w = ()
     indices_e_v_w = ()
-    #color_e_v_w = (0, 0, 1, 1)
     color_e_v_w = scene_settings.color_version_warning
     n_e_v_w = 0
 
@@ -278,7 +275,8 @@ def drawBpmSequencerCallbackPx():
     ### COMPUTE TIMELINE ###
     for strip in returnShotStrips(sequencer):
 
-        display_need_update = False                       
+        display_need_update = False
+        display_todo = False                  
 
         x1, y1, x2, y2 = getStripRectangle(strip)
 
@@ -287,17 +285,37 @@ def drawBpmSequencerCallbackPx():
         v3 = region.view2d.view_to_region(x1, y2, clip=False)
         v4 = region.view2d.view_to_region(x2, y2, clip=False)
 
+        # bpm todo shot
+        if scene_settings.display_shot_todo:
+
+            shot_deadline = getShotTaskDeadline(strip.bpm_shotsettings)[1]
+
+            if date == shot_deadline:
+                display_todo = True
+
+                y1s = y1 + 0.6
+
+                v1s = region.view2d.view_to_region(x1, y1s, clip=False)
+                v2s = region.view2d.view_to_region(x2, y1s, clip=False)
+
+                vertices_e_td += (v1s, v2s, v3, v4)
+                indices_e_td += ((n_e_td, n_e_td + 1, n_e_td + 2), (n_e_td + 2, n_e_td + 1, n_e_td + 3))
+                n_e_td += 4
+
+
         # bpm shot
         if scene_settings.display_shot_strip:
+            
+            if not display_todo:
                 
-            y1s = y1 + 0.6
+                y1s = y1 + 0.6
 
-            v1s = region.view2d.view_to_region(x1, y1s, clip=False)
-            v2s = region.view2d.view_to_region(x2, y1s, clip=False)
+                v1s = region.view2d.view_to_region(x1, y1s, clip=False)
+                v2s = region.view2d.view_to_region(x2, y1s, clip=False)
 
-            vertices_e_s += (v1s, v2s, v3, v4)
-            indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
-            n_e_s += 4
+                vertices_e_s += (v1s, v2s, v3, v4)
+                indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
+                n_e_s += 4
 
         # bpm shot state
         if scene_settings.display_shot_state:
@@ -400,6 +418,10 @@ def drawBpmSequencerCallbackPx():
     ### DRAW SHADERS ###
 
     bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE)
+
+    #shot todo
+    if scene_settings.display_shot_todo:
+        drawShader(vertices_e_td, indices_e_td, color_e_td)
     
     #shot strips
     if scene_settings.display_shot_strip:

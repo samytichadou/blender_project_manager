@@ -105,6 +105,10 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
             row.prop(scn_settings, 'color_shot_strip', text="")
 
             row = box.row()
+            row.prop(scn_settings, 'display_shot_todo')
+            row.prop(scn_settings, 'color_shot_todo', text="")
+
+            row = box.row()
             row.prop(scn_settings, 'display_shot_state')
             row.prop(general_settings, 'ui_shot_state_subpanel', icon='COLORSET_04_VEC')
 
@@ -205,8 +209,9 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         layout.prop(shot_settings, 'shot_state')
 
         row = layout.row(align=True)
-        row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1])
-        row.operator('bpm.modify_shot_tasks', text='', icon='GREASEPENCIL')
+        row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
+        row.operator('bpm.modify_shot_tasks', text='', icon='GREASEPENCIL').behavior = 'active_strip'
+        row.operator('bpm.modify_shot_tasks', text='', icon='SEQ_STRIP_DUPLICATE').behavior = 'selected_strips'
         drawWikiHelp(row, 'Shot-Task-System')
 
         row = layout.row(align=True)
@@ -290,8 +295,8 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         layout.prop(shot_settings, 'shot_state', text = "")
 
         row = layout.row(align=True)
-        row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1])
-        row.operator('bpm.modify_shot_tasks', text='', icon='GREASEPENCIL')
+        row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
+        row.operator('bpm.modify_shot_tasks', text='', icon='GREASEPENCIL').behavior = 'active_strip'
         drawWikiHelp(row, 'Shot-Task-System')
 
         row = layout.row(align=True)
