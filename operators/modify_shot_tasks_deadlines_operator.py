@@ -4,10 +4,10 @@ import bpy
 from ..functions.date_functions import getDateYearString
 
 
-class BPMModifyShotTasks(bpy.types.Operator):
-    """Modify shot tasks"""
-    bl_idname = "bpm.modify_shot_tasks"
-    bl_label = "Modify shot tasks"
+class BPMModifyShotTasksDeadline(bpy.types.Operator):
+    """Modify shot tasks deadlines"""
+    bl_idname = "bpm.modify_shot_tasks_deadlines"
+    bl_label = "Modify deadlines"
     bl_options = {'REGISTER', 'INTERNAL'}
 
     shot_settings = None
@@ -183,21 +183,23 @@ class BPMModifyShotTasks(bpy.types.Operator):
             sequencer = context.scene.sequence_editor
 
             for s in returnSelectedStrips(sequencer):
+
+                if s.type in {'SCENE'}:
                 
-                if s != sequencer.active_strip:
+                    if s != sequencer.active_strip:
 
-                    shot_settings = s.bpm_shotsettings
-                    
-                    shot_settings.storyboard_deadline = st
-                    shot_settings.layout_deadline = la
-                    shot_settings.animation_deadline = an
-                    shot_settings.lighting_deadline = li
-                    shot_settings.rendering_deadline = re
-                    shot_settings.compositing_deadline = co
+                        shot_settings = s.bpm_shotsettings
+                        
+                        shot_settings.storyboard_deadline = st
+                        shot_settings.layout_deadline = la
+                        shot_settings.animation_deadline = an
+                        shot_settings.lighting_deadline = li
+                        shot_settings.rendering_deadline = re
+                        shot_settings.compositing_deadline = co
 
-                    updateShotSettingsProperties(shot_settings, context)
+                        updateShotSettingsProperties(shot_settings, context)
 
-                    if general_settings.debug: print(deadlines_modified_statement + s.name) #debug
+                        if general_settings.debug: print(deadlines_modified_statement + s.name) #debug
 
         # reload sequencer
         bpy.ops.sequencer.refresh_all()

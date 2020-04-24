@@ -215,8 +215,8 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
         row = layout.row(align=True)
         row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
-        row.operator('bpm.modify_shot_tasks', text='', icon='GREASEPENCIL').behavior = 'active_strip'
-        row.operator('bpm.modify_shot_tasks', text='', icon='SEQ_STRIP_DUPLICATE').behavior = 'selected_strips'
+        row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
+        row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='SEQ_STRIP_DUPLICATE').behavior = 'selected_strips'
         drawWikiHelp(row, 'Shot-Task-System')
 
         row = layout.row(align=True)
@@ -305,7 +305,7 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
 
         row = layout.row(align=True)
         row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
-        row.operator('bpm.modify_shot_tasks', text='', icon='GREASEPENCIL').behavior = 'active_strip'
+        row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
         drawWikiHelp(row, 'Shot-Task-System')
 
         row = layout.row(align=True)
