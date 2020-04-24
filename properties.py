@@ -243,6 +243,8 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
 
     blend_already_opened : bpy.props.BoolProperty(default=False)
 
+    today_date : bpy.props.StringProperty(name = "Today date")
+
 
 # render settings
 class BPMRenderSettings(bpy.types.PropertyGroup) :

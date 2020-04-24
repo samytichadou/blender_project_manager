@@ -43,12 +43,14 @@ from .global_variables import (
                             locked_file_statement,
                             timer_function_added_statement,
                             timer_function_removed_statement,
+                            date_set_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
 from .functions.utils_functions import clearLibraryUsers
 from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
 from .functions.lock_file_functions import setupLockFile, getLockFilepath
+from .functions.date_functions import getDateString
 from .timer_function import bpmTimerFunction
 from .addon_prefs import getAddonPreferences
 
@@ -69,6 +71,10 @@ def bpmStartupHandler(scene):
         if chekIfBpmProject(winman, project_data_file, file_type):
             
             ### bpm project ###
+
+            # set date
+            general_settings.today_date = getDateString()
+            if general_settings.debug: print(date_set_statement) #debug
 
             prefs = getAddonPreferences()
 

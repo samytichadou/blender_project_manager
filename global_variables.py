@@ -82,6 +82,8 @@ playing_playblast_statement = bpm_statement + "Playing playblast render"
 setting_usual_render_statement = bpm_statement + "Setting usual render back"
 completed_playblast_statement = bpm_statement + "Playblast successfully rendered"
 
+date_set_statement = bpm_statement + "Current date set"
+
 
 # python scripts statement
 creating_python_script_statement = bpm_statement + "Creating python script : "
