@@ -14,6 +14,7 @@ from .global_variables import (
                             unload_font_statement,
                         )
 from .functions.project_data_functions import getShotTaskDeadline, getShotTaskComplete
+from .functions.date_functions import formatDateFromYrMoDa, returnPriorDate
 
 
 # compute dpi_fac on every blender startup
@@ -256,6 +257,11 @@ def drawBpmSequencerCallbackPx():
     indices_e_st_do = ()
     n_e_st_do = 0
 
+    #deadline preview
+    vertices_e_pr = ()
+    indices_e_pr = ()
+    n_e_pr = 0
+
     # info shot audio sync
     vertices_e_au = ()
     indices_e_au = ()
@@ -377,6 +383,25 @@ def drawBpmSequencerCallbackPx():
                 n_e_st_do += 4
 
 
+        # bpm deadline preview
+        if scene_settings.display_shot_deadline_preview:
+
+            preview_date = formatDateFromYrMoDa(scene_settings.shot_deadline_preview_yr, scene_settings.shot_deadline_preview_mn, scene_settings.shot_deadline_preview_da)
+            shot_date = getShotTaskDeadline(strip.bpm_shotsettings)[1]
+
+            if shot_date == preview_date or (scene_settings.shot_deadline_preview_until and returnPriorDate(shot_date, preview_date)):
+                
+                y2pr = y1 + 0.1
+
+                v1pr = region.view2d.view_to_region(x1, y1, clip=False)
+                v2pr = region.view2d.view_to_region(x2, y1, clip=False)
+                v3pr = region.view2d.view_to_region(x1, y2pr, clip=False)
+                v4pr = region.view2d.view_to_region(x2, y2pr, clip=False)
+
+                vertices_e_pr += (v1pr, v2pr, v3pr, v4pr)
+                indices_e_pr += ((n_e_pr, n_e_pr + 1, n_e_pr + 2), (n_e_pr + 2, n_e_pr + 1, n_e_pr + 3))
+                n_e_pr += 4
+
         # bpm shot audio sync
         if scene_settings.display_audio_sync:
             if strip.bpm_shotsettings.auto_audio_sync:
@@ -460,6 +485,10 @@ def drawBpmSequencerCallbackPx():
         drawShader(vertices_e_st_fi, indices_e_st_fi, color_e_st_fi)
 
         drawShader(vertices_e_st_do, indices_e_st_do, color_e_st_fi)
+
+    #deadline preview
+    if scene_settings.display_shot_deadline_preview:
+        drawShader(vertices_e_pr, indices_e_pr, color_e_td)
 
     # audio sync info
     if scene_settings.display_audio_sync:

@@ -173,14 +173,19 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
 
             row = box.row()
             row.prop(scn_settings, 'display_shot_deadline_preview')
-            row.prop(scn_settings, 'color_shot_deadline_preview', text = "")
 
-            row = box.row(align=True)
+
+            col = box.column()
             if not scn_settings.display_shot_deadline_preview:
-                row.enabled = False
+                col.enabled = False
+
+            row = col.row(align=True)
             row.prop(scn_settings, 'shot_deadline_preview_yr', text = "")
             row.prop(scn_settings, 'shot_deadline_preview_mn', text = "")
             row.prop(scn_settings, 'shot_deadline_preview_da', text = "")
+
+            row = col.row()
+            row.prop(scn_settings, 'shot_deadline_preview_until')
 
 
 # sequencer shot panel

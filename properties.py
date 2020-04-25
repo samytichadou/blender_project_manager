@@ -229,7 +229,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     color_shot_todo : bpy.props.FloatVectorProperty(name="Shot to do color", subtype='COLOR', default=(0, 0, 1, 0.5), min=0.0, max=1.0, size=4)
 
     display_shot_deadline_preview : bpy.props.BoolProperty(name = "Deadline preview", default=False)
-    color_shot_deadline_preview : bpy.props.FloatVectorProperty(name="Deadline preview color", subtype='COLOR', default=(0.5, 0.5, 0, 1), min=0.0, max=1.0, size=4)
+    shot_deadline_preview_until : bpy.props.BoolProperty(name = "Preview until this day", default=False)
     shot_deadline_preview_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString())-10, default = int(getDateYearString()))
     shot_deadline_preview_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12, default = int(getDateMonthString()))
     shot_deadline_preview_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31, default = int(getDateDayString()))
