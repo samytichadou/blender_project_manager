@@ -208,3 +208,12 @@ def linkAssetLibrary(filepath, asset, debug):
 
     else:
         return True
+
+
+# get file count in a folder
+def counFilesInFolder(folder):
+    n = 0
+    for f in os.listdir(folder):
+        if os.path.isfile(os.path.join(folder, f)):
+            n += 1
+    return n
