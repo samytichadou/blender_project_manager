@@ -36,7 +36,7 @@ class BpmDisplayModifyRenderSettings(bpy.types.Operator):
     bl_idname = "bpm.display_modify_render_settings"
     bl_label = "Display/Modify Render Settings"
 
-    shot_render_state_extended_items = new_list = shot_render_state_items.copy()
+    shot_render_state_extended_items = shot_render_state_items.copy()
     shot_render_state_extended_items.append((render_playblast_folder, render_playblast_folder, ""))
 
     render_settings : bpy.props.EnumProperty(name = "Render settings", items = shot_render_state_extended_items)

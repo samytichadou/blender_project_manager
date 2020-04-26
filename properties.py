@@ -57,6 +57,12 @@ shot_render_state_items = [
         (render_final_folder, render_final_folder, ""),
         ]
 
+shot_display_timeline_items = shot_render_state_items.copy()
+shot_display_timeline_items.insert(0, ("00_openGL", "00_openGL", ""))
+
+asset_type_display_items = asset_type_items.copy()
+asset_type_display_items.append(('ALL', 'All', "", "", 0))   
+
 
 # update function for asset display type to change index
 def updateAssetDisplayType(self, context):
@@ -132,6 +138,8 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     not_last_version : bpy.props.BoolProperty(default=False)
     auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = updateShotSettingsProperties)
     shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
+
+    shot_timeline_display : bpy.props.EnumProperty(name = "Shot display", items = shot_display_timeline_items, default = '00_openGL')
 
     # tasks
     storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateString())
@@ -255,9 +263,6 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
     custom_folders_index : bpy.props.IntProperty(update = updateFilebrowserPath)
 
     ui_shot_state_subpanel : bpy.props.BoolProperty(name = "Display state colors", default=False)
-
-    asset_type_display_items = asset_type_items
-    asset_type_display_items.append(('ALL', 'All', "", "", 0))   
 
     panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL', update = updateAssetDisplayType)
 

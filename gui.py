@@ -251,11 +251,15 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'shot_render_state', text = "Render")
         drawWikiHelp(row, 'Render-Settings')
 
-        layout.prop(shot_settings, 'display_markers')
-
         row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
+
+        row = layout.row(align=True)
+        row.prop(shot_settings, 'shot_timeline_display', text = "Display")
+        drawWikiHelp(row, 'Timeline-Shot-Display-Mode')
+
+        layout.prop(shot_settings, 'display_markers')
 
         drawDebugPanel(layout, shot_settings, general_settings)#debug
 
