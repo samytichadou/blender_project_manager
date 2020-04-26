@@ -3,6 +3,9 @@ import os
 import shutil
 
 
+from ..functions.file_functions import absolutePath
+
+
 class BPMBumpShotVersionFromEdit(bpy.types.Operator):
     """Create a new version of active shot"""
     bl_idname = "bpm.bump_shot_version_edit"
@@ -23,12 +26,11 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
                 if context.scene.sequence_editor:
                     if context.scene.sequence_editor.active_strip:
                         active = context.scene.sequence_editor.active_strip
-                        if not active.lock:
-                            try:
-                                if active.bpm_shotsettings.is_shot and active.scene.library:
-                                    return True
-                            except AttributeError:
-                                pass
+                        if active.type in {'SCENE'}:
+                            if not active.lock:
+                                if active.bpm_shotsettings.is_shot:
+                                    if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
+                                        return True
 
     def invoke(self, context, event):
         self.file_to_copy = 'CURRENT'
@@ -54,9 +56,9 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
                                     scene_not_found_message,
                                     scene_not_found_statement,
                                 )
-        from ..functions.file_functions import absolutePath, linkExternalScenes
         from ..functions.utils_functions import clearLibraryUsers
         from ..functions.strip_functions import getListSequencerShots
+        from ..functions.file_functions import linkExternalScenes
 
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
@@ -73,7 +75,7 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         shot_settings.shot_version = shot_settings.shot_last_version + 1
 
         # get new shot path
-        old_version_shot_filepath = absolutePath(shot_lib.filepath)
+        old_version_shot_filepath = absolutePath(shot_settings.shot_filepath)
         shot_folder_path = os.path.dirname(old_version_shot_filepath)
         old_version_shot_file = os.path.basename(old_version_shot_filepath)
         old_version_shot_name = os.path.splitext(old_version_shot_file)[0]
@@ -114,6 +116,9 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
             self.report({'INFO'}, scene_not_found_message + shot_name)
             if general_settings.debug: print(scene_not_found_statement + shot_name) #debug
             return {'FINISHED'}
+
+        # set new shot filepath
+        shot_settings.shot_filepath = bpy.path.relpath(new_shot_path)
 
         # check if old library is still used
         lib_used = getListSequencerShots(context.scene.sequence_editor)[1]

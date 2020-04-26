@@ -218,14 +218,14 @@ def getShotSettingsFileFromBlend():
 # refresh all shot strips in timeline from json shot files
 def refreshTimelineShotDatas(winman, sequencer):
     general_settings = winman.bpm_generalsettings
-    avoid_list = ('is_shot', 'shot_version', 'shot_last_version', 'not_last_version')
+    avoid_list = ('is_shot', 'shot_version', 'not_last_version')
 
     general_settings.bypass_update_tag = True
     # iterate through timeline strips
     for strip in returnShotStrips(sequencer):
         # get json path
-        shot_folder = os.path.dirname(strip.scene.library.filepath)
-        shot_json = absolutePath(os.path.join(shot_folder, shot_file))
+        shot_folder = os.path.dirname(absolutePath(strip.bpm_shotsettings.shot_filepath))
+        shot_json = os.path.join(shot_folder, shot_file)
 
         # set json datas
         if os.path.isfile(shot_json):
@@ -297,6 +297,7 @@ def getShotTaskDeadline(shotsettings):
         if state + "_deadline" == p.identifier:
             return p.identifier, getattr(shotsettings, p.identifier)
     return None, "None"
+
 
 # get shot task complete, return identifier, value
 def getShotTaskComplete(shotsettings):

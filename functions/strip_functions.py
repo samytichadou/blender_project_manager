@@ -1,6 +1,9 @@
 import bpy
 
 
+from .dataset_functions import setPropertiesFromDataset
+
+
 # get strip offsets
 def getStripOffsets(strip):
     start_offset    = strip.frame_final_start   - strip.frame_start
@@ -61,26 +64,25 @@ def returnSelectedStrips(sequencer):
 
 
 # update shot strip start/end
-def updateStripOnTimeline(strip):
-    # get settings
-    scene = strip.scene
+def updateStripOnTimeline(strip, winman):
     name = strip.name
-    channel = strip.channel
-    frame_start = strip.frame_final_start
+
+    # copy strip
+    new_strip = bpy.context.scene.sequence_editor.sequences.new_scene(
+        scene       = strip.scene,
+        name        = "temp_name",
+        channel     = strip.channel,
+        frame_start = strip.frame_final_start,
+    )
+
+    # set bpm shot props
+    setPropertiesFromDataset(strip.bpm_shotsettings, new_strip.bpm_shotsettings, winman)
 
     # delete previous strip
     bpy.context.scene.sequence_editor.sequences.remove(strip)
 
-    # copy strip
-    new_strip = bpy.context.scene.sequence_editor.sequences.new_scene(
-        scene       = scene,
-        name        = name,
-        channel     = channel,
-        frame_start = frame_start,
-    )
-
-    # set it to bpm shot
-    new_strip.bpm_shotsettings.is_shot = True
+    # correct name dupe
+    new_strip.name = name
 
     return new_strip
 

@@ -93,6 +93,8 @@ class BPMCreateShot(bpy.types.Operator):
         # format the json dataset
         json_dataset = createJsonDatasetFromProperties(winman.bpm_shotsettings, ())
         json_dataset['shot_folder'] = next_shot_folder
+        json_dataset['shot_filepath'] = bpy.path.relpath(next_shot_file)
+
         # create json file
         create_json_file(json_dataset, shot_json)
 
@@ -132,6 +134,9 @@ class BPMCreateShot(bpy.types.Operator):
         linked_strip.bpm_shotsettings.is_shot = True
         linked_strip.bpm_shotsettings.shot_folder = next_shot_folder
         sequencer.active_strip = linked_strip
+
+        # set its settings
+        linked_strip.bpm_shotsettings.shot_filepath = json_dataset['shot_filepath']
 
         # select created strip
         deselectAllStrips(sequencer)

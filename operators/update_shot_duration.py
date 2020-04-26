@@ -2,6 +2,8 @@ import bpy
 import os
 
 
+from ..functions.file_functions import absolutePath
+
 
 class BPMUpdateShotDuration(bpy.types.Operator):
     """Update selected shot(s) duration"""
@@ -17,12 +19,11 @@ class BPMUpdateShotDuration(bpy.types.Operator):
             if context.scene.sequence_editor:
                 if context.scene.sequence_editor.active_strip:
                     active = context.scene.sequence_editor.active_strip
-                    if not active.lock:
-                        try:
-                            if active.bpm_shotsettings.is_shot and active.scene.library:
-                                return True
-                        except AttributeError:
-                            pass
+                    if active.type in {'SCENE'}:
+                        if not active.lock:
+                            if active.bpm_shotsettings.is_shot:
+                                if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
+                                    return True
 
     def execute(self, context):
         # import statements and functions
@@ -44,10 +45,10 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                                             getStripOffsets, 
                                             getStripNewTiming, 
                                             updateStripOnTimeline,
+                                            returnShotStrips,
                                         )
         from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
         from ..functions.project_data_functions import getArgumentForPythonScript
-        from ..functions.file_functions import absolutePath
         from ..functions.audio_sync_functions import syncAudioEdit
         
         winman = context.window_manager
@@ -59,57 +60,49 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
         if general_settings.debug: print(start_update_shot_statement) #debug
 
-        selected_strips = returnSelectedStrips(scn.sequence_editor)
+        for strip in returnShotStrips(scn.sequence_editor):
 
-        # add active if not selected
-        if active not in selected_strips:
-            selected_strips.append(active)
+            if strip.select or strip == active:
 
-        for strip in selected_strips:
-            try:
-                if strip.bpm_shotsettings.is_shot and strip.scene.library:
-                    if general_settings.debug: print(checking_update_shot_statement + strip.name) #debug
-                    
-                    strip_scene = strip.scene
-                    new_start, new_end = getStripNewTiming(strip)
+                if general_settings.debug: print(checking_update_shot_statement + strip.name) #debug
+                
+                strip_scene = strip.scene
+                new_start, new_end = getStripNewTiming(strip)
 
-                    if new_start != strip_scene.frame_start or new_end != strip_scene.frame_end:
-                        if general_settings.debug: print(updating_shot_statement) #debug
-                        if general_settings.debug: print(update_shot_new_start_end_statement + str(new_start) + "-" + str(new_end)) #debug
+                if new_start != strip_scene.frame_start or new_end != strip_scene.frame_end:
+                    if general_settings.debug: print(updating_shot_statement) #debug
+                    if general_settings.debug: print(update_shot_new_start_end_statement + str(new_start) + "-" + str(new_end)) #debug
 
-                        # check if frame become negative and avoid it
-                        if new_start < 0:
+                    # check if frame become negative and avoid it
+                    if new_start < 0:
 
-                            self.report({'INFO'}, shot_update_impossible_message)
-                            if general_settings.debug: print(shot_update_impossible_statement) #debug
+                        self.report({'INFO'}, shot_update_impossible_message)
+                        if general_settings.debug: print(shot_update_impossible_statement) #debug
 
-                        else:
+                    else:
 
-                            filepath = absolutePath(strip.scene.library.filepath)
+                        filepath = absolutePath(strip.bpm_shotsettings.shot_filepath)
 
-                            arguments = getArgumentForPythonScript([new_start, new_end])
+                        arguments = getArgumentForPythonScript([new_start, new_end])
 
-                            # build command
-                            command = buildBlenderCommandBackgroundPython(update_shot_file, filepath, arguments)
+                        # build command
+                        command = buildBlenderCommandBackgroundPython(update_shot_file, filepath, arguments)
 
-                            if general_settings.debug: print(launching_command_statement + command) #debug
+                        if general_settings.debug: print(launching_command_statement + command) #debug
 
-                            # launch command
-                            launchCommand(command)
+                        # launch command
+                        launchCommand(command)
 
-                            # update scene fram_start frame_end
-                            strip_scene.frame_start = new_start
-                            strip_scene.frame_end   = new_end
+                        # update scene fram_start frame_end
+                        strip_scene.frame_start = new_start
+                        strip_scene.frame_end   = new_end
 
-                            # update the strip
-                            updateStripOnTimeline(strip)
+                        # update the strip
+                        updateStripOnTimeline(strip, winman)
 
-                            if general_settings.debug: print(updated_shot_statement) #debug
+                        if general_settings.debug: print(updated_shot_statement) #debug
 
-                    elif general_settings.debug: print(no_update_needed_statement) #debug
-
-            except AttributeError:
-                pass
+                elif general_settings.debug: print(no_update_needed_statement) #debug
 
         # update audio sync if existing
         audio_sync_filepath = os.path.join(project_folder, audio_sync_file)

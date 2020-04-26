@@ -10,20 +10,28 @@ from ..global_variables import (
                         )
 from .json_functions import create_json_file, createJsonDatasetFromProperties
 from .set_render_shot_update_function import setRenderShot
+from .file_functions import absolutePath
 
 
 #update function for shot settings props general
 def updateShotSettingsProperties(self, context):
     winman = context.window_manager
-    debug = winman.bpm_generalsettings.debug
+    general_settings = winman.bpm_generalsettings
+    debug = general_settings.debug
 
-    if winman.bpm_generalsettings.bypass_update_tag:
+    if general_settings.bypass_update_tag:
         if debug: print(bypass_shot_settings_update_statement) #debug
         return
 
     # create the json file
     if debug: print(saving_to_json_statement) #debug
-    shot_json = os.path.join(self.shot_folder, shot_file)
+
+    if general_settings.file_type == 'EDIT':
+        shot_folder = os.path.dirname(absolutePath(self.shot_filepath))
+    else:
+        shot_folder = os.path.dirname(bpy.data.filepath)
+    
+    shot_json = os.path.join(shot_folder, shot_file)
 
     # format the json dataset
     json_dataset = createJsonDatasetFromProperties(self, ())

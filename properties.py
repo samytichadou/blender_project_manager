@@ -145,11 +145,16 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
     shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsProperties)
     shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = render_draft_folder , update = updateShotSettingsProperties)
+    
     shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
     shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = updateShotSettingsProperties)
     not_last_version : bpy.props.BoolProperty(default=False)
+    
     auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = updateShotSettingsProperties)
-    shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
+    
+    #shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
+
+    shot_filepath : bpy.props.StringProperty(name = 'Shot filepath', subtype = 'FILE_PATH')
 
     shot_timeline_display : bpy.props.EnumProperty(name = "Shot display", items = getAvailableShotDisplay)
     is_draft : bpy.props.BoolProperty(default=False)
@@ -179,11 +184,16 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
     shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsProperties)
     shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = render_draft_folder , update = updateShotRenderState)
+    
     shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
     shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1)
     not_last_version : bpy.props.BoolProperty(default=False)
+    
     auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = updateShotSettingsProperties)
-    shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
+    
+    #shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
+
+    shot_filepath : bpy.props.StringProperty(name = 'Shot filepath', subtype = 'FILE_PATH')
 
     # tasks
     storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateString())

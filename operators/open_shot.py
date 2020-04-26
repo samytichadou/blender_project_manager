@@ -2,6 +2,9 @@ import bpy
 import os
 
 
+from ..functions.file_functions import absolutePath
+
+
 class BPMOpenShot(bpy.types.Operator):
     """Open Shot from Timeline"""
     bl_idname = "bpm.open_shot"
@@ -16,12 +19,11 @@ class BPMOpenShot(bpy.types.Operator):
                 if context.scene.sequence_editor:
                     if context.scene.sequence_editor.active_strip:
                         active = context.scene.sequence_editor.active_strip
-                        if not active.lock:
-                            try:
-                                if active.bpm_shotsettings.is_shot and active.scene.library:
-                                    return True
-                            except AttributeError:
-                                pass
+                        if active.type in {'SCENE'}:
+                            if not active.lock:
+                                if active.bpm_shotsettings.is_shot:
+                                    if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
+                                        return True
 
     def execute(self, context):
         # import statements and functions
@@ -29,7 +31,7 @@ class BPMOpenShot(bpy.types.Operator):
         from ..global_variables import opening_statement
 
         winman = context.window_manager
-        filepath = absolutePath(context.scene.sequence_editor.active_strip.scene.library.filepath)
+        filepath = absolutePath(context.scene.sequence_editor.active_strip.bpm_shotsettings.shot_filepath)
 
         if winman.bpm_generalsettings.debug: print(opening_statement + filepath) #debug
 

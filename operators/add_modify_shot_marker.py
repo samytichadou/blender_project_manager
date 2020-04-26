@@ -24,13 +24,13 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
                 if context.scene.sequence_editor.active_strip:
                     if context.scene.sequence_editor:
                         active = context.scene.sequence_editor.active_strip
-                        if not active.lock:
-                            try:
-                                if active.bpm_shotsettings.is_shot and active.scene.library: #TODO when other strip type than scene, change this
-                                    
-                                    return True
-                            except AttributeError:
-                                return False
+                        if active.type in {'SCENE'}:
+                            if not active.lock:
+                                try:
+                                    if active.bpm_shotsettings.is_shot and active.scene.library:                                       
+                                        return True
+                                except AttributeError:
+                                    return False
 
     def invoke(self, context, event):
         from ..vse_extra_ui import getMarkerFrameFromShotStrip
