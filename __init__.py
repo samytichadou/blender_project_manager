@@ -27,7 +27,9 @@ bl_info = {
  "description": "Manage small animation project from Blender",  
   "wiki_url": "https://github.com/samytichadou/blender_project_manager/wiki",  
  "tracker_url": "https://github.com/samytichadou/blender_project_manager/issues/new",  
- "category": "Animation"}
+ "category": "Animation",
+ "warning": "Alpha version, use at your own risks"
+ }
 
 
 import bpy
