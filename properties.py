@@ -96,8 +96,6 @@ class BPMProjectSettings(bpy.types.PropertyGroup) :
     default_shot_length : bpy.props.IntProperty(name = "Default Shot Length", default = 100)
     version_suffix : bpy.props.StringProperty(name = "Version Suffix", default = "v")
     version_digits : bpy.props.IntProperty(name = "Version Digits", default = 3)
-    # shot_version_suffix : bpy.props.StringProperty(name = "Shot Version Suffix", default = "v")
-    # shot_version_digits : bpy.props.IntProperty(name = "Shot Version Digits", default = 3)
 
 
 # custom project folders
