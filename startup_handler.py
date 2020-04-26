@@ -37,6 +37,8 @@ from .global_variables import (
                             missing_shot_file_statement,
                             refreshing_timeline_shot_datas_statement,
                             refreshed_timeline_shot_datas_statement,
+                            refreshing_timeline_shot_display_mode,
+                            refreshed_timeline_shot_display_mode,
                             assets_settings_loading_statement,
                             assets_settings_loaded_statement,
                             asset_missing_in_list_statement,
@@ -173,15 +175,17 @@ def bpmStartupHandler(scene):
             # load edit settings
             if general_settings.file_type == 'EDIT':
                 
-                # refresh timeline shots strips datas
-                if general_settings.debug: print(refreshing_timeline_shot_datas_statement) #debug
-
                 sequencer = bpy.context.scene.sequence_editor
-                
-                refreshTimelineShotDatas(winman, sequencer)
-                refreshShotStripsDisplay(winman, sequencer)
 
+                # refresh timeline shots strips datas
+                if general_settings.debug: print(refreshing_timeline_shot_datas_statement) #debug               
+                refreshTimelineShotDatas(winman, sequencer)
                 if general_settings.debug: print(refreshed_timeline_shot_datas_statement) #debug
+
+                if general_settings.debug: print(refreshing_timeline_shot_display_mode) #debug
+                refreshShotStripsDisplay(winman, sequencer)
+                if general_settings.debug: print(refreshed_timeline_shot_display_mode ) #debug
+
 
             # load shot settings
             elif general_settings.file_type == 'SHOT':

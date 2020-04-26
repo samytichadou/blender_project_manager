@@ -137,8 +137,12 @@ shot_not_used_message = "Shot not used in project timeline"
 shot_not_used_statement = bpm_statement + shot_not_used_message
 loaded_sounds_statement = bpm_statement + "Sounds loaded : "
 created_sound_strips_statement = bpm_statement + "Created sound strips : "
+
 refreshing_timeline_shot_datas_statement = bpm_statement + "Refreshing timeline shots datas from files"
 refreshed_timeline_shot_datas_statement = bpm_statement + "Timeline shots datas refreshed"
+
+refreshing_timeline_shot_display_mode = bpm_statement + "Refreshing timeline shots available display mode"
+refreshed_timeline_shot_display_mode = bpm_statement + "Timeline shots available display mode refreshed"
 
 
 # shot update statement

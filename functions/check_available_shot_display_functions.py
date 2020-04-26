@@ -53,4 +53,4 @@ def refreshShotStripsDisplay(winman, sequencer):
         shot_settings.is_final = False
         if os.path.isdir(shot_final_folder_path):
             if counFilesInFolder(shot_final_folder_path) == length:
-                shot_settings.is_final = True                
+                shot_settings.is_final = True
