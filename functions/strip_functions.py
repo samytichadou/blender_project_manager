@@ -62,18 +62,26 @@ def returnSelectedStrips(sequencer):
 
 # update shot strip start/end
 def updateStripOnTimeline(strip):
-    # print("DEBUG --- frame_start : "+str(strip.frame_start))
-    # copy strip
-    new_strip = bpy.context.scene.sequence_editor.sequences.new_scene(
-        scene       = strip.scene,
-        name        = strip.name,
-        channel     = strip.channel,
-        frame_start = strip.frame_final_start,
-    )
-    # set it to bpm shot
-    new_strip.bpm_shotsettings.is_shot = True
+    # get settings
+    scene = strip.scene
+    name = strip.name
+    channel = strip.channel
+    frame_start = strip.frame_final_start
+
     # delete previous strip
     bpy.context.scene.sequence_editor.sequences.remove(strip)
+
+    # copy strip
+    new_strip = bpy.context.scene.sequence_editor.sequences.new_scene(
+        scene       = scene,
+        name        = name,
+        channel     = channel,
+        frame_start = frame_start,
+    )
+
+    # set it to bpm shot
+    new_strip.bpm_shotsettings.is_shot = True
+
     return new_strip
 
 
