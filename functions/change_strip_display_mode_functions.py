@@ -29,9 +29,7 @@ from ..global_variables import (
                             missing_file_image,
                             library_cleared_statement,
                             shot_display_no_render_images_statement,
-                            shot_display_not_enough_render_images_statement,
-                            shot_display_too_much_render_images_statement,
-
+                            shot_display_render_images_statement,
                         )
 
 
@@ -39,8 +37,6 @@ from ..global_variables import (
 def completeRenderMissingImages(render_filepath, extension, start_frame, end_frame, debug):
 
     render_folderpath = os.path.dirname(render_filepath)
-
-    length = end_frame - start_frame
 
     frame_list = returnAllFilesInFolder(render_folderpath)
     shot_frames = []
@@ -56,36 +52,25 @@ def completeRenderMissingImages(render_filepath, extension, start_frame, end_fra
             shutil.copy(missing_file_image, image_filepath)
             shot_frames.append(os.path.basename(image_filepath))
 
-    # not enough rendered images
-    elif len(frame_list) < length:
-        
-        if debug: print(shot_display_not_enough_render_images_statement) #debug
+    # image rendered
+    else:
 
-        for i in range(start_frame, end_frame + 1):
-
-            image_filepath = render_filepath + str(i).zfill(5) + extension
-            shot_frames.append(os.path.basename(image_filepath))
-
-            if os.path.basename(image_filepath) not in frame_list:
-                shutil.copy(missing_file_image, image_filepath)
-                frame_list.append(os.path.basename(image_filepath))
-
-    # to much rendered images
-    elif len(frame_list) > length:
-
-        if debug: print(shot_display_too_much_render_images_statement) #debug
+        if debug: print(shot_display_render_images_statement) #debug
 
         frames_to_create = []
+
         for i in range(start_frame, end_frame + 1):
             image_filepath = render_filepath + str(i).zfill(5) + extension
-            shot_frames.append(os.path.basename(image_filepath))
+            image_file = os.path.basename(image_filepath)
+            shot_frames.append(image_file)
 
-            if image_filepath not in frame_list:
-                frames_to_create.append(os.path.basename(image_filepath))
+            if image_file not in frame_list:
+                frames_to_create.append(image_file)
 
         for f in frame_list:
             if f not in shot_frames:
                 suppressExistingFile(os.path.join(render_folderpath, f))
+                pass
                 
         for f in frames_to_create:
             image_filepath = os.path.join(render_folderpath, f)
