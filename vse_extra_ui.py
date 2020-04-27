@@ -429,7 +429,7 @@ def drawBpmSequencerCallbackPx():
                     indices_e_v_w += ((n_e_v_w, n_e_v_w + 1, n_e_v_w + 2), (n_e_v_w + 2, n_e_v_w + 1, n_e_v_w + 3))
                     n_e_v_w += 4
 
-        if strip.scene:
+        if strip.type == 'SCENE':
 
             # markers
             if m_display != 'NONE' :
