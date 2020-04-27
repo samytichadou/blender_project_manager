@@ -19,7 +19,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
             if context.scene.sequence_editor:
                 if context.scene.sequence_editor.active_strip:
                     active = context.scene.sequence_editor.active_strip
-                    if active.type in {'SCENE'}:
+                    if active.type in {'SCENE', 'IMAGE'}:
                         if not active.lock:
                             if active.bpm_shotsettings.is_shot:
                                 if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
@@ -46,30 +46,36 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                                             getStripNewTiming, 
                                             updateSceneStripOnTimeline,
                                             returnShotStrips,
+                                            updateImageSequenceShot,
                                         )
         from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
         from ..functions.project_data_functions import getArgumentForPythonScript
         from ..functions.audio_sync_functions import syncAudioEdit
+        from ..functions.change_strip_display_mode_functions import updateShotDisplayMode
+        from ..functions.shot_settings_json_update_function import updateShotSettingsProperties
         
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
         project_folder = general_settings.project_folder
         scn = context.scene
+        sequencer = scn.sequence_editor
 
-        active = scn.sequence_editor.active_strip
+        active = sequencer.active_strip
 
         if general_settings.debug: print(start_update_shot_statement) #debug
 
-        for strip in returnShotStrips(scn.sequence_editor):
+        for strip in returnShotStrips(sequencer):
 
             if strip.select or strip == active:
 
                 if general_settings.debug: print(checking_update_shot_statement + strip.name) #debug
                 
-                strip_scene = strip.scene
+                shot_settings = strip.bpm_shotsettings
+                
                 new_start, new_end = getStripNewTiming(strip)
 
-                if new_start != strip_scene.frame_start or new_end != strip_scene.frame_end:
+                if new_start != shot_settings.shot_frame_start or new_end != shot_settings.shot_frame_end:
+
                     if general_settings.debug: print(updating_shot_statement) #debug
                     if general_settings.debug: print(update_shot_new_start_end_statement + str(new_start) + "-" + str(new_end)) #debug
 
@@ -93,12 +99,26 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                         # launch command
                         launchCommand(command)
 
-                        # update scene fram_start frame_end
-                        strip_scene.frame_start = new_start
-                        strip_scene.frame_end   = new_end
+                        # update shot settings and save json
+                        shot_settings.shot_frame_start = new_start
+                        shot_settings.shot_frame_end = new_end
 
-                        # update the strip
-                        updateSceneStripOnTimeline(strip, winman)
+                        updateShotSettingsProperties(shot_settings, context)
+
+                        general_settings.bypass_update_tag = True
+
+                        # update scene frame_start frame_end if scene strip
+                        if strip.type == 'SCENE':
+                            strip.scene.frame_start = new_start
+                            strip.scene.frame_end   = new_end
+
+                            # update the strip
+                            updateSceneStripOnTimeline(strip, winman)
+
+                        elif strip.type == 'IMAGE':
+                            updateImageSequenceShot(strip, winman)    
+
+                        general_settings.bypass_update_tag = False                     
 
                         if general_settings.debug: print(updated_shot_statement) #debug
 

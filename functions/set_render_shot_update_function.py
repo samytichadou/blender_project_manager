@@ -10,6 +10,7 @@ from ..global_variables import (
                             setting_render_statement,
                             render_set_statement,
                         )
+from .file_functions import returnRenderFilePathFromShot
 
 
 def setRenderShot(context, shot_render_state):
@@ -25,16 +26,10 @@ def setRenderShot(context, shot_render_state):
     if debug: print(setting_render_statement) #debug
 
     # get render folder
-    shot_name = os.path.splitext(os.path.basename(bpy.data.filepath))[0]
-    render_folder_path = os.path.join(general_settings.project_folder, render_folder)
-    render_shot_folder_path = os.path.join(render_folder_path, render_shots_folder)
-    spec_render_folder_path = os.path.join(render_shot_folder_path, shot_render_state)
+    output_filepath = returnRenderFilePathFromShot(bpy.data.filepath, winman, shot_render_state)
 
-    if render_settings.is_file_format == 'FFMPEG':
-        output_filepath = os.path.join(spec_render_folder_path, shot_name + "_")
-    else:
-        shot_folder_path = os.path.join(spec_render_folder_path, shot_name)
-        output_filepath = os.path.join(shot_folder_path, shot_name + "_#####")
+    if render_settings.is_file_format != 'FFMPEG':
+        output_filepath += "#####"
 
     # set render
 

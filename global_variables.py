@@ -13,7 +13,6 @@ loaded_project_folder = bpm_statement + "Project folder loaded : "
 
 # shot management statements
 creating_shot_statement = bpm_statement + "Starting new shot creation"
-creating_shot_folder_statement = bpm_statement + "Creating new shot folder : "
 used_shots_list_statement = bpm_statement + "Shots used in edit : "
 existing_shots_list_statement = bpm_statement + "Existing shots in project : "
 unused_shots_list_statement = bpm_statement + "Unused shots : "
@@ -137,6 +136,9 @@ shot_not_used_message = "Shot not used in project timeline"
 shot_not_used_statement = bpm_statement + shot_not_used_message
 loaded_sounds_statement = bpm_statement + "Sounds loaded : "
 created_sound_strips_statement = bpm_statement + "Created sound strips : "
+created_strip_statement = bpm_statement + "Created strip : "
+setting_strip_properties_statement = bpm_statement + "Setting strip properties"
+setting_strip_display_mode_statement = bpm_statement + "Setting strip display to : "
 
 refreshing_timeline_shot_datas_statement = bpm_statement + "Refreshing timeline shots datas from files"
 refreshed_timeline_shot_datas_statement = bpm_statement + "Timeline shots datas refreshed"
@@ -221,6 +223,8 @@ ressources_folder = os.path.join(os.path.dirname(script_file), "ressources")
 font_file = os.path.join(ressources_folder, "JetBrainsMono-Regular.ttf")
 
 base_startup_filepath = os.path.join(ressources_folder, "blank.blend")
+
+missing_file_image = os.path.join(ressources_folder, "missing_file_placeholder.exr")
 
 new_project_name = "Project_name"
 

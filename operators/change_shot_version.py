@@ -23,7 +23,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
                 if context.scene.sequence_editor:
                     if context.scene.sequence_editor.active_strip:
                         active = context.scene.sequence_editor.active_strip
-                        if active.type in {'SCENE'}:
+                        if active.type in {'SCENE', 'IMAGE'}:
                             if not active.lock:
                                 if active.bpm_shotsettings.is_shot:
                                     if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
@@ -81,9 +81,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
         active_strip = context.scene.sequence_editor.active_strip
         shot_settings = active_strip.bpm_shotsettings
         proj_datas = winman.bpm_projectdatas
-        shot_scn = active_strip.scene
-        shot_lib = shot_scn.library
-        shot_name = shot_scn.name
+        shot_name = active_strip.name
 
         # check for invalid shot version number or already loaded version
         if self.version_number > shot_settings.shot_last_version:
@@ -119,42 +117,49 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
         else:
             shot_settings.not_last_version = False
 
-        # link new scene
-        linkExternalScenes(target_shot_path)
-        if general_settings.debug: print(scenes_linked_statement + target_shot_path) #debug
-
-        # link strip to new scene
-        scene_to_link = None
-        for s in bpy.data.scenes:
-            if s.library:
-                if absolutePath(s.library.filepath) == target_shot_path:
-                    if s.name == shot_name:
-                        scene_to_link = s
-                        break
-        if scene_to_link is not None:
-            active_strip.scene = scene_to_link
-            if general_settings.debug: print(linked_to_strip_statement + target_shot_path) #debug
-            
-        # error message if scene not found
-        else:
-            self.report({'INFO'}, scene_not_found_message + shot_name)
-            if general_settings.debug: print(scene_not_found_statement + shot_name) #debug
-            return {'FINISHED'}
-
         # set new filepath
         shot_settings.shot_filepath = bpy.path.relpath(target_shot_path)
 
-        # check if old library is still used
-        lib_used = getListSequencerShots(context.scene.sequence_editor)[1]
-        if shot_lib not in lib_used:
 
-            # delete old scene
-            if general_settings.debug: print(deleting_scene_statement + shot_name) #debug
-            bpy.data.scenes.remove(shot_scn, do_unlink = True)
+        # deal with scene if scene strip
+        if active_strip.type == 'SCENE':
 
-            # unlink old lib
-            clearLibraryUsers(shot_lib)
-            bpy.data.orphans_purge()
-            if general_settings.debug: print(library_cleared_statement + old_version_shot_filepath) #debug
+            shot_scn = active_strip.scene
+            shot_lib = shot_scn.library
+
+            # link new scene
+            linkExternalScenes(target_shot_path)
+            if general_settings.debug: print(scenes_linked_statement + target_shot_path) #debug
+
+            # link strip to new scene
+            scene_to_link = None
+            for s in bpy.data.scenes:
+                if s.library:
+                    if absolutePath(s.library.filepath) == target_shot_path:
+                        if s.name == shot_name:
+                            scene_to_link = s
+                            break
+            if scene_to_link is not None:
+                active_strip.scene = scene_to_link
+                if general_settings.debug: print(linked_to_strip_statement + target_shot_path) #debug
+
+            # error message if scene not found
+            else:
+                self.report({'INFO'}, scene_not_found_message + shot_name)
+                if general_settings.debug: print(scene_not_found_statement + shot_name) #debug
+                return {'FINISHED'}
+
+            # check if old library is still used
+            lib_used = getListSequencerShots(context.scene.sequence_editor)[1]
+            if shot_lib not in lib_used:
+
+                # delete old scene
+                if general_settings.debug: print(deleting_scene_statement + shot_name) #debug
+                bpy.data.scenes.remove(shot_scn, do_unlink = True)
+
+                # unlink old lib
+                clearLibraryUsers(shot_lib)
+                bpy.data.orphans_purge()
+                if general_settings.debug: print(library_cleared_statement + old_version_shot_filepath) #debug
 
         return {'FINISHED'}

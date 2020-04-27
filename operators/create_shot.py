@@ -18,7 +18,6 @@ class BPMCreateShot(bpy.types.Operator):
     def execute(self, context):
         # import statements and functions
         from ..global_variables import (creating_shot_statement, 
-                                    creating_shot_folder_statement, 
                                     python_temp, 
                                     shot_setup_file, 
                                     launching_command_statement, 
@@ -38,14 +37,24 @@ class BPMCreateShot(bpy.types.Operator):
                                     ressources_folder,
                                     startup_files_folder,
                                     shot_startup_file,
-                                    copying_file_statement
+                                    copying_file_statement,
+                                    folder_created_statement,
                                 )
-        from ..functions.file_functions import getNextShot, createDirectory, replaceContentInPythonScript, suppressExistingFile, linkExternalScenes, absolutePath
+        from ..functions.file_functions import (
+                                            getNextShot, 
+                                            createDirectory, 
+                                            replaceContentInPythonScript, 
+                                            suppressExistingFile, 
+                                            linkExternalScenes, 
+                                            absolutePath,
+                                            createShotRenderFolders,
+                                        )
         from ..functions.project_data_functions import getShotPattern, getScriptReplacementListShotCreation
         from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
         from ..functions.strip_functions import returnAvailablePositionStripChannel, deselectAllStrips
         from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
         from ..functions.audio_sync_functions import syncAudioEdit
+        from ..functions.shot_settings_json_update_function import updateShotSettingsProperties
 
 
         winman = context.window_manager
@@ -76,7 +85,7 @@ class BPMCreateShot(bpy.types.Operator):
 
         # create shot dir
         createDirectory(next_shot_folder)
-        if general_settings.debug: print(creating_shot_folder_statement + next_shot_folder) #debug
+        if general_settings.debug: print(folder_created_statement + next_shot_folder) #debug
 
         # copy shot file
         ressources_folderpath = os.path.join(project_folder, ressources_folder)
@@ -120,6 +129,9 @@ class BPMCreateShot(bpy.types.Operator):
         suppressExistingFile(temp_python_script)
         if general_settings.debug: print(deleted_file_statement + temp_python_script) #debug
 
+        # create render folders
+        createShotRenderFolders(next_shot_file, winman)
+
         # link shot
         linkExternalScenes(next_shot_file)
         if general_settings.debug: print(scenes_linked_statement + next_shot_file) #debug
@@ -136,7 +148,15 @@ class BPMCreateShot(bpy.types.Operator):
         sequencer.active_strip = linked_strip
 
         # set its settings
-        linked_strip.bpm_shotsettings.shot_filepath = json_dataset['shot_filepath']
+        shot_settings = linked_strip.bpm_shotsettings
+        shot_settings.shot_filepath = json_dataset['shot_filepath']
+        shot_settings.is_draft = True
+        shot_settings.is_render = True
+        shot_settings.is_final = True
+        shot_settings.shot_frame_start = project_datas.shot_start_frame
+        shot_settings.shot_frame_end = project_datas.shot_start_frame + project_datas.default_shot_length
+
+        updateShotSettingsProperties(shot_settings, context)
 
         # select created strip
         deselectAllStrips(sequencer)

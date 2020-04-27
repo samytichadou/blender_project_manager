@@ -167,6 +167,9 @@ def register():
     bpy.types.SceneSequence.bpm_shotsettings = \
         bpy.props.PointerProperty(type = BPMShotSettingsStrips, name="BPM shot settings")
 
+    bpy.types.ImageSequence.bpm_shotsettings = \
+        bpy.props.PointerProperty(type = BPMShotSettingsStrips, name="BPM shot settings")
+
     bpy.types.Scene.bpm_scenesettings = \
         bpy.props.PointerProperty(type = BPMSceneSettings, name="BPM scene settings")
 
@@ -206,6 +209,8 @@ def unregister():
     del bpy.types.WindowManager.bpm_rendersettings
 
     del bpy.types.SceneSequence.bpm_shotsettings
+
+    del bpy.types.ImageSequence.bpm_shotsettings
 
     del bpy.types.Scene.bpm_scenesettings
 

@@ -5,6 +5,7 @@ from .functions.filebrowser_update_function import updateFilebrowserPath
 from .functions.shot_settings_json_update_function import updateShotSettingsProperties, updateShotRenderState
 from .functions.asset_assigning_update_function import updateAssetAssigning, updateChangingAssetType, saveAssetToJson
 from .functions.date_functions import getDateString, getDateYearString, getDateMonthString, getDateDayString
+from .functions.change_strip_display_mode_functions import updateShotDisplayMode
 
 from .global_variables import (
                             render_draft_folder,
@@ -24,23 +25,7 @@ def getAssetIcon(identifier):
     elif identifier ==  'FX':           icon = 'SHADERFX'
     elif identifier ==  'NONE':         icon = ''
     return icon
-
-# return available shot display enum items
-def getAvailableShotDisplay(scene, context):
-    shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-
-    items = []
-
-    items.append(("00_openGL", "00_openGL", ""))
-
-    if shot_settings.is_draft:
-        items.append((render_draft_folder, render_draft_folder, ""))
-    if shot_settings.is_render:
-        items.append((render_render_folder, render_render_folder, ""))
-    if shot_settings.is_final:
-        items.append((render_final_folder, render_final_folder, ""))
-
-    return items
+    
 
 # enum prop lists (identifier, name, description, icon, unique number)
 asset_type_items = [
@@ -73,6 +58,9 @@ shot_render_state_items = [
         (render_render_folder, render_render_folder, ""),
         (render_final_folder, render_final_folder, ""),
         ]
+
+shot_display_items = shot_render_state_items.copy()
+shot_display_items.insert(0, ("00_openGL", "00_openGL", ""))
 
 asset_type_display_items = asset_type_items.copy()
 asset_type_display_items.append(('ALL', 'All', "", "", 0))   
@@ -156,7 +144,10 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
 
     shot_filepath : bpy.props.StringProperty(name = 'Shot filepath', subtype = 'FILE_PATH')
 
-    shot_timeline_display : bpy.props.EnumProperty(name = "Shot display", items = getAvailableShotDisplay)
+    shot_frame_start : bpy.props.IntProperty(name = "Shot frame start", default = 100, min = 1)
+    shot_frame_end:  bpy.props.IntProperty(name = "Shot frame end", default = 200, min = 1)
+
+    shot_timeline_display : bpy.props.EnumProperty(name = "Shot display", items = shot_display_items, update = updateShotDisplayMode)
     is_draft : bpy.props.BoolProperty(default=False)
     is_render : bpy.props.BoolProperty(default=False)
     is_final : bpy.props.BoolProperty(default=False)
@@ -194,6 +185,9 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     #shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
 
     shot_filepath : bpy.props.StringProperty(name = 'Shot filepath', subtype = 'FILE_PATH')
+
+    shot_frame_start : bpy.props.IntProperty(name = "Shot frame start", default = 100, min = 1)
+    shot_frame_end:  bpy.props.IntProperty(name = "Shot frame end", default = 100, min = 1)
 
     # tasks
     storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateString())

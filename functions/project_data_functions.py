@@ -306,3 +306,12 @@ def getShotTaskComplete(shotsettings):
         if state + "_done" == p.identifier:
             return p.identifier, getattr(shotsettings, p.identifier)
     return None, None
+
+
+# return render file extension from render settings
+def returnRenderExtensionFromSettings(render_settings):
+    extension = ""
+    if render_settings.is_file_format == "OPEN_EXR" and render_settings.rd_use_file_extension:
+        extension = '.exr'
+
+    return extension

@@ -1,4 +1,5 @@
 import bpy
+import os
 
 
 from .dataset_functions import setPropertiesFromDataset
@@ -13,10 +14,14 @@ def getStripOffsets(strip):
 
 # get new timing of a shot strip
 def getStripNewTiming(strip) :
-    strip_scene = strip.scene
+    shot_settings = strip.bpm_shotsettings
+
+    old_start = shot_settings.shot_frame_start
+    old_end = shot_settings.shot_frame_end
+
     offset = strip.frame_offset_start - strip.frame_still_start
-    start = strip_scene.frame_start + offset
-    end = strip_scene.frame_end + strip.frame_still_end - strip.frame_offset_end
+    start = old_start + offset
+    end = old_end + strip.frame_still_end - strip.frame_offset_end
 
     return start, end
 
@@ -76,6 +81,7 @@ def updateSceneStripOnTimeline(strip, winman):
     )
 
     # set bpm shot props
+    new_strip.bpm_shotsettings.shot_filepath = strip.bpm_shotsettings.shot_filepath
     setPropertiesFromDataset(strip.bpm_shotsettings, new_strip.bpm_shotsettings, winman)
 
     # delete previous strip
@@ -129,7 +135,7 @@ def createSequencer(scene):
 def returnShotStrips(sequencer):
     shot_list = []
     for strip in sequencer.sequences_all:
-        if strip.type in {'SCENE'}:
+        if strip.type in {'SCENE', 'IMAGE'}:
             if strip.bpm_shotsettings.is_shot:
                 shot_list.append(strip)
     return shot_list
@@ -140,3 +146,68 @@ def deselectAllStrips(sequencer):
     for strip in sequencer.sequences_all:
         if strip.select:
             strip.select = False
+
+
+# update shot image sequence on timeline
+def updateImageSequenceShot(strip, winman):
+    from .change_strip_display_mode_functions import completeRenderMissingImages
+    from .file_functions import absolutePath, returnRenderFilePathFromShot
+    from .project_data_functions import returnRenderExtensionFromSettings, setPropertiesFromJsonDataset
+    from ..global_variables import created_strip_statement, setting_strip_properties_statement
+    from .json_functions import createJsonDatasetFromProperties
+
+    debug = winman.bpm_generalsettings.debug
+
+    # get settings
+    name = strip.name
+    channel = strip.channel
+    strip_frame_start = strip.frame_final_start
+
+    shot_settings = strip.bpm_shotsettings
+
+    start_frame = shot_settings.shot_frame_start
+    end_frame = shot_settings.shot_frame_end
+
+    render_filepath = returnRenderFilePathFromShot(absolutePath(shot_settings.shot_filepath), winman, shot_settings.shot_timeline_display)
+
+    sequence_folder = os.path.dirname(render_filepath)
+
+    extension = returnRenderExtensionFromSettings(winman.bpm_rendersettings[shot_settings.shot_timeline_display])
+    
+    # get render image sequence
+    frames = completeRenderMissingImages(render_filepath, extension, start_frame, end_frame, debug)
+    
+    first = os.path.join(sequence_folder, frames[0])
+
+    # store shot settings
+    shot_dataset = createJsonDatasetFromProperties(shot_settings, ())
+
+    # delete previous strip
+    bpy.context.scene.sequence_editor.sequences.remove(strip)
+
+    # copy strip
+    new_strip = bpy.context.scene.sequence_editor.sequences.new_image(
+        filepath    = first,
+        name        = "temp_name",
+        channel     = channel,
+        frame_start = strip_frame_start,
+    )
+
+    if debug: print(created_strip_statement + name) #debug
+
+    if debug: print(setting_strip_properties_statement) #debug
+
+    # remove first image already used
+    frames.remove(frames[0])
+
+    # get all images
+    for f in frames:
+        new_strip.elements.append(f)
+
+    # set bpm shot props
+    setPropertiesFromJsonDataset(shot_dataset, new_strip.bpm_shotsettings, debug, ())
+
+    # correct name dupe
+    new_strip.name = name
+
+    return new_strip

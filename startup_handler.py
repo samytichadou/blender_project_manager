@@ -49,7 +49,6 @@ from .global_variables import (
                             date_set_statement,
                         )
 from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
-from .functions.utils_functions import clearLibraryUsers
 from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
 from .functions.lock_file_functions import setupLockFile, getLockFilepath
@@ -182,9 +181,7 @@ def bpmStartupHandler(scene):
                 refreshTimelineShotDatas(winman, sequencer)
                 if general_settings.debug: print(refreshed_timeline_shot_datas_statement) #debug
 
-                if general_settings.debug: print(refreshing_timeline_shot_display_mode) #debug
                 refreshShotStripsDisplay(winman, sequencer)
-                if general_settings.debug: print(refreshed_timeline_shot_display_mode ) #debug
 
 
             # load shot settings
