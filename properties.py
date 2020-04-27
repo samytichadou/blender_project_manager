@@ -4,7 +4,7 @@ import bpy
 from .functions.filebrowser_update_function import updateFilebrowserPath
 from .functions.shot_settings_json_update_function import updateShotSettingsProperties, updateShotRenderState
 from .functions.asset_assigning_update_function import updateAssetAssigning, updateChangingAssetType, saveAssetToJson
-from .functions.date_functions import getDateString, getDateYearString, getDateMonthString, getDateDayString
+from .functions.date_functions import getDateStringPlusDays, getDateYearString, getDateMonthString, getDateDayString
 from .functions.change_strip_display_mode_functions import updateShotDisplayMode
 
 from .global_variables import (
@@ -153,12 +153,12 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     is_final : bpy.props.BoolProperty(default=False)
 
     # tasks
-    storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateString())
-    layout_deadline : bpy.props.StringProperty(name = 'Layout deadline', default = getDateString())
-    animation_deadline : bpy.props.StringProperty(name = 'Animation deadline', default = getDateString())
-    lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = getDateString())
-    rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = getDateString())
-    compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = getDateString())
+    storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateStringPlusDays(10))
+    layout_deadline : bpy.props.StringProperty(name = 'Layout deadline', default = getDateStringPlusDays(20))
+    animation_deadline : bpy.props.StringProperty(name = 'Animation deadline', default = getDateStringPlusDays(30))
+    lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = getDateStringPlusDays(40))
+    rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = getDateStringPlusDays(50))
+    compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = getDateStringPlusDays(60))
 
     storyboard_done : bpy.props.BoolProperty(name = "Storyboard done", update = updateShotSettingsProperties)
     layout_done : bpy.props.BoolProperty(name = "Layout done", update = updateShotSettingsProperties)
@@ -190,12 +190,12 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     shot_frame_end:  bpy.props.IntProperty(name = "Shot frame end", default = 100, min = 1)
 
     # tasks
-    storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateString())
-    layout_deadline : bpy.props.StringProperty(name = 'Layout deadline', default = getDateString())
-    animation_deadline : bpy.props.StringProperty(name = 'Animation deadline', default = getDateString())
-    lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = getDateString())
-    rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = getDateString())
-    compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = getDateString())
+    storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateStringPlusDays(10))
+    layout_deadline : bpy.props.StringProperty(name = 'Layout deadline', default = getDateStringPlusDays(20))
+    animation_deadline : bpy.props.StringProperty(name = 'Animation deadline', default = getDateStringPlusDays(30))
+    lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = getDateStringPlusDays(40))
+    rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = getDateStringPlusDays(50))
+    compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = getDateStringPlusDays(60))
 
     storyboard_done : bpy.props.BoolProperty(name = "Storyboard done", update = updateShotSettingsProperties)
     layout_done : bpy.props.BoolProperty(name = "Layout done", update = updateShotSettingsProperties)

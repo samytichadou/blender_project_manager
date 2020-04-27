@@ -3,6 +3,11 @@ import datetime
 def getDateString():
     return datetime.datetime.now().strftime('%Y-%m-%d')
 
+def getDateStringPlusDays(days_to_add):
+    original_date = datetime.datetime.now()
+    end_date = original_date + datetime.timedelta(days=days_to_add)
+    return end_date.strftime('%Y-%m-%d')
+
 def getDateYearString():
     return datetime.datetime.now().strftime('%Y')
 

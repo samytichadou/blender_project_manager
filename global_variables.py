@@ -163,8 +163,7 @@ missing_shot_file_message = "Shot settings file missing"
 missing_shot_file_statement = bpm_statement + missing_shot_file_message
 
 shot_display_no_render_images_statement = bpm_statement + "No rendered images found, filling"
-shot_display_not_enough_render_images_statement = bpm_statement + "Not enough rendered images found, filling"
-shot_display_too_much_render_images_statement = bpm_statement + "Too much rendered images found, deleting and filling"
+shot_display_render_images_statement = bpm_statement + "Rendered images found, deleting and filling"
 
 
 # marker statements
