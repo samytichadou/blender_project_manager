@@ -26,7 +26,7 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
                 if context.scene.sequence_editor:
                     if context.scene.sequence_editor.active_strip:
                         active = context.scene.sequence_editor.active_strip
-                        if active.type in {'SCENE', 'IMAGE'}:
+                        if active.type in {'SCENE'}:
                             if not active.lock:
                                 if active.bpm_shotsettings.is_shot:
                                     if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
