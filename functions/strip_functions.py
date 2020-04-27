@@ -6,8 +6,8 @@ from .dataset_functions import setPropertiesFromDataset
 
 # get strip offsets
 def getStripOffsets(strip):
-    start_offset    = strip.frame_final_start   - strip.frame_start
-    end_offset      = strip.frame_final_end     - (strip.frame_start + strip.frame_duration)
+    start_offset = strip.frame_final_start - strip.frame_start
+    end_offset = strip.frame_final_end - (strip.frame_start + strip.frame_duration)
     return start_offset, end_offset
 
 
