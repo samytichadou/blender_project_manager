@@ -64,7 +64,7 @@ def returnSelectedStrips(sequencer):
 
 
 # update shot strip start/end
-def updateStripOnTimeline(strip, winman):
+def updateSceneStripOnTimeline(strip, winman):
     name = strip.name
 
     # copy strip

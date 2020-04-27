@@ -44,7 +44,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                                             returnSelectedStrips, 
                                             getStripOffsets, 
                                             getStripNewTiming, 
-                                            updateStripOnTimeline,
+                                            updateSceneStripOnTimeline,
                                             returnShotStrips,
                                         )
         from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
@@ -98,7 +98,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                         strip_scene.frame_end   = new_end
 
                         # update the strip
-                        updateStripOnTimeline(strip, winman)
+                        updateSceneStripOnTimeline(strip, winman)
 
                         if general_settings.debug: print(updated_shot_statement) #debug
 
