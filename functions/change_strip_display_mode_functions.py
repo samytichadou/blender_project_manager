@@ -28,6 +28,10 @@ from ..global_variables import (
                             bypass_shot_settings_update_statement,
                             missing_file_image,
                             library_cleared_statement,
+                            shot_display_no_render_images_statement,
+                            shot_display_not_enough_render_images_statement,
+                            shot_display_too_much_render_images_statement,
+
                         )
 
 
@@ -43,7 +47,8 @@ def completeRenderMissingImages(render_filepath, extension, start_frame, end_fra
 
     # no image rendered
     if len(frame_list) == 0:
-        if debug: print("No images found, filling") #debug
+        
+        if debug: print(shot_display_no_render_images_statement) #debug
 
         for i in range(start_frame, end_frame + 1):
 
@@ -53,7 +58,8 @@ def completeRenderMissingImages(render_filepath, extension, start_frame, end_fra
 
     # not enough rendered images
     elif len(frame_list) < length:
-        if debug: print("Not enough images found, filling") #debug
+        
+        if debug: print(shot_display_not_enough_render_images_statement) #debug
 
         for i in range(start_frame, end_frame + 1):
 
@@ -67,7 +73,7 @@ def completeRenderMissingImages(render_filepath, extension, start_frame, end_fra
     # to much rendered images
     elif len(frame_list) > length:
 
-        if debug: print("Too much images found, deleting and filling") #debug
+        if debug: print(shot_display_too_much_render_images_statement) #debug
 
         frames_to_create = []
         for i in range(start_frame, end_frame + 1):
