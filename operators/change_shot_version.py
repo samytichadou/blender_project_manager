@@ -134,6 +134,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
         if scene_to_link is not None:
             active_strip.scene = scene_to_link
             if general_settings.debug: print(linked_to_strip_statement + target_shot_path) #debug
+            
         # error message if scene not found
         else:
             self.report({'INFO'}, scene_not_found_message + shot_name)
