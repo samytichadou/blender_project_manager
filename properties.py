@@ -335,7 +335,7 @@ class BPMRenderSettings(bpy.types.PropertyGroup) :
 
     rd_resolution_percentage : bpy.props.IntProperty(name = "Resolution percentage", default = 100)
 
-    rd_film_transparent : bpy.props.BoolProperty(name = "Transparent background", default = False)
+    #rd_film_transparent : bpy.props.BoolProperty(name = "Transparent background", default = False)
     
     rd_use_motion_blur : bpy.props.BoolProperty(name = "Cycles motion blur", default = False)
 
