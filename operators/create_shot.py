@@ -150,9 +150,6 @@ class BPMCreateShot(bpy.types.Operator):
         # set its settings
         shot_settings = linked_strip.bpm_shotsettings
         shot_settings.shot_filepath = json_dataset['shot_filepath']
-        shot_settings.is_draft = True
-        shot_settings.is_render = True
-        shot_settings.is_final = True
         shot_settings.shot_frame_start = project_datas.shot_start_frame
         shot_settings.shot_frame_end = project_datas.shot_start_frame + project_datas.default_shot_length
 

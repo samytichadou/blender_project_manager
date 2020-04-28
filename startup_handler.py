@@ -16,7 +16,6 @@ from .functions.project_data_functions import (
                                             getAssetDatasFromJson,
                                             setAssetCollectionFromJsonDataset,
                                         )
-from .functions.check_available_shot_display_functions import refreshShotStripsDisplay
 from .functions.dataset_functions import setPropertiesFromJsonDataset
 from .global_variables import (
                             startup_statement, 
@@ -180,8 +179,6 @@ def bpmStartupHandler(scene):
                 if general_settings.debug: print(refreshing_timeline_shot_datas_statement) #debug               
                 refreshTimelineShotDatas(winman, sequencer)
                 if general_settings.debug: print(refreshed_timeline_shot_datas_statement) #debug
-
-                refreshShotStripsDisplay(winman, sequencer)
 
 
             # load shot settings

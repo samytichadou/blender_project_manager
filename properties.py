@@ -148,9 +148,6 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     shot_frame_end:  bpy.props.IntProperty(name = "Shot frame end", default = 200, min = 1)
 
     shot_timeline_display : bpy.props.EnumProperty(name = "Shot display", items = shot_display_items, update = updateShotDisplayMode)
-    is_draft : bpy.props.BoolProperty(default=False)
-    is_render : bpy.props.BoolProperty(default=False)
-    is_final : bpy.props.BoolProperty(default=False)
 
     # tasks
     storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateStringPlusDays(10))
