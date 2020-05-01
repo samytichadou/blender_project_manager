@@ -99,9 +99,6 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
 
         # create shot render folders
         createShotRenderFolders(new_shot_path, winman)
-        shot_settings.is_draft = True
-        shot_settings.is_render = True
-        shot_settings.is_final = True
 
         # deal with scene if scene strip
         if active_strip.type == 'SCENE':
