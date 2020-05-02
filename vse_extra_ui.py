@@ -118,6 +118,14 @@ def getInfoZoneStrip(x, y):
     v4 = (x, y + warning_square_size)
     return (v1,v2,v3,v4)
 
+# get todo zone of a strip
+def getTodoZoneStrip(x, y):
+    v1 = (x, y - warning_square_size)
+    v2 = (x + warning_square_size, y- warning_square_size)
+    v3 = (x, y)
+    v4 = (x + warning_square_size, y)
+    return (v1,v2,v3,v4)
+
 
 # check if a strip has to be updated
 def getStripNeedUpdate(strip):
@@ -286,8 +294,7 @@ def drawBpmSequencerCallbackPx():
     ### COMPUTE TIMELINE ###
     for strip in returnShotStrips(sequencer):
 
-        display_need_update = False
-        display_todo = False                  
+        display_need_update = False             
 
         x1, y1, x2, y2 = getStripRectangle(strip)
 
@@ -302,37 +309,30 @@ def drawBpmSequencerCallbackPx():
             shot_deadline = getShotTaskDeadline(strip.bpm_shotsettings)[1]
 
             if date == shot_deadline:
-                display_todo = True
 
-                y2s = y1 + 0.05
+                v1td, v2td, v3td, v4td = getTodoZoneStrip(*v3)
 
-                v3s = region.view2d.view_to_region(x1, y2s, clip=False)
-                v4s = region.view2d.view_to_region(x2, y2s, clip=False)
-
-                vertices_e_td += (v1, v2, v3s, v4s)
+                vertices_e_td += (v1td, v2td, v3td, v4td)
                 indices_e_td += ((n_e_td, n_e_td + 1, n_e_td + 2), (n_e_td + 2, n_e_td + 1, n_e_td + 3))
                 n_e_td += 4
 
-
         # bpm shot
         if scene_settings.display_shot_strip:
-            
-            if not display_todo:
                 
-                y2s = y1 + 0.05
+            y2s = y1 + 0.1
 
-                v3s = region.view2d.view_to_region(x1, y2s, clip=False)
-                v4s = region.view2d.view_to_region(x2, y2s, clip=False)
+            v3s = region.view2d.view_to_region(x1, y2s, clip=False)
+            v4s = region.view2d.view_to_region(x2, y2s, clip=False)
 
-                vertices_e_s += (v1, v2, v3s, v4s)
-                indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
-                n_e_s += 4
+            vertices_e_s += (v1, v2, v3s, v4s)
+            indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
+            n_e_s += 4
 
         # bpm shot state
         if scene_settings.display_shot_state:
 
             y1st = y1 + 0.5
-            y2st = y2 - 0.3
+            y2st = y1st + 0.05
 
             v1st = region.view2d.view_to_region(x1, y1st, clip=False)
             v2st = region.view2d.view_to_region(x2, y1st, clip=False)

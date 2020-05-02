@@ -208,7 +208,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     extra_ui : bpy.props.BoolProperty(name = "Extra UI", default=True)
 
     display_shot_strip : bpy.props.BoolProperty(name = "Shot strips", default=True)
-    color_shot_strip : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 1, 0, 0.25), min=0.0, max=1.0, size=4)
+    color_shot_strip : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 0, 0, 1), min=0.0, max=1.0, size=4)
 
     display_shot_state : bpy.props.BoolProperty(name = "Shot state", default=True)
     color_state_storyboard : bpy.props.FloatVectorProperty(name="Storyboard", subtype='COLOR', default=(0.996, 0.898, 0.0, 1), min=0.0, max=1.0, size=4)
@@ -247,10 +247,10 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     color_update_warning : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1, 0, 0, 1), min=0.0, max=1.0, size=4)
 
     display_shot_version_warning : bpy.props.BoolProperty(name = "Shot version warning", default=True)
-    color_version_warning : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 0, 1, 1), min=0.0, max=1.0, size=4)
+    color_version_warning : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 1, 0.75, 1), min=0.0, max=1.0, size=4)
 
     display_shot_todo : bpy.props.BoolProperty(name = "Shot to do", default=True)
-    color_shot_todo : bpy.props.FloatVectorProperty(name="Shot to do color", subtype='COLOR', default=(0, 0, 1, 0.5), min=0.0, max=1.0, size=4)
+    color_shot_todo : bpy.props.FloatVectorProperty(name="Shot to do color", subtype='COLOR', default=(0, 0, 1, 1), min=0.0, max=1.0, size=4)
 
     display_shot_deadline_preview : bpy.props.BoolProperty(name = "Deadline preview", default=False)
     shot_deadline_preview_until : bpy.props.BoolProperty(name = "Preview until this day", default=False)
