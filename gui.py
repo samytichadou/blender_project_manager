@@ -132,7 +132,7 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
                 row.prop(scn_settings, 'color_state_finished')
 
             row = box.row()
-            row.prop(scn_settings, 'display_audio_sync')
+            row.prop(scn_settings, 'display_audio_sync_warning')
             row.prop(scn_settings, 'color_audio_sync', text="")
 
             row = box.row()

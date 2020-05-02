@@ -403,8 +403,8 @@ def drawBpmSequencerCallbackPx():
                 n_e_pr += 4
 
         # bpm shot audio sync
-        if scene_settings.display_audio_sync:
-            if strip.bpm_shotsettings.auto_audio_sync:
+        if scene_settings.display_audio_sync_warning:
+            if not strip.bpm_shotsettings.auto_audio_sync:
                 vertices_e_au += getInfoZoneStrip(*v2)
                 indices_e_au += ((n_e_au, n_e_au + 1, n_e_au + 2), (n_e_au + 2, n_e_au + 1, n_e_au + 3))
                 n_e_au += 4
@@ -491,7 +491,7 @@ def drawBpmSequencerCallbackPx():
         drawShader(vertices_e_pr, indices_e_pr, color_e_td)
 
     # audio sync info
-    if scene_settings.display_audio_sync:
+    if scene_settings.display_audio_sync_warning:
         drawShader(vertices_e_au, indices_e_au, color_e_au)
 
     # update warning
