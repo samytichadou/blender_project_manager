@@ -23,11 +23,11 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
                 if context.scene.sequence_editor:
                     if context.scene.sequence_editor.active_strip:
                         active = context.scene.sequence_editor.active_strip
-                        if active.type in {'SCENE'}:
+                        if active.type in {'SCENE', 'IMAGE'}:
                             if not active.lock:
                                 if active.bpm_shotsettings.is_shot:
-                                    if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
-                                        return True
+                                    #if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
+                                    return True
 
     def invoke(self, context, event):
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
@@ -120,8 +120,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
         # set new filepath
         shot_settings.shot_filepath = bpy.path.relpath(target_shot_path)
 
-
-        # deal with scene if scene strip
+        ### deal with scene if scene strip ###
         if active_strip.type == 'SCENE':
 
             shot_scn = active_strip.scene
@@ -161,5 +160,9 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
                 clearLibraryUsers(shot_lib)
                 bpy.data.orphans_purge()
                 if general_settings.debug: print(library_cleared_statement + old_version_shot_filepath) #debug
+
+        ### deal with images if image strip ###
+        elif active_strip.type == 'IMAGE':
+            shot_settings.shot_timeline_display = shot_settings.shot_timeline_display
 
         return {'FINISHED'}
