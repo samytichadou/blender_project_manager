@@ -304,12 +304,12 @@ def drawBpmSequencerCallbackPx():
             if date == shot_deadline:
                 display_todo = True
 
-                y1s = y1 + 0.6
+                y2s = y1 + 0.05
 
-                v1s = region.view2d.view_to_region(x1, y1s, clip=False)
-                v2s = region.view2d.view_to_region(x2, y1s, clip=False)
+                v3s = region.view2d.view_to_region(x1, y2s, clip=False)
+                v4s = region.view2d.view_to_region(x2, y2s, clip=False)
 
-                vertices_e_td += (v1s, v2s, v3, v4)
+                vertices_e_td += (v1, v2, v3s, v4s)
                 indices_e_td += ((n_e_td, n_e_td + 1, n_e_td + 2), (n_e_td + 2, n_e_td + 1, n_e_td + 3))
                 n_e_td += 4
 
@@ -319,12 +319,12 @@ def drawBpmSequencerCallbackPx():
             
             if not display_todo:
                 
-                y1s = y1 + 0.6
+                y2s = y1 + 0.05
 
-                v1s = region.view2d.view_to_region(x1, y1s, clip=False)
-                v2s = region.view2d.view_to_region(x2, y1s, clip=False)
+                v3s = region.view2d.view_to_region(x1, y2s, clip=False)
+                v4s = region.view2d.view_to_region(x2, y2s, clip=False)
 
-                vertices_e_s += (v1s, v2s, v3, v4)
+                vertices_e_s += (v1, v2, v3s, v4s)
                 indices_e_s += ((n_e_s, n_e_s + 1, n_e_s + 2), (n_e_s + 2, n_e_s + 1, n_e_s + 3))
                 n_e_s += 4
 
@@ -391,10 +391,11 @@ def drawBpmSequencerCallbackPx():
 
             if shot_date == preview_date or (scene_settings.shot_deadline_preview_until and returnPriorDate(shot_date, preview_date)):
                 
-                y2pr = y1 + 0.1
+                y1pr = y1 + 0.05
+                y2pr = y1pr + 0.05
 
-                v1pr = region.view2d.view_to_region(x1, y1, clip=False)
-                v2pr = region.view2d.view_to_region(x2, y1, clip=False)
+                v1pr = region.view2d.view_to_region(x1, y1pr, clip=False)
+                v2pr = region.view2d.view_to_region(x2, y1pr, clip=False)
                 v3pr = region.view2d.view_to_region(x1, y2pr, clip=False)
                 v4pr = region.view2d.view_to_region(x2, y2pr, clip=False)
 
@@ -462,7 +463,7 @@ def drawBpmSequencerCallbackPx():
     
     ### DRAW SHADERS ###
 
-    bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE)
+    #bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE)
 
     #shot todo
     if scene_settings.display_shot_todo:
@@ -472,7 +473,7 @@ def drawBpmSequencerCallbackPx():
     if scene_settings.display_shot_strip:
         drawShader(vertices_e_s, indices_e_s, color_e_s)
 
-    bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE_MINUS_SRC_ALPHA)
+    #bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE_MINUS_SRC_ALPHA)
 
     #shot state
     if scene_settings.display_shot_state:

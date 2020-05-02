@@ -219,7 +219,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     color_state_compositing : bpy.props.FloatVectorProperty(name="Compositing", subtype='COLOR', default=(0.0, 0.0, 0.25, 1), min=0.0, max=1.0, size=4)
     color_state_finished : bpy.props.FloatVectorProperty(name="Finished", subtype='COLOR', default=(0.0, 0.386, 0.0, 1), min=0.0, max=1.0, size=4)
 
-    display_audio_sync_warning : bpy.props.BoolProperty(name = "Shot not audio synced", default=True)
+    display_audio_sync_warning : bpy.props.BoolProperty(name = "Shot audio sync warning", default=True)
     color_audio_sync : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1.0, 0.0, 0.924, 1.0), min=0.0, max=1.0, size=4)
 
     display_marker_items = [
