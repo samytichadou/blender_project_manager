@@ -20,6 +20,10 @@ from .functions.date_functions import formatDateFromYrMoDa, returnPriorDate
 # compute dpi_fac on every blender startup
 # dpi_fac = bpy.context.preferences.system.pixel_size * bpy.context.preferences.system.dpi / 72
 
+# ui parameters 
+warning_square_size = 8
+strip_line_length = 0.075
+
 # font id for makers
 markers_font = {
     "font_id": 0,
@@ -97,8 +101,6 @@ def getBoundingBoxCoordinates(pos, text, text_size, dpi_fac):
 
 
 # get warning zone of a strip
-warning_square_size = 8
-
 def getWarningZoneStrip(x, y):
     v1 = (x-warning_square_size, y-warning_square_size)
     v2 = (x, y-warning_square_size)
@@ -319,7 +321,7 @@ def drawBpmSequencerCallbackPx():
         # bpm shot
         if scene_settings.display_shot_strip:
                 
-            y2s = y1 + 0.1
+            y2s = y1 + strip_line_length
 
             v3s = region.view2d.view_to_region(x1, y2s, clip=False)
             v4s = region.view2d.view_to_region(x2, y2s, clip=False)
@@ -332,7 +334,7 @@ def drawBpmSequencerCallbackPx():
         if scene_settings.display_shot_state:
 
             y1st = y1 + 0.5
-            y2st = y1st + 0.05
+            y2st = y1st + strip_line_length
 
             v1st = region.view2d.view_to_region(x1, y1st, clip=False)
             v2st = region.view2d.view_to_region(x2, y1st, clip=False)
@@ -371,7 +373,7 @@ def drawBpmSequencerCallbackPx():
             # bpm state done
             if getShotTaskComplete(strip.bpm_shotsettings)[1] and strip.bpm_shotsettings.shot_state != 'FINISHED':
                 
-                y1do = y1st - 0.05
+                y1do = y1st - strip_line_length
 
                 v1do = region.view2d.view_to_region(x1, y1do, clip=False)
                 v2do = region.view2d.view_to_region(x2, y1do, clip=False)
@@ -391,8 +393,8 @@ def drawBpmSequencerCallbackPx():
 
             if shot_date == preview_date or (scene_settings.shot_deadline_preview_until and returnPriorDate(shot_date, preview_date)):
                 
-                y1pr = y1 + 0.05
-                y2pr = y1pr + 0.05
+                y1pr = y1 + strip_line_length
+                y2pr = y1pr + strip_line_length
 
                 v1pr = region.view2d.view_to_region(x1, y1pr, clip=False)
                 v2pr = region.view2d.view_to_region(x2, y1pr, clip=False)
