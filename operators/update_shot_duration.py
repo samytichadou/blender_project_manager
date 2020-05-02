@@ -62,6 +62,8 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
         active = sequencer.active_strip
 
+        new_active = None
+
         if general_settings.debug: print(start_update_shot_statement) #debug
 
         for strip in returnShotStrips(sequencer):
@@ -113,16 +115,27 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                             strip.scene.frame_end   = new_end
 
                             # update the strip
-                            updateSceneStripOnTimeline(strip, winman)
+                            if strip == active:
+                                new_active = updateSceneStripOnTimeline(strip, winman)
+                            else:
+                                updateSceneStripOnTimeline(strip, winman)
 
+                        # update for image strip
                         elif strip.type == 'IMAGE':
-                            updateImageSequenceShot(strip, winman)    
+                            if strip == active:
+                                new_active = updateImageSequenceShot(strip, winman)   
+                            else:
+                                updateImageSequenceShot(strip, winman)
 
                         general_settings.bypass_update_tag = False                     
 
                         if general_settings.debug: print(updated_shot_statement) #debug
-
+                        
                 elif general_settings.debug: print(no_update_needed_statement) #debug
+
+        # set back active strip if needed
+        if new_active is not None:
+            sequencer.active_strip = new_active
 
         # update audio sync if existing
         audio_sync_filepath = os.path.join(project_folder, audio_sync_file)
