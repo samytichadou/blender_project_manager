@@ -27,7 +27,7 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
                         if active.type in {'SCENE'}:
                             if not active.lock:
                                 try:
-                                    if active.bpm_shotsettings.is_shot and active.scene.library:                                       
+                                    if active.bpm_shotsettings.is_shot and active.scene.library:
                                         return True
                                 except AttributeError:
                                     return False
