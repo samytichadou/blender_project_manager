@@ -147,7 +147,7 @@ def getBlendName():
 
 # link asset libraries
 def linkAssetLibrary(filepath, asset, debug):
-    from .utils_functions import clearLibraryUsers
+    from .utils_functions import clearLibraryUsers, ensureCollectionExists
     from ..global_variables import(
                                 library_cleared_statement,
                                 asset_linked_statement,
@@ -189,7 +189,8 @@ def linkAssetLibrary(filepath, asset, debug):
     # collections
     else:
         name = asset.asset_collection
-        master_collection = bpy.context.scene.collection
+
+        link_to_coll = ensureCollectionExists(bpy.context.scene, asset_type)
 
         with lib as (data_from, data_to):
             data_to.collections = data_from.collections
@@ -202,7 +203,7 @@ def linkAssetLibrary(filepath, asset, debug):
                 instance = bpy.data.objects.new(new_coll.name, None)
                 instance.instance_type = 'COLLECTION'
                 instance.instance_collection = new_coll
-                master_collection.objects.link(instance)
+                link_to_coll.objects.link(instance)
 
                 imported.append(instance)
 

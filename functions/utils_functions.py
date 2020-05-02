@@ -43,3 +43,14 @@ def returnFormatedTimestamp(timestamp):
 def getCurrentPID():
     import os
     return os.getpid()
+
+
+# ensure collection exist
+def ensureCollectionExists(scene, coll_name):
+    try:
+        link_to_coll = scene.collection.children[coll_name]
+    except KeyError:
+        link_to_coll = bpy.data.collections.new(coll_name)
+        scene.collection.children.link(link_to_coll)
+    
+    return link_to_coll
