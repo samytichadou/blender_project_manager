@@ -259,7 +259,9 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'shot_timeline_display', text = "Display")
         drawWikiHelp(row, 'Timeline-Shot-Display-Mode')
 
-        layout.prop(shot_settings, 'display_markers')
+        row = layout.row(align=True)
+        if active.type == 'IMAGE': row.enabled = False
+        row.prop(shot_settings, 'display_markers')
 
         drawDebugPanel(layout, shot_settings, general_settings)#debug
 
