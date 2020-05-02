@@ -50,12 +50,10 @@ class BPMModifyShotTasksDeadline(bpy.types.Operator):
                     if context.scene.sequence_editor:
                         if context.scene.sequence_editor.active_strip:
                             active = context.scene.sequence_editor.active_strip
-                            if not active.lock:
-                                try:
+                            if active.type in {'SCENE', 'IMAGE'}:
+                                if not active.lock:
                                     if active.bpm_shotsettings.is_shot:
                                         return True
-                                except AttributeError:
-                                    pass
 
     def invoke(self, context, event):
         winman = context.window_manager
