@@ -228,7 +228,7 @@ def updateShotDisplayMode(self, context):
     # open gl
     if display_mode == '00_openGL':
         if active.type != 'SCENE':
-            updateStripToScene(active, winman)
+            new_strip = updateStripToScene(active, winman)
 
     else:
         shot_filepath = absolutePath(active.bpm_shotsettings.shot_filepath)
@@ -241,6 +241,8 @@ def updateShotDisplayMode(self, context):
         elif display_mode == render_final_folder:
             shot_render_folder = shot_final
         
-        updateStripToImageSequence(active, sequencer, shot_render_folder, winman)
+        new_strip = updateStripToImageSequence(active, sequencer, shot_render_folder, winman)
+
+    sequencer.active_strip = new_strip
 
     general_settings.bypass_update_tag = False
