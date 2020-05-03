@@ -106,8 +106,10 @@ classes = (BPMOpenShot,
             BPMClearLockFileUser,
             BPMRenderShotPlayblast,
             BPMModifyShotTasksDeadline,
-            
+
             BPMOpenShotFolder,
+            BPMOpenShotRenderFolder,
+            BPMOpenPlayblastFolder,
 
             BPMOpenWikiPage,
 
