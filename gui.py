@@ -75,7 +75,9 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
 
-        layout.operator('bpm.open_shot_folder')
+        row = layout.row(align=True)
+        row.operator('bpm.open_shot_folder')
+        drawWikiHelp(row, 'Project-Architecture')
                 
         drawDebugPanel(layout, general_settings, general_settings)#debug
 
@@ -352,6 +354,10 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'shot_render_state', text = "Render")
         drawWikiHelp(row, 'Render-Settings')
 
+        row = layout.row(align=True)
+        row.operator('bpm.open_shot_folder')
+        drawWikiHelp(row, 'Project-Architecture')
+
         drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
 
 
@@ -514,6 +520,8 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
-        layout.operator('bpm.open_shot_folder').context='filebrowser'
+        row = layout.row(align=True)
+        row.operator('bpm.open_shot_folder').context='filebrowser'
+        drawWikiHelp(row, 'Project-Architecture')
         #asset
         layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
