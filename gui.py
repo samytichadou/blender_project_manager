@@ -41,6 +41,26 @@ def drawOpenedWarning(container, general_settings):
         drawOperatorAndHelp(container, 'bpm.show_open_blend_lock_file', 'ERROR', "Lock-File-System")
         #container.label(text="File already opened", icon='ERROR')
 
+# draw open folders panel
+def drawOpenFoldersPanel(container, filebrowser):
+    col = container.column(align=True)
+
+    row = col.row(align=True)
+    row.operator('bpm.open_shot_folder').filebrowser=filebrowser
+    drawWikiHelp(row, 'Project-Architecture')
+
+    row = col.row(align=True)
+    row.operator('bpm.open_shot_render_folder').filebrowser=filebrowser
+    drawWikiHelp(row, 'Project-Architecture')
+
+    row = col.row(align=True)
+    row.operator('bpm.open_playblast_folder').filebrowser=filebrowser
+    drawWikiHelp(row, 'Project-Architecture')
+
+    row = col.row(align=True)
+    row.operator('bpm.open_asset_folder').filebrowser=filebrowser
+    drawWikiHelp(row, 'Project-Architecture')
+
 
 # sequencer management
 class BPM_PT_sequencer_management_panel(bpy.types.Panel):
@@ -75,17 +95,7 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
 
-        row = layout.row(align=True)
-        row.operator('bpm.open_shot_folder')
-        drawWikiHelp(row, 'Project-Architecture')
-
-        row = layout.row(align=True)
-        row.operator('bpm.open_shot_render_folder')
-        drawWikiHelp(row, 'Project-Architecture')
-
-        row = layout.row(align=True)
-        row.operator('bpm.open_playblast_folder')
-        drawWikiHelp(row, 'Project-Architecture')
+        drawOpenFoldersPanel(layout, False)
                 
         drawDebugPanel(layout, general_settings, general_settings)#debug
 
@@ -362,18 +372,7 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'shot_render_state', text = "Render")
         drawWikiHelp(row, 'Render-Settings')
 
-        row = layout.row(align=True)
-        row.operator('bpm.open_shot_folder')
-        drawWikiHelp(row, 'Project-Architecture')
-
-        row = layout.row(align=True)
-        row.operator('bpm.open_shot_render_folder')
-        drawWikiHelp(row, 'Project-Architecture')
-
-        row = layout.row(align=True)
-        row.operator('bpm.open_playblast_folder')
-        drawWikiHelp(row, 'Project-Architecture')
-
+        drawOpenFoldersPanel(layout, False)
 
         drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
 
@@ -538,17 +537,7 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
 
         layout = self.layout
 
-        row = layout.row(align=True)
-        row.operator('bpm.open_shot_folder').filebrowser=True
-        drawWikiHelp(row, 'Project-Architecture')
-
-        row = layout.row(align=True)
-        row.operator('bpm.open_shot_render_folder').filebrowser=True
-        drawWikiHelp(row, 'Project-Architecture')
-
-        row = layout.row(align=True)
-        row.operator('bpm.open_playblast_folder').filebrowser=True
-        drawWikiHelp(row, 'Project-Architecture')
-
+        drawOpenFoldersPanel(layout, True)
+        
         #asset
         layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)

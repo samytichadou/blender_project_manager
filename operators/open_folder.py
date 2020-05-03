@@ -1,6 +1,31 @@
 import bpy
 import os
 
+
+from ..functions.utils_functions import openFolderInExplorer
+from ..global_variables import (
+                            opening_folder_statement,
+                            no_folder_statement,
+                            asset_folder,
+                        )
+
+
+# opening function
+def openFolderFilebrowserOption(folder_path, filebrowser, context, debug):        
+    if os.path.isdir(folder_path):
+
+        if debug: print(opening_folder_statement + folder_path) #debug
+
+        if filebrowser:
+            area = context.area
+            area.spaces[0].params.directory = str.encode(folder_path)
+
+        else:
+            openFolderInExplorer(folder_path)
+
+    else:
+        if debug: print(no_folder_statement + folder_path) #debug
+
 # shot folder
 class BPMOpenShotFolder(bpy.types.Operator):
     """Open Shot Folder"""
@@ -35,30 +60,18 @@ class BPMOpenShotFolder(bpy.types.Operator):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
 
-        absolute_path = None
+        folder_path = None
 
         # get shot settings and filepath 
         if general_settings.file_type == 'EDIT':
             shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-            absolute_path = os.path.dirname(absolutePath(shot_settings.shot_filepath))
+            folder_path = os.path.dirname(absolutePath(shot_settings.shot_filepath))
 
         elif general_settings.file_type == 'SHOT':
-            absolute_path = os.path.dirname(bpy.data.filepath)
+            folder_path = os.path.dirname(bpy.data.filepath)
 
         # open if available        
-        if os.path.isdir(absolute_path):
-
-            if general_settings.debug: print(opening_folder_statement + absolute_path) #debug
-
-            if self.filebrowser:
-                area = context.area
-                area.spaces[0].params.directory = str.encode(absolute_path)
-
-            else:
-                openFolderInExplorer(absolute_path)
-
-        else:
-            if general_settings.debug: print(no_folder_statement + absolute_path) #debug
+        openFolderFilebrowserOption(folder_path, self.filebrowser, context, general_settings.debug)
 
         return {'FINISHED'}
 
@@ -116,21 +129,10 @@ class BPMOpenShotRenderFolder(bpy.types.Operator):
         folder_path = os.path.dirname(returnRenderFilePathFromShot(shot_filepath, winman, render_state))
 
         # open if available        
-        if os.path.isdir(folder_path):
-
-            if general_settings.debug: print(opening_folder_statement + folder_path) #debug
-
-            if self.filebrowser:
-                area = context.area
-                area.spaces[0].params.directory = str.encode(folder_path)
-
-            else:
-                openFolderInExplorer(folder_path)
-
-        else:
-            if general_settings.debug: print(no_folder_statement + folder_path) #debug
+        openFolderFilebrowserOption(folder_path, self.filebrowser, context, general_settings.debug)
 
         return {'FINISHED'}
+
 
 # shot render folder
 class BPMOpenPlayblastFolder(bpy.types.Operator):
@@ -183,18 +185,35 @@ class BPMOpenPlayblastFolder(bpy.types.Operator):
         folder_path = os.path.dirname(returnRenderFilePathFromShot(shot_filepath, winman, render_playblast_folder))
 
         # open if available        
-        if os.path.isdir(folder_path):
+        openFolderFilebrowserOption(folder_path, self.filebrowser, context, general_settings.debug)
 
-            if general_settings.debug: print(opening_folder_statement + folder_path) #debug
+        return {'FINISHED'}
 
-            if self.filebrowser:
-                area = context.area
-                area.spaces[0].params.directory = str.encode(folder_path)
 
-            else:
-                openFolderInExplorer(folder_path)
+# asset folder
+class BPMOpenAssetFolder(bpy.types.Operator):
+    """Open Asset Folder"""
+    bl_idname = "bpm.open_asset_folder"
+    bl_label = "Open Asset Folder"
+    bl_options = {'REGISTER'}
 
-        else:
-            if general_settings.debug: print(no_folder_statement + folder_path) #debug
+    filebrowser : bpy.props.BoolProperty()
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.is_project
+
+    def execute(self, context):
+        from ..functions.utils_functions import openFolderInExplorer
+        from ..functions.file_functions import absolutePath
+        from ..global_variables import opening_folder_statement, no_folder_statement, asset_folder
+
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+
+        folder_path = os.path.join(general_settings.project_folder, asset_folder)
+
+        # open if available  
+        openFolderFilebrowserOption(folder_path, self.filebrowser, context, general_settings.debug)
 
         return {'FINISHED'}
