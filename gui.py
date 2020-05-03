@@ -547,3 +547,17 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
         
         #asset
         layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
+
+
+# right click sequencer menu
+def drawRightClickMenu(self, context):
+    general_settings = context.window_manager.bpm_generalsettings
+    if general_settings.is_project and general_settings.file_type == 'EDIT':
+        layout = self.layout
+        layout.operator('bpm.open_shot')
+        layout.operator('bpm.update_shot_duration')
+        #layout.operator('bpm.add_modify_shot_marker')
+        layout.operator('bpm.bump_shot_version_edit')
+        #layout.operator('bpm.change_shot_version_edit')
+        #layout.operator('bpm.change_shot_version_edit').go_to_last_version=True
+        layout.separator()

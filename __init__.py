@@ -193,6 +193,7 @@ def register():
 
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.prepend(bpmTopbarFunction)
+    bpy.types.SEQUENCER_MT_context_menu.prepend(drawRightClickMenu)
 
 
 def unregister():
@@ -231,3 +232,4 @@ def unregister():
 
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.remove(bpmTopbarFunction)
+    bpy.types.SEQUENCER_MT_context_menu.remove(drawRightClickMenu)
