@@ -35,11 +35,13 @@ def drawDebugPanel(container, dataset, general_settings):
                 row = box.row()
                 row.prop(dataset, '%s' % p.identifier)
 
+
 # draw already opened blend warning
 def drawOpenedWarning(container, general_settings):
     if general_settings.blend_already_opened:
         drawOperatorAndHelp(container, 'bpm.show_open_blend_lock_file', 'ERROR', "Lock-File-System")
         #container.label(text="File already opened", icon='ERROR')
+
 
 # draw open folders panel
 def drawOpenFoldersPanel(container, filebrowser):
