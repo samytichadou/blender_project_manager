@@ -74,6 +74,8 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
 
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
+
+        layout.operator('bpm.open_shot_folder')
                 
         drawDebugPanel(layout, general_settings, general_settings)#debug
 
@@ -505,14 +507,13 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
     
     @classmethod
     def poll(cls, context):
-        general_settings = context.window_manager.bpm_generalsettings
-        return context.window_manager.bpm_customfolders and general_settings.is_project
+        return context.window_manager.bpm_generalsettings.is_project
     
     def draw(self, context):
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
-        #shot
+        layout.operator('bpm.open_shot_folder').context='filebrowser'
         #asset
         layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)

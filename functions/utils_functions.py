@@ -1,4 +1,8 @@
 import bpy
+import platform
+import os
+import subprocess
+
 
 # redraw areas
 def redrawAreas(context, area_to_redraw):
@@ -54,3 +58,13 @@ def ensureCollectionExists(scene, coll_name):
         scene.collection.children.link(link_to_coll)
     
     return link_to_coll
+
+
+# open folder in explorer
+def openFolderInExplorer(absolute_path) :
+    if platform.system() == "Windows":
+        os.startfile(absolute_path)
+    elif platform.system() == "Darwin":
+        subprocess.Popen(["open", absolute_path])
+    else:
+        subprocess.Popen(["xdg-open", absolute_path])

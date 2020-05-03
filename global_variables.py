@@ -109,6 +109,9 @@ copying_file_statement = bpm_statement + "Copying file from : "
 file_does_not_exist_message = "File does not exist : "
 file_does_not_exist_statement = bpm_statement + file_does_not_exist_message
 
+opening_folder_statement = bpm_statement + "Opening folder : "
+no_folder_statement = bpm_statement + "Folder does not exist : "
+
 
 # lock system
 created_lock_file_statement = bpm_statement + "Lock file created"
