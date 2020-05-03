@@ -109,8 +109,7 @@ classes = (BPMOpenShot,
 
             BPMOpenShotFolder,
             BPMOpenShotRenderFolder,
-            BPMOpenPlayblastFolder,
-            BPMOpenAssetFolder,
+            BPMOpenProjectFolder,
 
             BPMOpenWikiPage,
 

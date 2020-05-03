@@ -43,23 +43,27 @@ def drawOpenedWarning(container, general_settings):
 
 # draw open folders panel
 def drawOpenFoldersPanel(container, filebrowser):
-    col = container.column(align=True)
+    box = container.box()
+
+    box.label(text='Open Folders', icon='FILE_FOLDER')
+
+    col = box.column(align=True)
+
+    for f in ('Project', 'Asset', 'Shot', 'Render', 'Ressources', 'Playblast'):
+        row = col.row(align=True)
+        op = row.operator('bpm.open_project_folder', text = f)
+        op.folder = f
+        op.filebrowser = filebrowser
+        drawWikiHelp(row, 'Project-Architecture')
 
     row = col.row(align=True)
-    row.operator('bpm.open_shot_folder').filebrowser=filebrowser
+    row.operator('bpm.open_shot_folder', text='Active Shot').filebrowser=filebrowser
+    drawWikiHelp(row, 'Project-Architecture')
+    
+    row = col.row(align=True)
+    row.operator('bpm.open_shot_render_folder', text='Active Render').filebrowser=filebrowser
     drawWikiHelp(row, 'Project-Architecture')
 
-    row = col.row(align=True)
-    row.operator('bpm.open_shot_render_folder').filebrowser=filebrowser
-    drawWikiHelp(row, 'Project-Architecture')
-
-    row = col.row(align=True)
-    row.operator('bpm.open_playblast_folder').filebrowser=filebrowser
-    drawWikiHelp(row, 'Project-Architecture')
-
-    row = col.row(align=True)
-    row.operator('bpm.open_asset_folder').filebrowser=filebrowser
-    drawWikiHelp(row, 'Project-Architecture')
 
 
 # sequencer management
