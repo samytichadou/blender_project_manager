@@ -48,6 +48,8 @@ def saveAssetToJson(self, context):
         asset_datas['asset_material'] = asset_settings.asset_material.name
     if asset_settings.asset_world is not None:
         asset_datas['asset_world'] = asset_settings.asset_world.name
+    if asset_settings.asset_nodegroup is not None:
+        asset_datas['asset_nodegroup'] = asset_settings.asset_nodegroup.name
 
     datas['assets'].append(asset_datas)
 
@@ -66,12 +68,14 @@ def updateAssetAssigning(self, context):
         if debug: print(bypass_shot_settings_update_statement) #debug
         return
     
-    if self.asset_type not in {'SHADER', 'WORLD'}:
-        asset = self.asset_collection
-    elif self.asset_type == 'SHADER':
+    if self.asset_type == 'SHADER':
         asset = self.asset_material
+    elif self.asset_type == 'NODEGROUP':
+        asset = self.asset_nodegroup
     elif self.asset_type == 'WORLD':
         asset = self.asset_world
+    else:
+        asset = self.asset_collection
 
     if debug: print(cleared_old_asset_statement)
 
@@ -101,17 +105,25 @@ def updateChangingAssetType(self, context):
 
     clearOldAssetBpmIsasset()
 
-    if self.asset_type not in {'SHADER', 'WORLD'}:       
+    if self.asset_type not in {'SHADER', 'WORLD', 'NODEGROUP'}:       
         self.asset_material = None
         self.asset_world = None
+        self.asset_nodegroup = None
         asset = self.asset_collection
     elif self.asset_type == 'SHADER':
         self.asset_collection = None
         self.asset_world = None
+        self.asset_nodegroup = None
         asset = self.asset_material
+    elif self.asset_type == 'NODEGROUP':
+        self.asset_collection = None
+        self.asset_world = None
+        self.asset_material = None
+        asset = self.asset_nodegroup
     elif self.asset_type == 'WORLD':
         self.asset_collection = None
         self.asset_material = None
+        self.asset_nodegroup = None
         asset = self.asset_world
 
     general_settings.bypass_update_tag = False

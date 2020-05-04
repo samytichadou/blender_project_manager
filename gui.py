@@ -425,6 +425,7 @@ class BPM_PT_properties_asset_panel(bpy.types.Panel):
         layout.prop(asset_settings, 'asset_state')
 
         if asset_settings.asset_type == 'SHADER': target_prop = 'asset_material'
+        elif asset_settings.asset_type == 'NODEGROUP': target_prop = 'asset_nodegroup'
         elif asset_settings.asset_type == 'WORLD': target_prop = 'asset_world'
         else: target_prop = 'asset_collection'
 

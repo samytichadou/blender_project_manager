@@ -188,6 +188,9 @@ def register():
     bpy.types.Material.bpm_isasset = \
         bpy.props.BoolProperty(default = False)
 
+    bpy.types.NodeTree.bpm_isasset = \
+        bpy.props.BoolProperty(default = False)
+
     bpy.types.World.bpm_isasset = \
         bpy.props.BoolProperty(default = False)
 
@@ -227,6 +230,8 @@ def unregister():
     del bpy.types.Collection.bpm_isasset
 
     del bpy.types.Material.bpm_isasset
+
+    del bpy.types.NodeTree.bpm_isasset
 
     del bpy.types.World.bpm_isasset
 

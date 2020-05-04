@@ -21,6 +21,7 @@ def getAssetIcon(identifier):
     elif identifier ==  'PROP':         icon = 'MESH_CUBE'
     elif identifier ==  'SET':          icon = 'SCENE_DATA'
     elif identifier ==  'SHADER':       icon = 'MATERIAL'
+    elif identifier ==  'NODEGROUP':     icon = 'NODETREE'
     elif identifier ==  'WORLD':        icon = 'WORLD'
     elif identifier ==  'FX':           icon = 'SHADERFX'
     elif identifier ==  'NONE':         icon = ''
@@ -33,8 +34,9 @@ asset_type_items = [
         ('PROP', 'Prop', "", getAssetIcon('PROP'), 2),
         ('SET', 'Set', "", getAssetIcon('SET'), 3),
         ('SHADER', 'Shader', "", getAssetIcon('SHADER'), 4),
-        ('WORLD', 'World', "", getAssetIcon('WORLD'), 5),
-        ('FX', 'FX', "", getAssetIcon('FX'), 6),
+        ('NODEGROUP', 'Nodegroup', "", getAssetIcon('NODEGROUP'), 5),
+        ('WORLD', 'World', "", getAssetIcon('WORLD'), 6),
+        ('FX', 'FX', "", getAssetIcon('FX'), 7),
         ]
 
 asset_state_items = [
@@ -113,6 +115,7 @@ class BPMAssetList(bpy.types.PropertyGroup) :
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
     asset_collection : bpy.props.StringProperty(name="Asset collection name")
     asset_material : bpy.props.StringProperty(name="Asset material name")
+    asset_nodegroup : bpy.props.StringProperty(name="Asset nodegroup name")
     asset_world : bpy.props.StringProperty(name="Asset world name")
     is_thisassetfile : bpy.props.BoolProperty(default = False)
 
@@ -124,6 +127,7 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT', update = saveAssetToJson)
     asset_collection : bpy.props.PointerProperty(name="Asset collection", type=bpy.types.Collection, update = updateAssetAssigning)
     asset_material : bpy.props.PointerProperty(name="Asset material", type=bpy.types.Material, update = updateAssetAssigning)
+    asset_nodegroup : bpy.props.PointerProperty(name="Asset nodegroup", type=bpy.types.NodeTree, update = updateAssetAssigning)
     asset_world : bpy.props.PointerProperty(name="Asset world", type=bpy.types.World, update = updateAssetAssigning)
 
 # shot settings strips

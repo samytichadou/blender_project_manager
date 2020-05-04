@@ -177,6 +177,19 @@ def linkAssetLibrary(filepath, asset, debug):
             else:
                 if debug: print(asset_linked_statement + new_mat.name) #debug
 
+    # nodetree
+    elif asset_type == "NODEGROUP":
+        name = asset.asset_nodegroup
+        with lib as (data_from, data_to):
+            data_to.node_groups = data_from.node_groups
+
+        for new_node in data_to.node_groups:
+            imported.append(new_node)
+            if not new_node.bpm_isasset or new_node.name != name:
+                bpy.data.node_groups.remove(bpy.data.node_groups[new_node.name])
+            else:
+                if debug: print(asset_linked_statement + new_node.name) #debug
+
     # world
     elif asset_type == "WORLD":
         name = asset.asset_world
