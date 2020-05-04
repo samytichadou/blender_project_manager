@@ -128,6 +128,12 @@ timer_function_removed_statement = bpm_statement + "Timer function removed"
 timer_function_processing_statement = bpm_statement + "Timer function processing"
 
 
+# thread statements
+thread_start_statement = bpm_statement + "Starting new thread"
+thread_end_statement = bpm_statement + "Thread ended"
+thread_end_function_statement = bpm_statement + "Starting thread end function"
+
+
 # timeline statements
 no_available_timeline_space_message = "No available space on timeline"
 no_available_timeline_space_statement = bpm_statement + no_available_timeline_space_message

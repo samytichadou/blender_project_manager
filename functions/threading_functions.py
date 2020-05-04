@@ -3,10 +3,15 @@ import subprocess
 import threading
 
 
+from ..global_variables import thread_start_statement, thread_end_statement, thread_end_function_statement
+
+
 # launch command in separate thread
-def launchCommandFunction(command, debug):
+def launchCommandFunction(command, debug, endfunction, *endfunction_args):
+
+    if debug: print(thread_start_statement) #debug
+
     # launch command
-    if debug : print(command) #debug
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
     # check on it
@@ -16,11 +21,16 @@ def launchCommandFunction(command, debug):
         if line != '' :
             if debug : print(line) #debug
             if b"Blender quit" in line :
-                print("finish")
                 break
         else:
-            print("finish")
             break
+    
+    # when ending
+    if debug: print(thread_end_statement) #debug
+
+    if endfunction is not None:
+        if debug: print(thread_end_function_statement) #debug
+        endfunction(*endfunction_args)
 
 
 # launch separate thread
