@@ -45,26 +45,14 @@ def drawOpenedWarning(container, general_settings):
 
 # draw open folders panel
 def drawOpenFoldersPanel(container, filebrowser):
-    box = container.box()
-
-    box.label(text='Open Folders', icon='FILE_FOLDER')
-
-    col = box.column(align=True)
-
     for f in ('Project', 'Asset', 'Shot', 'Render', 'Ressources', 'Playblast'):
-        row = col.row(align=True)
-        op = row.operator('bpm.open_project_folder', text = f)
+        op = container.operator('bpm.open_project_folder', text = f)
         op.folder = f
         op.filebrowser = filebrowser
-        drawWikiHelp(row, 'Project-Architecture')
 
-    row = col.row(align=True)
-    row.operator('bpm.open_shot_folder', text='Active Shot').filebrowser=filebrowser
-    drawWikiHelp(row, 'Project-Architecture')
+    container.operator('bpm.open_shot_folder', text='Active Shot').filebrowser=filebrowser
     
-    row = col.row(align=True)
-    row.operator('bpm.open_shot_render_folder', text='Active Render').filebrowser=filebrowser
-    drawWikiHelp(row, 'Project-Architecture')
+    container.operator('bpm.open_shot_render_folder', text='Active Render').filebrowser=filebrowser
 
 
 
@@ -101,7 +89,9 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
 
-        drawOpenFoldersPanel(layout, False)
+        row = layout.row(align=True)
+        row.menu('BPM_MT_OpenFolder_Menu')
+        drawWikiHelp(row, 'Project-Architecture')
                 
         drawDebugPanel(layout, general_settings, general_settings)#debug
 
@@ -378,7 +368,9 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'shot_render_state', text = "Render")
         drawWikiHelp(row, 'Render-Settings')
 
-        drawOpenFoldersPanel(layout, False)
+        row = layout.row(align=True)
+        row.menu('BPM_MT_OpenFolder_Menu')
+        drawWikiHelp(row, 'Project-Architecture')
 
         drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
 
@@ -543,10 +535,22 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
 
         layout = self.layout
 
-        drawOpenFoldersPanel(layout, True)
+        box = layout.box()
+        box.label(text='Open Folder')
+        drawOpenFoldersPanel(box, True)
         
-        #asset
         layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
+
+
+# open folder menu
+class BPM_MT_OpenFolder_Menu(bpy.types.Menu):
+    bl_label = "BPM Open Folders"
+    bl_idname = "BPM_MT_OpenFolder_Menu"
+
+    def draw(self, context):
+        layout = self.layout
+        
+        drawOpenFoldersPanel(layout, False)
 
 
 # right click sequencer menu

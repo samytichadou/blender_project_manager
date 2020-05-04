@@ -136,6 +136,7 @@ classes = (BPMOpenShot,
             BPM_PT_FileBrowser_Panel,
             BPM_UL_Asset_UI_List,
             BPM_PT_properties_asset_library_panel,
+            BPM_MT_OpenFolder_Menu,
             )
 
 

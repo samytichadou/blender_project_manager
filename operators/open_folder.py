@@ -12,6 +12,7 @@ from ..global_variables import (
                             asset_folder,
                             ressources_folder,
                             render_playblast_folder,
+                            render_shots_folder,
                         )
 
 
@@ -163,7 +164,8 @@ class BPMOpenProjectFolder(bpy.types.Operator):
             folder_path = general_settings.project_folder
 
         elif self.folder == "Playblast":
-            folder_path = os.path.join(os.path.join(general_settings.project_folder, render_folder), render_playblast_folder)
+            render_shot_folderpath = os.path.join(os.path.join(general_settings.project_folder, render_folder), render_shots_folder)
+            folder_path = os.path.join(render_shot_folderpath, render_playblast_folder)
 
         # open if available  
         openFolderFilebrowserOption(folder_path, self.filebrowser, context, general_settings.debug)
