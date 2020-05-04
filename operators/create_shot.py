@@ -13,30 +13,7 @@ from ..functions.file_functions import (
                                     createShotRenderFolders,
                                 )
 from ..functions.utils_functions import clearDataUsers
-from ..global_variables import (
-                            creating_shot_statement, 
-                            python_temp, 
-                            shot_setup_file, 
-                            launching_command_statement, 
-                            creating_python_script_statement,
-                            python_script_created_statement,
-                            deleted_file_statement,
-                            scenes_linked_statement,
-                            no_available_timeline_space_message,
-                            no_available_timeline_space_statement,
-                            checking_available_timeline_space_statement,
-                            shot_folder,
-                            shot_file,
-                            saving_to_json_statement,
-                            saved_to_json_statement,
-                            audio_sync_file,
-                            starting_shot_audio_sync_statement,
-                            ressources_folder,
-                            startup_files_folder,
-                            shot_startup_file,
-                            copying_file_statement,
-                            folder_created_statement,
-                        )
+
 
 
 # link proper scene, thread endfunction
@@ -60,7 +37,6 @@ def linkSceneToStrip(strip, lib_file, scene_name, python_script, debug):
 
     # delete the python temp
     suppressExistingFile(python_script)
-    if debug: print(deleted_file_statement + python_script) #debug
 
 
 class BPMCreateShot(bpy.types.Operator):
@@ -84,6 +60,30 @@ class BPMCreateShot(bpy.types.Operator):
         from ..functions.audio_sync_functions import syncAudioEdit
         from ..functions.shot_settings_json_update_function import updateShotSettingsProperties
         from ..functions.threading_functions import launchSeparateThread
+        from ..global_variables import (
+                                    creating_shot_statement, 
+                                    python_temp, 
+                                    shot_setup_file, 
+                                    launching_command_statement, 
+                                    creating_python_script_statement,
+                                    python_script_created_statement,
+                                    deleted_file_statement,
+                                    scenes_linked_statement,
+                                    no_available_timeline_space_message,
+                                    no_available_timeline_space_statement,
+                                    checking_available_timeline_space_statement,
+                                    shot_folder,
+                                    shot_file,
+                                    saving_to_json_statement,
+                                    saved_to_json_statement,
+                                    audio_sync_file,
+                                    starting_shot_audio_sync_statement,
+                                    ressources_folder,
+                                    startup_files_folder,
+                                    shot_startup_file,
+                                    copying_file_statement,
+                                    folder_created_statement,
+                                )
 
 
         winman = context.window_manager
@@ -147,6 +147,11 @@ class BPMCreateShot(bpy.types.Operator):
         replaceContentInPythonScript(shot_setup_file, temp_python_script, replacement_list)
         if general_settings.debug: print(python_script_created_statement) #debug
 
+        # launch the blend command
+        # command = buildBlenderCommandBackgroundPython(temp_python_script, next_shot_file, "")
+        # launchCommand(command)
+        # if general_settings.debug: print(launching_command_statement + command) #debug
+
         # link shot
         scene_list = linkExternalScenes(next_shot_file)
         if general_settings.debug: print(scenes_linked_statement + next_shot_file) #debug
@@ -164,10 +169,7 @@ class BPMCreateShot(bpy.types.Operator):
             frame_start=start
             )
 
-        # set end frame
-        #linked_strip.frame_final_duration = duration
-
-        # set its settings
+        # set strip settings
         shot_settings = linked_strip.bpm_shotsettings
 
         shot_settings.shot_filepath = json_dataset['shot_filepath']
@@ -181,8 +183,6 @@ class BPMCreateShot(bpy.types.Operator):
         # launch the blend command
         command = buildBlenderCommandBackgroundPython(temp_python_script, next_shot_file, "")
         if general_settings.debug: print(launching_command_statement + command) #debug
-
-        #launchCommand(command)
         launchSeparateThread([command, general_settings.debug, linkSceneToStrip, linked_strip, next_shot_file, name, temp_python_script, general_settings.debug])
 
         # # delete the python temp
