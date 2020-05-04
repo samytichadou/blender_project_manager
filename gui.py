@@ -452,6 +452,12 @@ class BPM_PT_properties_asset_panel(bpy.types.Panel):
                 row = col.row(align=True)
                 row.prop(i, 'bpm_isasset', text=i.name)
 
+            box.label(text = 'Nodegroups', icon = 'NODETREE')
+            col = box.column(align=True)
+            for i in bpy.data.node_groups:
+                row = col.row(align=True)
+                row.prop(i, 'bpm_isasset', text=i.name)
+
             box.label(text = 'Worlds', icon = 'WORLD')
             col = box.column(align=True)
             for i in bpy.data.worlds:
