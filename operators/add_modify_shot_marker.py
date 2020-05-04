@@ -1,6 +1,11 @@
 import bpy
 
 
+# reload library
+def reloadLibrary(library):
+    library.reload()
+
+
 class BPMAddModifyShotMarker(bpy.types.Operator):
     """Add or modify shot marker to active strip"""
     bl_idname = "bpm.add_modify_shot_marker"
@@ -66,6 +71,7 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
         from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
         from ..functions.project_data_functions import getArgumentForPythonScript
         from ..functions.strip_functions import getShotMarkerPosition
+        from ..functions.threading_functions import launchSeparateThread
         from ..global_variables import (
                                     launching_command_statement,
                                     add_modify_marker_file,
@@ -74,7 +80,7 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
                                     edited_shot_marker_statement,
                                 )
 
-        winman = context.window_manager
+        debug = context.window_manager.bpm_generalsettings.debug
         active = context.scene.sequence_editor.active_strip
         strip_scn = active.scene
         library = strip_scn.library
@@ -87,7 +93,7 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
             else:
                 behaviour = "DELETE"
         
-        if winman.bpm_generalsettings.debug: print(start_edit_shot_marker_statement) #debug
+        if debug: print(start_edit_shot_marker_statement) #debug
 
         # get the filepath and the scene
         filepath = absolutePath(library.filepath)
@@ -98,18 +104,16 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
         # build command
         arguments = getArgumentForPythonScript([self.name, shot_frame, behaviour])
 
-        if winman.bpm_generalsettings.debug: print(editing_shot_marker_statement + behaviour + " - " + self.name + " - frame " + str(shot_frame)) #debug
+        if debug: print(editing_shot_marker_statement + behaviour + " - " + self.name + " - frame " + str(shot_frame)) #debug
 
         # build command
         command = buildBlenderCommandBackgroundPython(add_modify_marker_file, filepath, arguments)
 
         # launch command
-        if winman.bpm_generalsettings.debug: print(launching_command_statement + command) #debug
-        launchCommand(command)
+        if debug: print(launching_command_statement + command) #debug
+        launchSeparateThread([command, debug, reloadLibrary, library])
+        #launchCommand(command)
 
-        # reload library
-        library.reload()
-
-        if winman.bpm_generalsettings.debug: print(edited_shot_marker_statement) #debug
+        if debug: print(edited_shot_marker_statement) #debug
 
         return {'FINISHED'}
