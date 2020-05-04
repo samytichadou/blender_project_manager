@@ -55,6 +55,7 @@ class BPMCreateShot(bpy.types.Operator):
         from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
         from ..functions.audio_sync_functions import syncAudioEdit
         from ..functions.shot_settings_json_update_function import updateShotSettingsProperties
+        from ..functions.threading_functions import launchSeparateThread
 
 
         winman = context.window_manager
@@ -124,6 +125,7 @@ class BPMCreateShot(bpy.types.Operator):
         if general_settings.debug: print(launching_command_statement + command) #debug
 
         launchCommand(command)
+        #launchSeparateThread([command, general_settings.debug])
 
         # delete the python temp
         suppressExistingFile(temp_python_script)

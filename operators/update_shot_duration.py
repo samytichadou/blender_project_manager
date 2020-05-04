@@ -53,6 +53,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
         from ..functions.audio_sync_functions import syncAudioEdit
         from ..functions.change_strip_display_mode_functions import updateShotDisplayMode
         from ..functions.shot_settings_json_update_function import updateShotSettingsProperties
+        from ..functions.threading_functions import launchSeparateThread
         
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
@@ -99,7 +100,8 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                         if general_settings.debug: print(launching_command_statement + command) #debug
 
                         # launch command
-                        launchCommand(command)
+                        #launchCommand(command)
+                        launchSeparateThread([command, general_settings.debug])
 
                         # update shot settings and save json
                         shot_settings.shot_frame_start = new_start
