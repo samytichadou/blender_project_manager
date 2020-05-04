@@ -544,7 +544,7 @@ class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
 
 # open folder menu
 class BPM_MT_OpenFolder_Menu(bpy.types.Menu):
-    bl_label = "BPM Open Folders"
+    bl_label = "Open Folders"
     bl_idname = "BPM_MT_OpenFolder_Menu"
 
     def draw(self, context):
@@ -553,15 +553,47 @@ class BPM_MT_OpenFolder_Menu(bpy.types.Menu):
         drawOpenFoldersPanel(layout, False)
 
 
-# right click sequencer menu
-def drawRightClickMenu(self, context):
-    general_settings = context.window_manager.bpm_generalsettings
-    if general_settings.is_project and general_settings.file_type == 'EDIT':
+# right click sequencer general menu
+class BPM_MT_RightClickSequencerManagement_Menu(bpy.types.Menu):
+    bl_label = "BPM Management"
+    bl_idname = "BPM_MT_RightClickSequencerManagement_Menu"
+
+    def draw(self, context):
         layout = self.layout
+
+        layout.operator('bpm.create_shot')
+        layout.operator('bpm.synchronize_audio_edit')
+        layout.operator('bpm.refresh_shot_datas_edit')
+
+
+# right click sequencer active shot menu
+class BPM_MT_RightClickSequencerShot_Menu(bpy.types.Menu):
+    bl_label = "BPM Active Shot"
+    bl_idname = "BPM_MT_RightClickSequencerShot_Menu"
+
+    def draw(self, context):
+        layout = self.layout
+        
         layout.operator('bpm.open_shot')
         layout.operator('bpm.update_shot_duration')
-        #layout.operator('bpm.add_modify_shot_marker')
         layout.operator('bpm.bump_shot_version_edit')
-        #layout.operator('bpm.change_shot_version_edit')
-        #layout.operator('bpm.change_shot_version_edit').go_to_last_version=True
+
+
+# right click sequencer menu
+def drawRightClickSequencerMenu(self, context):
+    general_settings = context.window_manager.bpm_generalsettings
+    scn = context.scene
+
+    if general_settings.is_project and general_settings.file_type == 'EDIT':
+
+        layout = self.layout
+        layout.menu('BPM_MT_RightClickSequencerManagement_Menu')
+
+        if scn.sequence_editor.active_strip:
+            active_strip = scn.sequence_editor.active_strip
+            if active_strip.type in {'SCENE', 'IMAGE'}:
+                if active_strip.bpm_shotsettings.is_shot:
+
+                    layout.menu('BPM_MT_RightClickSequencerShot_Menu')
+
         layout.separator()

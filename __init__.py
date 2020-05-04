@@ -137,6 +137,8 @@ classes = (BPMOpenShot,
             BPM_UL_Asset_UI_List,
             BPM_PT_properties_asset_library_panel,
             BPM_MT_OpenFolder_Menu,
+            BPM_MT_RightClickSequencerManagement_Menu,
+            BPM_MT_RightClickSequencerShot_Menu,
             )
 
 
@@ -194,7 +196,7 @@ def register():
 
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.prepend(bpmTopbarFunction)
-    bpy.types.SEQUENCER_MT_context_menu.prepend(drawRightClickMenu)
+    bpy.types.SEQUENCER_MT_context_menu.prepend(drawRightClickSequencerMenu)
 
 
 def unregister():
@@ -233,4 +235,4 @@ def unregister():
 
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.remove(bpmTopbarFunction)
-    bpy.types.SEQUENCER_MT_context_menu.remove(drawRightClickMenu)
+    bpy.types.SEQUENCER_MT_context_menu.remove(drawRightClickSequencerMenu)
