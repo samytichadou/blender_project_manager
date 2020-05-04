@@ -3,6 +3,66 @@ import os
 import shutil
 
 
+from ..functions.file_functions import (    
+                                    linkExternalScenes,
+                                    getNextShot, 
+                                    createDirectory, 
+                                    replaceContentInPythonScript, 
+                                    suppressExistingFile,
+                                    absolutePath,
+                                    createShotRenderFolders,
+                                )
+from ..functions.utils_functions import clearDataUsers
+from ..global_variables import (
+                            creating_shot_statement, 
+                            python_temp, 
+                            shot_setup_file, 
+                            launching_command_statement, 
+                            creating_python_script_statement,
+                            python_script_created_statement,
+                            deleted_file_statement,
+                            scenes_linked_statement,
+                            no_available_timeline_space_message,
+                            no_available_timeline_space_statement,
+                            checking_available_timeline_space_statement,
+                            shot_folder,
+                            shot_file,
+                            saving_to_json_statement,
+                            saved_to_json_statement,
+                            audio_sync_file,
+                            starting_shot_audio_sync_statement,
+                            ressources_folder,
+                            startup_files_folder,
+                            shot_startup_file,
+                            copying_file_statement,
+                            folder_created_statement,
+                        )
+
+
+# link proper scene, thread endfunction
+def linkSceneToStrip(strip, lib_file, scene_name, python_script, debug):
+    scene_list = linkExternalScenes(lib_file)
+    old_scene_name = strip.scene.name
+
+    for s in scene_list:
+        if s == scene_name:
+
+            # relink proper scene
+            strip.scene = bpy.data.scenes[s]
+
+            # remove old scene and reload lib
+            for scn in bpy.data.scenes:
+                if scn.library:
+                    if scn.name == old_scene_name and absolutePath(scn.library.filepath) == lib_file:
+                        clearDataUsers(scn)
+                        bpy.data.scenes.remove(scn, do_unlink = False)
+            break
+
+    # delete the python temp
+    suppressExistingFile(python_script)
+    if debug: print(deleted_file_statement + python_script) #debug
+
+
 class BPMCreateShot(bpy.types.Operator):
     """Create Shot from Timeline"""
     bl_idname = "bpm.create_shot"
@@ -17,38 +77,6 @@ class BPMCreateShot(bpy.types.Operator):
 
     def execute(self, context):
         # import statements and functions
-        from ..global_variables import (creating_shot_statement, 
-                                    python_temp, 
-                                    shot_setup_file, 
-                                    launching_command_statement, 
-                                    creating_python_script_statement,
-                                    python_script_created_statement,
-                                    deleted_file_statement,
-                                    scenes_linked_statement,
-                                    no_available_timeline_space_message,
-                                    no_available_timeline_space_statement,
-                                    checking_available_timeline_space_statement,
-                                    shot_folder,
-                                    shot_file,
-                                    saving_to_json_statement,
-                                    saved_to_json_statement,
-                                    audio_sync_file,
-                                    starting_shot_audio_sync_statement,
-                                    ressources_folder,
-                                    startup_files_folder,
-                                    shot_startup_file,
-                                    copying_file_statement,
-                                    folder_created_statement,
-                                )
-        from ..functions.file_functions import (
-                                            getNextShot, 
-                                            createDirectory, 
-                                            replaceContentInPythonScript, 
-                                            suppressExistingFile, 
-                                            linkExternalScenes, 
-                                            absolutePath,
-                                            createShotRenderFolders,
-                                        )
         from ..functions.project_data_functions import getShotPattern, getScriptReplacementListShotCreation
         from ..functions.command_line_functions import buildBlenderCommandBackgroundPython, launchCommand
         from ..functions.strip_functions import returnAvailablePositionStripChannel, deselectAllStrips
@@ -105,7 +133,6 @@ class BPMCreateShot(bpy.types.Operator):
         json_dataset['shot_folder'] = next_shot_folder
         json_dataset['shot_filepath'] = bpy.path.relpath(next_shot_file)
 
-        # create json file
         create_json_file(json_dataset, shot_json)
 
         if general_settings.debug: print(saved_to_json_statement) #debug
@@ -120,44 +147,53 @@ class BPMCreateShot(bpy.types.Operator):
         replaceContentInPythonScript(shot_setup_file, temp_python_script, replacement_list)
         if general_settings.debug: print(python_script_created_statement) #debug
 
-        # launch the blend command
-        command = buildBlenderCommandBackgroundPython(temp_python_script, next_shot_file, "")
-        if general_settings.debug: print(launching_command_statement + command) #debug
-
-        launchCommand(command)
-        #launchSeparateThread([command, general_settings.debug])
-
-        # delete the python temp
-        suppressExistingFile(temp_python_script)
-        if general_settings.debug: print(deleted_file_statement + temp_python_script) #debug
-
-        # create render folders
-        createShotRenderFolders(next_shot_file, winman)
-
         # link shot
-        linkExternalScenes(next_shot_file)
+        scene_list = linkExternalScenes(next_shot_file)
         if general_settings.debug: print(scenes_linked_statement + next_shot_file) #debug
+
+        # set temp scene to link
+        scn_to_link = bpy.data.scenes[scene_list[0]]
+        scn_to_link.frame_start = project_datas.shot_start_frame
+        scn_to_link.frame_end = project_datas.shot_start_frame + duration
 
         # add it to timeline
         linked_strip = sequencer.sequences.new_scene(
             name=name, 
-            scene=bpy.data.scenes[name], 
+            scene=scn_to_link, 
             channel=channel, 
             frame_start=start
             )
-        linked_strip.bpm_shotsettings.is_shot = True
-        linked_strip.bpm_shotsettings.shot_folder = next_shot_folder
-        sequencer.active_strip = linked_strip
+
+        # set end frame
+        #linked_strip.frame_final_duration = duration
 
         # set its settings
         shot_settings = linked_strip.bpm_shotsettings
+
         shot_settings.shot_filepath = json_dataset['shot_filepath']
         shot_settings.shot_frame_start = project_datas.shot_start_frame
-        shot_settings.shot_frame_end = project_datas.shot_start_frame + project_datas.default_shot_length
-
+        shot_settings.shot_frame_end = project_datas.shot_start_frame + duration
+        linked_strip.bpm_shotsettings.is_shot = True
+        linked_strip.bpm_shotsettings.shot_folder = next_shot_folder
+        
         updateShotSettingsProperties(shot_settings, context)
 
+        # launch the blend command
+        command = buildBlenderCommandBackgroundPython(temp_python_script, next_shot_file, "")
+        if general_settings.debug: print(launching_command_statement + command) #debug
+
+        #launchCommand(command)
+        launchSeparateThread([command, general_settings.debug, linkSceneToStrip, linked_strip, next_shot_file, name, temp_python_script, general_settings.debug])
+
+        # # delete the python temp
+        # suppressExistingFile(temp_python_script)
+        # if general_settings.debug: print(deleted_file_statement + temp_python_script) #debug
+
+        # create render folders
+        createShotRenderFolders(next_shot_file, winman)
+
         # select created strip
+        sequencer.active_strip = linked_strip
         deselectAllStrips(sequencer)
         linked_strip.select = True
 

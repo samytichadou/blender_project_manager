@@ -72,7 +72,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
                                     scene_not_found_statement,
                                 )
         from ..functions.file_functions import linkExternalScenes
-        from ..functions.utils_functions import clearLibraryUsers
+        from ..functions.utils_functions import clearDataUsers
         from ..functions.strip_functions import getListSequencerShots
 
         # variables
@@ -157,7 +157,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
                 bpy.data.scenes.remove(shot_scn, do_unlink = True)
 
                 # unlink old lib
-                clearLibraryUsers(shot_lib)
+                clearDataUsers(shot_lib)
                 bpy.data.orphans_purge()
                 if general_settings.debug: print(library_cleared_statement + old_version_shot_filepath) #debug
 

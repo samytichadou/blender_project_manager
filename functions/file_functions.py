@@ -126,7 +126,11 @@ def replaceContentInPythonScript(python_script_in, python_script_out, replacemen
 def linkExternalScenes(filepath):
     try: #debug
         with bpy.data.libraries.load(filepath, link=True, relative=True) as (data_from, data_to):
+            scene_list = []
             data_to.scenes = data_from.scenes
+            for s in data_to.scenes:
+                scene_list.append(s)
+            return scene_list
     except OSError as err: #debug
         print("OS error: {0}".format(err)) #debug
 
@@ -147,7 +151,7 @@ def getBlendName():
 
 # link asset libraries
 def linkAssetLibrary(filepath, asset, debug):
-    from .utils_functions import clearLibraryUsers, ensureCollectionExists
+    from .utils_functions import clearDataUsers, ensureCollectionExists
     from ..global_variables import(
                                 library_cleared_statement,
                                 asset_linked_statement,
@@ -210,7 +214,7 @@ def linkAssetLibrary(filepath, asset, debug):
     # remove lib if nothing imported
     if len(imported) == 0:
 
-        clearLibraryUsers(bpy.data.libraries[blend_name])
+        clearDataUsers(bpy.data.libraries[blend_name])
         bpy.data.orphans_purge()
 
         if debug: print(library_cleared_statement + blend_name) #debug

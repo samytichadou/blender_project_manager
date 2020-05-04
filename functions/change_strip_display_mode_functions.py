@@ -11,7 +11,7 @@ from .file_functions import (
                         returnRenderFilePathFromShot, 
                         suppressExistingFile,
                     )
-from .utils_functions import clearLibraryUsers
+from .utils_functions import clearDataUsers
 from .strip_functions import getListSequencerShots
 from .dataset_functions import setPropertiesFromDataset
 from .project_data_functions import returnRenderExtensionFromSettings
@@ -139,7 +139,7 @@ def updateStripToImageSequence(strip, sequencer, sequence_folder, winman):
         if lib not in lib_used:
             if debug: print(library_cleared_statement + lib.filepath) #debug
 
-            clearLibraryUsers(lib)
+            clearDataUsers(lib)
             bpy.data.orphans_purge()
 
     # set frame offset

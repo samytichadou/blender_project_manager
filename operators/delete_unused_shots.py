@@ -96,7 +96,7 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
                         )
         from ..functions.project_data_functions import findLibFromShot
         
-        from ..functions.utils_functions import clearLibraryUsers
+        from ..functions.utils_functions import clearDataUsers
 
         general_settings = context.window_manager.bpm_generalsettings
 
@@ -147,7 +147,7 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
             # remove libraries
             lib = findLibFromShot(shot_folder_name)
             if lib is not None:
-                clearLibraryUsers(lib)
+                clearDataUsers(lib)
                 bpy.data.orphans_purge()
         
         return {'FINISHED'}

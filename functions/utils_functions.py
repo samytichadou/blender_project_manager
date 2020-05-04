@@ -16,13 +16,16 @@ def listDifference(li1, li2):
 
 
 # clear lib user
-def clearLibraryUsers(lib):
+def clearDataUsers(lib):
     lib.use_fake_user = False
     while lib.users != 0:
         lib.user_clear()
-    for datas in lib.users_id:
-        datas.use_fake_user = False
-        datas.user_clear()
+    try:
+        for datas in lib.users_id:
+            datas.use_fake_user = False
+            datas.user_clear()
+    except AttributeError:
+        pass
 
 
 # get host name

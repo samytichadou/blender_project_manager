@@ -1,7 +1,7 @@
 import bpy
 
 
-# reload library
+# reload library, thread endfunction
 def reloadLibrary(library):
     library.reload()
 
