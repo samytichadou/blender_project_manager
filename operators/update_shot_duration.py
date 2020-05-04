@@ -67,6 +67,8 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
         if general_settings.debug: print(start_update_shot_statement) #debug
 
+        chk_updated = False
+
         for strip in returnShotStrips(sequencer):
 
             if strip.select or strip == active:
@@ -90,6 +92,8 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
                     else:
 
+                        chk_updated = True
+
                         filepath = absolutePath(strip.bpm_shotsettings.shot_filepath)
 
                         arguments = getArgumentForPythonScript([new_start, new_end])
@@ -101,7 +105,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
                         # launch command
                         #launchCommand(command)
-                        launchSeparateThread([command, general_settings.debug])
+                        launchSeparateThread([command, general_settings.debug, None])
 
                         # update shot settings and save json
                         shot_settings.shot_frame_start = new_start
@@ -135,16 +139,19 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                         
                 elif general_settings.debug: print(no_update_needed_statement) #debug
 
-        # set back active strip if needed
-        if new_active is not None:
-            sequencer.active_strip = new_active
 
-        # update audio sync if existing
-        audio_sync_filepath = os.path.join(project_folder, audio_sync_file)
-        if os.path.isfile(audio_sync_filepath):
-            syncAudioEdit(general_settings.debug, project_folder, scn)
-        
-        # reload sequencer if needed
-        bpy.ops.sequencer.refresh_all()
+        if chk_updated:
+            
+            # set back active strip if needed
+            if new_active is not None:
+                sequencer.active_strip = new_active
+
+            # update audio sync if existing
+            audio_sync_filepath = os.path.join(project_folder, audio_sync_file)
+            if os.path.isfile(audio_sync_filepath):
+                syncAudioEdit(general_settings.debug, project_folder, scn)
+            
+            # reload sequencer if needed
+            bpy.ops.sequencer.refresh_all()
 
         return {'FINISHED'}
