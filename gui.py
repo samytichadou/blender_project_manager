@@ -284,20 +284,6 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         drawDebugPanel(layout, shot_settings, general_settings)#debug
 
 
-# draw asset library
-def drawAssetLibrary(container, winman):
-
-    general_settings = winman.bpm_generalsettings
-
-    drawOperatorAndHelp(container, 'bpm.create_asset', '', 'Asset-Management')
-
-    container.prop(general_settings, 'panel_asset_display', text="Display")
-
-    container.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
-
-    drawOperatorAndHelp(container, 'bpm.open_asset_file', 'FILE_FOLDER', 'Asset-Management')
-
-
 # sequencer assets panel
 class BPM_PT_sequencer_asset_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
@@ -375,17 +361,38 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
 
 
-# asset library panel
-class BPM_PT_properties_asset_library_panel(bpy.types.Panel):
+# draw asset library
+def drawAssetLibrary(container, winman):
+
+    general_settings = winman.bpm_generalsettings
+
+    drawOperatorAndHelp(container, 'bpm.create_asset', '', 'Asset-Management')
+
+    container.prop(general_settings, 'panel_asset_display', text="Display")
+
+    container.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
+
+    drawOperatorAndHelp(container, 'bpm.open_asset_file', 'FILE_FOLDER', 'Asset-Management')
+
+
+# asset library viewport panel
+class BPM_PT_properties_asset_library_viewport_panel(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "BPM"
     bl_label = "Assets Library"
-    bl_idname = "BPM_PT_properties_asset_library_panel"
+    bl_idname = "BPM_PT_properties_asset_library_viewport_panel"
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        if general_settings.is_project:
+            if general_settings.file_type == 'SHOT':
+                return True
+            elif general_settings.file_type == 'ASSET':
+                if winman.bpm_assetsettings.asset_type not in {'NODEGROUP', 'MATERIAL'}:
+                    return True
 
     def draw(self, context):
         winman = context.window_manager
@@ -400,17 +407,97 @@ class BPM_PT_properties_asset_library_panel(bpy.types.Panel):
             drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
 
 
-# asset settings panel
-class BPM_PT_properties_asset_panel(bpy.types.Panel):
+# asset library nodetree panel
+class BPM_PT_properties_asset_library_nodetree_panel(bpy.types.Panel):
+    bl_space_type = 'NODE_EDITOR'
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_label = "Assets Library"
+    bl_idname = "BPM_PT_properties_asset_library_nodetree_panel"
+
+    @classmethod
+    def poll(cls, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        asset_settings = winman.bpm_assetsettings
+        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type in {'NODEGROUP', 'MATERIAL'}
+
+    def draw(self, context):
+        winman = context.window_manager
+
+        layout = self.layout
+
+        drawOpenedWarning(layout, winman.bpm_generalsettings)
+
+        drawAssetLibrary(layout, winman)
+
+        if winman.bpm_generalsettings.file_type == 'SHOT':
+            drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
+
+
+# draw asset settings prop panel
+def drawPropertiesAssetPanel(container, asset_settings, general_settings):
+
+    drawOpenedWarning(container, general_settings)
+
+    container.prop(asset_settings, 'asset_type')
+    container.prop(asset_settings, 'asset_state')
+
+    if asset_settings.asset_type == 'SHADER': target_prop = 'asset_material'
+    elif asset_settings.asset_type == 'NODEGROUP': target_prop = 'asset_nodegroup'
+    elif asset_settings.asset_type == 'WORLD': target_prop = 'asset_world'
+    else: target_prop = 'asset_collection'
+
+    container.prop(asset_settings, target_prop, text='')
+    container.label(text = "Manually update when changing collection name", icon = "INFO")
+    
+    drawDebugPanel(container, asset_settings, general_settings) #debug
+    
+    if general_settings.show_debug_props:
+        #debug
+        box = container.box()
+
+        box.label(text = 'Debug', icon = 'ERROR')
+
+        box.label(text = 'Collections', icon = 'GROUP')
+        col = box.column(align=True)
+        for i in bpy.data.collections:
+            row = col.row(align=True)
+            row.prop(i, 'bpm_isasset', text=i.name)
+
+        box.label(text = 'Materials', icon = 'MATERIAL')
+        col = box.column(align=True)
+        for i in bpy.data.materials:
+            row = col.row(align=True)
+            row.prop(i, 'bpm_isasset', text=i.name)
+
+        box.label(text = 'Nodegroups', icon = 'NODETREE')
+        col = box.column(align=True)
+        for i in bpy.data.node_groups:
+            row = col.row(align=True)
+            row.prop(i, 'bpm_isasset', text=i.name)
+
+        box.label(text = 'Worlds', icon = 'WORLD')
+        col = box.column(align=True)
+        for i in bpy.data.worlds:
+            row = col.row(align=True)
+            row.prop(i, 'bpm_isasset', text=i.name)
+
+
+# asset settings viewport panel
+class BPM_PT_properties_asset_viewport_panel(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "BPM"
     bl_label = "Asset settings"
-    bl_idname = "BPM_PT_properties_asset_panel"
+    bl_idname = "BPM_PT_properties_asset_viewport_panel"
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'ASSET'
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        asset_settings = winman.bpm_assetsettings
+        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type not in {'NODEGROUP', 'MATERIAL'}
 
     def draw(self, context):
         winman = context.window_manager
@@ -419,50 +506,32 @@ class BPM_PT_properties_asset_panel(bpy.types.Panel):
 
         layout = self.layout
 
-        drawOpenedWarning(layout, general_settings)
+        drawPropertiesAssetPanel(layout, asset_settings, general_settings)
 
-        layout.prop(asset_settings, 'asset_type')
-        layout.prop(asset_settings, 'asset_state')
 
-        if asset_settings.asset_type == 'SHADER': target_prop = 'asset_material'
-        elif asset_settings.asset_type == 'NODEGROUP': target_prop = 'asset_nodegroup'
-        elif asset_settings.asset_type == 'WORLD': target_prop = 'asset_world'
-        else: target_prop = 'asset_collection'
+# asset settings nodetree panel
+class BPM_PT_properties_asset_nodetree_panel(bpy.types.Panel):
+    bl_space_type = 'NODE_EDITOR'
+    bl_region_type = 'UI'
+    bl_category = "BPM"
+    bl_label = "Asset settings"
+    bl_idname = "BPM_PT_properties_asset_nodetree_panel"
 
-        layout.prop(asset_settings, target_prop, text='')
-        layout.label(text = "Manually update when changing collection name", icon = "INFO")
-        
-        drawDebugPanel(layout, asset_settings, general_settings) #debug
-        
-        if general_settings.show_debug_props:
-            #debug
-            box = layout.box()
+    @classmethod
+    def poll(cls, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        asset_settings = winman.bpm_assetsettings
+        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type in {'NODEGROUP', 'MATERIAL'}
 
-            box.label(text = 'Debug', icon = 'ERROR')
+    def draw(self, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        asset_settings = winman.bpm_assetsettings
 
-            box.label(text = 'Collections', icon = 'GROUP')
-            col = box.column(align=True)
-            for i in bpy.data.collections:
-                row = col.row(align=True)
-                row.prop(i, 'bpm_isasset', text=i.name)
+        layout = self.layout
 
-            box.label(text = 'Materials', icon = 'MATERIAL')
-            col = box.column(align=True)
-            for i in bpy.data.materials:
-                row = col.row(align=True)
-                row.prop(i, 'bpm_isasset', text=i.name)
-
-            box.label(text = 'Nodegroups', icon = 'NODETREE')
-            col = box.column(align=True)
-            for i in bpy.data.node_groups:
-                row = col.row(align=True)
-                row.prop(i, 'bpm_isasset', text=i.name)
-
-            box.label(text = 'Worlds', icon = 'WORLD')
-            col = box.column(align=True)
-            for i in bpy.data.worlds:
-                row = col.row(align=True)
-                row.prop(i, 'bpm_isasset', text=i.name)
+        drawPropertiesAssetPanel(layout, asset_settings, general_settings)
 
 
 # bpm function topbar back/open operators
