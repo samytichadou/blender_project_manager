@@ -39,6 +39,7 @@ import bpy
 ##################################
 
 from .startup_handler import bpmStartupHandler
+from .timer_function import bpmTimerFunction
 from .functions.lock_file_functions import deleteLockFileHandler
 from .functions.filebrowser_update_function import updateFilebrowserPath
 
@@ -236,3 +237,7 @@ def unregister():
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.remove(bpmTopbarFunction)
     bpy.types.SEQUENCER_MT_context_menu.remove(drawRightClickSequencerMenu)
+
+    ### TIMER ###
+    if bpy.app.timers.is_registered(bpmTimerFunction):
+         bpy.app.timers.unregister(bpmTimerFunction)
