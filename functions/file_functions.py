@@ -207,13 +207,13 @@ def linkAssetLibrary(filepath, asset, debug):
     else:
         name = asset.asset_collection
 
-        link_to_coll = ensureCollectionExists(bpy.context.scene, asset_type)
-
         with lib as (data_from, data_to):
             data_to.collections = data_from.collections
 
         for new_coll in data_to.collections:
             if new_coll.bpm_isasset and new_coll.name == name:
+
+                link_to_coll = ensureCollectionExists(bpy.context.scene, asset_type)
 
                 if debug: print(asset_linked_statement + new_coll.name) #debug
 
