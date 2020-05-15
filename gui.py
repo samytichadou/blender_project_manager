@@ -450,6 +450,10 @@ def drawPropertiesAssetPanel(container, asset_settings, general_settings):
 
     container.prop(asset_settings, target_prop, text='')
     container.label(text = "Manually update when changing collection name", icon = "INFO")
+
+    row = container.row(align=True)
+    row.menu('BPM_MT_OpenFolder_Menu')
+    drawWikiHelp(row, 'Project-Architecture')
     
     drawDebugPanel(container, asset_settings, general_settings) #debug
     
