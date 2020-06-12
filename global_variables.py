@@ -132,6 +132,7 @@ timer_function_processing_statement = bpm_statement + "Timer function processing
 thread_start_statement = bpm_statement + "Starting new thread"
 thread_end_statement = bpm_statement + "Thread ended"
 thread_end_function_statement = bpm_statement + "Starting thread end function"
+thread_error_statement = bpm_statement + "Error in thread, aborted"
 
 
 # timeline statements

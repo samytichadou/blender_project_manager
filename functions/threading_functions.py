@@ -3,7 +3,7 @@ import subprocess
 import threading
 
 
-from ..global_variables import thread_start_statement, thread_end_statement, thread_end_function_statement
+from ..global_variables import thread_start_statement, thread_end_statement, thread_end_function_statement, thread_error_statement
 
 
 # launch command in separate thread
@@ -13,15 +13,22 @@ def launchCommandFunction(command, debug, endfunction, *endfunction_args):
 
     # launch command
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    
+    previous = ""
 
     # check on it
     while True:
         line = process.stdout.readline()
 
         if line != '' :
-            if debug : print(line) #debug
+            if line != previous:
+                if debug : print(line) #debug
             if b"Blender quit" in line :
                 break
+            elif b"EXCEPTION_ACCESS_VIOLATION" in line:
+                if debug: print(thread_error_statement) #debug
+                break
+            previous = line
         else:
             break
     
