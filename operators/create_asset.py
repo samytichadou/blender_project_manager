@@ -20,7 +20,11 @@ class BPMCreateAsset(bpy.types.Operator):
             return context.window_manager.bpm_generalsettings.is_project
 
     def invoke(self, context, event):
-        return context.window_manager.invoke_props_dialog(self)
+        winman = context.window_manager
+        display_asset_type = winman.bpm_generalsettings.panel_asset_display
+        if display_asset_type != "ALL":
+            self.asset_type = display_asset_type
+        return winman.invoke_props_dialog(self)
  
     def draw(self, context):
         layout = self.layout
