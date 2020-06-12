@@ -168,7 +168,10 @@ def drawBpmSequencerCallbackPx():
 
     scn = context.scene
     scene_settings = scn.bpm_scenesettings
+
     date = context.window_manager.bpm_generalsettings.today_date
+    preview_date = formatDateFromYrMoDa(scene_settings.shot_deadline_preview_yr, scene_settings.shot_deadline_preview_mn, scene_settings.shot_deadline_preview_da)
+
     m_display = scene_settings.display_markers
     mn_display = scene_settings.display_marker_names
     
@@ -267,10 +270,11 @@ def drawBpmSequencerCallbackPx():
     indices_e_st_do = ()
     n_e_st_do = 0
 
-    #deadline preview
-    vertices_e_pr = ()
-    indices_e_pr = ()
-    n_e_pr = 0
+    #working strips
+    vertices_e_ws = ()
+    indices_e_ws = ()
+    n_e_ws = 0
+    color_e_ws = scene_settings.color_strip_working
 
     # info shot audio sync
     vertices_e_au = ()
@@ -296,6 +300,8 @@ def drawBpmSequencerCallbackPx():
     ### COMPUTE TIMELINE ###
     for strip in returnShotStrips(sequencer):
 
+        display_todo = False
+
         display_need_update = False             
 
         x1, y1, x2, y2 = getStripRectangle(strip)
@@ -306,11 +312,23 @@ def drawBpmSequencerCallbackPx():
         v4 = region.view2d.view_to_region(x2, y2, clip=False)
 
         # bpm todo shot
-        if scene_settings.display_shot_todo:
+        if scene_settings.display_shot_todo != "NONE":
 
             shot_deadline = getShotTaskDeadline(strip.bpm_shotsettings)[1]
 
-            if date == shot_deadline:
+            if scene_settings.display_shot_todo ==  'TODAY':
+                if shot_deadline == date:
+                    display_todo = True
+
+            elif scene_settings.display_shot_todo == 'UNTIL_TODAY':
+                if shot_deadline == date or returnPriorDate(shot_deadline, date):
+                    display_todo = True
+
+            elif scene_settings.display_shot_todo == 'SPECIFIC_DATE':
+                if shot_deadline == preview_date:
+                    display_todo = True
+
+            if display_todo:
 
                 v1td, v2td, v3td, v4td = getTodoZoneStrip(*v3)
 
@@ -385,25 +403,22 @@ def drawBpmSequencerCallbackPx():
                 n_e_st_do += 4
 
 
-        # bpm deadline preview
-        if scene_settings.display_shot_deadline_preview:
+        # bpm is working
+        if scene_settings.display_working_warning:
 
-            preview_date = formatDateFromYrMoDa(scene_settings.shot_deadline_preview_yr, scene_settings.shot_deadline_preview_mn, scene_settings.shot_deadline_preview_da)
-            shot_date = getShotTaskDeadline(strip.bpm_shotsettings)[1]
+            if strip.bpm_shotsettings.is_working:
+               
+                y1ws = y1 + strip_line_length
+                y2ws = y1ws + strip_line_length
 
-            if shot_date == preview_date or (scene_settings.shot_deadline_preview_until and returnPriorDate(shot_date, preview_date)):
-                
-                y1pr = y1 + strip_line_length
-                y2pr = y1pr + strip_line_length
+                v1ws = region.view2d.view_to_region(x1, y1ws, clip=False)
+                v2ws = region.view2d.view_to_region(x2, y1ws, clip=False)
+                v3ws = region.view2d.view_to_region(x1, y2ws, clip=False)
+                v4ws = region.view2d.view_to_region(x2, y2ws, clip=False)
 
-                v1pr = region.view2d.view_to_region(x1, y1pr, clip=False)
-                v2pr = region.view2d.view_to_region(x2, y1pr, clip=False)
-                v3pr = region.view2d.view_to_region(x1, y2pr, clip=False)
-                v4pr = region.view2d.view_to_region(x2, y2pr, clip=False)
-
-                vertices_e_pr += (v1pr, v2pr, v3pr, v4pr)
-                indices_e_pr += ((n_e_pr, n_e_pr + 1, n_e_pr + 2), (n_e_pr + 2, n_e_pr + 1, n_e_pr + 3))
-                n_e_pr += 4
+                vertices_e_ws += (v1ws, v2ws, v3ws, v4ws)
+                indices_e_ws += ((n_e_ws, n_e_ws + 1, n_e_ws + 2), (n_e_ws + 2, n_e_ws + 1, n_e_ws + 3))
+                n_e_ws += 4
 
         # bpm shot audio sync
         if scene_settings.display_audio_sync_warning:
@@ -490,8 +505,8 @@ def drawBpmSequencerCallbackPx():
         drawShader(vertices_e_st_do, indices_e_st_do, color_e_st_fi)
 
     #deadline preview
-    if scene_settings.display_shot_deadline_preview:
-        drawShader(vertices_e_pr, indices_e_pr, color_e_td)
+    if scene_settings.display_working_warning:
+        drawShader(vertices_e_ws, indices_e_ws, color_e_ws)
 
     # audio sync info
     if scene_settings.display_audio_sync_warning:

@@ -161,6 +161,10 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
             row.prop(scn_settings, 'display_shot_version_warning')
             row.prop(scn_settings, 'color_version_warning', text="")
 
+            row = box.row()
+            row.prop(scn_settings, 'display_working_warning')
+            row.prop(scn_settings, 'color_strip_working', text="")
+
             # markers
             box = layout.box()
             row = box.row()
@@ -186,24 +190,17 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
             row.label(text = "Scheduling")
 
             row = box.row()
-            row.prop(scn_settings, 'display_shot_todo')
+            row.prop(scn_settings, 'display_shot_todo', text="")
             row.prop(scn_settings, 'color_shot_todo', text="")
 
-            row = box.row()
-            row.prop(scn_settings, 'display_shot_deadline_preview')
-
-
             col = box.column()
-            if not scn_settings.display_shot_deadline_preview:
+            if scn_settings.display_shot_todo != "SPECIFIC_DATE":
                 col.enabled = False
 
             row = col.row(align=True)
             row.prop(scn_settings, 'shot_deadline_preview_yr', text = "")
             row.prop(scn_settings, 'shot_deadline_preview_mn', text = "")
             row.prop(scn_settings, 'shot_deadline_preview_da', text = "")
-
-            row = col.row()
-            row.prop(scn_settings, 'shot_deadline_preview_until')
 
 
 # sequencer shot panel
@@ -249,6 +246,8 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         row = layout.row(align=True)
         row.operator('bpm.change_shot_version_edit', text = "Last shot version").go_to_last_version = True
         row.operator('bpm.open_wiki_page', text='', icon='QUESTION').wiki_page = 'Shot-Version-Management'
+
+        drawOperatorAndHelp(layout, 'bpm.render_shot_edit', '', 'Shot-Rendering')
 
         layout.separator()
         layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))

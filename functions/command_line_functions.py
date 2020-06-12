@@ -3,13 +3,18 @@ import bpy, os
 
 # build blender command for launching with python script
 def buildBlenderCommandBackgroundPython(python_script, blend_file, arguments):
-    if blend_file:
-        blend_file = '"' + blend_file + '"'
-        
-    command = "%s %s --background --python %s" % ('"' + bpy.app.binary_path + '"', blend_file, '"' + python_script + '"')
+
+    command = "%s %s --background --python %s" % ('"' + bpy.app.binary_path + '"', '"'+ blend_file + '"', '"' + python_script + '"')
 
     if arguments != "":
         command += " -- %s" % (arguments)
+
+    return command
+
+# build blender command for rendering in background
+def buildBlenderCommandBackgroundRender(blend_file):
+
+    command = "%s -b %s -a" % ('"' + bpy.app.binary_path + '"', '"'+ blend_file + '"')
 
     return command
 

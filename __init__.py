@@ -65,6 +65,7 @@ from .operators.clear_lock_file_user import *
 from .operators.render_shot_playblast import *
 from .operators.modify_shot_tasks_deadlines import *
 from .operators.open_folder import *
+from .operators.render_shot_edit import *
 
 from .operators.display_modify_project_settings import *
 from .operators.save_project_settings_to_json import *
@@ -107,6 +108,7 @@ classes = (BPMOpenShot,
             BPMClearLockFileUser,
             BPMRenderShotPlayblast,
             BPMModifyShotTasksDeadline,
+            BPMRenderShotEdit,
 
             BPMOpenShotFolder,
             BPMOpenShotRenderFolder,

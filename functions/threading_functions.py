@@ -14,21 +14,21 @@ def launchCommandFunction(command, debug, endfunction, *endfunction_args):
     # launch command
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     
-    previous = ""
+    previous_line = ""
 
     # check on it
     while True:
         line = process.stdout.readline()
 
         if line != '' :
-            if line != previous:
+            if line != previous_line:
                 if debug : print(line) #debug
             if b"Blender quit" in line :
                 break
             elif b"EXCEPTION_ACCESS_VIOLATION" in line:
                 if debug: print(thread_error_statement) #debug
                 break
-            previous = line
+            previous_line = line
         else:
             break
     

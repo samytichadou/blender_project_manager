@@ -81,6 +81,8 @@ playing_playblast_statement = bpm_statement + "Playing playblast render"
 setting_usual_render_statement = bpm_statement + "Setting usual render back"
 completed_playblast_statement = bpm_statement + "Playblast successfully rendered"
 
+completed_render_statement = bpm_statement + "Render completed : "
+
 date_set_statement = bpm_statement + "Current date set"
 
 
