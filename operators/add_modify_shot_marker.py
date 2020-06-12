@@ -2,8 +2,9 @@ import bpy
 
 
 # reload library, thread endfunction
-def reloadLibrary(library):
+def modifyMarkerEndFunction(strip, library):
     library.reload()
+    strip.bpm_shotsettings.is_working = False
 
 
 class BPMAddModifyShotMarker(bpy.types.Operator):
@@ -85,6 +86,10 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
         strip_scn = active.scene
         library = strip_scn.library
 
+        # set strip working
+        active.bpm_shotsettings.is_working = True
+        bpy.ops.sequencer.refresh_all()
+
         if not self.existing_marker: 
             behaviour = "ADD"
         else:
@@ -111,7 +116,7 @@ class BPMAddModifyShotMarker(bpy.types.Operator):
 
         # launch command
         if debug: print(launching_command_statement + command) #debug
-        launchSeparateThread([command, debug, reloadLibrary, library])
+        launchSeparateThread([command, debug, modifyMarkerEndFunction, active, library])
         #launchCommand(command)
 
         if debug: print(edited_shot_marker_statement) #debug

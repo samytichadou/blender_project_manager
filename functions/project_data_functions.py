@@ -218,7 +218,7 @@ def getShotSettingsFileFromBlend():
 # refresh all shot strips in timeline from json shot files
 def refreshTimelineShotDatas(winman, sequencer):
     general_settings = winman.bpm_generalsettings
-    avoid_list = ('is_shot', 'shot_version', 'not_last_version')
+    avoid_list = ('is_shot', 'shot_version', 'not_last_version', 'is_working')
 
     general_settings.bypass_update_tag = True
     # iterate through timeline strips

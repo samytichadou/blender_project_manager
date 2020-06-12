@@ -34,6 +34,10 @@ def linkSceneToStrip(strip, lib_file, scene_name, python_script, debug):
                         clearDataUsers(scn)
                         bpy.data.scenes.remove(scn, do_unlink = False)
             break
+    
+    # strip not working
+    strip.bpm_shotsettings.is_working = False
+    # bpy.ops.sequencer.refresh_all()
 
     # delete the python temp
     suppressExistingFile(python_script)
@@ -179,6 +183,8 @@ class BPMCreateShot(bpy.types.Operator):
         linked_strip.bpm_shotsettings.shot_folder = next_shot_folder
         
         updateShotSettingsProperties(shot_settings, context)
+        
+        shot_settings.is_working = True
 
         # launch the blend command
         command = buildBlenderCommandBackgroundPython(temp_python_script, next_shot_file, "")

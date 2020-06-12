@@ -5,6 +5,11 @@ import os
 from ..functions.file_functions import absolutePath
 
 
+def updateShotDurationEndFunction(strip):
+    strip.bpm_shotsettings.is_working = False
+    bpy.ops.sequencer.refresh_all()
+
+
 class BPMUpdateShotDuration(bpy.types.Operator):
     """Update selected shot(s) duration"""
     bl_idname = "bpm.update_shot_duration"
@@ -105,13 +110,15 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
                         # launch command
                         #launchCommand(command)
-                        launchSeparateThread([command, general_settings.debug, None])
+                        # launchSeparateThread([command, general_settings.debug, None])
 
                         # update shot settings and save json
                         shot_settings.shot_frame_start = new_start
                         shot_settings.shot_frame_end = new_end
 
                         updateShotSettingsProperties(shot_settings, context)
+
+                        shot_settings.is_working = True
 
                         general_settings.bypass_update_tag = True
 
@@ -122,18 +129,20 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
                             # update the strip
                             if strip == active:
-                                new_active = updateSceneStripOnTimeline(strip, winman)
+                                new_active = new_strip = updateSceneStripOnTimeline(strip, winman)
                             else:
-                                updateSceneStripOnTimeline(strip, winman)
+                                new_strip = updateSceneStripOnTimeline(strip, winman)
 
                         # update for image strip
                         elif strip.type == 'IMAGE':
                             if strip == active:
-                                new_active = updateImageSequenceShot(strip, winman)   
+                                new_active = new_strip = updateImageSequenceShot(strip, winman)   
                             else:
-                                updateImageSequenceShot(strip, winman)
+                                new_strip = updateImageSequenceShot(strip, winman)
 
-                        general_settings.bypass_update_tag = False                     
+                        general_settings.bypass_update_tag = False
+
+                        launchSeparateThread([command, general_settings.debug, updateShotDurationEndFunction, new_strip])               
 
                         if general_settings.debug: print(updated_shot_statement) #debug
                         
