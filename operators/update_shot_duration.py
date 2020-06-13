@@ -26,7 +26,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                     active = context.scene.sequence_editor.active_strip
                     if active.type in {'SCENE', 'IMAGE'}:
                         if not active.lock:
-                            if active.bpm_shotsettings.is_shot:
+                            if active.bpm_shotsettings.is_shot and not active.bpm_shotsettings.is_working:
                                 #if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
                                 return True
 
