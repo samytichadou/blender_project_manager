@@ -44,6 +44,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                                     shot_update_impossible_message,
                                     shot_update_impossible_statement,
                                     audio_sync_file,
+                                    strip_already_working_statement,
                                 )
         from ..functions.strip_functions import (
                                             returnSelectedStrips, 
@@ -78,75 +79,79 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
             if strip.select or strip == active:
 
-                if general_settings.debug: print(checking_update_shot_statement + strip.name) #debug
-                
-                shot_settings = strip.bpm_shotsettings
-                
-                new_start, new_end = getStripNewTiming(strip)
+                if not strip.bpm_shotsettings.is_working:
 
-                if new_start != shot_settings.shot_frame_start or new_end != shot_settings.shot_frame_end:
+                    if general_settings.debug: print(checking_update_shot_statement + strip.name) #debug
+                    
+                    shot_settings = strip.bpm_shotsettings
+                    
+                    new_start, new_end = getStripNewTiming(strip)
 
-                    if general_settings.debug: print(updating_shot_statement) #debug
-                    if general_settings.debug: print(update_shot_new_start_end_statement + str(new_start) + "-" + str(new_end)) #debug
+                    if new_start != shot_settings.shot_frame_start or new_end != shot_settings.shot_frame_end:
 
-                    # check if frame become negative and avoid it
-                    if new_start < 0:
+                        if general_settings.debug: print(updating_shot_statement) #debug
+                        if general_settings.debug: print(update_shot_new_start_end_statement + str(new_start) + "-" + str(new_end)) #debug
 
-                        self.report({'INFO'}, shot_update_impossible_message)
-                        if general_settings.debug: print(shot_update_impossible_statement) #debug
+                        # check if frame become negative and avoid it
+                        if new_start < 0:
 
-                    else:
+                            self.report({'INFO'}, shot_update_impossible_message)
+                            if general_settings.debug: print(shot_update_impossible_statement) #debug
 
-                        chk_updated = True
+                        else:
 
-                        filepath = absolutePath(strip.bpm_shotsettings.shot_filepath)
+                            chk_updated = True
 
-                        arguments = getArgumentForPythonScript([new_start, new_end])
+                            filepath = absolutePath(strip.bpm_shotsettings.shot_filepath)
 
-                        # build command
-                        command = buildBlenderCommandBackgroundPython(update_shot_file, filepath, arguments)
+                            arguments = getArgumentForPythonScript([new_start, new_end])
 
-                        if general_settings.debug: print(launching_command_statement + command) #debug
+                            # build command
+                            command = buildBlenderCommandBackgroundPython(update_shot_file, filepath, arguments)
 
-                        # launch command
-                        #launchCommand(command)
-                        # launchSeparateThread([command, general_settings.debug, None])
+                            if general_settings.debug: print(launching_command_statement + command) #debug
 
-                        # update shot settings and save json
-                        shot_settings.shot_frame_start = new_start
-                        shot_settings.shot_frame_end = new_end
+                            # launch command
+                            #launchCommand(command)
+                            # launchSeparateThread([command, general_settings.debug, None])
 
-                        updateShotSettingsProperties(shot_settings, context)
+                            # update shot settings and save json
+                            shot_settings.shot_frame_start = new_start
+                            shot_settings.shot_frame_end = new_end
 
-                        shot_settings.is_working = True
+                            updateShotSettingsProperties(shot_settings, context)
 
-                        general_settings.bypass_update_tag = True
+                            shot_settings.is_working = True
 
-                        # update scene frame_start frame_end if scene strip
-                        if strip.type == 'SCENE':
-                            strip.scene.frame_start = new_start
-                            strip.scene.frame_end   = new_end
+                            general_settings.bypass_update_tag = True
 
-                            # update the strip
-                            if strip == active:
-                                new_active = new_strip = updateSceneStripOnTimeline(strip, winman)
-                            else:
-                                new_strip = updateSceneStripOnTimeline(strip, winman)
+                            # update scene frame_start frame_end if scene strip
+                            if strip.type == 'SCENE':
+                                strip.scene.frame_start = new_start
+                                strip.scene.frame_end   = new_end
 
-                        # update for image strip
-                        elif strip.type == 'IMAGE':
-                            if strip == active:
-                                new_active = new_strip = updateImageSequenceShot(strip, winman)   
-                            else:
-                                new_strip = updateImageSequenceShot(strip, winman)
+                                # update the strip
+                                if strip == active:
+                                    new_active = new_strip = updateSceneStripOnTimeline(strip, winman)
+                                else:
+                                    new_strip = updateSceneStripOnTimeline(strip, winman)
 
-                        general_settings.bypass_update_tag = False
+                            # update for image strip
+                            elif strip.type == 'IMAGE':
+                                if strip == active:
+                                    new_active = new_strip = updateImageSequenceShot(strip, winman)   
+                                else:
+                                    new_strip = updateImageSequenceShot(strip, winman)
 
-                        launchSeparateThread([command, general_settings.debug, updateShotDurationEndFunction, new_strip])               
+                            general_settings.bypass_update_tag = False
 
-                        if general_settings.debug: print(updated_shot_statement) #debug
-                        
-                elif general_settings.debug: print(no_update_needed_statement) #debug
+                            launchSeparateThread([command, general_settings.debug, updateShotDurationEndFunction, new_strip])               
+
+                            if general_settings.debug: print(updated_shot_statement) #debug
+                            
+                    elif general_settings.debug: print(no_update_needed_statement) #debug
+
+                elif general_settings.debug: print(strip_already_working_statement + strip.name) #debug
 
 
         if chk_updated:

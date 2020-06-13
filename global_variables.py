@@ -83,6 +83,8 @@ completed_playblast_statement = bpm_statement + "Playblast successfully rendered
 
 completed_render_statement = bpm_statement + "Render completed : "
 
+strip_already_working_statement = bpm_statement + "Avoiding strip, already working : "
+
 date_set_statement = bpm_statement + "Current date set"
 
 
