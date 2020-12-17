@@ -12,10 +12,11 @@ class BPMImportAsset(bpy.types.Operator):
     def poll(cls, context):
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
-        if general_settings.asset_list_index < len(winman.bpm_assets):
-            if general_settings.asset_list_index >= 0:
+        idx = general_settings.asset_list_index
+        if idx < len(winman.bpm_assets):
+            if idx >= 0:
                 if general_settings.is_project:
-                    return winman.bpm_generalsettings.file_type == 'SHOT'
+                    return winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'} and not winman.bpm_assets[idx].is_thisassetfile
 
     def execute(self, context):
         from ..functions.file_functions import linkAssetLibrary

@@ -402,7 +402,7 @@ class BPM_PT_properties_asset_library_viewport_panel(bpy.types.Panel):
 
         drawAssetLibrary(layout, winman)
 
-        if winman.bpm_generalsettings.file_type == 'SHOT':
+        if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
             drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
 
 
@@ -430,7 +430,7 @@ class BPM_PT_properties_asset_library_nodetree_panel(bpy.types.Panel):
 
         drawAssetLibrary(layout, winman)
 
-        if winman.bpm_generalsettings.file_type == 'SHOT':
+        if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
             drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
 
 
