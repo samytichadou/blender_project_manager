@@ -656,6 +656,7 @@ class BPM_MT_RightClickSequencerShot_Menu(bpy.types.Menu):
         layout.operator('bpm.open_shot')
         layout.operator('bpm.update_shot_duration')
         layout.operator('bpm.bump_shot_version_edit')
+        layout.operator('bpm.render_shot_edit')
 
 
 # right click sequencer menu
