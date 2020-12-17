@@ -352,7 +352,7 @@ class BPMRenderSettings(bpy.types.PropertyGroup) :
 
     #rd_film_transparent : bpy.props.BoolProperty(name = "Transparent background", default = False)
     
-    rd_use_motion_blur : bpy.props.BoolProperty(name = "Cycles motion blur", default = False)
+    #rd_use_motion_blur : bpy.props.BoolProperty(name = "Cycles motion blur", default = False)
 
     rd_tile_x : bpy.props.IntProperty(name = "Cycles tiles X size", default = 64)
     rd_tile_y : bpy.props.IntProperty(name = "Cycles tiles Y size", default = 64)
@@ -374,7 +374,7 @@ class BPMRenderSettings(bpy.types.PropertyGroup) :
 
     ee_taa_render_samples : bpy.props.IntProperty(name = "EEVEE render samples", default = 64)
 
-    ee_use_motion_blur : bpy.props.BoolProperty(name = "EEVEE motion blur", default = False)
+    #ee_use_motion_blur : bpy.props.BoolProperty(name = "EEVEE motion blur", default = False)
 
 
     ### cycles settings ###
