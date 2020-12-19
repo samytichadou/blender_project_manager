@@ -580,10 +580,10 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             project_data = winman.bpm_projectdatas
             layout.label(text = project_data.name)
 
-            if general_settings.file_type == 'EDIT':
+            # if general_settings.file_type == 'EDIT':
 
-                layout.operator('bpm.display_modify_project_settings')
-                layout.operator('bpm.display_modify_render_settings')
+            layout.operator('bpm.display_modify_project_settings')
+            layout.operator('bpm.display_modify_render_settings')
             
             layout.prop(general_settings, 'debug')
                                 

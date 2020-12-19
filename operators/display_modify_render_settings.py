@@ -44,7 +44,7 @@ class BpmDisplayModifyRenderSettings(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT'
+        return context.window_manager.bpm_generalsettings.is_project # and context.window_manager.bpm_generalsettings.file_type == 'EDIT'
     
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
