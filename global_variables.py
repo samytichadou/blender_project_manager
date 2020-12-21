@@ -243,7 +243,7 @@ base_startup_filepath = os.path.join(ressources_folder, "blank.blend")
 
 missing_file_image = os.path.join(ressources_folder, "missing_file_placeholder.exr")
 
-new_project_name = "Project_name"
+#new_project_name = "Project_name"
 
 asset_folder = "01_assets"
 shot_folder = "02_shots"

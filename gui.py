@@ -105,6 +105,10 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
     bl_category = "BPM"
     #bl_parent_id = "BPM_PT_sequencer_management_panel"
 
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT'
+
     def draw(self, context):
         scn_settings = context.scene.bpm_scenesettings
         general_settings = context.window_manager.bpm_generalsettings

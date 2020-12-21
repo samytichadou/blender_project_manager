@@ -16,7 +16,6 @@ class BpmCreateProject(bpy.types.Operator):
     
     def invoke(self, context, event):
         from ..functions.file_functions import absolutePath
-        from ..global_variables import new_project_name
 
         # create properties
         winman = context.window_manager
@@ -40,7 +39,8 @@ class BpmCreateProject(bpy.types.Operator):
         # set specific project properties
         general_settings.project_folder = project_dir
         datas.edit_file_pattern = edit_file_name
-        datas.name = new_project_name
+        datas.name = edit_file_name
+        datas.project_prefix = edit_file_name
 
         return context.window_manager.invoke_props_dialog(self)
  
