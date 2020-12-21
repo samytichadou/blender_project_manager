@@ -180,10 +180,10 @@ shot_display_no_render_images_statement = bpm_statement + "No rendered images fo
 shot_display_render_images_statement = bpm_statement + "Rendered images found, deleting and filling"
 
 
-# marker statements
-start_edit_shot_marker_statement = bpm_statement + "Starting editing shot marker"
-editing_shot_marker_statement = bpm_statement + "Editing shot marker : "
-edited_shot_marker_statement= bpm_statement + "Shot marker successfully edited"
+# comment statements
+start_edit_shot_comment_statement = bpm_statement + "Starting editing shot comment"
+editing_shot_comment_statement = bpm_statement + "Editing shot comment : "
+edited_shot_comment_statement= bpm_statement + "Shot comment successfully edited"
 
 
 # extra ui statements
@@ -227,6 +227,7 @@ custom_folders_file = "project_custom_folders.json"
 audio_sync_file = "project_audio_sync.json"
 shot_file = "shot_settings.json"
 render_file = "render_settings.json"
+comment_file = "shot_comments.json"
 
 python_temp = "python_temp.py"
 

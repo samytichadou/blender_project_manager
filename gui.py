@@ -241,7 +241,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.update_shot_duration', '', 'Update-Shot-Operator')
 
-        drawOperatorAndHelp(layout, 'bpm.add_modify_shot_marker', '', 'Add-Modify-Shot-Marker-Operator')
+        drawOperatorAndHelp(layout, 'bpm.add_shot_comment', '', 'Add-Modify-Shot-Marker-Operator')
 
         drawOperatorAndHelp(layout, 'bpm.bump_shot_version_edit', '', 'Shot-Version-Management')
 
