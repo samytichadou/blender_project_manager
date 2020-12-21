@@ -149,6 +149,10 @@ def update_shot_comments_json(shot_settings):
     create_json_file(datas, comment_filepath)
 
 
+def update_comment_frame_property(self, context):
+    context.scene.frame_current = self.frame
+    
+
 class BPMAddShotComment(bpy.types.Operator):
     """Add shot comment to active strip"""
     bl_idname = "bpm.add_shot_comment"
@@ -157,7 +161,7 @@ class BPMAddShotComment(bpy.types.Operator):
 
     name : bpy.props.StringProperty(name = "Marker name", default = "Marker name")
     marker : bpy.props.BoolProperty(name = "Timeline Marker")
-    frame : bpy.props.IntProperty(name = "Marker frame")
+    frame : bpy.props.IntProperty(name = "Marker frame", update=update_comment_frame_property)
     author : bpy.props.StringProperty(name = "Author")
 
     @classmethod
