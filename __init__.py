@@ -131,6 +131,7 @@ classes = (BPMOpenShot,
 
             BPM_PT_sequencer_management_panel,
             BPM_PT_sequencer_shot_panel,
+            BPM_PT_sequencer_shot_comment_panel,
             BPM_PT_sequencer_asset_panel,
             BPM_PT_sequencer_ui_panel,
             BPM_PT_properties_shot_panel,
