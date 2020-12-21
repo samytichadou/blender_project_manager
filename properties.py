@@ -130,6 +130,16 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
     asset_nodegroup : bpy.props.PointerProperty(name="Asset nodegroup", type=bpy.types.NodeTree, update = updateAssetAssigning)
     asset_world : bpy.props.PointerProperty(name="Asset world", type=bpy.types.World, update = updateAssetAssigning)
 
+
+# shot comments
+class BPMShotComments(bpy.types.PropertyGroup):
+    '''name : StringProperty() '''
+    marker : bpy.props.BoolProperty(name = "Timeline Marker")
+    frame : bpy.props.IntProperty(name = "Marker Frame")
+    time : bpy.props.StringProperty(name = "Creation Date")
+    author : bpy.props.StringProperty(name = "Author")
+
+
 # shot settings strips
 class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
@@ -172,6 +182,8 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     rendering_done : bpy.props.BoolProperty(name = "Rendering done", update = updateShotSettingsProperties)
     compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = updateShotSettingsProperties)
 
+    # comments
+    comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
 
 # shot settings file
 class BPMShotSettings(bpy.types.PropertyGroup) :
@@ -209,6 +221,9 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     rendering_done : bpy.props.BoolProperty(name = "Rendering done", update = updateShotSettingsProperties)
     compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = updateShotSettingsProperties)
 
+    # comments
+    comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
+    
 
 # scene settings
 class BPMSceneSettings(bpy.types.PropertyGroup) :
