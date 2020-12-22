@@ -4,7 +4,7 @@ def getDateString():
     return datetime.datetime.now().strftime('%Y-%m-%d')
 
 def getDateTimeString():
-    return datetime.datetime.now().strftime('%d-%m-%Y')
+    return datetime.datetime.now().strftime('%d-%m-%Y, %H:%M:%S')
 
 def getDateStringPlusDays(days_to_add):
     original_date = datetime.datetime.now()
