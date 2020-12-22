@@ -294,8 +294,8 @@ def sequencer_shot_comment_draw(container, comments):
         col.label(text=c.name)
         col.label(text="Marker : " + str(c.marker))
         col.label(text="Frame : " + str(c.frame))
-        col.label(text="Creation Time" + c.time)
-        col.label(text="Author" + c.author)
+        col.label(text="Creation Time : " + c.time)
+        col.label(text="Author : " + c.author)
 
 
 class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
