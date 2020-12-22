@@ -4,11 +4,13 @@ import bpy, os
 from ..functions.check_edit_poll_function import check_edit_poll_function
 from ..functions.json_functions import create_json_file, createJsonDatasetFromProperties
 from ..functions.date_functions import getDateTimeString
+from ..functions.file_functions import absolutePath
 from ..global_variables import (
                                 comment_file,
                                 start_edit_shot_comment_statement,
                                 editing_shot_comment_statement,
                                 edited_shot_comment_statement,
+                                bypass_shot_settings_update_statement,
                             )
 
 
@@ -135,10 +137,12 @@ class BPMAddModifyShotMarkerOld(bpy.types.Operator):
         return {'FINISHED'}
 
 
-def update_shot_comments_json(shot_settings):
+def update_shot_comments_json_file(shot_settings):
+    print(shot_settings.shot_filepath)
     folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
+    print(folder_path)
     comment_filepath = os.path.join(folder_path, comment_file)
-
+    print(comment_filepath)
     datas = {}
     datas["comments"] = []
 
@@ -150,6 +154,13 @@ def update_shot_comments_json(shot_settings):
 
 
 def update_comment_frame_property(self, context):
+    general_settings = context.window_manager.bpm_generalsettings
+    debug = general_settings.debug
+
+    if general_settings.bypass_update_tag:
+        if debug: print(bypass_shot_settings_update_statement) #debug
+        return
+
     context.scene.frame_current = self.frame
     
 
@@ -166,26 +177,18 @@ class BPMAddShotComment(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        edit, shot, active = check_edit_poll_function(context)
-        if edit and shot:
-            if not active.lock:
-                if not active.bpm_shotsettings.is_working:
-                    return True
+        if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
+            edit, shot, active = check_edit_poll_function(context)
+            if edit and shot:
+                if not active.lock:
+                    if not active.bpm_shotsettings.is_working:
+                        return True
+        elif context.window_manager.bpm_generalsettings.file_type == 'SHOT':
+            return True
 
 
     def invoke(self, context, event):
-        from ..vse_extra_ui import getMarkerFrameFromShotStrip
-
-        scn = context.scene
         self.frame = context.scene.frame_current
-
-        active = context.scene.sequence_editor.active_strip
-
-        for m in getMarkerFrameFromShotStrip(active):
-            if m[1] == scn.frame_current:
-                self.name = m[0]
-                self.existing_marker = True
-                break
         return context.window_manager.invoke_props_dialog(self)
  
 
@@ -201,20 +204,24 @@ class BPMAddShotComment(bpy.types.Operator):
     def execute(self, context):
 
         winman = context.window_manager
-        debug = winman.bpm_generalsettings.debug
+        general_settings = winman.bpm_generalsettings
+        debug = general_settings.debug
 
         if debug: print(start_edit_shot_comment_statement) #debug
 
         # get shot settings and filepath 
-        shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-        folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
-        comment_filepath = os.path.join(folder_path, comment_file)
+        if general_settings.file_type == "EDIT":
+            shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
+        elif general_settings.file_type == "SHOT":
+            shot_settings = winman.bpm_shotsettings
 
         if debug: print(editing_shot_comment_statement + self.name) #debug
 
         # set frame if not timeline marker
         if not self.marker:
+            general_settings.bypass_update_tag = True
             self.frame = -1
+            general_settings.bypass_update_tag = False
 
         # add new comment to strip settings
         new_comment = shot_settings.comments.add()
@@ -224,9 +231,9 @@ class BPMAddShotComment(bpy.types.Operator):
         new_comment.time = getDateTimeString()
         new_comment.author = self.author
 
-        if debug: print(edited_shot_comment_statement) #debug
-
         # update json file
-        update_shot_comments_json(shot_settings)
+        update_shot_comments_json_file(shot_settings)
+
+        if debug: print(edited_shot_comment_statement) #debug
         
         return {'FINISHED'}

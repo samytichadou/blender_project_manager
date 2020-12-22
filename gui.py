@@ -241,8 +241,6 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
         drawOperatorAndHelp(layout, 'bpm.update_shot_duration', '', 'Update-Shot-Operator')
 
-        drawOperatorAndHelp(layout, 'bpm.add_shot_comment', '', 'Add-Modify-Shot-Marker-Operator')
-
         drawOperatorAndHelp(layout, 'bpm.bump_shot_version_edit', '', 'Shot-Version-Management')
 
         drawOperatorAndHelp(layout, 'bpm.change_shot_version_edit', '', 'Shot-Version-Management')
@@ -287,11 +285,23 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         drawDebugPanel(layout, shot_settings, general_settings)#debug
 
 
-# sequencer shot comment panel
+# sequencer shot comment function 
+def sequencer_shot_comment_draw(container, comments):        
+
+    for c in comments:
+        box = container.box()
+        col = box.column(align=True)
+        col.label(text=c.name)
+        col.label(text="Marker : " + str(c.marker))
+        col.label(text="Frame : " + str(c.frame))
+        col.label(text="Creation Time" + c.time)
+        col.label(text="Author" + c.author)
+
+
 class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
-    bl_label = "Comment"
+    bl_label = "Comments"
     bl_idname = "BPM_PT_sequencer_shot_comment_panel"
     bl_category = "BPM"
 
@@ -308,21 +318,15 @@ class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
                     return False
         return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT' and chk_isshot
 
-    def draw(self, context):        
-        active = context.scene.sequence_editor.active_strip
-        general_settings = context.window_manager.bpm_generalsettings
-        shot_settings = active.bpm_shotsettings
+    def draw(self, context):
 
         layout = self.layout
 
-        for c in shot_settings.comments:
-            box = layout.box()
-            col = box.column(align=True)
-            col.label(text=c.name)
-            col.label(text="Marker : " + str(c.marker))
-            col.label(text="Frame : " + str(c.frame))
-            col.label(text="Creation Time" + c.time)
-            col.label(text="Author" + c.author)
+        drawOperatorAndHelp(layout, 'bpm.add_shot_comment', '', 'Add-Modify-Shot-Marker-Operator')
+
+        shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
+
+        sequencer_shot_comment_draw(layout, shot_settings.comments)
 
 
 # sequencer assets panel
@@ -400,6 +404,29 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         drawWikiHelp(row, 'Project-Architecture')
 
         drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
+
+
+# shot settings panel
+class BPM_PT_properties_shot_comment_panel(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_label = "Comments"
+    bl_idname = "BPM_PT_properties_shot_comment_panel"
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'SHOT'
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        drawOperatorAndHelp(layout, 'bpm.add_shot_comment', '', 'Add-Modify-Shot-Marker-Operator')
+
+        shot_settings = context.window_manager.bpm_shotsettings
+
+        sequencer_shot_comment_draw(self.layout, shot_settings.comments)
 
 
 # draw asset library
