@@ -185,6 +185,7 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     # comments
     comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
 
+
 # shot settings file
 class BPMShotSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
@@ -223,7 +224,7 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
 
     # comments
     comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
-    
+
 
 # scene settings
 class BPMSceneSettings(bpy.types.PropertyGroup) :
