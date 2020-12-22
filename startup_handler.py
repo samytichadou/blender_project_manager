@@ -191,6 +191,7 @@ def bpmStartupHandler(scene):
 
                     general_settings.bypass_update_tag = True
                     loadJsonDataToDataset(winman, shot_settings, shot_json, ())
+                    shot_settings.shot_filepath = bpy.path.relpath(bpy.data.filepath)
                     general_settings.bypass_update_tag = False
 
                     if general_settings.debug: print(shot_loaded_statement) #debug
