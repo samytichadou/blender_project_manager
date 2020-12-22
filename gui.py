@@ -286,7 +286,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
 
 # sequencer shot comment function 
-def sequencer_shot_comment_draw(container, comments):        
+def sequencer_shot_comment_draw(container, comments):
 
     for c in comments:
         box = container.box()
