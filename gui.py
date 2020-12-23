@@ -56,6 +56,59 @@ def drawOpenFoldersPanel(container, filebrowser):
     container.operator('bpm.open_shot_render_folder', text='Active Render').filebrowser=filebrowser
 
 
+# split string on spaces
+def split_string_on_spaces(string, char_limit):
+    lines = []
+    words = string.split()
+
+    line = ""
+    for w in words:
+        if len(line) < char_limit:
+            line += w + " "
+        else:
+            line = line[:-1]
+            lines.append(line)
+            line = w + " "
+
+    if line not in lines:    
+        lines.append(line)
+        
+    return lines
+
+
+# sequencer shot comment function 
+def comment_draw(container, comments):
+
+    drawOperatorAndHelp(container, 'bpm.add_comment', '', 'Comments')
+
+    bigcol = container.column(align=True)
+
+    for c in comments:
+        box = bigcol.box()
+        col = box.column(align=True)   
+
+        row = col.row(align=True)
+        if c.hide:
+            icon = "DISCLOSURE_TRI_RIGHT"
+        else:
+            icon = "DISCLOSURE_TRI_DOWN"
+        row.prop(c, "hide", text="", icon=icon, emboss=False)
+        row.label(text=c.author + " - " + c.time)
+        if c.edit_time:
+            row.label(text="", icon="OUTLINER_DATA_GP_LAYER")
+        idx = comments.find(c.name)
+        row.operator("bpm.modify_comment", text="", icon="GREASEPENCIL").index = idx
+        row.operator("bpm.remove_comment", text="", icon="X").index = idx
+
+        if not c.hide:
+            for line in split_string_on_spaces(c.comment, 25):
+                col.label(text=line)
+            col.separator()
+            if c.frame_comment:
+                col.label(text="Frame : " + str(c.frame))
+            if c.edit_time:
+                col.label(text="Edited on " + c.edit_time)
+
 
 # sequencer management
 class BPM_PT_sequencer_management_panel(bpy.types.Panel):
@@ -284,38 +337,6 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         row.prop(shot_settings, 'display_markers')
 
         drawDebugPanel(layout, shot_settings, general_settings)#debug
-
-
-# sequencer shot comment function 
-def comment_draw(container, comments):
-
-    drawOperatorAndHelp(container, 'bpm.add_comment', '', 'Comments')
-
-    bigcol = container.column(align=True)
-
-    for c in comments:
-        box = bigcol.box()
-        col = box.column(align=True)   
-
-        row = col.row(align=True)
-        if c.hide:
-            icon = "DISCLOSURE_TRI_RIGHT"
-        else:
-            icon = "DISCLOSURE_TRI_DOWN"
-        row.prop(c, "hide", text="", icon=icon, emboss=False)
-        row.label(text=c.author + " - " + c.time)
-        if c.edit_time:
-            row.label(text="", icon="OUTLINER_DATA_GP_LAYER")
-        idx = comments.find(c.name)
-        row.operator("bpm.modify_comment", text="", icon="GREASEPENCIL").index = idx
-        row.operator("bpm.remove_comment", text="", icon="X").index = idx
-
-        if not c.hide:
-            col.label(text=c.comment)
-            if c.frame_comment :
-                col.label(text="Frame : " + str(c.frame))
-            if c.edit_time:
-                col.label(text="Edited on " + c.edit_time)
 
 
 class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
