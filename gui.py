@@ -287,9 +287,9 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
 
 # sequencer shot comment function 
-def sequencer_shot_comment_draw(container, comments):
+def comment_draw(container, comments):
 
-    drawOperatorAndHelp(container, 'bpm.add_shot_comment', '', 'Shot-Comments')
+    drawOperatorAndHelp(container, 'bpm.add_comment', '', 'Comments')
 
     bigcol = container.column(align=True)
 
@@ -307,8 +307,8 @@ def sequencer_shot_comment_draw(container, comments):
         if c.edit_time:
             row.label(text="", icon="OUTLINER_DATA_GP_LAYER")
         idx = comments.find(c.name)
-        row.operator("bpm.modify_shot_comment", text="", icon="GREASEPENCIL").index = idx
-        row.operator("bpm.remove_shot_comment", text="", icon="X").index = idx
+        row.operator("bpm.modify_comment", text="", icon="GREASEPENCIL").index = idx
+        row.operator("bpm.remove_comment", text="", icon="X").index = idx
 
         if not c.hide:
             col.label(text=c.comment)
@@ -341,7 +341,7 @@ class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
         
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
 
-        sequencer_shot_comment_draw(layout, shot_settings.comments)
+        comment_draw(layout, shot_settings.comments)
 
 
 # sequencer assets panel
@@ -439,7 +439,7 @@ class BPM_PT_properties_shot_comment_panel(bpy.types.Panel):
 
         shot_settings = context.window_manager.bpm_shotsettings
 
-        sequencer_shot_comment_draw(self.layout, shot_settings.comments)
+        comment_draw(self.layout, shot_settings.comments)
 
 
 # draw asset library

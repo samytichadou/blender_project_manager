@@ -139,7 +139,7 @@ class BPMAddModifyShotMarkerOld(bpy.types.Operator):
         return {'FINISHED'}
 
 
-def update_shot_comments_json_file(shot_settings):
+def update_comments_json_file(shot_settings):
     folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
     comment_filepath = os.path.join(folder_path, comment_file)
     datas = {}
@@ -163,10 +163,10 @@ def update_comment_frame_property(self, context):
     context.scene.frame_current = self.frame
   
 
-class BPMAddShotComment(bpy.types.Operator):
-    """Add shot comment to active shot"""
-    bl_idname = "bpm.add_shot_comment"
-    bl_label = "Add shot comment"
+class BPMAddComment(bpy.types.Operator):
+    """Add comment to active"""
+    bl_idname = "bpm.add_comment"
+    bl_label = "Add comment"
     bl_options = {'REGISTER'}
 
     comment : bpy.props.StringProperty(name = "Comment", default = "Comment")
@@ -234,7 +234,7 @@ class BPMAddShotComment(bpy.types.Operator):
         new_comment.author = self.author
 
         # update json file
-        update_shot_comments_json_file(shot_settings)
+        update_comments_json_file(shot_settings)
         if debug: print(comment_file_updated_statement) #debug
 
         if debug: print(edited_shot_comment_statement) #debug
@@ -245,10 +245,10 @@ class BPMAddShotComment(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class BPMRemoveShotComment(bpy.types.Operator):
-    """Remove shot comment"""
-    bl_idname = "bpm.remove_shot_comment"
-    bl_label = "Remove shot comment"
+class BPMRemoveComment(bpy.types.Operator):
+    """Remove comment"""
+    bl_idname = "bpm.remove_comment"
+    bl_label = "Remove comment"
     bl_options = {'REGISTER', 'INTERNAL'}
 
     index : bpy.props.IntProperty()
@@ -289,7 +289,7 @@ class BPMRemoveShotComment(bpy.types.Operator):
         comments.remove(self.index)
 
         # update json file
-        update_shot_comments_json_file(shot_settings)
+        update_comments_json_file(shot_settings)
         if debug: print(comment_file_updated_statement) #debug
 
         if debug: print(removed_shot_comment_statement) #debug
@@ -297,10 +297,10 @@ class BPMRemoveShotComment(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class BPMModifyShotComment(bpy.types.Operator):
-    """Modify shot comment"""
-    bl_idname = "bpm.modify_shot_comment"
-    bl_label = "Modify shot comment"
+class BPMModifyComment(bpy.types.Operator):
+    """Modify comment"""
+    bl_idname = "bpm.modify_comment"
+    bl_label = "Modify comment"
     bl_options = {"REGISTER", "INTERNAL"}
 
     index : bpy.props.IntProperty()
@@ -377,7 +377,7 @@ class BPMModifyShotComment(bpy.types.Operator):
         active_comment.edit_time = getDateTimeString()
 
         # update json file
-        update_shot_comments_json_file(shot_settings)
+        update_comments_json_file(shot_settings)
         if debug: print(comment_file_updated_statement) #debug
 
         if debug: print(edited_shot_comment_statement) #debug
