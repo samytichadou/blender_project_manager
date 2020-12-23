@@ -147,7 +147,7 @@ def update_shot_comments_json_file(shot_settings):
     datas["comments"] = []
 
     for c in shot_settings.comments:
-        new_comment = createJsonDatasetFromProperties(c, ())
+        new_comment = createJsonDatasetFromProperties(c, ('hide'))
         datas["comments"].append(new_comment)
 
     create_json_file(datas, comment_filepath)
@@ -173,7 +173,7 @@ class BPMAddShotComment(bpy.types.Operator):
     comment : bpy.props.StringProperty(name = "Comment", default = "Comment")
     marker : bpy.props.BoolProperty(name = "Timeline Marker")
     frame : bpy.props.IntProperty(name = "Marker frame", update=update_comment_frame_property)
-    author : bpy.props.StringProperty(name = "Author")
+    author : bpy.props.StringProperty(name = "Author", default = "Me")
 
     @classmethod
     def poll(cls, context):
@@ -194,11 +194,11 @@ class BPMAddShotComment(bpy.types.Operator):
 
     def draw(self, context):
         layout = self.layout
+        layout.prop(self, "author")
+        layout.prop(self, "comment", text="")
         layout.prop(self, "marker")
         if self.marker:
             layout.prop(self, "frame")
-        layout.prop(self, "comment", text="")
-        layout.prop(self, "author")
 
 
     def execute(self, context):
@@ -231,6 +231,55 @@ class BPMAddShotComment(bpy.types.Operator):
         new_comment.frame = self.frame
         new_comment.time = getDateTimeString()
         new_comment.author = self.author
+
+        # update json file
+        update_shot_comments_json_file(shot_settings)
+
+        if debug: print(edited_shot_comment_statement) #debug
+        
+        return {'FINISHED'}
+
+
+class BPMRemoveShotComment(bpy.types.Operator):
+    """Remove shot comment to active strip"""
+    bl_idname = "bpm.remove_shot_comment"
+    bl_label = "Remove shot comment"
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    index : bpy.props.IntProperty()
+
+    @classmethod
+    def poll(cls, context):
+        if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
+            edit, shot, active = check_edit_poll_function(context)
+            if edit and shot:
+                if not active.lock:
+                    if not active.bpm_shotsettings.is_working:
+                        return True
+        elif context.window_manager.bpm_generalsettings.file_type == 'SHOT':
+            return True
+
+
+    def execute(self, context):
+
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        debug = general_settings.debug
+
+        if debug: print(start_edit_shot_comment_statement) #debug
+
+        # get shot settings and filepath 
+        if general_settings.file_type == "EDIT":
+            shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
+        elif general_settings.file_type == "SHOT":
+            shot_settings = winman.bpm_shotsettings
+
+        comments = shot_settings.comments
+
+        if debug: print(editing_shot_comment_statement + comments[self.index].name) #debug
+
+        # remove comment
+        comments.remove(self.index)
 
         # update json file
         update_shot_comments_json_file(shot_settings)

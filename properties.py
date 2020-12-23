@@ -139,6 +139,7 @@ class BPMShotComments(bpy.types.PropertyGroup):
     frame : bpy.props.IntProperty(name = "Marker Frame")
     time : bpy.props.StringProperty(name = "Creation Date")
     author : bpy.props.StringProperty(name = "Author")
+    hide : bpy.props.BoolProperty(name = "Hide Comment")
 
 
 # shot settings strips

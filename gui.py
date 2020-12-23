@@ -288,14 +288,26 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 # sequencer shot comment function 
 def sequencer_shot_comment_draw(container, comments):
 
+    bigcol = container.column(align=True)
+
     for c in comments:
-        box = container.box()
-        col = box.column(align=True)
-        col.label(text=c.comment)
-        if c.marker :
-            col.label(text="Frame : " + str(c.frame))
-        col.label(text="Creation Time : " + c.time)
-        col.label(text="Author : " + c.author)
+        box = bigcol.box()
+        col = box.column(align=True)   
+
+        row = col.row()
+        if c.hide:
+            icon = "DISCLOSURE_TRI_RIGHT"
+        else:
+            icon = "DISCLOSURE_TRI_DOWN"
+        row.prop(c, "hide", text="", icon=icon, emboss=False)
+        row.label(text=c.author + " - " + c.time)
+        op = row.operator("bpm.remove_shot_comment", text="", icon="X")
+        op.index = comments.find(c.name)
+
+        if not c.hide:
+            col.label(text=c.comment)
+            if c.marker :
+                col.label(text="Frame : " + str(c.frame))
 
 
 class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
