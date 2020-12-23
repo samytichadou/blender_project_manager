@@ -50,7 +50,7 @@ from .operators.create_project import *
 from .operators.update_shot_duration import *
 from .operators.create_asset import *
 from .operators.open_webpage import *
-from .operators.add_shot_comment import *
+from .operators.shot_comments_operators import *
 from .operators.delete_unused_shots import *
 from .operators.empty_project_recycle_bin import *
 from .operators.bump_shot_version import *
