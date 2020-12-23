@@ -289,6 +289,8 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 # sequencer shot comment function 
 def sequencer_shot_comment_draw(container, comments):
 
+    drawOperatorAndHelp(container, 'bpm.add_shot_comment', '', 'Shot-Comments')
+
     bigcol = container.column(align=True)
 
     for c in comments:
@@ -331,9 +333,7 @@ class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
     def draw(self, context):
 
         layout = self.layout
-
-        drawOperatorAndHelp(layout, 'bpm.add_shot_comment', '', 'Add-Modify-Shot-Marker-Operator')
-
+        
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
 
         sequencer_shot_comment_draw(layout, shot_settings.comments)
@@ -431,8 +431,6 @@ class BPM_PT_properties_shot_comment_panel(bpy.types.Panel):
     def draw(self, context):
 
         layout = self.layout
-
-        drawOperatorAndHelp(layout, 'bpm.add_shot_comment', '', 'Add-Modify-Shot-Marker-Operator')
 
         shot_settings = context.window_manager.bpm_shotsettings
 
