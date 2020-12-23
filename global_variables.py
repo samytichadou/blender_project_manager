@@ -229,7 +229,7 @@ custom_folders_file = "project_custom_folders.json"
 audio_sync_file = "project_audio_sync.json"
 shot_file = "shot_settings.json"
 render_file = "render_settings.json"
-comment_file = "shot_comments.json"
+comment_file = "comments.json"
 
 python_temp = "python_temp.py"
 
