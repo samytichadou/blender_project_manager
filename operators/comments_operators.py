@@ -267,6 +267,15 @@ class BPMRemoveComment(bpy.types.Operator):
                 return True
 
 
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+ 
+
+    def draw(self, context):
+        layout = self.layout
+        layout.label(text="Continue ?")
+
+
     def execute(self, context):
 
         winman = context.window_manager
@@ -293,6 +302,9 @@ class BPMRemoveComment(bpy.types.Operator):
         if debug: print(comment_file_updated_statement) #debug
 
         if debug: print(removed_shot_comment_statement) #debug
+
+        for area in context.screen.areas:
+            area.tag_redraw()
         
         return {'FINISHED'}
 
