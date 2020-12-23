@@ -297,20 +297,25 @@ def sequencer_shot_comment_draw(container, comments):
         box = bigcol.box()
         col = box.column(align=True)   
 
-        row = col.row()
+        row = col.row(align=True)
         if c.hide:
             icon = "DISCLOSURE_TRI_RIGHT"
         else:
             icon = "DISCLOSURE_TRI_DOWN"
         row.prop(c, "hide", text="", icon=icon, emboss=False)
         row.label(text=c.author + " - " + c.time)
-        op = row.operator("bpm.remove_shot_comment", text="", icon="X")
-        op.index = comments.find(c.name)
+        if c.edit_time:
+            row.label(text="", icon="OUTLINER_DATA_GP_LAYER")
+        idx = comments.find(c.name)
+        row.operator("bpm.modify_shot_comment", text="", icon="GREASEPENCIL").index = idx
+        row.operator("bpm.remove_shot_comment", text="", icon="X").index = idx
 
         if not c.hide:
             col.label(text=c.comment)
             if c.marker :
                 col.label(text="Frame : " + str(c.frame))
+            if c.edit_time:
+                col.label(text="Edited on " + c.edit_time)
 
 
 class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):

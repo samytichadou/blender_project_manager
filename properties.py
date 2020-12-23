@@ -138,6 +138,7 @@ class BPMShotComments(bpy.types.PropertyGroup):
     marker : bpy.props.BoolProperty(name = "Timeline Marker")
     frame : bpy.props.IntProperty(name = "Marker Frame")
     time : bpy.props.StringProperty(name = "Creation Date")
+    edit_time : bpy.props.StringProperty(name = "Edition Date")
     author : bpy.props.StringProperty(name = "Author")
     hide : bpy.props.BoolProperty(name = "Hide Comment")
 

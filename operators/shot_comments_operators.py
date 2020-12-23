@@ -164,7 +164,7 @@ def update_comment_frame_property(self, context):
   
 
 class BPMAddShotComment(bpy.types.Operator):
-    """Add shot comment to active strip"""
+    """Add shot comment to active shot"""
     bl_idname = "bpm.add_shot_comment"
     bl_label = "Add shot comment"
     bl_options = {'REGISTER'}
@@ -246,7 +246,7 @@ class BPMAddShotComment(bpy.types.Operator):
 
 
 class BPMRemoveShotComment(bpy.types.Operator):
-    """Remove shot comment to active strip"""
+    """Remove shot comment"""
     bl_idname = "bpm.remove_shot_comment"
     bl_label = "Remove shot comment"
     bl_options = {'REGISTER', 'INTERNAL'}
@@ -293,5 +293,96 @@ class BPMRemoveShotComment(bpy.types.Operator):
         if debug: print(comment_file_updated_statement) #debug
 
         if debug: print(removed_shot_comment_statement) #debug
+        
+        return {'FINISHED'}
+
+
+class BPMModifyShotComment(bpy.types.Operator):
+    """Modify shot comment"""
+    bl_idname = "bpm.modify_shot_comment"
+    bl_label = "Modify shot comment"
+    bl_options = {"REGISTER", "INTERNAL"}
+
+    index : bpy.props.IntProperty()
+    comment : bpy.props.StringProperty(name = "Comment", default = "Comment")
+    marker : bpy.props.BoolProperty(name = "Timeline Marker")
+    frame : bpy.props.IntProperty(name = "Marker frame", update=update_comment_frame_property)
+    author : bpy.props.StringProperty(name = "Author", default = "Me")
+
+    @classmethod
+    def poll(cls, context):
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.is_project:
+            if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
+                edit, shot, active = check_edit_poll_function(context)
+                if edit and shot:
+                    if not active.lock:
+                        if not active.bpm_shotsettings.is_working:
+                            return True
+            elif context.window_manager.bpm_generalsettings.file_type == 'SHOT':
+                return True
+
+
+    def invoke(self, context, event):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+
+        # get shot settings and filepath 
+        if general_settings.file_type == "EDIT":
+            active_comment = context.scene.sequence_editor.active_strip.bpm_shotsettings.comments[self.index]
+        elif general_settings.file_type == "SHOT":
+            active_comment = winman.bpm_shotsettings.comments[self.index]
+
+        self.author = active_comment.author
+        self.comment = active_comment.comment
+        self.marker = active_comment.marker
+        general_settings.bypass_update_tag = True
+        self.frame = active_comment.frame
+        general_settings.bypass_update_tag = False
+        return context.window_manager.invoke_props_dialog(self)
+ 
+
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "author")
+        layout.prop(self, "comment", text="")
+        layout.prop(self, "marker")
+        if self.marker:
+            layout.prop(self, "frame")
+
+
+    def execute(self, context):
+
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        debug = general_settings.debug
+
+        if debug: print(start_edit_shot_comment_statement) #debug
+
+        # get shot settings and filepath 
+        if general_settings.file_type == "EDIT":
+            shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
+        elif general_settings.file_type == "SHOT":
+            shot_settings = winman.bpm_shotsettings
+            
+        active_comment = shot_settings.comments[self.index]
+
+        if debug: print(editing_shot_comment_statement + active_comment.comment) #debug
+
+        # modify comment to strip settings
+        active_comment.comment = self.comment
+        active_comment.marker = self.marker
+        active_comment.frame = self.frame
+        active_comment.author = self.author
+        active_comment.edit_time = getDateTimeString()
+
+        # update json file
+        update_shot_comments_json_file(shot_settings)
+        if debug: print(comment_file_updated_statement) #debug
+
+        if debug: print(edited_shot_comment_statement) #debug
+
+        for area in context.screen.areas:
+            area.tag_redraw()
         
         return {'FINISHED'}
