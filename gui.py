@@ -312,7 +312,7 @@ def sequencer_shot_comment_draw(container, comments):
 
         if not c.hide:
             col.label(text=c.comment)
-            if c.marker :
+            if c.frame_comment :
                 col.label(text="Frame : " + str(c.frame))
             if c.edit_time:
                 col.label(text="Edited on " + c.edit_time)

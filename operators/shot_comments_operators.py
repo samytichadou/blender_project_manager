@@ -170,8 +170,8 @@ class BPMAddShotComment(bpy.types.Operator):
     bl_options = {'REGISTER'}
 
     comment : bpy.props.StringProperty(name = "Comment", default = "Comment")
-    marker : bpy.props.BoolProperty(name = "Timeline Marker")
-    frame : bpy.props.IntProperty(name = "Marker frame", update=update_comment_frame_property)
+    frame_comment : bpy.props.BoolProperty(name = "Frame Comment")
+    frame : bpy.props.IntProperty(name = "Comment Frame", update=update_comment_frame_property)
     author : bpy.props.StringProperty(name = "Author", default = "Me")
 
     @classmethod
@@ -197,8 +197,8 @@ class BPMAddShotComment(bpy.types.Operator):
         layout = self.layout
         layout.prop(self, "author")
         layout.prop(self, "comment", text="")
-        layout.prop(self, "marker")
-        if self.marker:
+        layout.prop(self, "frame_comment")
+        if self.frame_comment:
             layout.prop(self, "frame")
 
 
@@ -218,8 +218,8 @@ class BPMAddShotComment(bpy.types.Operator):
 
         if debug: print(editing_shot_comment_statement + self.comment) #debug
 
-        # set frame if not timeline marker
-        if not self.marker:
+        # set frame if not frame comment
+        if not self.frame_comment:
             general_settings.bypass_update_tag = True
             self.frame = -1
             general_settings.bypass_update_tag = False
@@ -228,7 +228,7 @@ class BPMAddShotComment(bpy.types.Operator):
         new_comment = shot_settings.comments.add()
         new_comment.name = getDateTimeID()
         new_comment.comment = self.comment
-        new_comment.marker = self.marker
+        new_comment.frame_comment = self.frame_comment
         new_comment.frame = self.frame
         new_comment.time = getDateTimeString()
         new_comment.author = self.author
@@ -305,8 +305,8 @@ class BPMModifyShotComment(bpy.types.Operator):
 
     index : bpy.props.IntProperty()
     comment : bpy.props.StringProperty(name = "Comment", default = "Comment")
-    marker : bpy.props.BoolProperty(name = "Timeline Marker")
-    frame : bpy.props.IntProperty(name = "Marker frame", update=update_comment_frame_property)
+    frame_comment : bpy.props.BoolProperty(name = "Frame Comment")
+    frame : bpy.props.IntProperty(name = "Frame", update=update_comment_frame_property)
     author : bpy.props.StringProperty(name = "Author", default = "Me")
 
     @classmethod
@@ -335,7 +335,7 @@ class BPMModifyShotComment(bpy.types.Operator):
 
         self.author = active_comment.author
         self.comment = active_comment.comment
-        self.marker = active_comment.marker
+        self.frame_comment = active_comment.frame_comment
         general_settings.bypass_update_tag = True
         self.frame = active_comment.frame
         general_settings.bypass_update_tag = False
@@ -346,8 +346,8 @@ class BPMModifyShotComment(bpy.types.Operator):
         layout = self.layout
         layout.prop(self, "author")
         layout.prop(self, "comment", text="")
-        layout.prop(self, "marker")
-        if self.marker:
+        layout.prop(self, "frame_comment")
+        if self.frame_comment:
             layout.prop(self, "frame")
 
 
@@ -371,7 +371,7 @@ class BPMModifyShotComment(bpy.types.Operator):
 
         # modify comment to strip settings
         active_comment.comment = self.comment
-        active_comment.marker = self.marker
+        active_comment.frame_comment = self.frame_comment
         active_comment.frame = self.frame
         active_comment.author = self.author
         active_comment.edit_time = getDateTimeString()
