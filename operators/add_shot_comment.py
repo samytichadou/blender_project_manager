@@ -176,14 +176,16 @@ class BPMAddShotComment(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-            edit, shot, active = check_edit_poll_function(context)
-            if edit and shot:
-                if not active.lock:
-                    if not active.bpm_shotsettings.is_working:
-                        return True
-        elif context.window_manager.bpm_generalsettings.file_type == 'SHOT':
-            return True
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.is_project:
+            if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
+                edit, shot, active = check_edit_poll_function(context)
+                if edit and shot:
+                    if not active.lock:
+                        if not active.bpm_shotsettings.is_working:
+                            return True
+            elif context.window_manager.bpm_generalsettings.file_type == 'SHOT':
+                return True
 
 
     def invoke(self, context, event):
@@ -253,14 +255,16 @@ class BPMRemoveShotComment(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-            edit, shot, active = check_edit_poll_function(context)
-            if edit and shot:
-                if not active.lock:
-                    if not active.bpm_shotsettings.is_working:
-                        return True
-        elif context.window_manager.bpm_generalsettings.file_type == 'SHOT':
-            return True
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.is_project:
+            if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
+                edit, shot, active = check_edit_poll_function(context)
+                if edit and shot:
+                    if not active.lock:
+                        if not active.bpm_shotsettings.is_working:
+                            return True
+            elif context.window_manager.bpm_generalsettings.file_type == 'SHOT':
+                return True
 
 
     def execute(self, context):

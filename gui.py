@@ -3,6 +3,7 @@ import bpy
 
 from .properties import getAssetIcon
 from .functions.project_data_functions import getShotTaskDeadline, getShotTaskComplete
+from .functions.check_edit_poll_function import check_edit_poll_function
 
 
 # help function
@@ -319,16 +320,13 @@ class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        chk_isshot = False
-        if context.scene.sequence_editor:
-            if context.scene.sequence_editor.active_strip:
-                active = context.scene.sequence_editor.active_strip
-                try:
-                    if active.bpm_shotsettings.is_shot:
-                        chk_isshot = True
-                except AttributeError:
-                    return False
-        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT' and chk_isshot
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.is_project:
+            if general_settings.file_type == 'EDIT':
+                edit, shot, active = check_edit_poll_function(context)
+                if edit and shot:
+                    if not active.lock:
+                        return True
 
     def draw(self, context):
 
