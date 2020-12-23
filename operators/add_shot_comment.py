@@ -5,6 +5,7 @@ from ..functions.check_edit_poll_function import check_edit_poll_function
 from ..functions.json_functions import create_json_file, createJsonDatasetFromProperties
 from ..functions.date_functions import getDateTimeString, getDateTimeID
 from ..functions.file_functions import absolutePath
+from ..functions.utils_functions import redrawAreas
 from ..global_variables import (
                                 comment_file,
                                 start_edit_shot_comment_statement,
@@ -236,6 +237,8 @@ class BPMAddShotComment(bpy.types.Operator):
         update_shot_comments_json_file(shot_settings)
 
         if debug: print(edited_shot_comment_statement) #debug
+
+        redrawAreas(context, 'SEQUENCE_EDITOR')
         
         return {'FINISHED'}
 
