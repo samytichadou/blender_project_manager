@@ -10,6 +10,8 @@ from ..global_variables import (
                                 start_edit_shot_comment_statement,
                                 editing_shot_comment_statement,
                                 edited_shot_comment_statement,
+                                removed_shot_comment_statement,
+                                comment_file_updated_statement,
                                 bypass_shot_settings_update_statement,
                             )
 
@@ -138,11 +140,8 @@ class BPMAddModifyShotMarkerOld(bpy.types.Operator):
 
 
 def update_shot_comments_json_file(shot_settings):
-    print(shot_settings.shot_filepath)
     folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
-    print(folder_path)
     comment_filepath = os.path.join(folder_path, comment_file)
-    print(comment_filepath)
     datas = {}
     datas["comments"] = []
 
@@ -234,6 +233,7 @@ class BPMAddShotComment(bpy.types.Operator):
 
         # update json file
         update_shot_comments_json_file(shot_settings)
+        if debug: print(comment_file_updated_statement) #debug
 
         if debug: print(edited_shot_comment_statement) #debug
 
@@ -286,7 +286,8 @@ class BPMRemoveShotComment(bpy.types.Operator):
 
         # update json file
         update_shot_comments_json_file(shot_settings)
+        if debug: print(comment_file_updated_statement) #debug
 
-        if debug: print(edited_shot_comment_statement) #debug
+        if debug: print(removed_shot_comment_statement) #debug
         
         return {'FINISHED'}
