@@ -6,6 +6,9 @@ def getDateString():
 def getDateTimeString():
     return datetime.datetime.now().strftime('%d-%m-%Y, %H:%M:%S')
 
+def getDateTimeID():
+    return datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+
 def getDateStringPlusDays(days_to_add):
     original_date = datetime.datetime.now()
     end_date = original_date + datetime.timedelta(days=days_to_add)

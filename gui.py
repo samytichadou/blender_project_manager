@@ -291,7 +291,7 @@ def sequencer_shot_comment_draw(container, comments):
     for c in comments:
         box = container.box()
         col = box.column(align=True)
-        col.label(text=c.name)
+        col.label(text=c.comment)
         if c.marker :
             col.label(text="Frame : " + str(c.frame))
         col.label(text="Creation Time : " + c.time)

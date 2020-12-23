@@ -1,9 +1,9 @@
-import bpy, os
+import bpy, os, string
 
 
 from ..functions.check_edit_poll_function import check_edit_poll_function
 from ..functions.json_functions import create_json_file, createJsonDatasetFromProperties
-from ..functions.date_functions import getDateTimeString
+from ..functions.date_functions import getDateTimeString, getDateTimeID
 from ..functions.file_functions import absolutePath
 from ..global_variables import (
                                 comment_file,
@@ -162,7 +162,7 @@ def update_comment_frame_property(self, context):
         return
 
     context.scene.frame_current = self.frame
-    
+  
 
 class BPMAddShotComment(bpy.types.Operator):
     """Add shot comment to active strip"""
@@ -170,7 +170,7 @@ class BPMAddShotComment(bpy.types.Operator):
     bl_label = "Add shot comment"
     bl_options = {'REGISTER'}
 
-    name : bpy.props.StringProperty(name = "Marker name", default = "Marker name")
+    comment : bpy.props.StringProperty(name = "Comment", default = "Comment")
     marker : bpy.props.BoolProperty(name = "Timeline Marker")
     frame : bpy.props.IntProperty(name = "Marker frame", update=update_comment_frame_property)
     author : bpy.props.StringProperty(name = "Author")
@@ -197,7 +197,7 @@ class BPMAddShotComment(bpy.types.Operator):
         layout.prop(self, "marker")
         if self.marker:
             layout.prop(self, "frame")
-        layout.prop(self, "name", text="")
+        layout.prop(self, "comment", text="")
         layout.prop(self, "author")
 
 
@@ -215,7 +215,7 @@ class BPMAddShotComment(bpy.types.Operator):
         elif general_settings.file_type == "SHOT":
             shot_settings = winman.bpm_shotsettings
 
-        if debug: print(editing_shot_comment_statement + self.name) #debug
+        if debug: print(editing_shot_comment_statement + self.comment) #debug
 
         # set frame if not timeline marker
         if not self.marker:
@@ -225,7 +225,8 @@ class BPMAddShotComment(bpy.types.Operator):
 
         # add new comment to strip settings
         new_comment = shot_settings.comments.add()
-        new_comment.name = self.name
+        new_comment.name = getDateTimeID()
+        new_comment.comment = self.comment
         new_comment.marker = self.marker
         new_comment.frame = self.frame
         new_comment.time = getDateTimeString()

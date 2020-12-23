@@ -134,6 +134,7 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
 # shot comments
 class BPMShotComments(bpy.types.PropertyGroup):
     '''name : StringProperty() '''
+    comment : bpy.props.StringProperty(name = "Comment")
     marker : bpy.props.BoolProperty(name = "Timeline Marker")
     frame : bpy.props.IntProperty(name = "Marker Frame")
     time : bpy.props.StringProperty(name = "Creation Date")
