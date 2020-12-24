@@ -77,9 +77,12 @@ def split_string_on_spaces(string, char_limit):
 
 
 # sequencer shot comment function 
-def comment_draw(container, comments):
+def comment_draw(container, comments, c_type):
 
-    drawOperatorAndHelp(container, 'bpm.add_comment', '', 'Comments')
+    row = container.row(align=True)
+    op = row.operator("bpm.add_comment")
+    op.comment_type = c_type
+    drawWikiHelp(row, "Comments")
 
     bigcol = container.column(align=True)
 
@@ -97,8 +100,12 @@ def comment_draw(container, comments):
         if c.edit_time:
             row.label(text="", icon="OUTLINER_DATA_GP_LAYER")
         idx = comments.find(c.name)
-        row.operator("bpm.modify_comment", text="", icon="GREASEPENCIL").index = idx
-        row.operator("bpm.remove_comment", text="", icon="X").index = idx
+        op = row.operator("bpm.modify_comment", text="", icon="GREASEPENCIL")
+        op.index = idx
+        op.comment_type = c_type
+        op = row.operator("bpm.remove_comment", text="", icon="X")
+        op.index = idx
+        op.comment_type = c_type
 
         if not c.hide:
             for line in split_string_on_spaces(c.comment, 25):
@@ -342,7 +349,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
-    bl_label = "Comments"
+    bl_label = "Shot Comments"
     bl_idname = "BPM_PT_sequencer_shot_comment_panel"
     bl_category = "BPM"
 
@@ -362,7 +369,7 @@ class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
         
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
 
-        comment_draw(layout, shot_settings.comments)
+        comment_draw(layout, shot_settings.comments, "edit_shot")
 
 
 # sequencer assets panel
@@ -447,7 +454,7 @@ class BPM_PT_properties_shot_comment_panel(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "BPM"
-    bl_label = "Comments"
+    bl_label = "Shot Comments"
     bl_idname = "BPM_PT_properties_shot_comment_panel"
 
     @classmethod
@@ -460,7 +467,7 @@ class BPM_PT_properties_shot_comment_panel(bpy.types.Panel):
 
         shot_settings = context.window_manager.bpm_shotsettings
 
-        comment_draw(self.layout, shot_settings.comments)
+        comment_draw(self.layout, shot_settings.comments, "shot")
 
 
 # draw asset library

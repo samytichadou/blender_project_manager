@@ -139,13 +139,12 @@ class BPMAddModifyShotMarkerOld(bpy.types.Operator):
         return {'FINISHED'}
 
 
-def update_comments_json_file(shot_settings):
-    folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
+def update_comments_json_file(comment_collection, folder_path):
     comment_filepath = os.path.join(folder_path, comment_file)
     datas = {}
     datas["comments"] = []
 
-    for c in shot_settings.comments:
+    for c in comment_collection:
         new_comment = createJsonDatasetFromProperties(c, ('hide'))
         datas["comments"].append(new_comment)
 
@@ -163,6 +162,22 @@ def update_comment_frame_property(self, context):
     context.scene.frame_current = self.frame
   
 
+def return_commentcoll_folderpath(comment_type, context):
+    winman = context.window_manager
+
+    if comment_type == "edit_shot":
+        shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
+        comment_collection = shot_settings.comments
+        folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
+
+    elif comment_type == "shot":
+        shot_settings = winman.bpm_shotsettings
+        comment_collection = shot_settings.comments
+        folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
+
+    return (comment_collection, folder_path)
+
+
 class BPMAddComment(bpy.types.Operator):
     """Add comment to active"""
     bl_idname = "bpm.add_comment"
@@ -174,6 +189,8 @@ class BPMAddComment(bpy.types.Operator):
     frame : bpy.props.IntProperty(name = "Comment Frame", update=update_comment_frame_property)
     author : bpy.props.StringProperty(name = "Author", default = "Me")
 
+    comment_type : bpy.props.StringProperty()
+
     @classmethod
     def poll(cls, context):
         general_settings = context.window_manager.bpm_generalsettings
@@ -184,7 +201,7 @@ class BPMAddComment(bpy.types.Operator):
                     if not active.lock:
                         if not active.bpm_shotsettings.is_working:
                             return True
-            elif context.window_manager.bpm_generalsettings.file_type == 'SHOT':
+            elif context.window_manager.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
                 return True
 
 
@@ -210,11 +227,8 @@ class BPMAddComment(bpy.types.Operator):
 
         if debug: print(start_edit_shot_comment_statement) #debug
 
-        # get shot settings and filepath 
-        if general_settings.file_type == "EDIT":
-            shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-        elif general_settings.file_type == "SHOT":
-            shot_settings = winman.bpm_shotsettings
+        # get comment collection and folder path
+        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
 
         if debug: print(editing_shot_comment_statement + self.comment) #debug
 
@@ -225,7 +239,7 @@ class BPMAddComment(bpy.types.Operator):
             general_settings.bypass_update_tag = False
 
         # add new comment to strip settings
-        new_comment = shot_settings.comments.add()
+        new_comment = comment_collection.add()
         new_comment.name = getDateTimeID()
         new_comment.comment = self.comment
         new_comment.frame_comment = self.frame_comment
@@ -234,7 +248,7 @@ class BPMAddComment(bpy.types.Operator):
         new_comment.author = self.author
 
         # update json file
-        update_comments_json_file(shot_settings)
+        update_comments_json_file(comment_collection, folder_path)
         if debug: print(comment_file_updated_statement) #debug
 
         if debug: print(edited_shot_comment_statement) #debug
@@ -252,6 +266,7 @@ class BPMRemoveComment(bpy.types.Operator):
     bl_options = {'REGISTER', 'INTERNAL'}
 
     index : bpy.props.IntProperty()
+    comment_type : bpy.props.StringProperty()
 
     @classmethod
     def poll(cls, context):
@@ -284,21 +299,16 @@ class BPMRemoveComment(bpy.types.Operator):
 
         if debug: print(start_edit_shot_comment_statement) #debug
 
-        # get shot settings and filepath 
-        if general_settings.file_type == "EDIT":
-            shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-        elif general_settings.file_type == "SHOT":
-            shot_settings = winman.bpm_shotsettings
+        # get comment collection and folder path
+        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
 
-        comments = shot_settings.comments
-
-        if debug: print(editing_shot_comment_statement + comments[self.index].name) #debug
+        if debug: print(editing_shot_comment_statement + comment_collection[self.index].name) #debug
 
         # remove comment
-        comments.remove(self.index)
+        comment_collection.remove(self.index)
 
         # update json file
-        update_comments_json_file(shot_settings)
+        update_comments_json_file(comment_collection, folder_path)
         if debug: print(comment_file_updated_statement) #debug
 
         if debug: print(removed_shot_comment_statement) #debug
@@ -321,6 +331,8 @@ class BPMModifyComment(bpy.types.Operator):
     frame : bpy.props.IntProperty(name = "Frame", update=update_comment_frame_property)
     author : bpy.props.StringProperty(name = "Author", default = "Me")
 
+    comment_type : bpy.props.StringProperty()
+
     @classmethod
     def poll(cls, context):
         general_settings = context.window_manager.bpm_generalsettings
@@ -339,11 +351,9 @@ class BPMModifyComment(bpy.types.Operator):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
 
-        # get shot settings and filepath 
-        if general_settings.file_type == "EDIT":
-            active_comment = context.scene.sequence_editor.active_strip.bpm_shotsettings.comments[self.index]
-        elif general_settings.file_type == "SHOT":
-            active_comment = winman.bpm_shotsettings.comments[self.index]
+        # get comment collection and folder path
+        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
+        active_comment = comment_collection[self.index]
 
         self.author = active_comment.author
         self.comment = active_comment.comment
@@ -371,13 +381,10 @@ class BPMModifyComment(bpy.types.Operator):
 
         if debug: print(start_edit_shot_comment_statement) #debug
 
-        # get shot settings and filepath 
-        if general_settings.file_type == "EDIT":
-            shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-        elif general_settings.file_type == "SHOT":
-            shot_settings = winman.bpm_shotsettings
+        # get comment collection and folder path
+        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
             
-        active_comment = shot_settings.comments[self.index]
+        active_comment = comment_collection[self.index]
 
         if debug: print(editing_shot_comment_statement + active_comment.comment) #debug
 
@@ -389,7 +396,7 @@ class BPMModifyComment(bpy.types.Operator):
         active_comment.edit_time = getDateTimeString()
 
         # update json file
-        update_comments_json_file(shot_settings)
+        update_comments_json_file(comment_collection, folder_path)
         if debug: print(comment_file_updated_statement) #debug
 
         if debug: print(edited_shot_comment_statement) #debug
