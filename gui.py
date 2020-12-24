@@ -861,6 +861,31 @@ class BPM_PT_properties_asset_nodetree_panel(bpy.types.Panel):
         drawPropertiesAssetPanel(layout, asset_settings, general_settings)
 
 
+# asset settings nodetree debug subpanel
+class BPM_PT_properties_asset_nodetree_debug_subpanel(bpy.types.Panel):
+    bl_space_type = 'NODE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "Debug"
+    bl_idname = "BPM_PT_properties_asset_nodetree_debug_subpanel"
+    bl_parent_id = "BPM_PT_properties_asset_nodetree_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.debug
+
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        winman = context.window_manager
+        asset_settings = winman.bpm_assetsettings
+
+        drawDebugAssetPanel(layout, asset_settings)
+
+
 # bpm function topbar back/open operators
 def bpmTopbarFunction(self, context):
     if context.region.alignment == 'RIGHT':
