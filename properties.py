@@ -147,7 +147,7 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
 
     # comments
     comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
-    
+
 
 # shot settings strips
 class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
@@ -312,7 +312,6 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
     project_folder : bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
 
     debug : bpy.props.BoolProperty(default=True)
-    show_debug_props : bpy.props.BoolProperty(name = 'Debug properties', default=False)
 
     bypass_update_tag : bpy.props.BoolProperty(default=False)
 
