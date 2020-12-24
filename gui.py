@@ -217,9 +217,12 @@ class ViewportPanel(bpy.types.Panel):
 
 # nodetree class
 class NodetreePanel(bpy.types.Panel):
-    bl_space_type = 'NODE_EDITOR'
-    bl_region_type = 'UI'
+    bl_space_type = 'FILE_BROWSER'
+    bl_region_type = 'TOOLS'
     bl_category = "BPM"
+
+# filebrowser class
+class FilebrowserPanel(bpy.types.Panel):
 
 
 # sequencer management
@@ -830,7 +833,7 @@ class BPM_PT_properties_asset_nodetree_debug_subpanel(NodetreePanel):
 
 # asset comment nodetree panel
 class BPM_PT_properties_asset_comments_nodetree_panel(NodetreePanel):
-    bl_label = "Assets Library"
+    bl_label = "Assets Comments"
 
     @classmethod
     def poll(cls, context):
@@ -885,12 +888,8 @@ class BPM_UL_Folders_Uilist(bpy.types.UIList):
 
 
 # filebrowser gui
-class BPM_PT_FileBrowser_Panel(bpy.types.Panel):
-    bl_space_type = 'FILE_BROWSER'
-    bl_region_type = 'TOOLS'
-    bl_category = "BPM"
+class BPM_PT_FileBrowser_Panel(NodetreePanel):
     bl_label = "BPM Project Folders"
-    bl_idname = "BPM_PT_FileBrowser_Panel"
     
     @classmethod
     def poll(cls, context):
