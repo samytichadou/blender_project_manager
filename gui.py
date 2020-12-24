@@ -268,6 +268,32 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
             row.prop(scn_settings, 'shot_deadline_preview_da', text = "")
 
 
+# sequencer timeline comment panel
+class BPM_PT_sequencer_timeline_comment_panel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "TimelineComments"
+    bl_idname = "BPM_PT_sequencer_timeline_comment_panel"
+    bl_category = "BPM"
+
+    @classmethod
+    def poll(cls, context):
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.is_project:
+            if general_settings.file_type == 'EDIT':
+                edit, shot, active = check_edit_poll_function(context)
+                if edit:
+                    return True
+
+    def draw(self, context):
+
+        layout = self.layout
+        
+        comments = context.window_manager.bpm_projectdatas.comments
+
+        comment_draw(layout, comments, "edit")
+
+
 # sequencer shot panel
 class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
@@ -346,6 +372,7 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         drawDebugPanel(layout, shot_settings, general_settings)#debug
 
 
+# sequencer shot comment panel
 class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
@@ -620,6 +647,30 @@ class BPM_PT_properties_asset_viewport_panel(bpy.types.Panel):
         layout = self.layout
 
         drawPropertiesAssetPanel(layout, asset_settings, general_settings)
+
+
+# asset comment viewport panel
+class BPM_PT_properties_asset_comments_viewport_panel(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_label = "Asset Comments"
+    bl_idname = "BPM_PT_properties_asset_comments_viewport_panel"
+
+    @classmethod
+    def poll(cls, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        asset_settings = winman.bpm_assetsettings
+        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type not in {'NODEGROUP', 'MATERIAL'}
+
+    def draw(self, context):
+        winman = context.window_manager
+        asset_settings = winman.bpm_assetsettings
+
+        layout = self.layout
+
+        comment_draw(self.layout, asset_settings.comments, "asset")
 
 
 # asset settings nodetree panel

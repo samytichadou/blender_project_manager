@@ -160,6 +160,9 @@ refreshed_timeline_shot_datas_statement = bpm_statement + "Timeline shots datas 
 refreshing_timeline_shot_display_mode = bpm_statement + "Refreshing timeline shots available display mode"
 refreshed_timeline_shot_display_mode = bpm_statement + "Timeline shots available display mode refreshed"
 
+no_active_shot_message = "No active shot"
+no_active_shot_statement = bpm_statement + no_active_shot_message
+
 
 # shot update statement
 start_update_shot_statement = bpm_statement + "Starting update shot(s) from timeline"

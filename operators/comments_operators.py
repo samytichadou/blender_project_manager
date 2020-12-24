@@ -13,6 +13,8 @@ from ..global_variables import (
                                 removed_shot_comment_statement,
                                 comment_file_updated_statement,
                                 bypass_shot_settings_update_statement,
+                                no_active_shot_message,
+                                no_active_shot_statement,
                             )
 
 
@@ -175,6 +177,16 @@ def return_commentcoll_folderpath(comment_type, context):
         comment_collection = shot_settings.comments
         folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
 
+    elif comment_type == "edit":
+        project_settings = winman.bpm_projectdatas
+        comment_collection = project_settings.comments
+        folder_path = os.path.dirname(bpy.data.filepath)
+
+    elif comment_type == "asset":
+        asset_settings = winman.bpm_assetsettings
+        comment_collection = asset_settings.comments
+        folder_path = os.path.dirname(bpy.data.filepath)
+
     return (comment_collection, folder_path)
 
 
@@ -195,15 +207,9 @@ class BPMAddComment(bpy.types.Operator):
     def poll(cls, context):
         general_settings = context.window_manager.bpm_generalsettings
         if general_settings.is_project:
-            if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-                edit, shot, active = check_edit_poll_function(context)
-                if edit and shot:
-                    if not active.lock:
-                        if not active.bpm_shotsettings.is_working:
-                            return True
-            elif context.window_manager.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
+            if context.window_manager.bpm_generalsettings.file_type in {"SHOT", "ASSET", "EDIT"}:
                 return True
-
+                
 
     def invoke(self, context, event):
         self.frame = context.scene.frame_current
@@ -224,6 +230,14 @@ class BPMAddComment(bpy.types.Operator):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
         debug = general_settings.debug
+
+        # return if no active shot
+        if self.comment_type == "edit_shot":
+            edit, shot, active = check_edit_poll_function(context)
+            if not shot or active.lock:
+                self.report({'INFO'}, no_active_shot_message)
+                if general_settings.debug: print(no_active_shot_statement) #debug
+                return {'FINISHED'}
 
         if debug: print(start_edit_shot_comment_statement) #debug
 
@@ -272,13 +286,7 @@ class BPMRemoveComment(bpy.types.Operator):
     def poll(cls, context):
         general_settings = context.window_manager.bpm_generalsettings
         if general_settings.is_project:
-            if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-                edit, shot, active = check_edit_poll_function(context)
-                if edit and shot:
-                    if not active.lock:
-                        if not active.bpm_shotsettings.is_working:
-                            return True
-            elif context.window_manager.bpm_generalsettings.file_type == 'SHOT':
+            if context.window_manager.bpm_generalsettings.file_type in {"SHOT", "ASSET", "EDIT"}:
                 return True
 
 
@@ -296,6 +304,14 @@ class BPMRemoveComment(bpy.types.Operator):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
         debug = general_settings.debug
+
+        # return if no active shot
+        if self.comment_type == "edit_shot":
+            edit, shot, active = check_edit_poll_function(context)
+            if not shot or active.lock:
+                self.report({'INFO'}, no_active_shot_message)
+                if general_settings.debug: print(no_active_shot_statement) #debug
+                return {'FINISHED'}
 
         if debug: print(start_edit_shot_comment_statement) #debug
 
@@ -337,13 +353,7 @@ class BPMModifyComment(bpy.types.Operator):
     def poll(cls, context):
         general_settings = context.window_manager.bpm_generalsettings
         if general_settings.is_project:
-            if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-                edit, shot, active = check_edit_poll_function(context)
-                if edit and shot:
-                    if not active.lock:
-                        if not active.bpm_shotsettings.is_working:
-                            return True
-            elif context.window_manager.bpm_generalsettings.file_type == 'SHOT':
+            if context.window_manager.bpm_generalsettings.file_type in {"SHOT", "ASSET", "EDIT"}:
                 return True
 
 
@@ -378,6 +388,14 @@ class BPMModifyComment(bpy.types.Operator):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
         debug = general_settings.debug
+
+        # return if no active shot
+        if self.comment_type == "edit_shot":
+            edit, shot, active = check_edit_poll_function(context)
+            if not shot or active.lock:
+                self.report({'INFO'}, no_active_shot_message)
+                if general_settings.debug: print(no_active_shot_statement) #debug
+                return {'FINISHED'}
 
         if debug: print(start_edit_shot_comment_statement) #debug
 

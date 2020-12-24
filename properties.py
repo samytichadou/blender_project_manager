@@ -84,6 +84,18 @@ def updateAssetDisplayType(self, context):
     self.asset_list_index = -1
 
 
+# shot comments
+class BPMShotComments(bpy.types.PropertyGroup):
+    '''name : StringProperty() '''
+    comment : bpy.props.StringProperty(name = "Comment")
+    frame_comment : bpy.props.BoolProperty(name = "Frame Comment")
+    frame : bpy.props.IntProperty(name = "Marker Frame")
+    time : bpy.props.StringProperty(name = "Creation Date")
+    edit_time : bpy.props.StringProperty(name = "Edition Date")
+    author : bpy.props.StringProperty(name = "Author")
+    hide : bpy.props.BoolProperty(name = "Hide Comment")
+
+
 # project settings
 class BPMProjectSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
@@ -100,6 +112,9 @@ class BPMProjectSettings(bpy.types.PropertyGroup) :
     default_shot_length : bpy.props.IntProperty(name = "Default Shot Length", default = 100)
     version_suffix : bpy.props.StringProperty(name = "Version Suffix", default = "v")
     version_digits : bpy.props.IntProperty(name = "Version Digits", default = 3)
+
+    # comments
+    comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
 
 
 # custom project folders
@@ -130,18 +145,9 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
     asset_nodegroup : bpy.props.PointerProperty(name="Asset nodegroup", type=bpy.types.NodeTree, update = updateAssetAssigning)
     asset_world : bpy.props.PointerProperty(name="Asset world", type=bpy.types.World, update = updateAssetAssigning)
 
-
-# shot comments
-class BPMShotComments(bpy.types.PropertyGroup):
-    '''name : StringProperty() '''
-    comment : bpy.props.StringProperty(name = "Comment")
-    frame_comment : bpy.props.BoolProperty(name = "Frame Comment")
-    frame : bpy.props.IntProperty(name = "Marker Frame")
-    time : bpy.props.StringProperty(name = "Creation Date")
-    edit_time : bpy.props.StringProperty(name = "Edition Date")
-    author : bpy.props.StringProperty(name = "Author")
-    hide : bpy.props.BoolProperty(name = "Hide Comment")
-
+    # comments
+    comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
+    
 
 # shot settings strips
 class BPMShotSettingsStrips(bpy.types.PropertyGroup) :

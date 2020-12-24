@@ -120,11 +120,11 @@ classes = (BPMOpenShot,
 
             BPMAddonPrefs,
 
+            BPMShotComments,
             BPMProjectSettings,
             BPMCustomFolders,
             BPMAssetList,
             BPMAssetSettings,
-            BPMShotComments,
             BPMShotSettingsStrips,
             BPMShotSettings,
             BPMSceneSettings,
@@ -132,6 +132,7 @@ classes = (BPMOpenShot,
             BPMRenderSettings,
 
             BPM_PT_sequencer_management_panel,
+            BPM_PT_sequencer_timeline_comment_panel,
             BPM_PT_sequencer_shot_panel,
             BPM_PT_sequencer_shot_comment_panel,
             BPM_PT_sequencer_asset_panel,
@@ -139,6 +140,7 @@ classes = (BPMOpenShot,
             BPM_PT_properties_shot_panel,
             BPM_PT_properties_shot_comment_panel,
             BPM_PT_properties_asset_viewport_panel,
+            BPM_PT_properties_asset_comments_viewport_panel,
             BPM_PT_properties_asset_nodetree_panel,
             BPM_PT_properties_asset_library_viewport_panel,
             BPM_PT_properties_asset_library_nodetree_panel,
@@ -165,7 +167,7 @@ def register():
         bpy.props.PointerProperty(type = BPMGeneralSettings, name="BPM general settings")
 
     bpy.types.WindowManager.bpm_projectdatas = \
-        bpy.props.PointerProperty(type = BPMProjectSettings, name="BPM preoject datas")
+        bpy.props.PointerProperty(type = BPMProjectSettings, name="BPM project datas")
 
     bpy.types.WindowManager.bpm_customfolders = \
         bpy.props.CollectionProperty(type = BPMCustomFolders, name="BPM custom folders")

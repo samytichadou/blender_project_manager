@@ -102,7 +102,7 @@ class BpmCreateProject(bpy.types.Operator):
         project_file = os.path.join(project_folder, file_project)
 
         # format the project datas json dataset
-        json_dataset = createJsonDatasetFromProperties(datas, ())
+        json_dataset = createJsonDatasetFromProperties(datas, ("comments"))
 
         # create json file
         create_json_file(json_dataset, project_file)
