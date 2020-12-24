@@ -5,6 +5,7 @@ from ..functions.check_edit_poll_function import check_edit_poll_function
 from ..functions.json_functions import create_json_file, createJsonDatasetFromProperties
 from ..functions.date_functions import getDateTimeString, getDateTimeID
 from ..functions.file_functions import absolutePath
+from ..functions.strip_functions import getShotCommentPosition
 from ..global_variables import (
                                 comment_file,
                                 start_edit_shot_comment_statement,
@@ -246,18 +247,19 @@ class BPMAddComment(bpy.types.Operator):
 
         if debug: print(editing_shot_comment_statement + self.comment) #debug
 
-        # set frame if not frame comment
+        # set frame
         if not self.frame_comment:
-            general_settings.bypass_update_tag = True
-            self.frame = -1
-            general_settings.bypass_update_tag = False
+            frame = -1
+        elif self.comment_type == "edit_shot":
+            active = context.scene.sequence_editor.active_strip
+            frame = getShotCommentPosition(self.frame, active)
 
         # add new comment to strip settings
         new_comment = comment_collection.add()
         new_comment.name = getDateTimeID()
         new_comment.comment = self.comment
         new_comment.frame_comment = self.frame_comment
-        new_comment.frame = self.frame
+        new_comment.frame = frame
         new_comment.time = getDateTimeString()
         new_comment.author = self.author
 
