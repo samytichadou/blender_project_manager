@@ -31,6 +31,38 @@ def drawDebugPanel(container, dataset):
             row.prop(dataset, '%s' % p.identifier)
 
 
+# draw debug for assets
+def drawDebugAssetPanel(container, dataset):
+
+    drawDebugPanel(container, dataset)
+
+    container.label(text = 'Debug', icon = 'ERROR')
+
+    container.label(text = 'Collections', icon = 'GROUP')
+    col = container.column(align=True)
+    for i in bpy.data.collections:
+        row = col.row(align=True)
+        row.prop(i, 'bpm_isasset', text=i.name)
+
+    container.label(text = 'Materials', icon = 'MATERIAL')
+    col = container.column(align=True)
+    for i in bpy.data.materials:
+        row = col.row(align=True)
+        row.prop(i, 'bpm_isasset', text=i.name)
+
+    container.label(text = 'Nodegroups', icon = 'NODETREE')
+    col = container.column(align=True)
+    for i in bpy.data.node_groups:
+        row = col.row(align=True)
+        row.prop(i, 'bpm_isasset', text=i.name)
+
+    container.label(text = 'Worlds', icon = 'WORLD')
+    col = container.column(align=True)
+    for i in bpy.data.worlds:
+        row = col.row(align=True)
+        row.prop(i, 'bpm_isasset', text=i.name)
+
+
 # draw already opened blend warning
 def drawOpenedWarning(container, general_settings):
     if general_settings.blend_already_opened:
@@ -156,7 +188,7 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
     bl_label = "UI"
     bl_idname = "BPM_PT_sequencer_ui_panel"
     bl_category = "BPM"
-    #bl_parent_id = "BPM_PT_sequencer_management_panel"
+
 
     @classmethod
     def poll(cls, context):
@@ -586,10 +618,35 @@ class BPM_PT_properties_shot_panel(bpy.types.Panel):
         row.menu('BPM_MT_OpenFolder_Menu')
         drawWikiHelp(row, 'Project-Architecture')
 
-        drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
+        #drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
 
 
-# shot settings panel
+# shot settings debug subpanel
+class BPM_PT_properties_shot_debug_subpanel(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_label = "Debug"
+    bl_idname = "BPM_PT_properties_shot_debug_subpanel"
+    bl_parent_id = "BPM_PT_properties_shot_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.debug
+
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        winman = context.window_manager
+        shot_settings = winman.bpm_shotsettings
+
+        drawDebugPanel(layout, shot_settings)
+
+
+# shot comment panel
 class BPM_PT_properties_shot_comment_panel(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
@@ -703,38 +760,6 @@ def drawPropertiesAssetPanel(container, asset_settings, general_settings):
     row = container.row(align=True)
     row.menu('BPM_MT_OpenFolder_Menu')
     drawWikiHelp(row, 'Project-Architecture')
-    
-    drawDebugPanel(container, asset_settings, general_settings) #debug
-    
-    if general_settings.show_debug_props:
-        #debug
-        box = container.box()
-
-        box.label(text = 'Debug', icon = 'ERROR')
-
-        box.label(text = 'Collections', icon = 'GROUP')
-        col = box.column(align=True)
-        for i in bpy.data.collections:
-            row = col.row(align=True)
-            row.prop(i, 'bpm_isasset', text=i.name)
-
-        box.label(text = 'Materials', icon = 'MATERIAL')
-        col = box.column(align=True)
-        for i in bpy.data.materials:
-            row = col.row(align=True)
-            row.prop(i, 'bpm_isasset', text=i.name)
-
-        box.label(text = 'Nodegroups', icon = 'NODETREE')
-        col = box.column(align=True)
-        for i in bpy.data.node_groups:
-            row = col.row(align=True)
-            row.prop(i, 'bpm_isasset', text=i.name)
-
-        box.label(text = 'Worlds', icon = 'WORLD')
-        col = box.column(align=True)
-        for i in bpy.data.worlds:
-            row = col.row(align=True)
-            row.prop(i, 'bpm_isasset', text=i.name)
 
 
 # asset settings viewport panel
@@ -760,6 +785,31 @@ class BPM_PT_properties_asset_viewport_panel(bpy.types.Panel):
         layout = self.layout
 
         drawPropertiesAssetPanel(layout, asset_settings, general_settings)
+
+
+# asset settings viewport debug subpanel
+class BPM_PT_properties_asset_viewport_debug_subpanel(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_label = "Debug"
+    bl_idname = "BPM_PT_properties_asset_viewport_debug_subpanel"
+    bl_parent_id = "BPM_PT_properties_asset_viewport_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.debug
+
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        winman = context.window_manager
+        asset_settings = winman.bpm_assetsettings
+
+        drawDebugAssetPanel(layout, asset_settings)
 
 
 # asset comment viewport panel
