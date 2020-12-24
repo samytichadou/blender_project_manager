@@ -22,19 +22,13 @@ def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
 
 
 # draw all props for debug
-def drawDebugPanel(container, dataset, general_settings):
-    if not general_settings.debug:
-        return
- 
-    box = container.box()
+def drawDebugPanel(container, dataset):
 
-    box.prop(general_settings, 'show_debug_props', text = "Show debug props", icon = 'TOOL_SETTINGS')
-    if general_settings.show_debug_props:
-        box.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
-        for p in dataset.bl_rna.properties:
-            if not p.is_readonly and p.identifier != 'name':
-                row = box.row()
-                row.prop(dataset, '%s' % p.identifier)
+    container.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
+    for p in dataset.bl_rna.properties:
+        if not p.is_readonly and p.identifier != 'name':
+            row = container.row()
+            row.prop(dataset, '%s' % p.identifier)
 
 
 # draw already opened blend warning
@@ -121,7 +115,7 @@ def comment_draw(container, comments, c_type):
 class BPM_PT_sequencer_management_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
-    bl_label = "Management"
+    bl_label = "Project"
     bl_idname = "BPM_PT_sequencer_management_panel"
     bl_category = "BPM"
 
@@ -153,8 +147,6 @@ class BPM_PT_sequencer_management_panel(bpy.types.Panel):
         row = layout.row(align=True)
         row.menu('BPM_MT_OpenFolder_Menu')
         drawWikiHelp(row, 'Project-Architecture')
-                
-        drawDebugPanel(layout, general_settings, general_settings)#debug
 
 
 # sequencer UI panel
@@ -268,13 +260,14 @@ class BPM_PT_sequencer_ui_panel(bpy.types.Panel):
             row.prop(scn_settings, 'shot_deadline_preview_da', text = "")
 
 
-# sequencer timeline comment panel
-class BPM_PT_sequencer_timeline_comment_panel(bpy.types.Panel):
+# sequencer management comment subpanel
+class BPM_PT_sequencer_management_comment_subpanel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
-    bl_label = "TimelineComments"
-    bl_idname = "BPM_PT_sequencer_timeline_comment_panel"
-    bl_category = "BPM"
+    bl_label = "Comments"
+    bl_idname = "BPM_PT_sequencer_management_comment_subpanel"
+    bl_parent_id = "BPM_PT_sequencer_management_panel"
+    bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
     def poll(cls, context):
@@ -294,6 +287,30 @@ class BPM_PT_sequencer_timeline_comment_panel(bpy.types.Panel):
         comment_draw(layout, comments, "edit")
 
 
+# sequencer management debug subpanel
+class BPM_PT_sequencer_management_debug_subpanel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "Debug"
+    bl_idname = "BPM_PT_sequencer_management_debug_subpanel"
+    bl_parent_id = "BPM_PT_sequencer_management_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.debug
+
+
+    def draw(self, context):
+
+        layout = self.layout
+        
+        general_settings = context.window_manager.bpm_generalsettings
+
+        drawDebugPanel(layout, general_settings)
+
+
 # sequencer shot panel
 class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
@@ -304,42 +321,41 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        chk_isshot = False
-        if context.scene.sequence_editor:
-            if context.scene.sequence_editor.active_strip:
-                active = context.scene.sequence_editor.active_strip
-                try:
-                    if active.bpm_shotsettings.is_shot:
-                        chk_isshot = True
-                except AttributeError:
-                    return False
-        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT' and chk_isshot
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.is_project:
+            if general_settings.file_type == 'EDIT':
+                edit, shot, active = check_edit_poll_function(context)
+                if edit and shot:
+                    return True
+
 
     def draw(self, context):        
-        active = context.scene.sequence_editor.active_strip
+
         general_settings = context.window_manager.bpm_generalsettings
-        shot_settings = active.bpm_shotsettings
 
         layout = self.layout
 
         drawOpenedWarning(layout, general_settings)
 
-        drawOperatorAndHelp(layout, 'bpm.open_shot', '', 'Open-Shot-and-Back-to-Edit')
+        #drawOperatorAndHelp(layout, 'bpm.open_shot', '', 'Open-Shot-and-Back-to-Edit')
 
-        drawOperatorAndHelp(layout, 'bpm.update_shot_duration', '', 'Update-Shot-Operator')
 
-        drawOperatorAndHelp(layout, 'bpm.bump_shot_version_edit', '', 'Shot-Version-Management')
+# sequencer tracking shot subpanel
+class BPM_PT_sequencer_shot_tracking_subpanel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "Tracking"
+    bl_idname = "BPM_PT_sequencer_shot_tracking_subpanel"
+    bl_parent_id = "BPM_PT_sequencer_shot_panel"
+    bl_options = {'DEFAULT_CLOSED'}
 
-        drawOperatorAndHelp(layout, 'bpm.change_shot_version_edit', '', 'Shot-Version-Management')
 
-        row = layout.row(align=True)
-        row.operator('bpm.change_shot_version_edit', text = "Last shot version").go_to_last_version = True
-        row.operator('bpm.open_wiki_page', text='', icon='QUESTION').wiki_page = 'Shot-Version-Management'
+    def draw(self, context):
 
-        drawOperatorAndHelp(layout, 'bpm.render_shot_edit', '', 'Shot-Rendering')
+        layout = self.layout
 
-        layout.separator()
-        layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
+        active = context.scene.sequence_editor.active_strip
+        shot_settings = active.bpm_shotsettings
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'shot_state', text="")
@@ -353,42 +369,67 @@ class BPM_PT_sequencer_shot_panel(bpy.types.Panel):
         row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='SEQ_STRIP_DUPLICATE').behavior = 'selected_strips'
         drawWikiHelp(row, 'Shot-Task-System')
 
+
+# sequencer version shot subpanel
+class BPM_PT_sequencer_shot_version_subpanel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "Version"
+    bl_idname = "BPM_PT_sequencer_shot_version_subpanel"
+    bl_parent_id = "BPM_PT_sequencer_shot_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        active = context.scene.sequence_editor.active_strip
+        shot_settings = active.bpm_shotsettings
+
+        layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
+
+        drawOperatorAndHelp(layout, 'bpm.bump_shot_version_edit', '', 'Shot-Version-Management')
+
+        drawOperatorAndHelp(layout, 'bpm.change_shot_version_edit', '', 'Shot-Version-Management')
+
         row = layout.row(align=True)
-        row.prop(shot_settings, 'shot_render_state', text = "Render")
-        drawWikiHelp(row, 'Render-Settings')
+        row.operator('bpm.change_shot_version_edit', text = "Last shot version").go_to_last_version = True
+        row.operator('bpm.open_wiki_page', text='', icon='QUESTION').wiki_page = 'Shot-Version-Management'
+
+
+# sequencer sync shot subpanel
+class BPM_PT_sequencer_shot_sync_subpanel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "Sync"
+    bl_idname = "BPM_PT_sequencer_shot_sync_subpanel"
+    bl_parent_id = "BPM_PT_sequencer_shot_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    def draw(self, context):
+
+        layout = self.layout
+        
+        shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
+
+        drawOperatorAndHelp(layout, 'bpm.update_shot_duration', '', 'Update-Shot-Operator')
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
 
-        row = layout.row(align=True)
-        row.prop(shot_settings, 'shot_timeline_display', text = "Display")
-        drawWikiHelp(row, 'Timeline-Shot-Display-Mode')
 
-        row = layout.row(align=True)
-        if active.type == 'IMAGE': row.enabled = False
-        row.prop(shot_settings, 'display_markers')
-
-        drawDebugPanel(layout, shot_settings, general_settings)#debug
-
-
-# sequencer shot comment panel
-class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
+# sequencer comment shot subpanel
+class BPM_PT_sequencer_shot_comment_subpanel(bpy.types.Panel):
     bl_space_type = 'SEQUENCE_EDITOR'
     bl_region_type = 'UI'
-    bl_label = "Shot Comments"
-    bl_idname = "BPM_PT_sequencer_shot_comment_panel"
-    bl_category = "BPM"
+    bl_label = "Comments"
+    bl_idname = "BPM_PT_sequencer_shot_comment_subpanel"
+    bl_parent_id = "BPM_PT_sequencer_shot_panel"
+    bl_options = {'DEFAULT_CLOSED'}
 
-    @classmethod
-    def poll(cls, context):
-        general_settings = context.window_manager.bpm_generalsettings
-        if general_settings.is_project:
-            if general_settings.file_type == 'EDIT':
-                edit, shot, active = check_edit_poll_function(context)
-                if edit and shot:
-                    if not active.lock:
-                        return True
 
     def draw(self, context):
 
@@ -397,6 +438,78 @@ class BPM_PT_sequencer_shot_comment_panel(bpy.types.Panel):
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
 
         comment_draw(layout, shot_settings.comments, "edit_shot")
+
+
+# sequencer display shot subpanel
+class BPM_PT_sequencer_shot_display_subpanel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "Display"
+    bl_idname = "BPM_PT_sequencer_shot_display_subpanel"
+    bl_parent_id = "BPM_PT_sequencer_shot_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        active = context.scene.sequence_editor.active_strip
+        shot_settings = active.bpm_shotsettings
+
+        row = layout.row(align=True)
+        row.prop(shot_settings, 'shot_timeline_display', text = "Display")
+        drawWikiHelp(row, 'Timeline-Shot-Display-Mode')
+
+        layout.prop(shot_settings, 'display_markers')
+
+
+# sequencer render shot subpanel
+class BPM_PT_sequencer_shot_render_subpanel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "Render"
+    bl_idname = "BPM_PT_sequencer_shot_render_subpanel"
+    bl_parent_id = "BPM_PT_sequencer_shot_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        active = context.scene.sequence_editor.active_strip
+        shot_settings = active.bpm_shotsettings
+
+        row = layout.row(align=True)
+        row.prop(shot_settings, 'shot_render_state', text = "Render")
+        drawWikiHelp(row, 'Render-Settings')
+
+        drawOperatorAndHelp(layout, 'bpm.render_shot_edit', '', 'Shot-Rendering')
+
+
+# sequencer shot debug subpanel
+class BPM_PT_sequencer_shot_debug_subpanel(bpy.types.Panel):
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_label = "Debug"
+    bl_idname = "BPM_PT_sequencer_shot_debug_subpanel"
+    bl_parent_id = "BPM_PT_sequencer_shot_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.debug
+
+
+    def draw(self, context):
+
+        layout = self.layout
+        
+        shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
+
+        drawDebugPanel(layout, shot_settings)
 
 
 # sequencer assets panel
