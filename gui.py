@@ -217,13 +217,15 @@ class ViewportPanel(bpy.types.Panel):
 
 # nodetree class
 class NodetreePanel(bpy.types.Panel):
-    bl_space_type = 'FILE_BROWSER'
-    bl_region_type = 'TOOLS'
+    bl_space_type = 'NODE_EDITOR'
+    bl_region_type = 'UI'
     bl_category = "BPM"
 
 # filebrowser class
 class FilebrowserPanel(bpy.types.Panel):
-
+    bl_space_type = 'FILE_BROWSER'
+    bl_region_type = 'TOOLS'
+    bl_category = "BPM"
 
 # sequencer management
 class BPM_PT_sequencer_management_panel(SequencerPanel):
@@ -888,7 +890,7 @@ class BPM_UL_Folders_Uilist(bpy.types.UIList):
 
 
 # filebrowser gui
-class BPM_PT_FileBrowser_Panel(NodetreePanel):
+class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
     bl_label = "BPM Project Folders"
     
     @classmethod
