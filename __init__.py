@@ -133,6 +133,7 @@ classes = (BPMOpenShot,
 
             BPM_PT_sequencer_management_panel,
             BPM_PT_sequencer_management_comment_subpanel,
+            BPM_PT_sequencer_browse_subpanel,
             BPM_PT_sequencer_management_debug_subpanel,
             BPM_PT_sequencer_shot_panel,
             BPM_PT_sequencer_shot_tracking_subpanel,

@@ -261,9 +261,63 @@ class BPM_PT_sequencer_management_panel(SequencerPanel):
 
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
 
+
+# sequencer management comment subpanel
+class BPM_PT_sequencer_management_comment_subpanel(SequencerPanel):
+    bl_label = "Comments"
+    bl_parent_id = "BPM_PT_sequencer_management_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.is_project:
+            if general_settings.file_type == 'EDIT':
+                edit, shot, active = check_edit_poll_function(context)
+                if edit:
+                    return True
+
+    def draw(self, context):
+
+        layout = self.layout
+        
+        comments = context.window_manager.bpm_projectdatas.comments
+
+        comment_draw(layout, comments, "edit")
+
+
+# sequencer browse subpanel
+class BPM_PT_sequencer_browse_subpanel(SequencerPanel):
+    bl_label = "Browse"
+    bl_parent_id = "BPM_PT_sequencer_management_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+ 
+    def draw(self, context):
+
+        layout = self.layout
+
         row = layout.row(align=True)
         row.menu('BPM_MT_OpenFolder_Explorer_Menu')
         drawWikiHelp(row, 'Project-Architecture')
+
+
+# sequencer management debug subpanel
+class BPM_PT_sequencer_management_debug_subpanel(SequencerPanel):
+    bl_label = "Debug"
+    bl_parent_id = "BPM_PT_sequencer_management_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.debug
+
+    def draw(self, context):
+
+        layout = self.layout
+        
+        general_settings = context.window_manager.bpm_generalsettings
+
+        drawDebugPanel(layout, general_settings)
 
 
 # sequencer UI panel
@@ -370,49 +424,6 @@ class BPM_PT_sequencer_ui_panel(SequencerPanel):
             row.prop(scn_settings, 'shot_deadline_preview_yr', text = "")
             row.prop(scn_settings, 'shot_deadline_preview_mn', text = "")
             row.prop(scn_settings, 'shot_deadline_preview_da', text = "")
-
-
-# sequencer management comment subpanel
-class BPM_PT_sequencer_management_comment_subpanel(SequencerPanel):
-    bl_label = "Comments"
-    bl_parent_id = "BPM_PT_sequencer_management_panel"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    @classmethod
-    def poll(cls, context):
-        general_settings = context.window_manager.bpm_generalsettings
-        if general_settings.is_project:
-            if general_settings.file_type == 'EDIT':
-                edit, shot, active = check_edit_poll_function(context)
-                if edit:
-                    return True
-
-    def draw(self, context):
-
-        layout = self.layout
-        
-        comments = context.window_manager.bpm_projectdatas.comments
-
-        comment_draw(layout, comments, "edit")
-
-
-# sequencer management debug subpanel
-class BPM_PT_sequencer_management_debug_subpanel(SequencerPanel):
-    bl_label = "Debug"
-    bl_parent_id = "BPM_PT_sequencer_management_panel"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.debug
-
-    def draw(self, context):
-
-        layout = self.layout
-        
-        general_settings = context.window_manager.bpm_generalsettings
-
-        drawDebugPanel(layout, general_settings)
 
 
 # sequencer shot panel
