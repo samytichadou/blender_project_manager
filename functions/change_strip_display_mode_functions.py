@@ -15,6 +15,7 @@ from .utils_functions import clearDataUsers
 from .strip_functions import getListSequencerShots
 from .dataset_functions import setPropertiesFromDataset
 from .project_data_functions import returnRenderExtensionFromSettings
+from .reload_comments_function import reload_comments
 
 from ..global_variables import (
                             scenes_linked_statement,
@@ -244,5 +245,8 @@ def updateShotDisplayMode(self, context):
         new_strip = updateStripToImageSequence(active, sequencer, shot_render_folder, winman)
 
     sequencer.active_strip = new_strip
+
+    # reload comments
+    reload_comments(context, "edit_shot")
 
     general_settings.bypass_update_tag = False

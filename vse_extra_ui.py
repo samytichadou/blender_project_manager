@@ -48,15 +48,17 @@ def unloadExternalFontId(font_id, file_font):
 
 
 # get link scene marker fram
-def getMarkerFrameFromShotStrip(strip):
-    marker_list = []
+def getCommentFrameFromShotStrip(strip):
+    comment_list = []
+    shot_settings = strip.bpm_shotsettings
     frame_start = strip.frame_start
-    scn = strip.scene
-    for marker in scn.timeline_markers:
-        marker_frame = (marker.frame - scn.frame_start) + frame_start
-        if marker_frame >= strip.frame_final_start and marker_frame < strip.frame_final_end:
-            marker_list.append((marker.name, marker_frame))
-    return marker_list
+    shot_frame_start = shot_settings.shot_frame_start
+    for comment in shot_settings.comments:
+        if comment.frame_comment:
+            comment_frame = (comment.frame - shot_frame_start) + frame_start
+            if comment_frame >= strip.frame_final_start and comment_frame < strip.frame_final_end:
+                comment_list.append((comment.comment, comment_frame))
+    return comment_list
 
 
 # get marker coordinates
@@ -449,36 +451,34 @@ def drawBpmSequencerCallbackPx():
                     indices_e_v_w += ((n_e_v_w, n_e_v_w + 1, n_e_v_w + 2), (n_e_v_w + 2, n_e_v_w + 1, n_e_v_w + 3))
                     n_e_v_w += 4
 
-        if strip.type == 'SCENE':
+        # markers
+        if m_display != 'NONE' :
+            if (m_display == 'SELECTED' and strip.select) \
+            or (m_display == 'PERSTRIP' and strip.bpm_shotsettings.display_markers) \
+            or (m_display == 'ALL'):
+                for m in getCommentFrameFromShotStrip(strip):
+                    coord = getMarkerCoordinates(m[1], strip.channel, region, dpi_fac)
+                    vertices_m += coord[0]
+                    indices_m += ((n_m, n_m + 1, n_m + 2),)
+                    n_m += 3   
 
-            # markers
-            if m_display != 'NONE' :
-                if (m_display == 'SELECTED' and strip.select) \
-                or (m_display == 'PERSTRIP' and strip.bpm_shotsettings.display_markers) \
-                or (m_display == 'ALL'):
-                    for m in getMarkerFrameFromShotStrip(strip):
-                        coord = getMarkerCoordinates(m[1], strip.channel, region, dpi_fac)
-                        vertices_m += coord[0]
-                        indices_m += ((n_m, n_m + 1, n_m + 2),)
-                        n_m += 3   
+                    # markers text
+                    if (mn_display == "ALL") \
+                    or (mn_display == "CURRENT" and scn.frame_current == m[1]):
+                        text = m[0]
+                        limit = scene_settings.display_marker_text_limit
+                        if len(text) > limit and limit != 0:
+                            if limit > 4:
+                                text = text[0:limit - 3] + "..."
+                            else:
+                                text = text[0:limit]
+                        marker_texts.append((coord[1], text))
 
-                        # markers text
-                        if (mn_display == "ALL") \
-                        or (mn_display == "CURRENT" and scn.frame_current == m[1]):
-                            text = m[0]
-                            limit = scene_settings.display_marker_text_limit
-                            if len(text) > limit and limit != 0:
-                                if limit > 4:
-                                    text = text[0:limit - 3] + "..."
-                                else:
-                                    text = text[0:limit]
-                            marker_texts.append((coord[1], text))
-
-                            # marker box
-                            if scene_settings.display_marker_boxes:
-                                vertices_m_bb += getBoundingBoxCoordinates(coord[1], text, text_size, dpi_fac)
-                                indices_m_bb += ((n_m_bb, n_m_bb + 1, n_m_bb + 2), (n_m_bb + 2, n_m_bb + 1, n_m_bb + 3))
-                                n_m_bb += 4
+                        # marker box
+                        if scene_settings.display_marker_boxes:
+                            vertices_m_bb += getBoundingBoxCoordinates(coord[1], text, text_size, dpi_fac)
+                            indices_m_bb += ((n_m_bb, n_m_bb + 1, n_m_bb + 2), (n_m_bb + 2, n_m_bb + 1, n_m_bb + 3))
+                            n_m_bb += 4
     
     ### DRAW SHADERS ###
 

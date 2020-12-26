@@ -34,7 +34,8 @@ def update_comments_json_file(comment_collection, folder_path):
 
 
 def update_comment_frame_property(self, context):
-    general_settings = context.window_manager.bpm_generalsettings
+    winman = context.window_manager
+    general_settings = winman.bpm_generalsettings
     debug = winman.bpm_projectdatas.debug
 
     if general_settings.bypass_update_tag:
