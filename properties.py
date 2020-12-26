@@ -112,6 +112,7 @@ class BPMProjectSettings(bpy.types.PropertyGroup) :
     default_shot_length : bpy.props.IntProperty(name = "Default Shot Length", default = 100)
     version_suffix : bpy.props.StringProperty(name = "Version Suffix", default = "v")
     version_digits : bpy.props.IntProperty(name = "Version Digits", default = 3)
+    debug : bpy.props.BoolProperty(default = True)
 
     # comments
     comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
@@ -311,7 +312,7 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
     file_type : bpy.props.EnumProperty(items = file_type, default='NONE')
     project_folder : bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
 
-    debug : bpy.props.BoolProperty(default = True)
+    #debug : bpy.props.BoolProperty(default = True)
 
     bypass_update_tag : bpy.props.BoolProperty(default=False)
 

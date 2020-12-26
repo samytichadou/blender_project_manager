@@ -314,7 +314,7 @@ class BPM_PT_sequencer_management_debug_subpanel(SequencerPanel):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.debug
+        return context.window_manager.bpm_projectdatas.debug
 
     def draw(self, context):
 
@@ -484,7 +484,7 @@ class BPM_PT_sequencer_shot_debug_subpanel(SequencerPanel):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.debug
+        return context.window_manager.bpm_projectdatas.debug
 
     def draw(self, context):
 
@@ -791,7 +791,7 @@ class BPM_PT_properties_shot_debug_viewport_subpanel(ViewportPanel):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.debug
+        return context.window_manager.bpm_projectdatas.debug
 
     def draw(self, context):
 
@@ -852,7 +852,7 @@ class BPM_PT_properties_asset_debug_viewport_subpanel(ViewportPanel):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.debug
+        return context.window_manager.bpm_projectdatas.debug
 
     def draw(self, context):
 
@@ -913,7 +913,7 @@ class BPM_PT_properties_asset_debug_nodetree_subpanel(NodetreePanel):
 
     @classmethod
     def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.debug
+        return context.window_manager.bpm_projectdatas.debug
 
     def draw(self, context):
 
@@ -1044,7 +1044,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             layout.operator('bpm.display_modify_project_settings')
             layout.operator('bpm.display_modify_render_settings')
             
-            layout.prop(general_settings, 'debug')
+            #layout.prop(general_settings, 'debug')
                                 
 
 # project folder ui list
