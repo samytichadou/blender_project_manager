@@ -1043,8 +1043,6 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
 
             layout.operator('bpm.display_modify_project_settings')
             layout.operator('bpm.display_modify_render_settings')
-            
-            #layout.prop(general_settings, 'debug')
                                 
 
 # project folder ui list
