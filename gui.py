@@ -595,8 +595,8 @@ class BPM_PT_sequencer_asset_panel(SequencerPanel):
 
 
 # shot settings panel
-class BPM_PT_properties_shot_panel(ViewportPanel):
-    bl_label = "Shot settings"
+class BPM_PT_properties_shot_viewport_panel(ViewportPanel):
+    bl_label = "Shot"
 
     @classmethod
     def poll(cls, context):
@@ -610,11 +610,27 @@ class BPM_PT_properties_shot_panel(ViewportPanel):
 
         drawOpenedWarning(layout, winman.bpm_generalsettings)
 
-        drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
-
-        drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
-
         drawOperatorAndHelp(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
+
+        row = layout.row(align=True)
+        row.menu('BPM_MT_OpenFolder_Menu')
+        drawWikiHelp(row, 'Project-Architecture')
+
+        #drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
+
+
+# shot tracking subpanel
+class BPM_PT_properties_shot_tracking_viewport_subpanel(ViewportPanel):
+    bl_label = "Tracking"
+    bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+
+        winman = context.window_manager
+        shot_settings = winman.bpm_shotsettings
+
+        layout = self.layout
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'shot_state', text="")
@@ -627,25 +643,65 @@ class BPM_PT_properties_shot_panel(ViewportPanel):
         row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
         drawWikiHelp(row, 'Shot-Task-System')
 
+
+# shot sync subpanel
+class BPM_PT_properties_shot_sync_viewport_subpanel(ViewportPanel):
+    bl_label = "Sync"
+    bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+
+        winman = context.window_manager
+        shot_settings = winman.bpm_shotsettings
+
+        layout = self.layout
+
+        drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
+
+        drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
+
         row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
+
+
+# shot comment subpanel
+class BPM_PT_properties_shot_comment_viewport_subpanel(ViewportPanel):
+    bl_label = "Comments"
+    bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        shot_settings = context.window_manager.bpm_shotsettings
+
+        comment_draw(self.layout, shot_settings.comments, "shot")
+
+
+# shot render subpanel
+class BPM_PT_properties_shot_render_viewport_subpanel(ViewportPanel):
+    bl_label = "Render"
+    bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        shot_settings = context.window_manager.bpm_shotsettings
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'shot_render_state', text = "Render")
         drawWikiHelp(row, 'Render-Settings')
 
-        row = layout.row(align=True)
-        row.menu('BPM_MT_OpenFolder_Menu')
-        drawWikiHelp(row, 'Project-Architecture')
-
-        #drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
-
 
 # shot settings debug subpanel
-class BPM_PT_properties_shot_debug_subpanel(ViewportPanel):
+class BPM_PT_properties_shot_debug_viewport_subpanel(ViewportPanel):
     bl_label = "Debug"
-    bl_parent_id = "BPM_PT_properties_shot_panel"
+    bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
     bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
@@ -660,23 +716,6 @@ class BPM_PT_properties_shot_debug_subpanel(ViewportPanel):
         shot_settings = winman.bpm_shotsettings
 
         drawDebugPanel(layout, shot_settings)
-
-
-# shot comment panel
-class BPM_PT_properties_shot_comment_panel(ViewportPanel):
-    bl_label = "Shot Comments"
-
-    @classmethod
-    def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'SHOT'
-
-    def draw(self, context):
-
-        layout = self.layout
-
-        shot_settings = context.window_manager.bpm_shotsettings
-
-        comment_draw(self.layout, shot_settings.comments, "shot")
 
 
 # asset library viewport panel
