@@ -170,13 +170,13 @@ def drawAssetLibrary(container, winman):
 
     general_settings = winman.bpm_generalsettings
 
-    drawOperatorAndHelp(container, 'bpm.create_asset', '', 'Asset-Management')
+    container.operator("bpm.create_asset")
 
     container.prop(general_settings, 'panel_asset_display', text="Display")
 
     container.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
 
-    drawOperatorAndHelp(container, 'bpm.open_asset_file', 'FILE_FOLDER', 'Asset-Management')
+    container.operator("bpm.open_asset_file", icon = "FILE_FOLDER")
 
 
 # bpm function topbar back/open operators
@@ -483,9 +483,9 @@ class BPM_PT_sequencer_shot_debug_subpanel(SequencerPanel):
         drawDebugPanel(layout, shot_settings)
 
 
-# sequencer assets panel
+# sequencer asset library panel
 class BPM_PT_sequencer_asset_library_panel(SequencerPanel):
-    bl_label = "Assets"
+    bl_label = ""
 
     @classmethod
     def poll(cls, context):
@@ -493,6 +493,11 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel):
             if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
                 if context.window_manager.bpm_projectdatas.edit_scene_keyword in context.scene.name:
                     return True
+
+    def draw_header(self, context):
+        row = self.layout.row(align=True)
+        row.label(text = "Assets")
+        drawWikiHelp(row, 'Asset-Management')
 
     def draw(self, context):
         winman = context.window_manager
