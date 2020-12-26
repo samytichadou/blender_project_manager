@@ -318,112 +318,6 @@ class BPM_PT_sequencer_management_debug_subpanel(SequencerPanel):
         drawDebugPanel(layout, general_settings)
 
 
-# sequencer UI panel
-class BPM_PT_sequencer_ui_panel(SequencerPanel):
-    bl_label = "UI"
-
-    @classmethod
-    def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT'
-
-    def draw(self, context):
-        scn_settings = context.scene.bpm_scenesettings
-        general_settings = context.window_manager.bpm_generalsettings
-
-        layout = self.layout
-
-        drawOpenedWarning(layout, general_settings)
-
-        row = layout.row(align=True)
-        row.prop(scn_settings, 'extra_ui')
-        drawWikiHelp(row, 'Extra-UI-in-Sequencer')
-
-        if scn_settings.extra_ui:
-
-            box = layout.box()
-            row = box.row()
-            row.label(text = "Shots")
-
-            row = box.row()
-            row.prop(scn_settings, 'display_shot_strip')
-            row.prop(scn_settings, 'color_shot_strip', text="")
-
-            row = box.row()
-            row.prop(scn_settings, 'display_shot_state')
-            row.prop(general_settings, 'ui_shot_state_subpanel', icon='COLORSET_04_VEC')
-
-            if general_settings.ui_shot_state_subpanel:
-                box2 = box.box()
-                col = box2.column(align=True)
-                row = col.row()
-                row.prop(scn_settings, 'color_state_storyboard')
-                row = col.row()
-                row.prop(scn_settings, 'color_state_layout')
-                row = col.row()
-                row.prop(scn_settings, 'color_state_animation')
-                row = col.row()
-                row.prop(scn_settings, 'color_state_lighting')
-                row = col.row()
-                row.prop(scn_settings, 'color_state_rendering')
-                row = col.row()
-                row.prop(scn_settings, 'color_state_compositing')
-                row = col.row()
-                row.prop(scn_settings, 'color_state_finished')
-
-            row = box.row()
-            row.prop(scn_settings, 'display_audio_sync_warning')
-            row.prop(scn_settings, 'color_audio_sync', text="")
-
-            row = box.row()
-            row.prop(scn_settings, 'display_shot_update_warning')
-            row.prop(scn_settings, 'color_update_warning', text="")
-
-            row = box.row()
-            row.prop(scn_settings, 'display_shot_version_warning')
-            row.prop(scn_settings, 'color_version_warning', text="")
-
-            row = box.row()
-            row.prop(scn_settings, 'display_working_warning')
-            row.prop(scn_settings, 'color_strip_working', text="")
-
-            # markers
-            box = layout.box()
-            row = box.row()
-            row.label(text = "Markers")
-
-            row = box.row()
-            row.prop(scn_settings, 'display_markers', text = "")
-            row.prop(scn_settings, 'color_markers', text="")
-
-            row = box.row()
-            row.label(text = "Names")
-            row.prop(scn_settings, 'display_marker_names', text = "")
-
-            row = box.row()
-            row.prop(scn_settings, 'display_marker_boxes', text = "Boxes")
-            row.prop(scn_settings, 'color_marker_boxes', text="")
-
-            box.prop(scn_settings, 'display_marker_text_limit')
-
-            # preview
-            box = layout.box()
-            row = box.row()
-            row.label(text = "Scheduling")
-
-            row = box.row()
-            row.prop(scn_settings, 'display_shot_todo', text="")
-            row.prop(scn_settings, 'color_shot_todo', text="")
-
-            col = box.column()
-            if scn_settings.display_shot_todo != "SPECIFIC_DATE":
-                col.enabled = False
-
-            row = col.row(align=True)
-            row.prop(scn_settings, 'shot_deadline_preview_yr', text = "")
-            row.prop(scn_settings, 'shot_deadline_preview_mn', text = "")
-            row.prop(scn_settings, 'shot_deadline_preview_da', text = "")
-
-
 # sequencer shot panel
 class BPM_PT_sequencer_shot_panel(SequencerPanel):
     bl_label = "Shot"
@@ -608,6 +502,155 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel):
         drawOpenedWarning(layout, winman.bpm_generalsettings)
 
         drawAssetLibrary(layout, winman)
+
+
+# sequencer UI panel
+class BPM_PT_sequencer_ui_panel(SequencerPanel):
+    bl_label = "UI"
+
+    @classmethod
+    def poll(cls, context):
+        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT'
+
+    def draw(self, context):
+
+        scn_settings = context.scene.bpm_scenesettings
+        general_settings = context.window_manager.bpm_generalsettings
+
+        layout = self.layout
+
+        drawOpenedWarning(layout, general_settings)
+
+        row = layout.row(align=True)
+        row.prop(scn_settings, 'extra_ui')
+        drawWikiHelp(row, 'Extra-UI-in-Sequencer')
+
+
+# sequencer UI shot subpanel
+class BPM_PT_sequencer_ui_shot_subpanel(SequencerPanel):
+    bl_label = "Shots"
+    bl_parent_id = "BPM_PT_sequencer_ui_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.scene.bpm_scenesettings.extra_ui
+
+    def draw(self, context):
+
+        scn_settings = context.scene.bpm_scenesettings
+        general_settings = context.window_manager.bpm_generalsettings
+
+        layout = self.layout
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_shot_strip')
+        row.prop(scn_settings, 'color_shot_strip', text="")
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_shot_state')
+        row.prop(general_settings, 'ui_shot_state_subpanel', icon='COLORSET_04_VEC')
+
+        if general_settings.ui_shot_state_subpanel:
+            box = layout.box()
+            col = box.column(align=True)
+            row = col.row()
+            row.prop(scn_settings, 'color_state_storyboard')
+            row = col.row()
+            row.prop(scn_settings, 'color_state_layout')
+            row = col.row()
+            row.prop(scn_settings, 'color_state_animation')
+            row = col.row()
+            row.prop(scn_settings, 'color_state_lighting')
+            row = col.row()
+            row.prop(scn_settings, 'color_state_rendering')
+            row = col.row()
+            row.prop(scn_settings, 'color_state_compositing')
+            row = col.row()
+            row.prop(scn_settings, 'color_state_finished')
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_audio_sync_warning')
+        row.prop(scn_settings, 'color_audio_sync', text="")
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_shot_update_warning')
+        row.prop(scn_settings, 'color_update_warning', text="")
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_shot_version_warning')
+        row.prop(scn_settings, 'color_version_warning', text="")
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_working_warning')
+        row.prop(scn_settings, 'color_strip_working', text="")
+
+
+# sequencer UI frame comment subpanel
+class BPM_PT_sequencer_ui_frame_comment_subpanel(SequencerPanel):
+    bl_label = "Comments"
+    bl_parent_id = "BPM_PT_sequencer_ui_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.scene.bpm_scenesettings.extra_ui
+
+    def draw(self, context):
+
+        scn_settings = context.scene.bpm_scenesettings
+
+        layout = self.layout
+
+        row = layout.row()
+        row.label(text = "Markers")
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_markers', text = "")
+        row.prop(scn_settings, 'color_markers', text="")
+
+        row = layout.row()
+        row.label(text = "Names")
+        row.prop(scn_settings, 'display_marker_names', text = "")
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_marker_boxes', text = "Boxes")
+        row.prop(scn_settings, 'color_marker_boxes', text="")
+
+        layout.prop(scn_settings, 'display_marker_text_limit')
+
+
+# sequencer UI preview subpanel
+class BPM_PT_sequencer_ui_preview_subpanel(SequencerPanel):
+    bl_label = "Preview"
+    bl_parent_id = "BPM_PT_sequencer_ui_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.scene.bpm_scenesettings.extra_ui
+
+    def draw(self, context):
+
+        scn_settings = context.scene.bpm_scenesettings
+
+        layout = self.layout
+
+        row = layout.row()
+        row.label(text = "Scheduling")
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_shot_todo', text="")
+        row.prop(scn_settings, 'color_shot_todo', text="")
+
+        col = layout.column()
+        if scn_settings.display_shot_todo != "SPECIFIC_DATE":
+            col.enabled = False
+
+        row = col.row(align=True)
+        row.prop(scn_settings, 'shot_deadline_preview_yr', text = "")
+        row.prop(scn_settings, 'shot_deadline_preview_mn', text = "")
+        row.prop(scn_settings, 'shot_deadline_preview_da', text = "")
 
 
 # shot settings viewport panel
