@@ -311,7 +311,7 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
     file_type : bpy.props.EnumProperty(items = file_type, default='NONE')
     project_folder : bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
 
-    debug : bpy.props.BoolProperty(default=True)
+    debug : bpy.props.BoolProperty()
 
     bypass_update_tag : bpy.props.BoolProperty(default=False)
 
