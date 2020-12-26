@@ -73,14 +73,17 @@ def drawOpenedWarning(container, general_settings):
 
 # draw open folders panel
 def drawOpenFoldersPanel(container, filebrowser):
+
+    col = container.column(align=True)
+
     for f in ('Project', 'Asset', 'Shot', 'Render', 'Ressources', 'Playblast'):
-        op = container.operator('bpm.open_project_folder', text = f)
+        op = col.operator('bpm.open_project_folder', text = f)
         op.folder = f
         op.filebrowser = filebrowser
 
-    container.operator('bpm.open_shot_folder', text='Active Shot').filebrowser=filebrowser
+    col.operator('bpm.open_shot_folder', text='Active Shot').filebrowser=filebrowser
     
-    container.operator('bpm.open_shot_render_folder', text='Active Render').filebrowser=filebrowser
+    col.operator('bpm.open_shot_render_folder', text='Active Render').filebrowser=filebrowser
 
 
 # split string on spaces
@@ -161,7 +164,7 @@ def drawPropertiesAssetPanel(container, asset_settings, general_settings):
     container.label(text = "Manually update when changing collection name", icon = "INFO")
 
     row = container.row(align=True)
-    row.menu('BPM_MT_OpenFolder_Menu')
+    row.menu('BPM_MT_OpenFolder_Explorer_Menu')
     drawWikiHelp(row, 'Project-Architecture')
 
 
@@ -255,7 +258,7 @@ class BPM_PT_sequencer_management_panel(SequencerPanel):
         drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
 
         row = layout.row(align=True)
-        row.menu('BPM_MT_OpenFolder_Menu')
+        row.menu('BPM_MT_OpenFolder_Explorer_Menu')
         drawWikiHelp(row, 'Project-Architecture')
 
 
@@ -594,7 +597,7 @@ class BPM_PT_sequencer_asset_panel(SequencerPanel):
         drawAssetLibrary(layout, winman)
 
 
-# shot settings panel
+# shot settings viewport panel
 class BPM_PT_properties_shot_viewport_panel(ViewportPanel):
     bl_label = "Shot"
 
@@ -613,13 +616,13 @@ class BPM_PT_properties_shot_viewport_panel(ViewportPanel):
         drawOperatorAndHelp(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
 
         row = layout.row(align=True)
-        row.menu('BPM_MT_OpenFolder_Menu')
+        row.menu('BPM_MT_OpenFolder_Explorer_Menu')
         drawWikiHelp(row, 'Project-Architecture')
 
         #drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
 
 
-# shot tracking subpanel
+# shot tracking viewport subpanel
 class BPM_PT_properties_shot_tracking_viewport_subpanel(ViewportPanel):
     bl_label = "Tracking"
     bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
@@ -644,7 +647,7 @@ class BPM_PT_properties_shot_tracking_viewport_subpanel(ViewportPanel):
         drawWikiHelp(row, 'Shot-Task-System')
 
 
-# shot sync subpanel
+# shot sync viewport subpanel
 class BPM_PT_properties_shot_sync_viewport_subpanel(ViewportPanel):
     bl_label = "Sync"
     bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
@@ -666,7 +669,7 @@ class BPM_PT_properties_shot_sync_viewport_subpanel(ViewportPanel):
         drawWikiHelp(row, 'Shot-Audio-Synchronization')
 
 
-# shot comment subpanel
+# shot comment viewport subpanel
 class BPM_PT_properties_shot_comment_viewport_subpanel(ViewportPanel):
     bl_label = "Comments"
     bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
@@ -681,7 +684,7 @@ class BPM_PT_properties_shot_comment_viewport_subpanel(ViewportPanel):
         comment_draw(self.layout, shot_settings.comments, "shot")
 
 
-# shot render subpanel
+# shot render viewport subpanel
 class BPM_PT_properties_shot_render_viewport_subpanel(ViewportPanel):
     bl_label = "Render"
     bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
@@ -698,7 +701,7 @@ class BPM_PT_properties_shot_render_viewport_subpanel(ViewportPanel):
         drawWikiHelp(row, 'Render-Settings')
 
 
-# shot settings debug subpanel
+# shot debug viewport subpanel
 class BPM_PT_properties_shot_debug_viewport_subpanel(ViewportPanel):
     bl_label = "Debug"
     bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
@@ -767,7 +770,7 @@ class BPM_PT_properties_asset_viewport_panel(ViewportPanel):
         drawPropertiesAssetPanel(layout, asset_settings, general_settings)
 
 
-# asset settings viewport debug subpanel
+# asset settings debug viewport subpanel
 class BPM_PT_properties_asset_viewport_debug_subpanel(ViewportPanel):
     bl_label = "Debug"
     bl_parent_id = "BPM_PT_properties_asset_viewport_panel"
@@ -930,7 +933,7 @@ class BPM_UL_Folders_Uilist(bpy.types.UIList):
 
 # filebrowser gui
 class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
-    bl_label = "BPM Project Folders"
+    bl_label = "BPM"
     
     @classmethod
     def poll(cls, context):
@@ -942,17 +945,16 @@ class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
 
         layout = self.layout
 
-        box = layout.box()
-        box.label(text='Open Folder')
-        drawOpenFoldersPanel(box, True)
+        row = layout.row(align=True)
+        row.menu('BPM_MT_OpenFolder_Filebrowser_Menu')
+        drawWikiHelp(row, 'Project-Architecture')
         
         layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
 
 
 # open folder menu
-class BPM_MT_OpenFolder_Menu(bpy.types.Menu):
+class BPM_MT_OpenFolder_Explorer_Menu(bpy.types.Menu):
     bl_label = "Open Folders"
-    bl_idname = "BPM_MT_OpenFolder_Menu"
 
     def draw(self, context):
         layout = self.layout
@@ -960,10 +962,19 @@ class BPM_MT_OpenFolder_Menu(bpy.types.Menu):
         drawOpenFoldersPanel(layout, False)
 
 
+# open folder menu
+class BPM_MT_OpenFolder_Filebrowser_Menu(bpy.types.Menu):
+    bl_label = "Open Folders"
+
+    def draw(self, context):
+        layout = self.layout
+        
+        drawOpenFoldersPanel(layout, True)
+
+
 # right click sequencer general menu
 class BPM_MT_RightClickSequencerManagement_Menu(bpy.types.Menu):
     bl_label = "BPM Management"
-    bl_idname = "BPM_MT_RightClickSequencerManagement_Menu"
 
     def draw(self, context):
         layout = self.layout
@@ -976,7 +987,6 @@ class BPM_MT_RightClickSequencerManagement_Menu(bpy.types.Menu):
 # right click sequencer active shot menu
 class BPM_MT_RightClickSequencerShot_Menu(bpy.types.Menu):
     bl_label = "BPM Active Shot"
-    bl_idname = "BPM_MT_RightClickSequencerShot_Menu"
 
     def draw(self, context):
         layout = self.layout
