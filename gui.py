@@ -139,11 +139,12 @@ def comment_draw(container, comments, c_type):
         if not c.hide:
             for line in split_string_on_spaces(c.comment, 25):
                 col.label(text=line)
-            col.separator()
-            if c.frame_comment:
-                col.label(text="Frame : " + str(c.frame))
-            if c.edit_time:
-                col.label(text="Edited on " + c.edit_time)
+            if c.frame_comment or c.edit_time:
+                col.separator()
+                if c.frame_comment:
+                    col.label(text="Frame : " + str(c.frame))
+                if c.edit_time:
+                    col.label(text="Edited on " + c.edit_time)
 
 
 # draw asset settings prop panel
