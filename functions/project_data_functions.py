@@ -21,6 +21,7 @@ from .json_functions import read_json
 from .file_functions import absolutePath, getBlendName
 from .dataset_functions import setPropertiesFromJsonDataset
 from .strip_functions import returnShotStrips, getListSequencerShots
+from .reload_comments_function import reload_comments
 
 
 # get project data file
@@ -216,7 +217,8 @@ def getShotSettingsFileFromBlend():
 
 
 # refresh all shot strips in timeline from json shot files
-def refreshTimelineShotDatas(winman, sequencer):
+def refreshTimelineShotDatas(context, sequencer):
+    winman = context.window_manager
     general_settings = winman.bpm_generalsettings
     avoid_list = ('is_shot', 'shot_version', 'not_last_version', 'is_working')
 
@@ -232,6 +234,9 @@ def refreshTimelineShotDatas(winman, sequencer):
             loadJsonDataToDataset(winman, strip.bpm_shotsettings, shot_json, avoid_list)
         else:
             if general_settings.debug: print(missing_shot_file_statement + " for " + strip.name) #debug
+
+        # load comments
+        reload_comments(bpy.context, "edit_shot")
 
     general_settings.bypass_update_tag = False
 

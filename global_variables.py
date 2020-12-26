@@ -184,11 +184,13 @@ shot_display_render_images_statement = bpm_statement + "Rendered images found, d
 
 
 # comment statements
-start_edit_shot_comment_statement = bpm_statement + "Starting editing shot comment"
-editing_shot_comment_statement = bpm_statement + "Editing shot comment : "
-edited_shot_comment_statement = bpm_statement + "Shot comment successfully edited"
-removed_shot_comment_statement = bpm_statement + "Shot comment successfully removed"
+start_edit_comment_statement = bpm_statement + "Starting editing comment"
+editing_comment_statement = bpm_statement + "Editing comment : "
+edited_comment_statement = bpm_statement + "Comment successfully edited"
+removed_comment_statement = bpm_statement + "Comment successfully removed"
 comment_file_updated_statement = bpm_statement + "Comment file updated"
+loading_comments_statement = bpm_statement + "Loading Comments"
+no_comment_file_statement = bpm_statement + "Comment file not found : "
 
 
 # extra ui statements

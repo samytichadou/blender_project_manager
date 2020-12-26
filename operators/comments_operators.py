@@ -8,10 +8,10 @@ from ..functions.file_functions import absolutePath
 from ..functions.strip_functions import getShotCommentPosition
 from ..global_variables import (
                                 comment_file,
-                                start_edit_shot_comment_statement,
-                                editing_shot_comment_statement,
-                                edited_shot_comment_statement,
-                                removed_shot_comment_statement,
+                                start_edit_comment_statement,
+                                editing_comment_statement,
+                                edited_comment_statement,
+                                removed_comment_statement,
                                 comment_file_updated_statement,
                                 bypass_shot_settings_update_statement,
                                 no_active_shot_message,
@@ -240,12 +240,12 @@ class BPMAddComment(bpy.types.Operator):
                 if general_settings.debug: print(no_active_shot_statement) #debug
                 return {'FINISHED'}
 
-        if debug: print(start_edit_shot_comment_statement) #debug
+        if debug: print(start_edit_comment_statement) #debug
 
         # get comment collection and folder path
         comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
 
-        if debug: print(editing_shot_comment_statement + self.comment) #debug
+        if debug: print(editing_comment_statement + self.comment) #debug
 
         # set frame
         if not self.frame_comment:
@@ -267,7 +267,7 @@ class BPMAddComment(bpy.types.Operator):
         update_comments_json_file(comment_collection, folder_path)
         if debug: print(comment_file_updated_statement) #debug
 
-        if debug: print(edited_shot_comment_statement) #debug
+        if debug: print(edited_comment_statement) #debug
 
         for area in context.screen.areas:
             area.tag_redraw()
@@ -315,12 +315,12 @@ class BPMRemoveComment(bpy.types.Operator):
                 if general_settings.debug: print(no_active_shot_statement) #debug
                 return {'FINISHED'}
 
-        if debug: print(start_edit_shot_comment_statement) #debug
+        if debug: print(start_edit_comment_statement) #debug
 
         # get comment collection and folder path
         comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
 
-        if debug: print(editing_shot_comment_statement + comment_collection[self.index].name) #debug
+        if debug: print(editing_comment_statement + comment_collection[self.index].name) #debug
 
         # remove comment
         comment_collection.remove(self.index)
@@ -329,7 +329,7 @@ class BPMRemoveComment(bpy.types.Operator):
         update_comments_json_file(comment_collection, folder_path)
         if debug: print(comment_file_updated_statement) #debug
 
-        if debug: print(removed_shot_comment_statement) #debug
+        if debug: print(removed_comment_statement) #debug
 
         for area in context.screen.areas:
             area.tag_redraw()
@@ -399,14 +399,14 @@ class BPMModifyComment(bpy.types.Operator):
                 if general_settings.debug: print(no_active_shot_statement) #debug
                 return {'FINISHED'}
 
-        if debug: print(start_edit_shot_comment_statement) #debug
+        if debug: print(start_edit_comment_statement) #debug
 
         # get comment collection and folder path
         comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
             
         active_comment = comment_collection[self.index]
 
-        if debug: print(editing_shot_comment_statement + active_comment.comment) #debug
+        if debug: print(editing_comment_statement + active_comment.comment) #debug
 
         # modify comment to strip settings
         active_comment.comment = self.comment
@@ -419,7 +419,7 @@ class BPMModifyComment(bpy.types.Operator):
         update_comments_json_file(comment_collection, folder_path)
         if debug: print(comment_file_updated_statement) #debug
 
-        if debug: print(edited_shot_comment_statement) #debug
+        if debug: print(edited_comment_statement) #debug
 
         for area in context.screen.areas:
             area.tag_redraw()

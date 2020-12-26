@@ -33,6 +33,7 @@ def setPropertiesFromJsonDataset(datasetin, datasetout, debug, avoid_list):
         else:
             if debug: print(prop_avoided_statement + prop)
 
+
 # set attributes between 2 dataset
 def setPropertiesFromDataset(datasetin, datasetout, winman):
     for prop in datasetin.bl_rna.properties:

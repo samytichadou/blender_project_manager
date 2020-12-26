@@ -28,7 +28,7 @@ class BPMRefreshShotDatasEdit(bpy.types.Operator):
 
         if debug: print(refreshing_timeline_shot_datas_statement) #debug
 
-        refreshTimelineShotDatas(winman, context.scene.sequence_editor)
+        refreshTimelineShotDatas(context, context.scene.sequence_editor)
 
         if debug: print(refreshed_timeline_shot_datas_statement) #debug
 

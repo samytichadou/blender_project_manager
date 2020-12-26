@@ -52,6 +52,7 @@ from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
 from .functions.lock_file_functions import setupLockFile, getLockFilepath
 from .functions.date_functions import getDateString
+from .functions.reload_comments_function import reload_comments
 from .timer_function import bpmTimerFunction
 from .addon_prefs import getAddonPreferences
 
@@ -177,9 +178,11 @@ def bpmStartupHandler(scene):
 
                 # refresh timeline shots strips datas
                 if general_settings.debug: print(refreshing_timeline_shot_datas_statement) #debug               
-                refreshTimelineShotDatas(winman, sequencer)
+                refreshTimelineShotDatas(bpy.context, sequencer)
                 if general_settings.debug: print(refreshed_timeline_shot_datas_statement) #debug
 
+                # load edit comments
+                reload_comments(bpy.context, "edit")
 
             # load shot settings
             elif general_settings.file_type == 'SHOT':
@@ -204,10 +207,16 @@ def bpmStartupHandler(scene):
                 else: 
                     if general_settings.debug: print(missing_shot_file_statement) #debug
 
+                # load shot comments
+                reload_comments(bpy.context, "shot")
+
             # load asset settings
             elif general_settings.file_type == 'ASSET':
                 asset_settings = winman.bpm_assetsettings
                 asset_settings.name = getBlendName()
+
+                # load asset comments
+                reload_comments(bpy.context, "asset")
 
         else:
             if general_settings.debug: print(no_datas_statement) #debug
