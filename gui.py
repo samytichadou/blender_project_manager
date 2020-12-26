@@ -1,6 +1,5 @@
 import bpy
 
-
 from .properties import getAssetIcon
 from .functions.project_data_functions import getShotTaskDeadline, getShotTaskComplete
 from .functions.check_edit_poll_function import check_edit_poll_function
