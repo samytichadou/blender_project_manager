@@ -111,7 +111,8 @@ def comment_draw(container, comments, c_type):
     row = container.row(align=True)
     op = row.operator("bpm.add_comment")
     op.comment_type = c_type
-    drawWikiHelp(row, "Comments")
+    op2 = row.operator("bpm.reload_comment", text = "", icon = "FILE_REFRESH")
+    op2.comment_type = c_type
 
     bigcol = container.column(align=True)
 
@@ -267,7 +268,7 @@ class BPM_PT_sequencer_management_panel(SequencerPanel):
 
 # sequencer management comment subpanel
 class BPM_PT_sequencer_management_comment_subpanel(SequencerPanel):
-    bl_label = "Comments"
+    bl_label = ""
     bl_parent_id = "BPM_PT_sequencer_management_panel"
     bl_options = {'DEFAULT_CLOSED'}
 
@@ -279,6 +280,11 @@ class BPM_PT_sequencer_management_comment_subpanel(SequencerPanel):
                 edit, shot, active = check_edit_poll_function(context)
                 if edit:
                     return True
+
+    def draw_header(self, context):
+        row = self.layout.row()
+        row.label(text = "Comments")
+        drawWikiHelp(row, "Comments")
 
     def draw(self, context):
 
@@ -412,9 +418,14 @@ class BPM_PT_sequencer_shot_sync_subpanel(SequencerPanel):
 
 # sequencer comment shot subpanel
 class BPM_PT_sequencer_shot_comment_subpanel(SequencerPanel):
-    bl_label = "Comments"
+    bl_label = ""
     bl_parent_id = "BPM_PT_sequencer_shot_panel"
     bl_options = {'DEFAULT_CLOSED'}
+
+    def draw_header(self, context):
+        row = self.layout.row()
+        row.label(text = "Comments")
+        drawWikiHelp(row, "Comments")
 
     def draw(self, context):
 
@@ -496,7 +507,7 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel):
                     return True
 
     def draw_header(self, context):
-        row = self.layout.row(align=True)
+        row = self.layout.row()
         row.label(text = "Assets")
         drawWikiHelp(row, 'Asset-Management')
 
@@ -520,7 +531,7 @@ class BPM_PT_sequencer_ui_panel(SequencerPanel):
 
     def draw_header(self, context):
         scn_settings = context.scene.bpm_scenesettings
-        row = self.layout.row(align=True)
+        row = self.layout.row()
         row.prop(scn_settings, "extra_ui", text = "UI")
         drawWikiHelp(row, 'Extra-UI-in-Sequencer')
 
@@ -737,9 +748,14 @@ class BPM_PT_properties_shot_sync_viewport_subpanel(ViewportPanel):
 
 # shot comment viewport subpanel
 class BPM_PT_properties_shot_comment_viewport_subpanel(ViewportPanel):
-    bl_label = "Comments"
+    bl_label = ""
     bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
     bl_options = {'DEFAULT_CLOSED'}
+
+    def draw_header(self, context):
+        row = self.layout.row()
+        row.label(text = "Comments")
+        drawWikiHelp(row, "Comments")
 
     def draw(self, context):
 
@@ -810,9 +826,14 @@ class BPM_PT_properties_asset_viewport_panel(ViewportPanel):
 
 # asset comment viewport subpanel
 class BPM_PT_properties_asset_comments_viewport_subpanel(ViewportPanel):
-    bl_label = "Comments"
+    bl_label = ""
     bl_parent_id = "BPM_PT_properties_asset_viewport_panel"
     bl_options = {'DEFAULT_CLOSED'}
+
+    def draw_header(self, context):
+        row = self.layout.row()
+        row.label(text = "Comments")
+        drawWikiHelp(row, "Comments")
 
     def draw(self, context):
         winman = context.window_manager
@@ -866,9 +887,14 @@ class BPM_PT_properties_asset_nodetree_panel(NodetreePanel):
 
 # asset comment nodetree subpanel
 class BPM_PT_properties_asset_comments_nodetree_subpanel(NodetreePanel):
-    bl_label = "Comments"
+    bl_label = ""
     bl_parent_id = "BPM_PT_properties_asset_nodetree_panel"
     bl_options = {'DEFAULT_CLOSED'}
+
+    def draw_header(self, context):
+        row = self.layout.row()
+        row.label(text = "Comments")
+        drawWikiHelp(row, "Comments")
 
     def draw(self, context):
         winman = context.window_manager
@@ -942,7 +968,7 @@ class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
         return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type in {'NODEGROUP', 'MATERIAL'}
 
     def draw_header(self, context):
-        row = self.layout.row(align=True)
+        row = self.layout.row()
         row.label(text = "Assets")
         drawWikiHelp(row, 'Asset-Management')
 
@@ -975,7 +1001,7 @@ class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel):
                     return True
 
     def draw_header(self, context):
-        row = self.layout.row(align=True)
+        row = self.layout.row()
         row.label(text = "Assets")
         drawWikiHelp(row, 'Asset-Management')
 

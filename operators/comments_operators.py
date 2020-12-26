@@ -6,6 +6,7 @@ from ..functions.json_functions import create_json_file, createJsonDatasetFromPr
 from ..functions.date_functions import getDateTimeString, getDateTimeID
 from ..functions.file_functions import absolutePath
 from ..functions.strip_functions import getShotCommentPosition
+from ..functions.reload_comments_function import return_commentcoll_folderpath, reload_comments
 from ..global_variables import (
                                 comment_file,
                                 start_edit_comment_statement,
@@ -16,6 +17,7 @@ from ..global_variables import (
                                 bypass_shot_settings_update_statement,
                                 no_active_shot_message,
                                 no_active_shot_statement,
+                                loading_comments_statement,
                             )
 
 
@@ -164,32 +166,6 @@ def update_comment_frame_property(self, context):
 
     context.scene.frame_current = self.frame
   
-
-def return_commentcoll_folderpath(comment_type, context):
-    winman = context.window_manager
-
-    if comment_type == "edit_shot":
-        shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-        comment_collection = shot_settings.comments
-        folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
-
-    elif comment_type == "shot":
-        shot_settings = winman.bpm_shotsettings
-        comment_collection = shot_settings.comments
-        folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
-
-    elif comment_type == "edit":
-        project_settings = winman.bpm_projectdatas
-        comment_collection = project_settings.comments
-        folder_path = os.path.dirname(bpy.data.filepath)
-
-    elif comment_type == "asset":
-        asset_settings = winman.bpm_assetsettings
-        comment_collection = asset_settings.comments
-        folder_path = os.path.dirname(bpy.data.filepath)
-
-    return (comment_collection, folder_path)
-
 
 class BPMAddComment(bpy.types.Operator):
     """Add comment to active"""
@@ -423,5 +399,46 @@ class BPMModifyComment(bpy.types.Operator):
 
         for area in context.screen.areas:
             area.tag_redraw()
+        
+        return {'FINISHED'}
+
+
+class BPMReloadComment(bpy.types.Operator):
+    """Reload comments"""
+    bl_idname = "bpm.reload_comment"
+    bl_label = "Reload comment"
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+    comment_type : bpy.props.StringProperty()
+
+
+    @classmethod
+    def poll(cls, context):
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.is_project:
+            if context.window_manager.bpm_generalsettings.file_type in {"SHOT", "ASSET", "EDIT"}:
+                return True
+
+
+    def execute(self, context):
+
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        debug = general_settings.debug
+
+        # return if no active shot
+        if self.comment_type == "edit_shot":
+            edit, shot, active = check_edit_poll_function(context)
+            if not shot:
+                self.report({'INFO'}, no_active_shot_message)
+                if general_settings.debug: print(no_active_shot_statement) #debug
+                return {'FINISHED'}
+
+        if debug: print(loading_comments_statement) #debug
+
+        # get comment collection and folder path
+        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
+
+        reload_comments(context, self.comment_type)
         
         return {'FINISHED'}

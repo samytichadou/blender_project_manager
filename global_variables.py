@@ -189,8 +189,9 @@ editing_comment_statement = bpm_statement + "Editing comment : "
 edited_comment_statement = bpm_statement + "Comment successfully edited"
 removed_comment_statement = bpm_statement + "Comment successfully removed"
 comment_file_updated_statement = bpm_statement + "Comment file updated"
-loading_comments_statement = bpm_statement + "Loading Comments"
+loading_comments_statement = bpm_statement + "Loading comments"
 no_comment_file_statement = bpm_statement + "Comment file not found : "
+comment_reloaded_statement = bpm_statement + "Comments successfully reloaded"
 
 
 # extra ui statements

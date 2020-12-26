@@ -1,14 +1,42 @@
-import os
+import bpy, os
 
 from .dataset_functions import setPropertiesFromJsonDataset
 from .json_functions import read_json
-from ..operators.comments_operators import return_commentcoll_folderpath
 from ..global_variables import (
                             comment_file,
                             loading_comments_statement,
                             editing_comment_statement,
                             no_comment_file_statement,
+                            comment_reloaded_statement,
                         )
+
+
+
+def return_commentcoll_folderpath(comment_type, context):
+    winman = context.window_manager
+
+    if comment_type == "edit_shot":
+        shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
+        comment_collection = shot_settings.comments
+        folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
+
+    elif comment_type == "shot":
+        shot_settings = winman.bpm_shotsettings
+        comment_collection = shot_settings.comments
+        folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
+
+    elif comment_type == "edit":
+        project_settings = winman.bpm_projectdatas
+        comment_collection = project_settings.comments
+        folder_path = os.path.dirname(bpy.data.filepath)
+
+    elif comment_type == "asset":
+        asset_settings = winman.bpm_assetsettings
+        comment_collection = asset_settings.comments
+        folder_path = os.path.dirname(bpy.data.filepath)
+
+    return (comment_collection, folder_path)
+
 
 def reload_comments(context, comment_type):
     winman = context.window_manager
@@ -34,3 +62,5 @@ def reload_comments(context, comment_type):
         if debug: print(editing_comment_statement + c['name'])
         dataset_out = comment_collection.add()
         setPropertiesFromJsonDataset(c, dataset_out, debug, ())
+
+    if debug: print(comment_reloaded_statement) #debug
