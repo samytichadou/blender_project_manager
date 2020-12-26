@@ -151,9 +151,7 @@ def comment_draw(container, comments, c_type):
 def drawPropertiesAssetPanel(container, asset_settings, general_settings):
 
     drawOpenedWarning(container, general_settings)
-
     
-
     if asset_settings.asset_type == 'SHADER': target_prop = 'asset_material'
     elif asset_settings.asset_type == 'NODEGROUP': target_prop = 'asset_nodegroup'
     elif asset_settings.asset_type == 'WORLD': target_prop = 'asset_world'
