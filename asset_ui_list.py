@@ -13,13 +13,20 @@ class BPM_UL_Asset_UI_List(bpy.types.UIList):
         
         if item.is_thisassetfile:
             layout.enabled = False
+            isthis_icon = "RADIOBUT_ON"
+        else:
+            layout.enabled = True
+            isthis_icon = "RADIOBUT_OFF"
 
         if self.layout_type in {'DEFAULT', 'COMPACT'}: 
-            layout.label(text = item.name, icon = icon) 
+            layout.label(text = item.name, icon = icon)
+            layout.label(text = "", icon = isthis_icon)
             
         elif self.layout_type in {'GRID'}: 
             layout.alignment = 'CENTER' 
             layout.label(text = "", icon = icon)
+            layout.label(text = "", icon = isthis_icon)
+
 
     # Called once to filter/reorder items.
     def filter_items(self, context, data, propname):
