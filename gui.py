@@ -167,10 +167,6 @@ def drawPropertiesAssetPanel(container, asset_settings, general_settings):
     col.prop(asset_settings, 'asset_type', text = "Type")
     col.prop(asset_settings, 'asset_state', text = "State")
 
-    row = container.row(align=True)
-    row.menu('BPM_MT_OpenFolder_Explorer_Menu')
-    drawWikiHelp(row, 'Project-Architecture')
-
 
 # draw asset library
 def drawAssetLibrary(container, winman):
@@ -634,10 +630,6 @@ class BPM_PT_properties_shot_viewport_panel(ViewportPanel):
         drawOpenedWarning(layout, winman.bpm_generalsettings)
 
         drawOperatorAndHelp(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
-
-        row = layout.row(align=True)
-        row.menu('BPM_MT_OpenFolder_Explorer_Menu')
-        drawWikiHelp(row, 'Project-Architecture')
 
 
 # shot tracking viewport subpanel
