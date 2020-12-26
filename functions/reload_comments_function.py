@@ -41,7 +41,7 @@ def return_commentcoll_folderpath(comment_type, context):
 def reload_comments(context, comment_type):
     winman = context.window_manager
     general_settings = winman.bpm_generalsettings
-    debug = general_settings.debug
+    debug = winman.bpm_projectdatas.debug
 
     if debug: print(loading_comments_statement) #debug
 

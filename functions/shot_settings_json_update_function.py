@@ -17,7 +17,7 @@ from .file_functions import absolutePath
 def updateShotSettingsProperties(self, context):
     winman = context.window_manager
     general_settings = winman.bpm_generalsettings
-    debug = general_settings.debug
+    debug = winman.bpm_projectdatas.debug
 
     if general_settings.bypass_update_tag:
         if debug: print(bypass_shot_settings_update_statement) #debug

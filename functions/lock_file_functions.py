@@ -71,4 +71,4 @@ def deleteLockFileExit():
 def deleteLockFileHandler(scene):
     if bpy.data.window_managers[0].bpm_generalsettings.is_project:
         if clearLockFile() in {'UPDATED', 'DELETED'}:
-            if bpy.data.window_managers[0].bpm_generalsettings.debug: print(deleted_lock_file_statement) #debug
+            if bpy.data.window_managers[0].bpm_projectdatas.debug: print(deleted_lock_file_statement) #debug

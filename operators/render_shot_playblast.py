@@ -25,29 +25,30 @@ class BPMRenderShotPlayblast(bpy.types.Operator):
                                 )
 
         winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = winman.bpm_generalsettings
         shot_settings = winman.bpm_shotsettings
         old_render_state = shot_settings.shot_render_state
 
-        if general_settings.debug: print(setting_playblast_statement) #debug
+        if debug: print(setting_playblast_statement) #debug
         
         # set render settings 
         setRenderShot(context, render_playblast_folder)
         
         # launch viewport render
-        if general_settings.debug: print(starting_playblast_statement) #debug
+        if debug: print(starting_playblast_statement) #debug
         bpy.ops.render.opengl(animation=True)
 
         # launch playback
         bpy.ops.render.play_rendered_anim()
-        if general_settings.debug: print(playing_playblast_statement) #debug
+        if debug: print(playing_playblast_statement) #debug
 
         # set old settings back
-        if general_settings.debug: print(setting_usual_render_statement) #debug
+        if debug: print(setting_usual_render_statement) #debug
         general_settings.bypass_update_tag = True
         shot_settings.shot_render_state = old_render_state
         general_settings.bypass_update_tag = False
 
-        if general_settings.debug: print(completed_playblast_statement) #debug
+        if debug: print(completed_playblast_statement) #debug
 
         return {'FINISHED'}

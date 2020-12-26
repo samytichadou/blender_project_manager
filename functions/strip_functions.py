@@ -157,7 +157,7 @@ def updateImageSequenceShot(strip, winman):
     from ..global_variables import created_strip_statement, setting_strip_properties_statement
     from .json_functions import createJsonDatasetFromProperties
 
-    debug = winman.bpm_generalsettings.debug
+    debug = winman.bpm_projectdatas.debug
 
     # get settings
     name = strip.name

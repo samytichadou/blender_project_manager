@@ -21,7 +21,7 @@ from ..global_variables import (
 def refreshShotStripsDisplay(winman, sequencer):
 
     general_settings = winman.bpm_generalsettings
-    debug = general_settings.debug
+    debug = winman.bpm_projectdatas.debug
 
     if debug: print(refreshing_timeline_shot_display_mode) #debug
 

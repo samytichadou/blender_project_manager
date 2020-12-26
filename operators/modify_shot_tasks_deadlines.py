@@ -152,9 +152,11 @@ class BPMModifyShotTasksDeadline(bpy.types.Operator):
         from ..functions.strip_functions import returnSelectedStrips
         from ..global_variables import shot_deadlines_modification_statement, deadlines_modified_statement
 
+        winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = context.window_manager.bpm_generalsettings
 
-        if general_settings.debug: print(shot_deadlines_modification_statement) #debug
+        if debug: print(shot_deadlines_modification_statement) #debug
 
         # format temp properties
         st = str(self.st_yr) + "-" + str(self.st_mn).zfill(2) + "-"  + str(self.st_da).zfill(2)
@@ -174,7 +176,7 @@ class BPMModifyShotTasksDeadline(bpy.types.Operator):
 
         updateShotSettingsProperties(self.shot_settings, context)
 
-        if general_settings.debug: print(deadlines_modified_statement + "active shot") #debug
+        if debug: print(deadlines_modified_statement + "active shot") #debug
 
         if general_settings.file_type == 'EDIT' and self.behavior == "selected_strips":
 
@@ -195,7 +197,7 @@ class BPMModifyShotTasksDeadline(bpy.types.Operator):
 
                     updateShotSettingsProperties(shot_settings, context)
 
-                    if general_settings.debug: print(deadlines_modified_statement + s.name) #debug
+                    if debug: print(deadlines_modified_statement + s.name) #debug
 
         # reload sequencer
         bpy.ops.sequencer.refresh_all()

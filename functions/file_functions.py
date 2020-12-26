@@ -281,18 +281,19 @@ def returnRenderFolderFromStrip(shot_filepath, project_folder):
 # create shot render function
 def createShotRenderFolders(shot_filepath, winman):
     general_settings = winman.bpm_generalsettings
+    debug = winman.bpm_projectdatas.debug
 
     # create render folders
     shot_draft, shot_render, shot_final = returnRenderFolderFromStrip(shot_filepath, general_settings.project_folder)
 
     createDirectory(shot_draft)
-    if general_settings.debug: print(folder_created_statement + shot_draft) #debug
+    if debug: print(folder_created_statement + shot_draft) #debug
 
     createDirectory(shot_render)
-    if general_settings.debug: print(folder_created_statement + shot_render) #debug
+    if debug: print(folder_created_statement + shot_render) #debug
 
     createDirectory(shot_final)
-    if general_settings.debug: print(folder_created_statement + shot_final) #debug
+    if debug: print(folder_created_statement + shot_final) #debug
 
 
 # return render filepath

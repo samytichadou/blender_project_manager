@@ -19,11 +19,12 @@ class BPMBackToEdit(bpy.types.Operator):
         from ..global_variables import back_to_edit_statement
 
         winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = context.window_manager.bpm_generalsettings
         project_datas = winman.bpm_projectdatas
         filepath = getLastVersion(general_settings.project_folder, project_datas.edit_file_pattern, ".blend")
 
-        if general_settings.debug: print(back_to_edit_statement + filepath) #debug
+        if debug: print(back_to_edit_statement + filepath) #debug
 
         # save if not temp
         bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)

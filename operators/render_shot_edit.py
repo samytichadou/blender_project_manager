@@ -36,7 +36,9 @@ class BPMRenderShotEdit(bpy.types.Operator):
         from ..functions.command_line_functions import buildBlenderCommandBackgroundRender
         from ..functions.threading_functions import launchSeparateThread
 
-        general_settings = context.window_manager.bpm_generalsettings
+        winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
+        general_settings = winman.bpm_generalsettings
 
         active_strip = context.scene.sequence_editor.active_strip
 
@@ -51,7 +53,7 @@ class BPMRenderShotEdit(bpy.types.Operator):
         command = buildBlenderCommandBackgroundRender(shot_filepath)
 
         #launch command
-        if general_settings.debug: print(launching_command_statement + command) #debug
+        if debug: print(launching_command_statement + command) #debug
         launchSeparateThread([command, general_settings.debug, renderShotEndFunction, active_strip, general_settings.debug])
 
         #store render pid

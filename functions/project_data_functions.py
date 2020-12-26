@@ -90,7 +90,7 @@ def chekIfBpmProject(winman, project_data_file, file_type):
 
 # load json to dataset
 def loadJsonDataToDataset(winman, dataset, json_file, avoid_list):
-    debug = winman.bpm_generalsettings.debug
+    debug = winman.bpm_projectdatas.debug
     if debug: print(loading_statement + json_file) #debug
 
     datasetin = read_json(json_file)
@@ -135,7 +135,7 @@ def getRenderSettingsFile(winman):
 def loadJsonInCollection(winman, json_file, collection, json_coll_name):
     # remove existing in collection
     collection.clear()
-    debug = winman.bpm_generalsettings.debug
+    debug = winman.bpm_projectdatas.debug
     dataset = read_json(json_file)
     for f in dataset[json_coll_name]:
         new = collection.add()
@@ -219,6 +219,7 @@ def getShotSettingsFileFromBlend():
 # refresh all shot strips in timeline from json shot files
 def refreshTimelineShotDatas(context, sequencer):
     winman = context.window_manager
+    debug = winman.bpm_projectdatas.debug
     general_settings = winman.bpm_generalsettings
     avoid_list = ('is_shot', 'shot_version', 'not_last_version', 'is_working')
 
@@ -233,7 +234,7 @@ def refreshTimelineShotDatas(context, sequencer):
         if os.path.isfile(shot_json):
             loadJsonDataToDataset(winman, strip.bpm_shotsettings, shot_json, avoid_list)
         else:
-            if general_settings.debug: print(missing_shot_file_statement + " for " + strip.name) #debug
+            if debug: print(missing_shot_file_statement + " for " + strip.name) #debug
 
         # load comments
         reload_comments(bpy.context, "edit_shot")
@@ -271,7 +272,7 @@ def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
             if m.name == specific_asset_datas[prop]:
                 datasetout.asset_material = m
                 m.bpm_isasset = True
-                if debug: print(setting_prop_statement + prop) ###debug
+                if debug: print(setting_prop_statement + prop) #debug
                 return
 
     # world
@@ -281,7 +282,7 @@ def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
             if w.name == specific_asset_datas[prop]:
                 datasetout.asset_world = w
                 w.bpm_isasset = True
-                if debug: print(setting_prop_statement + prop) ###debug
+                if debug: print(setting_prop_statement + prop) #debug
                 return
 
     # collections
@@ -291,7 +292,7 @@ def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
             if c.name == specific_asset_datas[prop]:
                 datasetout.asset_collection = c
                 c.bpm_isasset = True
-                if debug: print(setting_prop_statement + prop) ###debug
+                if debug: print(setting_prop_statement + prop) #debug
                 return
 
 

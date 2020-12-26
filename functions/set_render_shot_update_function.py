@@ -18,7 +18,7 @@ def setRenderShot(context, shot_render_state):
     winman = context.window_manager
     general_settings = winman.bpm_generalsettings
     #shot_render_state = winman.bpm_shotsettings.shot_render_state
-    debug = general_settings.debug
+    debug = winman.bpm_projectdatas.debug
     render_settings = winman.bpm_rendersettings[shot_render_state]
     scn = context.scene
     render = scn.render

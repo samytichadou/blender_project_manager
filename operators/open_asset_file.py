@@ -29,7 +29,7 @@ class BPMOpenAssetFile(bpy.types.Operator):
 
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
-        debug = general_settings.debug
+        debug = winman.bpm_projectdatas.debug
         asset_list = winman.bpm_assets
         asset_name = asset_list[general_settings.asset_list_index].name
 

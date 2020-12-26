@@ -29,16 +29,18 @@ class BPMClearLockFileUser(bpy.types.Operator):
                                     clearing_user_statement,
                                 )
 
-        general_settings = context.window_manager.bpm_generalsettings
+        winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
+        general_settings = winman.bpm_generalsettings
 
-        if general_settings.debug: print(starting_clear_user_statement) #debug
+        if debug: print(starting_clear_user_statement) #debug
 
         lock_filepath = getLockFilepath()
         pid = getCurrentPID()
 
         if os.path.isfile(lock_filepath):
             datas = read_json(lock_filepath)
-            if general_settings.debug: print(reading_json_statement + lock_filepath) #debug
+            if debug: print(reading_json_statement + lock_filepath) #debug
 
             chk_free = True
             n = 0
@@ -47,14 +49,14 @@ class BPMClearLockFileUser(bpy.types.Operator):
 
                 if o['pid'] == self.pid_to_clear:
                     del datas['opened'][n]
-                    if general_settings.debug: print(clearing_user_statement + o['hostname']) #debug
+                    if debug: print(clearing_user_statement + o['hostname']) #debug
 
                 elif o['pid'] != pid:
                     chk_free = False
 
                 n += 1
 
-            if general_settings.debug: print(saving_to_json_statement) #debug
+            if debug: print(saving_to_json_statement) #debug
 
             # make sure this process is locked
             if len(datas['opened']) == 0:

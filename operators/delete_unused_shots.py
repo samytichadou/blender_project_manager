@@ -41,6 +41,7 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
         self.permanently_delete = False
 
         winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = context.window_manager.bpm_generalsettings
 
         project_datas = winman.bpm_projectdatas
@@ -55,21 +56,21 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
         # get used shot
         timeline_shots, used_libraries = getListSequencerShots(sequencer)
 
-        if general_settings.debug: print(used_shots_list_statement + str(timeline_shots)) #debug
+        if debug: print(used_shots_list_statement + str(timeline_shots)) #debug
 
         # get all existing shot
         existing_shots = getAvailableShotsList(self.shot_folder_path, self.project_prefix)
 
-        if general_settings.debug: print(existing_shots_list_statement + str(existing_shots)) #debug
+        if debug: print(existing_shots_list_statement + str(existing_shots)) #debug
 
         # find difference
         self.shots_to_remove = listDifference(existing_shots, timeline_shots)
 
-        if general_settings.debug: print(unused_shots_list_statement + str(self.shots_to_remove)) #debug
+        if debug: print(unused_shots_list_statement + str(self.shots_to_remove)) #debug
 
         if len(self.shots_to_remove) == 0:
             self.report({'INFO'}, no_unused_shots_message)
-            if general_settings.debug: print(no_unused_shots_statement) #debug
+            if debug: print(no_unused_shots_statement) #debug
             return {'FINISHED'}
 
         return context.window_manager.invoke_props_dialog(self)
@@ -98,19 +99,21 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
         
         from ..functions.utils_functions import clearDataUsers
 
+        winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = context.window_manager.bpm_generalsettings
 
-        if general_settings.debug: print(starting_delete_shots_statement) #debug
+        if debug: print(starting_delete_shots_statement) #debug
 
         # move shots
         for shot in self.shots_to_remove:
             
-            if general_settings.debug: print(starting_delete_specific_shot_statement + shot) #debug
+            if debug: print(starting_delete_specific_shot_statement + shot) #debug
 
             # delete corresponding scene if exists
             for s in bpy.data.scenes:
                 if s.name == shot:
-                    if general_settings.debug: print(deleting_scene_statement + s.name) #debug
+                    if debug: print(deleting_scene_statement + s.name) #debug
 
                     bpy.data.scenes.remove(s, do_unlink = True)
             
@@ -119,7 +122,7 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
             # move
             if not self.permanently_delete:
                 old_shot_folder = os.path.join(general_settings.project_folder, old_folder)
-                if general_settings.debug: print(starting_moving_folder + shot_folder_name + " to " + old_shot_folder) #debug
+                if debug: print(starting_moving_folder + shot_folder_name + " to " + old_shot_folder) #debug
 
                 old_shot_path = os.path.join(old_shot_folder, shot_folder)
                 temp_dir_path = os.path.join(old_shot_path, shot_folder_name)
@@ -137,12 +140,12 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
 
                 shutil.move(folder, dir_path)
 
-                if general_settings.debug: print(moved_folder_statement) #debug
+                if debug: print(moved_folder_statement) #debug
             # delete
             else:
-                if general_settings.debug: print(starting_deleting_folder + shot_folder_name) #debug
+                if debug: print(starting_deleting_folder + shot_folder_name) #debug
                 shutil.rmtree(folder)
-                if general_settings.debug: print(deleted_folder_statement) #debug
+                if debug: print(deleted_folder_statement) #debug
 
             # remove libraries
             lib = findLibFromShot(shot_folder_name)

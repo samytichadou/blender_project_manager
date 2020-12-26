@@ -24,7 +24,7 @@ class BPMRefreshShotDatasEdit(bpy.types.Operator):
                                 )
 
         winman = context.window_manager
-        debug = winman.bpm_generalsettings.debug
+        debug = winman.bpm_projectdatas.debug
 
         if debug: print(refreshing_timeline_shot_datas_statement) #debug
 
@@ -59,16 +59,17 @@ class BPMRefreshShotDatasShot(bpy.types.Operator):
                                 )
 
         winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = winman.bpm_generalsettings
 
         shot_json = getShotSettingsFileFromBlend()
 
         if shot_json is None:
             self.report({'INFO'}, missing_shot_file_message)
-            if general_settings.debug: print(missing_shot_file_statement) #debug
+            if debug: print(missing_shot_file_statement) #debug
             return {'FINISHED'}
     
-        if general_settings.debug: print(shot_loading_statement + shot_json) #debug
+        if debug: print(shot_loading_statement + shot_json) #debug
 
         # load json in props
         shot_settings = winman.bpm_shotsettings
@@ -77,7 +78,7 @@ class BPMRefreshShotDatasShot(bpy.types.Operator):
         loadJsonDataToDataset(winman, shot_settings, shot_json, ())
         general_settings.bypass_update_tag = False
 
-        if general_settings.debug: print(shot_loaded_statement) #debug
+        if debug: print(shot_loaded_statement) #debug
 
         return {'FINISHED'}
 

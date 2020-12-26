@@ -77,6 +77,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
 
         # variables
         winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = winman.bpm_generalsettings
         active_strip = context.scene.sequence_editor.active_strip
         shot_settings = active_strip.bpm_shotsettings
@@ -86,15 +87,15 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
         # check for invalid shot version number or already loaded version
         if self.version_number > shot_settings.shot_last_version:
             self.report({'INFO'}, invalid_shot_version_message)
-            if general_settings.debug: print(invalid_shot_version_statement) #debug
+            if debug: print(invalid_shot_version_statement) #debug
             return {'FINISHED'}
 
         elif self.version_number == shot_settings.shot_version:
             self.report({'INFO'}, already_loaded_shot_version_message)
-            if general_settings.debug: print(already_loaded_shot_version_statement) #debug
+            if debug: print(already_loaded_shot_version_statement) #debug
             return {'FINISHED'}
 
-        if general_settings.debug: print(changing_shot_version_statement + str(self.version_number)) #debug
+        if debug: print(changing_shot_version_statement + str(self.version_number)) #debug
 
         # check if file exist
         old_version_shot_filepath = absolutePath(shot_settings.shot_filepath)
@@ -107,7 +108,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
 
         if not os.path.isfile(target_shot_path):
             self.report({'INFO'}, file_does_not_exist_message + target_shot_path)
-            if general_settings.debug: print(file_does_not_exist_statement + target_shot_path) #debug
+            if debug: print(file_does_not_exist_statement + target_shot_path) #debug
             return {'FINISHED'}
         
         # change version number and set warning if needed
@@ -128,7 +129,7 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
 
             # link new scene
             linkExternalScenes(target_shot_path)
-            if general_settings.debug: print(scenes_linked_statement + target_shot_path) #debug
+            if debug: print(scenes_linked_statement + target_shot_path) #debug
 
             # link strip to new scene
             scene_to_link = None
@@ -140,12 +141,12 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
                             break
             if scene_to_link is not None:
                 active_strip.scene = scene_to_link
-                if general_settings.debug: print(linked_to_strip_statement + target_shot_path) #debug
+                if debug: print(linked_to_strip_statement + target_shot_path) #debug
 
             # error message if scene not found
             else:
                 self.report({'INFO'}, scene_not_found_message + shot_name)
-                if general_settings.debug: print(scene_not_found_statement + shot_name) #debug
+                if debug: print(scene_not_found_statement + shot_name) #debug
                 return {'FINISHED'}
 
             # check if old library is still used
@@ -153,13 +154,13 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
             if shot_lib not in lib_used:
 
                 # delete old scene
-                if general_settings.debug: print(deleting_scene_statement + shot_name) #debug
+                if debug: print(deleting_scene_statement + shot_name) #debug
                 bpy.data.scenes.remove(shot_scn, do_unlink = True)
 
                 # unlink old lib
                 clearDataUsers(shot_lib)
                 bpy.data.orphans_purge()
-                if general_settings.debug: print(library_cleared_statement + old_version_shot_filepath) #debug
+                if debug: print(library_cleared_statement + old_version_shot_filepath) #debug
 
         ### deal with images if image strip ###
         elif active_strip.type == 'IMAGE':

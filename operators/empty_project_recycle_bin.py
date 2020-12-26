@@ -34,9 +34,11 @@ class BPMEmptyRecycleBin(bpy.types.Operator):
                         )
         from ..functions.file_functions import deleteFolderContent
 
+        winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = context.window_manager.bpm_generalsettings
 
-        if general_settings.debug: print(starting_empty_recycle_bin_statement) #debug
+        if debug: print(starting_empty_recycle_bin_statement) #debug
 
         # get folders to empty
         old_folder_path = os.path.join(general_settings.project_folder, old_folder)
@@ -45,13 +47,13 @@ class BPMEmptyRecycleBin(bpy.types.Operator):
             filepath = os.path.join(old_folder_path, filename)
             if os.path.isdir(filepath):
 
-                if general_settings.debug: print(emptying_folder_statement + filepath) #debug
+                if debug: print(emptying_folder_statement + filepath) #debug
 
                 # empty folders
                 deleteFolderContent(filepath)
 
-                if general_settings.debug: print(folder_emptied_statement) #debug
+                if debug: print(folder_emptied_statement) #debug
 
-        if general_settings.debug: print(empty_recycle_bin_completed_statement) #debug
+        if debug: print(empty_recycle_bin_completed_statement) #debug
         
         return {'FINISHED'}

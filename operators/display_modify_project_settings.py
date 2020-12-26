@@ -11,7 +11,7 @@ def reloadProjectSettingsFromJson(self, context):
     if not self.modify:
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
-        debug = winman.bpm_generalsettings.debug
+        debug = winman.bpm_projectdatas.debug
 
         datas = winman.bpm_projectdatas
         json_project_file = os.path.join(general_settings.project_folder, file_project)

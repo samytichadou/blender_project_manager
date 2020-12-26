@@ -95,8 +95,9 @@ class BpmCreateProject(bpy.types.Operator):
         general_settings = winman.bpm_generalsettings
         render_settings = winman.bpm_rendersettings
         datas = winman.bpm_projectdatas
+        debug = datas.debug
 
-        if winman.bpm_generalsettings.debug: print(saving_to_json_statement) #debug
+        if debug: print(saving_to_json_statement) #debug
 
         project_folder = general_settings.project_folder
         project_file = os.path.join(project_folder, file_project)
@@ -106,7 +107,7 @@ class BpmCreateProject(bpy.types.Operator):
 
         # create json file
         create_json_file(json_dataset, project_file)
-        if winman.bpm_generalsettings.debug: print(saved_to_json_statement) #debug
+        if debug: print(saved_to_json_statement) #debug
 
         # set project as bpm edit project
         general_settings.is_project = True
@@ -122,72 +123,72 @@ class BpmCreateProject(bpy.types.Operator):
         #shot
         shot_folder_path = os.path.join(project_folder, shot_folder)
         createFolder(shot_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + shot_folder_path) #debug
+        if debug: print(folder_created_statement + shot_folder_path) #debug
 
         #asset
         asset_folder_path = os.path.join(project_folder, asset_folder)
         createFolder(asset_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + asset_folder_path) #debug
+        if debug: print(folder_created_statement + asset_folder_path) #debug
 
         #render
         render_folder_path = os.path.join(project_folder, render_folder)
         createFolder(render_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_folder_path) #debug
+        if debug: print(folder_created_statement + render_folder_path) #debug
 
         #shot render
         render_shot_folder_path = os.path.join(render_folder_path, render_shots_folder)
         createFolder(render_shot_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_shot_folder_path) #debug
+        if debug: print(folder_created_statement + render_shot_folder_path) #debug
 
         #draft shot render
         render_shot_draft_folder_path = os.path.join(render_shot_folder_path, render_draft_folder)
         createFolder(render_shot_draft_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_shot_draft_folder_path) #debug
+        if debug: print(folder_created_statement + render_shot_draft_folder_path) #debug
 
         #render shot render
         render_shot_render_folder_path = os.path.join(render_shot_folder_path, render_render_folder)
         createFolder(render_shot_render_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_shot_render_folder_path) #debug
+        if debug: print(folder_created_statement + render_shot_render_folder_path) #debug
 
         #final shot render
         render_shot_final_folder_path = os.path.join(render_shot_folder_path, render_final_folder)
         createFolder(render_shot_final_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_shot_final_folder_path) #debug
+        if debug: print(folder_created_statement + render_shot_final_folder_path) #debug
 
         #playblast shot render
         render_playblast_folder_path = os.path.join(render_shot_folder_path, render_playblast_folder)
         createFolder(render_playblast_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_playblast_folder_path) #debug
+        if debug: print(folder_created_statement + render_playblast_folder_path) #debug
 
         #dailies render
         render_dailies_folder_path = os.path.join(render_folder_path, render_dailies_folder)
         createFolder(render_dailies_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_dailies_folder_path) #debug
+        if debug: print(folder_created_statement + render_dailies_folder_path) #debug
 
         #draft dailies render
         render_dailies_draft_folder_path = os.path.join(render_dailies_folder_path, render_draft_folder)
         createFolder(render_dailies_draft_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_dailies_draft_folder_path) #debug
+        if debug: print(folder_created_statement + render_dailies_draft_folder_path) #debug
 
         #render dailies render
         render_dailies_render_folder_path = os.path.join(render_dailies_folder_path, render_render_folder)
         createFolder(render_dailies_render_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_dailies_render_folder_path) #debug
+        if debug: print(folder_created_statement + render_dailies_render_folder_path) #debug
 
         #final dailies render
         render_dailies_final_folder_path = os.path.join(render_dailies_folder_path, render_final_folder)
         createFolder(render_dailies_final_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + render_dailies_final_folder_path) #debug
+        if debug: print(folder_created_statement + render_dailies_final_folder_path) #debug
 
         #ressources
         ressources_folder_path = os.path.join(project_folder, ressources_folder)
         createFolder(ressources_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + ressources_folder_path) #debug
+        if debug: print(folder_created_statement + ressources_folder_path) #debug
 
         #startup files folder
         project_startup_files_folder = os.path.join(ressources_folder_path, startup_files_folder)
         createFolder(project_startup_files_folder)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + project_startup_files_folder) #debug
+        if debug: print(folder_created_statement + project_startup_files_folder) #debug
 
         #old
         old_folder_path = os.path.join(project_folder, old_folder)
@@ -195,22 +196,22 @@ class BpmCreateProject(bpy.types.Operator):
         #old shot
         old_shot_folder_path = os.path.join(old_folder_path, shot_folder)
         createFolder(old_shot_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + old_shot_folder_path) #debug
+        if debug: print(folder_created_statement + old_shot_folder_path) #debug
 
         #old asset
         old_asset_folder_path = os.path.join(old_folder_path, asset_folder)
         createFolder(old_asset_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + old_asset_folder_path) #debug
+        if debug: print(folder_created_statement + old_asset_folder_path) #debug
 
         #old render
         old_render_folder_path = os.path.join(old_folder_path, render_folder)
         createFolder(old_render_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + old_render_folder_path) #debug
+        if debug: print(folder_created_statement + old_render_folder_path) #debug
 
         #old ressources
         old_ressources_folder_path = os.path.join(old_folder_path, ressources_folder)
         createFolder(old_ressources_folder_path)
-        if winman.bpm_generalsettings.debug: print(folder_created_statement + old_ressources_folder_path) #debug
+        if debug: print(folder_created_statement + old_ressources_folder_path) #debug
 
 
         # copy startup files
@@ -248,12 +249,12 @@ class BpmCreateProject(bpy.types.Operator):
             json_render_dataset['render_settings'].append(r_datas)
 
         # create json file
-        if winman.bpm_generalsettings.debug: print(saving_to_json_statement) #debug
+        if debug: print(saving_to_json_statement) #debug
 
         render_filepath = os.path.join(render_folder_path, render_file)
         create_json_file(json_render_dataset, render_filepath)
 
-        if winman.bpm_generalsettings.debug: print(saved_to_json_statement) #debug
+        if debug: print(saved_to_json_statement) #debug
 
         
         # add extra ui

@@ -18,9 +18,12 @@ class BPMOpenWikiPage(bpy.types.Operator):
         # import statements and functions
         from ..global_variables import opening_web_page_statement, wiki_url
         
+        winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
+
         url = wiki_url + self.wiki_page
 
-        if context.window_manager.bpm_generalsettings.debug: print(opening_web_page_statement + url) #debug
+        if debug: print(opening_web_page_statement + url) #debug
         
         webbrowser.open(url)
 

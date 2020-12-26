@@ -62,6 +62,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
         from ..functions.threading_functions import launchSeparateThread
         
         winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = winman.bpm_generalsettings
         project_folder = general_settings.project_folder
         scn = context.scene
@@ -71,7 +72,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
         new_active = None
 
-        if general_settings.debug: print(start_update_shot_statement) #debug
+        if debug: print(start_update_shot_statement) #debug
 
         chk_updated = False
 
@@ -81,7 +82,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
                 if not strip.bpm_shotsettings.is_working:
 
-                    if general_settings.debug: print(checking_update_shot_statement + strip.name) #debug
+                    if debug: print(checking_update_shot_statement + strip.name) #debug
                     
                     shot_settings = strip.bpm_shotsettings
                     
@@ -89,14 +90,14 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
                     if new_start != shot_settings.shot_frame_start or new_end != shot_settings.shot_frame_end:
 
-                        if general_settings.debug: print(updating_shot_statement) #debug
-                        if general_settings.debug: print(update_shot_new_start_end_statement + str(new_start) + "-" + str(new_end)) #debug
+                        if debug: print(updating_shot_statement) #debug
+                        if debug: print(update_shot_new_start_end_statement + str(new_start) + "-" + str(new_end)) #debug
 
                         # check if frame become negative and avoid it
                         if new_start < 0:
 
                             self.report({'INFO'}, shot_update_impossible_message)
-                            if general_settings.debug: print(shot_update_impossible_statement) #debug
+                            if debug: print(shot_update_impossible_statement) #debug
 
                         else:
 
@@ -109,11 +110,11 @@ class BPMUpdateShotDuration(bpy.types.Operator):
                             # build command
                             command = buildBlenderCommandBackgroundPython(update_shot_file, filepath, arguments)
 
-                            if general_settings.debug: print(launching_command_statement + command) #debug
+                            if debug: print(launching_command_statement + command) #debug
 
                             # launch command
                             #launchCommand(command)
-                            # launchSeparateThread([command, general_settings.debug, None])
+                            # launchSeparateThread([command, debug, None])
 
                             # update shot settings and save json
                             shot_settings.shot_frame_start = new_start
@@ -145,13 +146,13 @@ class BPMUpdateShotDuration(bpy.types.Operator):
 
                             general_settings.bypass_update_tag = False
 
-                            launchSeparateThread([command, general_settings.debug, updateShotDurationEndFunction, new_strip])               
+                            launchSeparateThread([command, debug, updateShotDurationEndFunction, new_strip])               
 
-                            if general_settings.debug: print(updated_shot_statement) #debug
+                            if debug: print(updated_shot_statement) #debug
                             
-                    elif general_settings.debug: print(no_update_needed_statement) #debug
+                    elif debug: print(no_update_needed_statement) #debug
 
-                elif general_settings.debug: print(strip_already_working_statement + strip.name) #debug
+                elif debug: print(strip_already_working_statement + strip.name) #debug
 
 
         if chk_updated:
@@ -163,7 +164,7 @@ class BPMUpdateShotDuration(bpy.types.Operator):
             # update audio sync if existing
             audio_sync_filepath = os.path.join(project_folder, audio_sync_file)
             if os.path.isfile(audio_sync_filepath):
-                syncAudioEdit(general_settings.debug, project_folder, scn)
+                syncAudioEdit(debug, project_folder, scn)
             
             # reload sequencer if needed
             bpy.ops.sequencer.refresh_all()

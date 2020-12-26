@@ -8,7 +8,7 @@ def updateTimer(self, context):
     from .timer_function import bpmTimerFunction
     from .global_variables import timer_function_added_statement, timer_function_removed_statement, timer_function_updated_statement
 
-    debug = context.window_manager.bpm_generalsettings.debug
+    debug = context.window_manager.bpm_projectdatas.debug
 
     if self.use_timer_refresh:
 
@@ -30,7 +30,7 @@ def updateLockFileToggle(self, context):
     from .functions.lock_file_functions import setupLockFile, clearLockFile
     from .global_variables import deleted_lock_file_statement, created_lock_file_statement
 
-    debug = context.window_manager.bpm_generalsettings.debug
+    debug = context.window_manager.bpm_projectdatas.debug
 
     if self.use_lock_file_system:
         setupLockFile()

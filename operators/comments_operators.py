@@ -35,7 +35,7 @@ def update_comments_json_file(comment_collection, folder_path):
 
 def update_comment_frame_property(self, context):
     general_settings = context.window_manager.bpm_generalsettings
-    debug = general_settings.debug
+    debug = winman.bpm_projectdatas.debug
 
     if general_settings.bypass_update_tag:
         if debug: print(bypass_shot_settings_update_statement) #debug
@@ -83,7 +83,7 @@ class BPMAddComment(bpy.types.Operator):
 
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
-        debug = general_settings.debug
+        debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
         if self.comment_type == "edit_shot":
@@ -158,14 +158,14 @@ class BPMRemoveComment(bpy.types.Operator):
 
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
-        debug = general_settings.debug
+        debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
         if self.comment_type == "edit_shot":
             edit, shot, active = check_edit_poll_function(context)
             if not shot or active.lock:
                 self.report({'INFO'}, no_active_shot_message)
-                if general_settings.debug: print(no_active_shot_statement) #debug
+                if debug: print(no_active_shot_statement) #debug
                 return {'FINISHED'}
 
         if debug: print(start_edit_comment_statement) #debug
@@ -242,14 +242,14 @@ class BPMModifyComment(bpy.types.Operator):
 
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
-        debug = general_settings.debug
+        debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
         if self.comment_type == "edit_shot":
             edit, shot, active = check_edit_poll_function(context)
             if not shot or active.lock:
                 self.report({'INFO'}, no_active_shot_message)
-                if general_settings.debug: print(no_active_shot_statement) #debug
+                if debug: print(no_active_shot_statement) #debug
                 return {'FINISHED'}
 
         if debug: print(start_edit_comment_statement) #debug
@@ -301,14 +301,14 @@ class BPMReloadComment(bpy.types.Operator):
 
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
-        debug = general_settings.debug
+        debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
         if self.comment_type == "edit_shot":
             edit, shot, active = check_edit_poll_function(context)
             if not shot:
                 self.report({'INFO'}, no_active_shot_message)
-                if general_settings.debug: print(no_active_shot_statement) #debug
+                if debug: print(no_active_shot_statement) #debug
                 return {'FINISHED'}
 
         if debug: print(loading_comments_statement) #debug

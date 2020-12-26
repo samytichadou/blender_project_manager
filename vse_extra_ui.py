@@ -33,14 +33,16 @@ markers_font = {
 # initialize fonts
 def initializeExternalFontId(font_id, file_font):
     winman = bpy.context.window_manager
-    if winman.bpm_generalsettings.debug: print(load_font_statement + file_font) #debug
+    debug = winman.bpm_projectdatas.debug
+    if debug: print(load_font_statement + file_font) #debug
     font_id["font_id"] = blf.load(file_font)
 
 
 # unload external font
 def unloadExternalFontId(font_id, file_font):
     winman = bpy.context.window_manager
-    if winman.bpm_generalsettings.debug: print(unload_font_statement + file_font) #debug
+    debug = winman.bpm_projectdatas.debug
+    if debug: print(unload_font_statement + file_font) #debug
     font_id["font_id"] = 0
     blf.unload(file_font)
 
@@ -550,7 +552,8 @@ def enableSequencerCallback():
         drawBpmSequencerCallbackPx, (), 'WINDOW', 'POST_PIXEL'))
 
     winman = bpy.context.window_manager
-    if winman.bpm_generalsettings.debug: print(add_extra_ui_statement)#debug
+    debug = winman.bpm_projectdatas.debug
+    if debug: print(add_extra_ui_statement)#debug
 
 #disable callback
 def disableSequencerCallback():
@@ -563,4 +566,5 @@ def disableSequencerCallback():
     cb_handle.clear()
 
     winman = bpy.context.window_manager
-    if winman.bpm_generalsettings.debug: print(remove_extra_ui_statement) #debug
+    debug = winman.bpm_projectdatas.debug
+    if debug: print(remove_extra_ui_statement) #debug

@@ -91,10 +91,11 @@ class BPMCreateShot(bpy.types.Operator):
 
 
         winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = context.window_manager.bpm_generalsettings
         scn = context.scene
         
-        if general_settings.debug: print(creating_shot_statement) #debug
+        if debug: print(creating_shot_statement) #debug
         
         project_datas = winman.bpm_projectdatas
         project_folder = general_settings.project_folder
@@ -102,7 +103,7 @@ class BPMCreateShot(bpy.types.Operator):
         next_shot_folder, next_shot_file, next_shot_number = getNextShot(winman, project_datas, getShotPattern(project_datas), 1, shot_folder_path)
 
         # check timeline available space
-        if general_settings.debug: print(checking_available_timeline_space_statement) #debug
+        if debug: print(checking_available_timeline_space_statement) #debug
         name = project_datas.shot_prefix + next_shot_number
         start = scn.frame_current
         duration = project_datas.default_shot_length
@@ -113,12 +114,12 @@ class BPMCreateShot(bpy.types.Operator):
         if channel == 0:
             # return no place to put the strip
             self.report({'INFO'}, no_available_timeline_space_message)
-            if general_settings.debug: print(no_available_timeline_space_statement) #debug
+            if debug: print(no_available_timeline_space_statement) #debug
             return {'FINISHED'}
 
         # create shot dir
         createDirectory(next_shot_folder)
-        if general_settings.debug: print(folder_created_statement + next_shot_folder) #debug
+        if debug: print(folder_created_statement + next_shot_folder) #debug
 
         # copy shot file
         ressources_folderpath = os.path.join(project_folder, ressources_folder)
@@ -126,10 +127,10 @@ class BPMCreateShot(bpy.types.Operator):
         shot_startup_filepath = os.path.join(startup_folderpath, shot_startup_file)
         shutil.copy(shot_startup_filepath, next_shot_file)
 
-        if general_settings.debug: print(copying_file_statement + shot_startup_filepath) #debug
+        if debug: print(copying_file_statement + shot_startup_filepath) #debug
 
         # create the json file
-        if general_settings.debug: print(saving_to_json_statement) #debug
+        if debug: print(saving_to_json_statement) #debug
 
         shot_json = os.path.join(next_shot_folder, shot_file)
         # format the json dataset
@@ -139,26 +140,26 @@ class BPMCreateShot(bpy.types.Operator):
 
         create_json_file(json_dataset, shot_json)
 
-        if general_settings.debug: print(saved_to_json_statement) #debug
+        if debug: print(saved_to_json_statement) #debug
 
 
         # modify and copy python script
         replacement_list = getScriptReplacementListShotCreation(project_datas, next_shot_folder, next_shot_file, next_shot_number)
         
         temp_python_script = os.path.join(next_shot_folder, python_temp)
-        if general_settings.debug: print(creating_python_script_statement + temp_python_script) #debug
+        if debug: print(creating_python_script_statement + temp_python_script) #debug
 
         replaceContentInPythonScript(shot_setup_file, temp_python_script, replacement_list)
-        if general_settings.debug: print(python_script_created_statement) #debug
+        if debug: print(python_script_created_statement) #debug
 
         # launch the blend command
         # command = buildBlenderCommandBackgroundPython(temp_python_script, next_shot_file, "")
         # launchCommand(command)
-        # if general_settings.debug: print(launching_command_statement + command) #debug
+        # if debug: print(launching_command_statement + command) #debug
 
         # link shot
         scene_list = linkExternalScenes(next_shot_file)
-        if general_settings.debug: print(scenes_linked_statement + next_shot_file) #debug
+        if debug: print(scenes_linked_statement + next_shot_file) #debug
 
         # set temp scene to link
         scn_to_link = bpy.data.scenes[scene_list[0]]
@@ -188,12 +189,12 @@ class BPMCreateShot(bpy.types.Operator):
 
         # launch the blend command
         command = buildBlenderCommandBackgroundPython(temp_python_script, next_shot_file, "")
-        if general_settings.debug: print(launching_command_statement + command) #debug
-        launchSeparateThread([command, general_settings.debug, linkSceneToStrip, linked_strip, next_shot_file, name, temp_python_script, general_settings.debug])
+        if debug: print(launching_command_statement + command) #debug
+        launchSeparateThread([command, debug, linkSceneToStrip, linked_strip, next_shot_file, name, temp_python_script, debug])
 
         # # delete the python temp
         # suppressExistingFile(temp_python_script)
-        # if general_settings.debug: print(deleted_file_statement + temp_python_script) #debug
+        # if debug: print(deleted_file_statement + temp_python_script) #debug
 
         # create render folders
         createShotRenderFolders(next_shot_file, winman)
@@ -206,6 +207,6 @@ class BPMCreateShot(bpy.types.Operator):
         # update audio sync if existing
         audio_sync_filepath = os.path.join(project_folder, audio_sync_file)
         if os.path.isfile(audio_sync_filepath):
-            syncAudioEdit(general_settings.debug, general_settings.project_folder, scn)
+            syncAudioEdit(debug, general_settings.project_folder, scn)
 
         return {'FINISHED'}

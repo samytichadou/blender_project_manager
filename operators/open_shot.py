@@ -31,9 +31,10 @@ class BPMOpenShot(bpy.types.Operator):
         from ..global_variables import opening_statement
 
         winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         filepath = absolutePath(context.scene.sequence_editor.active_strip.bpm_shotsettings.shot_filepath)
 
-        if winman.bpm_generalsettings.debug: print(opening_statement + filepath) #debug
+        if debug: print(opening_statement + filepath) #debug
 
         # save if not temp
         bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)

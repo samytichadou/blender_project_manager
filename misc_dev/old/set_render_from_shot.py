@@ -39,7 +39,7 @@ class BPMSetRenderShot(bpy.types.Operator):
 
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
-        debug = general_settings.debug
+        debug = winman.bpm_projectdatas.debug
         render_settings = winman.bpm_rendersettings[self.render_settings]
         scn = context.scene
         render = scn.render

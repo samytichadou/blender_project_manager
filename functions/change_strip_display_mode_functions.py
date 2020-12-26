@@ -81,7 +81,7 @@ def completeRenderMissingImages(render_filepath, extension, start_frame, end_fra
 
 # update shot strip to image sequence
 def updateStripToImageSequence(strip, sequencer, sequence_folder, winman):
-    debug = winman.bpm_generalsettings.debug
+    debug = winman.bpm_projectdatas.debug
 
     # get settings
     name = strip.name
@@ -154,7 +154,7 @@ def updateStripToImageSequence(strip, sequencer, sequence_folder, winman):
 
 # update shot strip to scene
 def updateStripToScene(strip, winman):
-    debug = winman.bpm_generalsettings.debug
+    debug = winman.bpm_projectdatas.debug
 
     # get settings
     name = strip.name
@@ -211,7 +211,7 @@ def updateStripToScene(strip, winman):
 def updateShotDisplayMode(self, context):
     winman = context.window_manager
     general_settings = winman.bpm_generalsettings
-    debug = general_settings.debug
+    debug = winman.bpm_projectdatas.debug
     sequencer = context.scene.sequence_editor
     active = sequencer.active_strip
 

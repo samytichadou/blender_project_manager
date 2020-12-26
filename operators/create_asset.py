@@ -62,10 +62,11 @@ class BPMCreateAsset(bpy.types.Operator):
         from ..functions.file_functions import createDirectory
 
         winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
         general_settings = winman.bpm_generalsettings
         asset_collection = winman.bpm_assets
 
-        if general_settings.debug: print(creating_asset_statement + self.name) #debug
+        if debug: print(creating_asset_statement + self.name) #debug
 
         # get json file path
         asset_file_path, asset_file_exist = getAssetFile(winman)
@@ -74,7 +75,7 @@ class BPMCreateAsset(bpy.types.Operator):
 
         if asset_file_exist:
 
-            if general_settings.debug: print(reading_json_statement + asset_file_path) #debug
+            if debug: print(reading_json_statement + asset_file_path) #debug
 
             datas = read_json(asset_file_path)
 
@@ -84,13 +85,13 @@ class BPMCreateAsset(bpy.types.Operator):
 
                     # error message because dupe name
                     self.report({'INFO'}, dupe_asset_name_message)
-                    if general_settings.debug: print(dupe_asset_name_statement) #debug
+                    if debug: print(dupe_asset_name_statement) #debug
 
                     return {'FINISHED'}
 
         else:
 
-            if general_settings.debug: print(initialize_json_statement + asset_file_path) #debug
+            if debug: print(initialize_json_statement + asset_file_path) #debug
 
             datas = initializeAssetJsonDatas({"assets"})
 
@@ -109,11 +110,11 @@ class BPMCreateAsset(bpy.types.Operator):
         datas['assets'].append(asset_datas_json)
 
         # write json
-        if general_settings.debug: print(saving_to_json_statement) #debug
+        if debug: print(saving_to_json_statement) #debug
 
         create_json_file(datas, asset_file_path)
 
-        if general_settings.debug: print(saved_to_json_statement) #debug
+        if debug: print(saved_to_json_statement) #debug
         
         # create the folder
         asset_folder_path = os.path.join(general_settings.project_folder, asset_folder)
@@ -122,7 +123,7 @@ class BPMCreateAsset(bpy.types.Operator):
         
         new_asset_file_path = os.path.join(new_asset_folder_path, self.name + ".blend")
 
-        if general_settings.debug: print(asset_file_creation_statement + new_asset_file_path) #debug    
+        if debug: print(asset_file_creation_statement + new_asset_file_path) #debug    
 
         # create ressources folder
         ressources_folder_path = os.path.join(new_asset_folder_path, asset_ressources_folder)
@@ -134,7 +135,7 @@ class BPMCreateAsset(bpy.types.Operator):
         asset_startup_filepath = os.path.join(startup_folder, asset_startup_file)
         shutil.copy(asset_startup_filepath, new_asset_file_path)
 
-        if general_settings.debug: print(copying_file_statement + asset_startup_filepath) #debug
+        if debug: print(copying_file_statement + asset_startup_filepath) #debug
 
         # select asset if available
         if general_settings.panel_asset_display in {'ALL', self.asset_type}:
@@ -143,6 +144,6 @@ class BPMCreateAsset(bpy.types.Operator):
                     general_settings.asset_list_index = idx
                     break
 
-        if general_settings.debug: print(asset_created_statement + self.name) #debug
+        if debug: print(asset_created_statement + self.name) #debug
 
         return {'FINISHED'}

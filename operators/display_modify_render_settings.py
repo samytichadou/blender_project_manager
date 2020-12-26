@@ -20,7 +20,7 @@ def reloadRenderSettingsFromJson(self, context):
     if not self.modify:
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
-        debug = winman.bpm_generalsettings.debug
+        debug = winman.bpm_projectdatas.debug
 
         render_folderpath = os.path.join(general_settings.project_folder, render_folder)
         render_filepath = os.path.join(render_folderpath, render_file)

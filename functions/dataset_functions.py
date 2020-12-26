@@ -25,10 +25,10 @@ def setPropertiesFromJsonDataset(datasetin, datasetout, debug, avoid_list):
                 chk_avoid = True
         if not chk_avoid:
             try:
-                if debug: print(setting_prop_statement + prop) ###debug
+                if debug: print(setting_prop_statement + prop) #debug
                 setattr(datasetout, '%s' % prop, datasetin[prop])
             except (KeyError, AttributeError, TypeError):
-                if debug: print(setting_prop_error_statement + prop) ###debug
+                if debug: print(setting_prop_error_statement + prop) #debug
                 pass
         else:
             if debug: print(prop_avoided_statement + prop)
@@ -36,11 +36,12 @@ def setPropertiesFromJsonDataset(datasetin, datasetout, debug, avoid_list):
 
 # set attributes between 2 dataset
 def setPropertiesFromDataset(datasetin, datasetout, winman):
+    debug = winman.bpm_projectdatas.debug
     for prop in datasetin.bl_rna.properties:
         if not prop.is_readonly:
             try:
-                if winman.bpm_generalsettings.debug: print(setting_prop_statement + prop.identifier) ###debug
+                if debug: print(setting_prop_statement + prop.identifier) #debug
                 setattr(datasetout, '%s' % prop.identifier, getattr(datasetin, prop.identifier))
             except (KeyError, AttributeError):
-                if winman.bpm_generalsettings.debug: print(setting_prop_error_statement + prop.identifier) ###debug
+                if debug: print(setting_prop_error_statement + prop.identifier) #debug
                 pass

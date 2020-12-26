@@ -9,11 +9,12 @@ from .addon_prefs import getAddonPreferences
 
 def bpmTimerFunction():
     winman = bpy.context.window_manager
+    debug = winman.bpm_projectdatas.debug
     general_settings = winman.bpm_generalsettings
     prefs = getAddonPreferences()
     interval = prefs.timer_frequency
 
-    if general_settings.debug: print(timer_function_processing_statement) #debug
+    if debug: print(timer_function_processing_statement) #debug
 
     ### lock system ###
     if prefs.use_lock_file_system:
