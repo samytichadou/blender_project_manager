@@ -152,8 +152,7 @@ def drawPropertiesAssetPanel(container, asset_settings, general_settings):
 
     drawOpenedWarning(container, general_settings)
 
-    container.prop(asset_settings, 'asset_type')
-    container.prop(asset_settings, 'asset_state')
+    
 
     if asset_settings.asset_type == 'SHADER': target_prop = 'asset_material'
     elif asset_settings.asset_type == 'NODEGROUP': target_prop = 'asset_nodegroup'
@@ -161,7 +160,12 @@ def drawPropertiesAssetPanel(container, asset_settings, general_settings):
     else: target_prop = 'asset_collection'
 
     container.prop(asset_settings, target_prop, text='')
-    container.label(text = "Manually update when changing collection name", icon = "INFO")
+    container.label(text = "Manually Update", icon = "INFO")
+
+    col = container.column(align=True)
+
+    col.prop(asset_settings, 'asset_type', text = "Type")
+    col.prop(asset_settings, 'asset_state', text = "State")
 
     row = container.row(align=True)
     row.menu('BPM_MT_OpenFolder_Explorer_Menu')
@@ -751,7 +755,7 @@ class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel):
 
 # asset settings viewport panel
 class BPM_PT_properties_asset_viewport_panel(ViewportPanel):
-    bl_label = "Asset settings"
+    bl_label = "Asset"
 
     @classmethod
     def poll(cls, context):
@@ -770,8 +774,23 @@ class BPM_PT_properties_asset_viewport_panel(ViewportPanel):
         drawPropertiesAssetPanel(layout, asset_settings, general_settings)
 
 
+# asset comment viewport subpanel
+class BPM_PT_properties_asset_comments_viewport_subpanel(ViewportPanel):
+    bl_label = "Comments"
+    bl_parent_id = "BPM_PT_properties_asset_viewport_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+        winman = context.window_manager
+        asset_settings = winman.bpm_assetsettings
+
+        layout = self.layout
+
+        comment_draw(self.layout, asset_settings.comments, "asset")
+
+
 # asset settings debug viewport subpanel
-class BPM_PT_properties_asset_viewport_debug_subpanel(ViewportPanel):
+class BPM_PT_properties_asset_debug_viewport_subpanel(ViewportPanel):
     bl_label = "Debug"
     bl_parent_id = "BPM_PT_properties_asset_viewport_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -788,26 +807,6 @@ class BPM_PT_properties_asset_viewport_debug_subpanel(ViewportPanel):
         asset_settings = winman.bpm_assetsettings
 
         drawDebugAssetPanel(layout, asset_settings)
-
-
-# asset comment viewport panel
-class BPM_PT_properties_asset_comments_viewport_panel(ViewportPanel):
-    bl_label = "Asset Comments"
-
-    @classmethod
-    def poll(cls, context):
-        winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        asset_settings = winman.bpm_assetsettings
-        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type not in {'NODEGROUP', 'MATERIAL'}
-
-    def draw(self, context):
-        winman = context.window_manager
-        asset_settings = winman.bpm_assetsettings
-
-        layout = self.layout
-
-        comment_draw(self.layout, asset_settings.comments, "asset")
 
 
 # asset library nodetree panel
@@ -836,7 +835,7 @@ class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
 
 # asset settings nodetree panel
 class BPM_PT_properties_asset_nodetree_panel(NodetreePanel):
-    bl_label = "Asset settings"
+    bl_label = "Asset"
 
     @classmethod
     def poll(cls, context):
@@ -855,8 +854,23 @@ class BPM_PT_properties_asset_nodetree_panel(NodetreePanel):
         drawPropertiesAssetPanel(layout, asset_settings, general_settings)
 
 
+# asset comment nodetree subpanel
+class BPM_PT_properties_asset_comments_nodetree_subpanel(NodetreePanel):
+    bl_label = "Comments"
+    bl_parent_id = "BPM_PT_properties_asset_nodetree_panel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+        winman = context.window_manager
+        asset_settings = winman.bpm_assetsettings
+
+        layout = self.layout
+
+        comment_draw(self.layout, asset_settings.comments, "asset")
+
+
 # asset settings nodetree debug subpanel
-class BPM_PT_properties_asset_nodetree_debug_subpanel(NodetreePanel):
+class BPM_PT_properties_asset_debug_nodetree_subpanel(NodetreePanel):
     bl_label = "Debug"
     bl_parent_id = "BPM_PT_properties_asset_nodetree_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -873,26 +887,6 @@ class BPM_PT_properties_asset_nodetree_debug_subpanel(NodetreePanel):
         asset_settings = winman.bpm_assetsettings
 
         drawDebugAssetPanel(layout, asset_settings)
-
-
-# asset comment nodetree panel
-class BPM_PT_properties_asset_comments_nodetree_panel(NodetreePanel):
-    bl_label = "Assets Comments"
-
-    @classmethod
-    def poll(cls, context):
-        winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        asset_settings = winman.bpm_assetsettings
-        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type in {'NODEGROUP', 'MATERIAL'}
-
-    def draw(self, context):
-        winman = context.window_manager
-        asset_settings = winman.bpm_assetsettings
-
-        layout = self.layout
-
-        comment_draw(self.layout, asset_settings.comments, "asset")
 
 
 # topbar file menu
