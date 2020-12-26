@@ -7,6 +7,7 @@ from ..functions.date_functions import getDateTimeString, getDateTimeID
 from ..functions.file_functions import absolutePath
 from ..functions.strip_functions import getShotCommentPosition
 from ..functions.reload_comments_function import return_commentcoll_folderpath, reload_comments
+from ..vse_extra_ui import get_shot_comment_frame
 from ..global_variables import (
                                 comment_file,
                                 start_edit_comment_statement,
@@ -221,11 +222,17 @@ class BPMModifyComment(bpy.types.Operator):
         comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
         active_comment = comment_collection[self.index]
 
+        if self.comment_type == "edit_shot":
+            active = context.scene.sequence_editor.active_strip
+            frame = get_shot_comment_frame(active_comment, active)
+        else:
+            frame = active_comment.frame
+
         self.author = active_comment.author
         self.comment = active_comment.comment
         self.frame_comment = active_comment.frame_comment
         general_settings.bypass_update_tag = True
-        self.frame = active_comment.frame
+        self.frame = frame
         general_settings.bypass_update_tag = False
         return context.window_manager.invoke_props_dialog(self)
  
@@ -262,10 +269,16 @@ class BPMModifyComment(bpy.types.Operator):
 
         if debug: print(editing_comment_statement + active_comment.comment) #debug
 
+        if self.comment_type == "edit_shot":
+            active = context.scene.sequence_editor.active_strip
+            frame = getShotCommentPosition(self.frame, active)
+        else:
+            frame = self.frame
+
         # modify comment to strip settings
         active_comment.comment = self.comment
         active_comment.frame_comment = self.frame_comment
-        active_comment.frame = self.frame
+        active_comment.frame = frame
         active_comment.author = self.author
         active_comment.edit_time = getDateTimeString()
 

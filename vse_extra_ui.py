@@ -47,15 +47,19 @@ def unloadExternalFontId(font_id, file_font):
     blf.unload(file_font)
 
 
+# get shot comment frame in timeline
+def get_shot_comment_frame(comment, strip):
+    comment_frame = (comment.frame - strip.bpm_shotsettings.shot_frame_start) + strip.frame_start
+    return comment_frame
+
+
 # get link scene comments fram
 def getCommentFrameFromShotStrip(strip):
     comment_list = []
     shot_settings = strip.bpm_shotsettings
-    frame_start = strip.frame_start
-    shot_frame_start = shot_settings.shot_frame_start
     for comment in shot_settings.comments:
         if comment.frame_comment:
-            comment_frame = (comment.frame - shot_frame_start) + frame_start
+            comment_frame = get_shot_comment_frame(comment, strip)
             if comment_frame >= strip.frame_final_start and comment_frame < strip.frame_final_end:
                 comment_list.append((comment.comment, comment_frame))
     return comment_list
