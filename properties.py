@@ -317,8 +317,6 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
 
     custom_folders_index : bpy.props.IntProperty(update = updateFilebrowserPath)
 
-    ui_shot_state_subpanel : bpy.props.BoolProperty(name = "Display state colors", default=False)
-
     panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL', update = updateAssetDisplayType)
 
     asset_list_index : bpy.props.IntProperty(min = -1)

@@ -506,24 +506,25 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel):
 
 # sequencer UI panel
 class BPM_PT_sequencer_ui_panel(SequencerPanel):
-    bl_label = "UI"
+    bl_label = ""
 
     @classmethod
     def poll(cls, context):
         return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT'
 
+    def draw_header(self, context):
+        scn_settings = context.scene.bpm_scenesettings
+        row = self.layout.row(align=True)
+        row.prop(scn_settings, "extra_ui", text = "UI")
+        drawWikiHelp(row, 'Extra-UI-in-Sequencer')
+
     def draw(self, context):
 
-        scn_settings = context.scene.bpm_scenesettings
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
 
         drawOpenedWarning(layout, general_settings)
-
-        row = layout.row(align=True)
-        row.prop(scn_settings, 'extra_ui')
-        drawWikiHelp(row, 'Extra-UI-in-Sequencer')
 
 
 # sequencer UI shot subpanel
@@ -548,28 +549,6 @@ class BPM_PT_sequencer_ui_shot_subpanel(SequencerPanel):
         row.prop(scn_settings, 'color_shot_strip', text="")
 
         row = layout.row()
-        row.prop(scn_settings, 'display_shot_state')
-        row.prop(general_settings, 'ui_shot_state_subpanel', icon='COLORSET_04_VEC')
-
-        if general_settings.ui_shot_state_subpanel:
-            box = layout.box()
-            col = box.column(align=True)
-            row = col.row()
-            row.prop(scn_settings, 'color_state_storyboard')
-            row = col.row()
-            row.prop(scn_settings, 'color_state_layout')
-            row = col.row()
-            row.prop(scn_settings, 'color_state_animation')
-            row = col.row()
-            row.prop(scn_settings, 'color_state_lighting')
-            row = col.row()
-            row.prop(scn_settings, 'color_state_rendering')
-            row = col.row()
-            row.prop(scn_settings, 'color_state_compositing')
-            row = col.row()
-            row.prop(scn_settings, 'color_state_finished')
-
-        row = layout.row()
         row.prop(scn_settings, 'display_audio_sync_warning')
         row.prop(scn_settings, 'color_audio_sync', text="")
 
@@ -584,6 +563,40 @@ class BPM_PT_sequencer_ui_shot_subpanel(SequencerPanel):
         row = layout.row()
         row.prop(scn_settings, 'display_working_warning')
         row.prop(scn_settings, 'color_strip_working', text="")
+
+
+# sequencer UI shot subpanel
+class BPM_PT_sequencer_ui_shot_state_subpanel(SequencerPanel):
+    bl_label = "State"
+    bl_parent_id = "BPM_PT_sequencer_ui_shot_subpanel"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw_header(self, context):
+        
+        scn_settings = context.scene.bpm_scenesettings
+        self.layout.prop(scn_settings, "display_shot_state", text = "")
+
+    def draw(self, context):
+
+        scn_settings = context.scene.bpm_scenesettings
+        
+        layout = self.layout
+
+        col = layout.column(align=True)
+        row = col.row()
+        row.prop(scn_settings, 'color_state_storyboard')
+        row = col.row()
+        row.prop(scn_settings, 'color_state_layout')
+        row = col.row()
+        row.prop(scn_settings, 'color_state_animation')
+        row = col.row()
+        row.prop(scn_settings, 'color_state_lighting')
+        row = col.row()
+        row.prop(scn_settings, 'color_state_rendering')
+        row = col.row()
+        row.prop(scn_settings, 'color_state_compositing')
+        row = col.row()
+        row.prop(scn_settings, 'color_state_finished')
 
 
 # sequencer UI frame comment subpanel
