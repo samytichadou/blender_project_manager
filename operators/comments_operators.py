@@ -223,8 +223,11 @@ class BPMModifyComment(bpy.types.Operator):
         active_comment = comment_collection[self.index]
 
         if self.comment_type == "edit_shot":
-            active = context.scene.sequence_editor.active_strip
-            frame = get_shot_comment_frame(active_comment, active)
+            if self.frame_comment:
+                active = context.scene.sequence_editor.active_strip
+                frame = get_shot_comment_frame(active_comment, active)
+            else:
+                frame = context.scene.frame_current
         else:
             frame = active_comment.frame
 
@@ -270,8 +273,11 @@ class BPMModifyComment(bpy.types.Operator):
         if debug: print(editing_comment_statement + active_comment.comment) #debug
 
         if self.comment_type == "edit_shot":
-            active = context.scene.sequence_editor.active_strip
-            frame = getShotCommentPosition(self.frame, active)
+            if self.frame_comment:
+                active = context.scene.sequence_editor.active_strip
+                frame = getShotCommentPosition(self.frame, active)
+            else:
+                frame = -1
         else:
             frame = self.frame
 
