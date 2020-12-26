@@ -93,7 +93,7 @@ class BPMShotComments(bpy.types.PropertyGroup):
     time : bpy.props.StringProperty(name = "Creation Date")
     edit_time : bpy.props.StringProperty(name = "Edition Date")
     author : bpy.props.StringProperty(name = "Author")
-    hide : bpy.props.BoolProperty(name = "Hide Comment")
+    hide : bpy.props.BoolProperty(name = "Hide Comment", defaul = True)
 
 
 # project settings
