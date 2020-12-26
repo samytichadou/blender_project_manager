@@ -934,7 +934,7 @@ class BPM_PT_properties_browse_nodetree_panel(NodetreePanel):
 
 # asset library nodetree panel
 class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
-    bl_label = "Assets Library"
+    bl_label = ""
 
     @classmethod
     def poll(cls, context):
@@ -942,6 +942,11 @@ class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
         general_settings = winman.bpm_generalsettings
         asset_settings = winman.bpm_assetsettings
         return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type in {'NODEGROUP', 'MATERIAL'}
+
+    def draw_header(self, context):
+        row = self.layout.row(align=True)
+        row.label(text = "Assets")
+        drawWikiHelp(row, 'Asset-Management')
 
     def draw(self, context):
         winman = context.window_manager
@@ -953,12 +958,12 @@ class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
         drawAssetLibrary(layout, winman)
 
         if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
-            drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
+            layout.operator("bpm.import_asset", icon = "LINK_BLEND")
 
 
 # asset library viewport panel
 class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel):
-    bl_label = "Assets Library"
+    bl_label = ""
 
     @classmethod
     def poll(cls, context):
@@ -971,6 +976,11 @@ class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel):
                 if winman.bpm_assetsettings.asset_type not in {'NODEGROUP', 'MATERIAL'}:
                     return True
 
+    def draw_header(self, context):
+        row = self.layout.row(align=True)
+        row.label(text = "Assets")
+        drawWikiHelp(row, 'Asset-Management')
+
     def draw(self, context):
         winman = context.window_manager
 
@@ -981,7 +991,7 @@ class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel):
         drawAssetLibrary(layout, winman)
 
         if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
-            drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
+            layout.operator("bpm.import_asset", icon = "LINK_BLEND")
 
 
 # topbar file menu
