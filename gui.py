@@ -621,9 +621,6 @@ class BPM_PT_sequencer_ui_frame_comment_subpanel(SequencerPanel):
         layout = self.layout
 
         row = layout.row()
-        row.label(text = "Markers")
-
-        row = layout.row()
         row.prop(scn_settings, 'display_markers', text = "")
         row.prop(scn_settings, 'color_markers', text="")
 
