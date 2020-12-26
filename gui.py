@@ -453,7 +453,7 @@ class BPM_PT_sequencer_shot_display_subpanel(SequencerPanel):
         row.prop(shot_settings, 'shot_timeline_display', text = "Display")
         drawWikiHelp(row, 'Timeline-Shot-Display-Mode')
 
-        layout.prop(shot_settings, 'display_markers')
+        layout.prop(shot_settings, 'display_comments')
 
 
 # sequencer render shot subpanel
@@ -633,18 +633,18 @@ class BPM_PT_sequencer_ui_frame_comment_subpanel(SequencerPanel):
         layout = self.layout
 
         row = layout.row()
-        row.prop(scn_settings, 'display_markers', text = "")
-        row.prop(scn_settings, 'color_markers', text="")
+        row.prop(scn_settings, 'display_comments', text = "")
+        row.prop(scn_settings, 'color_comments', text="")
 
         row = layout.row()
         row.label(text = "Names")
-        row.prop(scn_settings, 'display_marker_names', text = "")
+        row.prop(scn_settings, 'display_comments_names', text = "")
 
         row = layout.row()
-        row.prop(scn_settings, 'display_marker_boxes', text = "Boxes")
-        row.prop(scn_settings, 'color_marker_boxes', text="")
+        row.prop(scn_settings, 'display_comments_boxes', text = "Boxes")
+        row.prop(scn_settings, 'color_comments_boxes', text="")
 
-        layout.prop(scn_settings, 'display_marker_text_limit')
+        layout.prop(scn_settings, 'display_comments_text_limit')
 
 
 # sequencer UI preview subpanel

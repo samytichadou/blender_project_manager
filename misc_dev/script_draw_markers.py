@@ -29,7 +29,7 @@ def draw_callback_px():
     region = bpy.context.region
     frame = scn.frame_current
 
-    if not scn.bpm_scenesettings.display_markers : return()
+    if not scn.bpm_scenesettings.display_comments : return()
     for strip in sequencer.sequences_all:
         if strip.bpm_shotsettings.is_shot and strip.scene:
             for m in getMarkerFrameFromShotStrip(strip):

@@ -89,7 +89,7 @@ class BPMShotComments(bpy.types.PropertyGroup):
     '''name : StringProperty() '''
     comment : bpy.props.StringProperty(name = "Comment")
     frame_comment : bpy.props.BoolProperty(name = "Frame Comment")
-    frame : bpy.props.IntProperty(name = "Marker Frame")
+    frame : bpy.props.IntProperty(name = "Comment Frame")
     time : bpy.props.StringProperty(name = "Creation Date")
     edit_time : bpy.props.StringProperty(name = "Edition Date")
     author : bpy.props.StringProperty(name = "Author")
@@ -154,7 +154,7 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
 class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_shot : bpy.props.BoolProperty(default=False)
-    display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
+    display_comments : bpy.props.BoolProperty(name = "Display comments", default=False)
     shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsProperties)
     shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = render_draft_folder , update = updateShotSettingsProperties)
     
@@ -200,7 +200,7 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
 class BPMShotSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_shot : bpy.props.BoolProperty(default=False)
-    display_markers : bpy.props.BoolProperty(name = "Display markers", default=False)
+    display_comments : bpy.props.BoolProperty(name = "Display comments", default=False)
     shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsProperties)
     shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = render_draft_folder , update = updateShotRenderState)
     
@@ -256,26 +256,26 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     display_audio_sync_warning : bpy.props.BoolProperty(name = "Shot audio sync warning", default=True)
     color_audio_sync : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1.0, 0.0, 0.924, 1.0), min=0.0, max=1.0, size=4)
 
-    display_marker_items = [
+    display_comments_items = [
         ('NONE', 'None', ""),
         ('SELECTED', 'Selected', ""),
         ('PERSTRIP', 'Per strip', ""),
         ('ALL', 'All', ""),
         ]
-    display_markers : bpy.props.EnumProperty(name = "Shot markers", items = display_marker_items, default = 'ALL')
-    color_markers : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1, 1, 1, 1), min=0.0, max=1.0, size=4)
+    display_comments : bpy.props.EnumProperty(name = "Shot comments", items = display_comments_items, default = 'ALL')
+    color_comments : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1, 1, 1, 1), min=0.0, max=1.0, size=4)
 
-    display_marker_name_items = [
+    display_comments_names_items = [
         ('NONE', 'None', ""),
         ('CURRENT', 'Current', ""),
         ('ALL', 'All', ""),
         ]
-    display_marker_names : bpy.props.EnumProperty(name = "Marker names", items = display_marker_name_items, default = 'ALL')
+    display_comments_names : bpy.props.EnumProperty(name = "Comments names", items = display_comments_names_items, default = 'CURRENT')
 
-    display_marker_boxes : bpy.props.BoolProperty(name = "Marker boxes", default=True)
-    color_marker_boxes : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 0, 0, 0.5), min=0.0, max=1.0, size=4)
+    display_comments_boxes : bpy.props.BoolProperty(name = "Comments boxes", default=True)
+    color_comments_boxes : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(0, 0, 0, 0.5), min=0.0, max=1.0, size=4)
 
-    display_marker_text_limit : bpy.props.IntProperty(name = "Marker text limit", default = 15, min = 0)
+    display_comments_text_limit : bpy.props.IntProperty(name = "Comments text limit", default = 15, min = 0)
 
     display_shot_update_warning : bpy.props.BoolProperty(name = "Shot update warning", default=True)
     color_update_warning : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1, 0, 0, 1), min=0.0, max=1.0, size=4)

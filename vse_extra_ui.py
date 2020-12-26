@@ -25,7 +25,7 @@ warning_square_size = 8
 strip_line_length = 0.075
 
 # font id for makers
-markers_font = {
+comments_font = {
     "font_id": 0,
 }
 
@@ -47,7 +47,7 @@ def unloadExternalFontId(font_id, file_font):
     blf.unload(file_font)
 
 
-# get link scene marker fram
+# get link scene comments fram
 def getCommentFrameFromShotStrip(strip):
     comment_list = []
     shot_settings = strip.bpm_shotsettings
@@ -61,8 +61,8 @@ def getCommentFrameFromShotStrip(strip):
     return comment_list
 
 
-# get marker coordinates
-def getMarkerCoordinates(frame, channel, region, dpi_fac):
+# get comments coordinates
+def getCommentsCoordinates(frame, channel, region, dpi_fac):
     m_width = 6
     m_height = 9
     m_pos_y = 0.035
@@ -176,8 +176,8 @@ def drawBpmSequencerCallbackPx():
     date = context.window_manager.bpm_generalsettings.today_date
     preview_date = formatDateFromYrMoDa(scene_settings.shot_deadline_preview_yr, scene_settings.shot_deadline_preview_mn, scene_settings.shot_deadline_preview_da)
 
-    m_display = scene_settings.display_markers
-    mn_display = scene_settings.display_marker_names
+    c_display = scene_settings.display_comments
+    c_n_display = scene_settings.display_comments_names
     
     if not scene_settings.extra_ui: return
 
@@ -188,26 +188,26 @@ def drawBpmSequencerCallbackPx():
     dpi = context.preferences.system.dpi
     dpi_fac = getDpiFactorFromContext(context)
 
-    # setup markers
+    # setup comments
     vertices_m = ()
     indices_m = ()
     #color_m = (1, 1, 1, 1)
-    color_m = scene_settings.color_markers
+    color_m = scene_settings.color_comments
     n_m = 0
 
-    # setup markers text
+    # setup comments text
     #text_size = int(12 * dpi_fac)
-    id_m = markers_font["font_id"]
+    id_m = comments_font["font_id"]
     text_size = 12
     blf.color(id_m, *color_m)
     blf.size(id_m, text_size, dpi)
-    marker_texts = []
+    comments_texts = []
 
-    # setup markers bounding box
+    # setup comments bounding box
     vertices_m_bb = ()
     indices_m_bb = ()
     #color_m_bb = (0, 0, 0, 0.5)
-    color_m_bb = scene_settings.color_marker_boxes
+    color_m_bb = scene_settings.color_comments_boxes
     n_m_bb = 0
 
     # setup extras
@@ -451,31 +451,31 @@ def drawBpmSequencerCallbackPx():
                     indices_e_v_w += ((n_e_v_w, n_e_v_w + 1, n_e_v_w + 2), (n_e_v_w + 2, n_e_v_w + 1, n_e_v_w + 3))
                     n_e_v_w += 4
 
-        # markers
-        if m_display != 'NONE' :
-            if (m_display == 'SELECTED' and strip.select) \
-            or (m_display == 'PERSTRIP' and strip.bpm_shotsettings.display_markers) \
-            or (m_display == 'ALL'):
+        # comments
+        if c_display != 'NONE' :
+            if (c_display == 'SELECTED' and strip.select) \
+            or (c_display == 'PERSTRIP' and strip.bpm_shotsettings.display_comments) \
+            or (c_display == 'ALL'):
                 for m in getCommentFrameFromShotStrip(strip):
-                    coord = getMarkerCoordinates(m[1], strip.channel, region, dpi_fac)
+                    coord = getCommentsCoordinates(m[1], strip.channel, region, dpi_fac)
                     vertices_m += coord[0]
                     indices_m += ((n_m, n_m + 1, n_m + 2),)
                     n_m += 3   
 
-                    # markers text
-                    if (mn_display == "ALL") \
-                    or (mn_display == "CURRENT" and scn.frame_current == m[1]):
+                    # comments text
+                    if (c_n_display == "ALL") \
+                    or (c_n_display == "CURRENT" and scn.frame_current == m[1]):
                         text = m[0]
-                        limit = scene_settings.display_marker_text_limit
+                        limit = scene_settings.display_comments_text_limit
                         if len(text) > limit and limit != 0:
                             if limit > 4:
                                 text = text[0:limit - 3] + "..."
                             else:
                                 text = text[0:limit]
-                        marker_texts.append((coord[1], text))
+                        comments_texts.append((coord[1], text))
 
-                        # marker box
-                        if scene_settings.display_marker_boxes:
+                        # comments box
+                        if scene_settings.display_comments_boxes:
                             vertices_m_bb += getBoundingBoxCoordinates(coord[1], text, text_size, dpi_fac)
                             indices_m_bb += ((n_m_bb, n_m_bb + 1, n_m_bb + 2), (n_m_bb + 2, n_m_bb + 1, n_m_bb + 3))
                             n_m_bb += 4
@@ -522,20 +522,20 @@ def drawBpmSequencerCallbackPx():
     if scene_settings.display_shot_version_warning:
         drawShader(vertices_e_v_w, indices_e_v_w, color_e_v_w)
 
-    # markers
-    if m_display != 'NONE' :
+    # comments
+    if c_display != 'NONE' :
 
-        # markers bounding boxes
-        if mn_display != "NONE" and scene_settings.display_marker_boxes:
+        # comments bounding boxes
+        if c_n_display != "NONE" and scene_settings.display_comments_boxes:
             drawShader(vertices_m_bb, indices_m_bb, color_m_bb)
 
-        # markers
+        # comments
         drawShader(vertices_m, indices_m, color_m)
 
 
-        # draw marker texts
-        if mn_display != "NONE":
-            for t in marker_texts:
+        # draw comments texts
+        if c_n_display != "NONE":
+            for t in comments_texts:
                 drawText(t[0], t[1], id_m)
 
             bgl.glDisable(bgl.GL_BLEND)
@@ -546,7 +546,7 @@ def enableSequencerCallback():
     if cb_handle:
         return
     
-    initializeExternalFontId(markers_font, font_file)
+    initializeExternalFontId(comments_font, font_file)
 
     cb_handle.append(bpy.types.SpaceSequenceEditor.draw_handler_add(
         drawBpmSequencerCallbackPx, (), 'WINDOW', 'POST_PIXEL'))
@@ -560,7 +560,7 @@ def disableSequencerCallback():
     if not cb_handle:
         return
 
-    unloadExternalFontId(markers_font, font_file)
+    unloadExternalFontId(comments_font, font_file)
 
     bpy.types.SpaceSequenceEditor.draw_handler_remove(cb_handle[0], 'WINDOW')
     cb_handle.clear()

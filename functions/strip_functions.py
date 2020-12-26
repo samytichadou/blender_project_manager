@@ -93,7 +93,7 @@ def updateSceneStripOnTimeline(strip, winman):
     return new_strip
 
 
-# get shot marker position
+# get shot comments position
 def getShotCommentPosition(comment_frame, shot_strip):
     shot_frame_start = shot_strip.bpm_shotsettings.shot_frame_start
     shot_frame = (comment_frame - shot_strip.frame_final_start) + shot_frame_start
