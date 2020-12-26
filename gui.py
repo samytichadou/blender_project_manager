@@ -208,6 +208,14 @@ def bpmTopbarFunction(self, context):
         layout.menu('BPM_MT_topbar_menu')
 
 
+# draw browse panel
+def draw_browse_panel(container):
+
+    row = container.row(align=True)
+    row.menu('BPM_MT_OpenFolder_Explorer_Menu')
+    drawWikiHelp(row, 'Project-Architecture')
+
+
 ### panel classes ###
 
 # sequencer class
@@ -233,6 +241,7 @@ class FilebrowserPanel(bpy.types.Panel):
     bl_space_type = 'FILE_BROWSER'
     bl_region_type = 'TOOLS'
     bl_category = "BPM"
+
 
 # sequencer management
 class BPM_PT_sequencer_management_panel(SequencerPanel):
@@ -294,11 +303,7 @@ class BPM_PT_sequencer_browse_subpanel(SequencerPanel):
  
     def draw(self, context):
 
-        layout = self.layout
-
-        row = layout.row(align=True)
-        row.menu('BPM_MT_OpenFolder_Explorer_Menu')
-        drawWikiHelp(row, 'Project-Architecture')
+        draw_browse_panel(self.layout)
 
 
 # sequencer management debug subpanel
@@ -592,7 +597,7 @@ class BPM_PT_sequencer_shot_debug_subpanel(SequencerPanel):
 
 
 # sequencer assets panel
-class BPM_PT_sequencer_asset_panel(SequencerPanel):
+class BPM_PT_sequencer_asset_library_panel(SequencerPanel):
     bl_label = "Assets"
 
     @classmethod
@@ -633,8 +638,6 @@ class BPM_PT_properties_shot_viewport_panel(ViewportPanel):
         row = layout.row(align=True)
         row.menu('BPM_MT_OpenFolder_Explorer_Menu')
         drawWikiHelp(row, 'Project-Architecture')
-
-        #drawDebugPanel(layout, shot_settings, winman.bpm_generalsettings) #debug
 
 
 # shot tracking viewport subpanel
@@ -736,34 +739,6 @@ class BPM_PT_properties_shot_debug_viewport_subpanel(ViewportPanel):
         drawDebugPanel(layout, shot_settings)
 
 
-# asset library viewport panel
-class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel):
-    bl_label = "Assets Library"
-
-    @classmethod
-    def poll(cls, context):
-        winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        if general_settings.is_project:
-            if general_settings.file_type == 'SHOT':
-                return True
-            elif general_settings.file_type == 'ASSET':
-                if winman.bpm_assetsettings.asset_type not in {'NODEGROUP', 'MATERIAL'}:
-                    return True
-
-    def draw(self, context):
-        winman = context.window_manager
-
-        layout = self.layout
-
-        drawOpenedWarning(layout, winman.bpm_generalsettings)
-
-        drawAssetLibrary(layout, winman)
-
-        if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
-            drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
-
-
 # asset settings viewport panel
 class BPM_PT_properties_asset_viewport_panel(ViewportPanel):
     bl_label = "Asset"
@@ -820,30 +795,6 @@ class BPM_PT_properties_asset_debug_viewport_subpanel(ViewportPanel):
         drawDebugAssetPanel(layout, asset_settings)
 
 
-# asset library nodetree panel
-class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
-    bl_label = "Assets Library"
-
-    @classmethod
-    def poll(cls, context):
-        winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        asset_settings = winman.bpm_assetsettings
-        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type in {'NODEGROUP', 'MATERIAL'}
-
-    def draw(self, context):
-        winman = context.window_manager
-
-        layout = self.layout
-
-        drawOpenedWarning(layout, winman.bpm_generalsettings)
-
-        drawAssetLibrary(layout, winman)
-
-        if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
-            drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
-
-
 # asset settings nodetree panel
 class BPM_PT_properties_asset_nodetree_panel(NodetreePanel):
     bl_label = "Asset"
@@ -898,6 +849,89 @@ class BPM_PT_properties_asset_debug_nodetree_subpanel(NodetreePanel):
         asset_settings = winman.bpm_assetsettings
 
         drawDebugAssetPanel(layout, asset_settings)
+
+
+# shot browse viewport panel
+class BPM_PT_properties_browse_viewport_panel(ViewportPanel):
+    bl_label = "Browse"
+
+    @classmethod
+    def poll(cls, context):
+        general_settings = context.window_manager.bpm_generalsettings
+        if general_settings.is_project:
+            return general_settings.file_type in {"SHOT", "ASSET"}
+ 
+    def draw(self, context):
+
+        draw_browse_panel(self.layout)
+
+
+# shot browse nodetree panel
+class BPM_PT_properties_browse_nodetree_panel(NodetreePanel):
+    bl_label = "Browse"
+
+    @classmethod
+    def poll(cls, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        asset_settings = winman.bpm_assetsettings
+        return general_settings.is_project and general_settings.file_type == "ASSET" and asset_settings.asset_type in {"NODEGROUP","MATERIAL"}
+
+    def draw(self, context):
+
+        draw_browse_panel(self.layout)
+
+
+# asset library nodetree panel
+class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
+    bl_label = "Assets Library"
+
+    @classmethod
+    def poll(cls, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        asset_settings = winman.bpm_assetsettings
+        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type in {'NODEGROUP', 'MATERIAL'}
+
+    def draw(self, context):
+        winman = context.window_manager
+
+        layout = self.layout
+
+        drawOpenedWarning(layout, winman.bpm_generalsettings)
+
+        drawAssetLibrary(layout, winman)
+
+        if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
+            drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
+
+
+# asset library viewport panel
+class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel):
+    bl_label = "Assets Library"
+
+    @classmethod
+    def poll(cls, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        if general_settings.is_project:
+            if general_settings.file_type == 'SHOT':
+                return True
+            elif general_settings.file_type == 'ASSET':
+                if winman.bpm_assetsettings.asset_type not in {'NODEGROUP', 'MATERIAL'}:
+                    return True
+
+    def draw(self, context):
+        winman = context.window_manager
+
+        layout = self.layout
+
+        drawOpenedWarning(layout, winman.bpm_generalsettings)
+
+        drawAssetLibrary(layout, winman)
+
+        if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
+            drawOperatorAndHelp(layout, 'bpm.import_asset', 'LINK_BLEND', 'Asset-Management')
 
 
 # topbar file menu
