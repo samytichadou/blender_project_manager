@@ -1,0 +1,29 @@
+EDIT FILE
+-> sequencer
+	-> Project
+		-> Actions
+		-> settings
+		-> debug
+	-> Timeline Comments
+	-> Shot
+		-> Tracking (integrate verrsion subpanel here)
+		-> Sync
+		-> Shot Comments
+		-> Display
+		-> Render
+		-> debug
+	-> asset library
+	-> UI
+		-> shots
+		-> comments
+		-> preview
+
+SHOT FILE
+-> viewport
+
+ASSET FILE
+-> viewport
+
+-> nodetree
+
+
