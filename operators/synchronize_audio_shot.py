@@ -21,9 +21,11 @@ class BPMSynchronizeAudioShot(bpy.types.Operator):
                                     shot_not_used_message,
                                 )
 
-        general_settings = context.window_manager.bpm_generalsettings
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        debug = winman.bpm_projectdatas.debug
 
-        state = syncAudioShot(general_settings.debug, general_settings.project_folder, context.scene)
+        state = syncAudioShot(debug, general_settings.project_folder, context.scene)
         if state == 'SYNC_FILE_MISSING':
             self.report({'INFO'}, sync_file_not_found_message)
         elif state == 'SHOT_NOT_USED':
