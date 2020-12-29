@@ -6,26 +6,28 @@ EDIT FILE
 			-o modify episode settings
 			-o open episode
 			-o delete episode
-		-o delete unused shots
-		-o empty recycle bin
-		-o open folder
-		-o Project settings
-		-o render settings
+		-> management
+			-o delete unused shots
+			-o empty recycle bin
+			-o open folder
+			-o Project settings
+			-o render settings
 		-> debug
 	-> Editing (timeline related)
-		-o create shot
-		-o synchronize audio edit
-		-o refresh shot datas
-		-o update shot duration
-		-o render selected shot(s)
-		-> Timeline comments
-		-> Timeline UI
+		-> Edit
+			-o create shot
+			-o synchronize audio edit
+			-o refresh shot datas
+			-o update shot duration
+			-o render selected shot(s)
+		-> Edit comments
+		-> Edit UI
 	-> Shots
 		-> Tracking
+			-o Render State
 		-> Versioning
 		-> Shot Comments
 		-> Timeline Display
-		-o Render State
 		-> Debug
 	-> Assets
 		-> asset library
