@@ -12,6 +12,7 @@ EDIT FILE
 			-o open folder
 			-o Project settings
 			-o render settings
+		-> render jobs
 		-> debug
 	-> Editing (timeline related)
 		-> Edit
@@ -34,9 +35,42 @@ EDIT FILE
 		-> selected asset comment
 		-> selected asset infos (tag system)
 		-> asset debug
-	-> Render
-		-> render jobs
 		
+SHOT FILE
+-> viewport
+	-> Project (management)
+		-> episode management (if serie)
+			-o create episode
+			-o modify episode settings
+			-o open episode
+			-o delete episode
+		-> management
+			-o delete unused shots
+			-o empty recycle bin
+			-o open folder
+			-o Project settings
+			-o render settings
+			-> Render Jobs
+	-> Shot
+		-o Render playblast
+		-> Tracking
+			-o Render State
+		-> Versioning
+		-> Shot Comments
+		-> Timeline Display
+		-> Debug
+	-> Assets
+		-> asset library
+		-> selected asset comment
+		-> selected asset infos (tag system)
+		-> asset debug
+
+ASSET FILE
+-> viewport
+
+-> nodetree
+
+COMMON
 -> Topbar
 	-t project name
 	-> Manage Users
@@ -45,13 +79,5 @@ EDIT FILE
 		-o delete user
 	-o log in
 	-o log out
-
-SHOT FILE
--> viewport
-
-ASSET FILE
--> viewport
-
--> nodetree
 
 
