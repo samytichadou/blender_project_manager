@@ -50,7 +50,7 @@ def draw_debug_panel(container, dataset):
 
     box = container.box()
     box.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
-    container.separator()
+
     for p in dataset.bl_rna.properties:
         if not p.is_readonly and p.identifier != 'name':
             row = container.row()
