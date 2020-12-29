@@ -4,15 +4,39 @@ from .properties import getAssetIcon
 from .functions.project_data_functions import getShotTaskDeadline, getShotTaskComplete
 from .functions.check_edit_poll_function import check_edit_poll_function
 
+
+### process functions ###
+
+# split string on spaces
+def split_string_on_spaces(string, char_limit):
+    lines = []
+    words = string.split()
+
+    line = ""
+    for w in words:
+        if len(line) < char_limit:
+            line += w + " "
+        else:
+            line = line[:-1]
+            lines.append(line)
+            line = w + " "
+
+    if line not in lines:    
+        lines.append(line)
+        
+    return lines
+
+
 ### drawing functions ###
 
+
 # help function
-def drawWikiHelp(container, wikipage):
+def draw_wiki_help(container, wikipage):
     container.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
 
 
 # draw operator and help function
-def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
+def draw_operator_and_help(container, operator_bl_idname, icon, wikipage):
     row = container.row(align=True)
     if icon != '':
         row.operator(operator_bl_idname, icon = icon)
@@ -22,7 +46,7 @@ def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
 
 
 # draw all props for debug
-def drawDebugPanel(container, dataset):
+def draw_debug_panel(container, dataset):
 
     box = container.box()
     box.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
@@ -34,9 +58,9 @@ def drawDebugPanel(container, dataset):
 
 
 # draw debug for assets
-def drawDebugAssetPanel(container, dataset):
+def draw_debug_asset_panel(container, dataset):
 
-    drawDebugPanel(container, dataset)
+    draw_debug_panel(container, dataset)
 
     container.label(text = 'Debug', icon = 'ERROR')
 
@@ -66,14 +90,14 @@ def drawDebugAssetPanel(container, dataset):
 
 
 # draw already opened blend warning
-def drawOpenedWarning(container, general_settings):
+def draw_opened_warning(container, general_settings):
     if general_settings.blend_already_opened:
-        drawOperatorAndHelp(container, 'bpm.show_open_blend_lock_file', 'ERROR', "Lock-File-System")
+        draw_operator_and_help(container, 'bpm.show_open_blend_lock_file', 'ERROR', "Lock-File-System")
         #container.label(text="File already opened", icon='ERROR')
 
 
 # draw open folders panel
-def drawOpenFoldersPanel(container, filebrowser):
+def draw_open_folders_panel(container, filebrowser):
 
     col = container.column(align=True)
 
@@ -87,28 +111,8 @@ def drawOpenFoldersPanel(container, filebrowser):
     col.operator('bpm.open_shot_render_folder', text='Active Render').filebrowser=filebrowser
 
 
-# split string on spaces
-def split_string_on_spaces(string, char_limit):
-    lines = []
-    words = string.split()
-
-    line = ""
-    for w in words:
-        if len(line) < char_limit:
-            line += w + " "
-        else:
-            line = line[:-1]
-            lines.append(line)
-            line = w + " "
-
-    if line not in lines:    
-        lines.append(line)
-        
-    return lines
-
-
 # sequencer shot comment function 
-def comment_draw(container, comments, c_type):
+def draw_comment(container, comments, c_type):
 
     row = container.row(align=True)
     op = row.operator("bpm.add_comment", text="Add")
@@ -116,7 +120,7 @@ def comment_draw(container, comments, c_type):
     op2 = row.operator("bpm.reload_comment", text = "", icon = "FILE_REFRESH")
     op2.comment_type = c_type
     row.separator()
-    drawWikiHelp(row, "Comments")
+    draw_wiki_help(row, "Comments")
 
     bigcol = container.column(align=True)
 
@@ -153,9 +157,9 @@ def comment_draw(container, comments, c_type):
 
 
 # draw asset settings prop panel
-def drawPropertiesAssetPanel(container, asset_settings, general_settings):
+def draw_properties_asset_panel(container, asset_settings, general_settings):
 
-    drawOpenedWarning(container, general_settings)
+    draw_opened_warning(container, general_settings)
     
     if asset_settings.asset_type == 'SHADER': target_prop = 'asset_material'
     elif asset_settings.asset_type == 'NODEGROUP': target_prop = 'asset_nodegroup'
@@ -172,39 +176,17 @@ def drawPropertiesAssetPanel(container, asset_settings, general_settings):
 
 
 # draw asset library
-def drawAssetLibrary(container, winman):
+def draw_asset_library(container, winman):
 
     general_settings = winman.bpm_generalsettings
 
-    drawOperatorAndHelp(container, 'bpm.create_asset', '', 'Asset-Management')
+    draw_operator_and_help(container, 'bpm.create_asset', '', 'Asset-Management')
 
     container.prop(general_settings, 'panel_asset_display', text="Display")
 
     container.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
 
-    drawOperatorAndHelp(container, 'bpm.open_asset_file', 'FILE_FOLDER', 'Asset-Management')
-
-
-# bpm function topbar back/open operators
-def bpmTopbarFunction(self, context):
-    if context.region.alignment == 'RIGHT':
-        layout = self.layout
-        general_settings = context.window_manager.bpm_generalsettings
-
-        if general_settings.is_project:
-
-            if general_settings.blend_already_opened:
-                drawOpenedWarning(layout, general_settings)
-
-            if general_settings.file_type in {'SHOT', 'ASSET'}:
-
-                drawOperatorAndHelp(layout, 'bpm.back_to_edit', '', 'Open-Shot-and-Back-to-Edit')
-
-            elif general_settings.file_type == 'EDIT':
-
-                drawOperatorAndHelp(layout, 'bpm.open_shot', '', 'Open-Shot-and-Back-to-Edit')
-
-        layout.menu('BPM_MT_topbar_menu')
+    draw_operator_and_help(container, 'bpm.open_asset_file', 'FILE_FOLDER', 'Asset-Management')
 
 
 # draw browse panel
@@ -212,7 +194,29 @@ def draw_browse_panel(container):
 
     row = container.row(align=True)
     row.menu('BPM_MT_OpenFolder_Explorer_Menu')
-    drawWikiHelp(row, 'Project-Architecture')
+    draw_wiki_help(row, 'Project-Architecture')
+
+
+# bpm function topbar back/open operators
+def draw_topbar(self, context):
+    if context.region.alignment == 'RIGHT':
+        layout = self.layout
+        general_settings = context.window_manager.bpm_generalsettings
+
+        if general_settings.is_project:
+
+            if general_settings.blend_already_opened:
+                draw_opened_warning(layout, general_settings)
+
+            if general_settings.file_type in {'SHOT', 'ASSET'}:
+
+                draw_operator_and_help(layout, 'bpm.back_to_edit', '', 'Open-Shot-and-Back-to-Edit')
+
+            elif general_settings.file_type == 'EDIT':
+
+                draw_operator_and_help(layout, 'bpm.open_shot', '', 'Open-Shot-and-Back-to-Edit')
+
+        layout.menu('BPM_MT_topbar_menu')
 
 
 ### panel classes ###
@@ -297,15 +301,15 @@ class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
 
         layout = self.layout
 
-        drawOpenedWarning(layout, general_settings)
+        draw_opened_warning(layout, general_settings)
 
-        drawOperatorAndHelp(layout, 'bpm.delete_unused_shots', '', 'Delete-Unused-Shots')
+        draw_operator_and_help(layout, 'bpm.delete_unused_shots', '', 'Delete-Unused-Shots')
 
-        drawOperatorAndHelp(layout, 'bpm.empty_recycle_bin', '', 'Empty-Recycle-Bin')
+        draw_operator_and_help(layout, 'bpm.empty_recycle_bin', '', 'Empty-Recycle-Bin')
 
-        drawOperatorAndHelp(layout, 'bpm.display_modify_project_settings', '', 'Project-Settings')
+        draw_operator_and_help(layout, 'bpm.display_modify_project_settings', '', 'Project-Settings')
         
-        drawOperatorAndHelp(layout, 'bpm.display_modify_render_settings', '', 'Render-Settings')
+        draw_operator_and_help(layout, 'bpm.display_modify_render_settings', '', 'Render-Settings')
 
         draw_browse_panel(layout)
 
@@ -324,7 +328,7 @@ class BPM_PT_sequencer_management_debug_panel(SequencerPanel_Project):
         
         general_settings = context.window_manager.bpm_generalsettings
 
-        drawDebugPanel(layout, general_settings)
+        draw_debug_panel(layout, general_settings)
 
 
 # sequencer edit panel
@@ -338,17 +342,17 @@ class BPM_PT_sequencer_edit_panel(SequencerPanel_Editing):
 
         layout = self.layout
 
-        drawOpenedWarning(layout, general_settings)
+        draw_opened_warning(layout, general_settings)
 
-        drawOperatorAndHelp(layout, 'bpm.create_shot', '', 'Create-Shot-Operator')
+        draw_operator_and_help(layout, 'bpm.create_shot', '', 'Create-Shot-Operator')
 
-        drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
+        draw_operator_and_help(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
 
-        drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
+        draw_operator_and_help(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
 
-        drawOperatorAndHelp(layout, 'bpm.update_shot_duration', '', 'Update-Shot-Operator')
+        draw_operator_and_help(layout, 'bpm.update_shot_duration', '', 'Update-Shot-Operator')
 
-        drawOperatorAndHelp(layout, 'bpm.render_shot_edit', '', 'Shot-Rendering')
+        draw_operator_and_help(layout, 'bpm.render_shot_edit', '', 'Shot-Rendering')
 
 
 # sequencer edit comment panel
@@ -361,7 +365,7 @@ class BPM_PT_sequencer_edit_comment_panel(SequencerPanel_Editing):
         
         comments = context.window_manager.bpm_projectdatas.comments
 
-        comment_draw(layout, comments, "edit")
+        draw_comment(layout, comments, "edit")
 
 
 # sequencer UI panel
@@ -375,11 +379,11 @@ class BPM_PT_sequencer_edit_ui_panel(SequencerPanel_Editing):
 
         layout = self.layout
 
-        drawOpenedWarning(layout, general_settings)
+        draw_opened_warning(layout, general_settings)
 
         row = layout.row(align=True)
         row.prop(scn_settings, "extra_ui", text = "UI")
-        drawWikiHelp(row, 'Extra-UI-in-Sequencer')
+        draw_wiki_help(row, 'Extra-UI-in-Sequencer')
 
 
 # sequencer UI shot subpanel
@@ -529,21 +533,21 @@ class BPM_PT_sequencer_shot_tracking_panel(SequencerPanel_Shot):
         row.prop(shot_settings, 'shot_state', text="")
         if shot_settings.shot_state != "FINISHED":
             row.prop(shot_settings, getShotTaskComplete(shot_settings)[0], text="")
-        drawWikiHelp(row, 'Shot-Datas')
+        draw_wiki_help(row, 'Shot-Datas')
 
         row = layout.row(align=True)
         row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
         row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
         row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='SEQ_STRIP_DUPLICATE').behavior = 'selected_strips'
-        drawWikiHelp(row, 'Shot-Task-System')
+        draw_wiki_help(row, 'Shot-Task-System')
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'shot_render_state', text = "Render")
-        drawWikiHelp(row, 'Render-Settings')
+        draw_wiki_help(row, 'Render-Settings')
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')
-        drawWikiHelp(row, 'Shot-Audio-Synchronization')
+        draw_wiki_help(row, 'Shot-Audio-Synchronization')
 
 
 # sequencer version shot panel
@@ -559,9 +563,9 @@ class BPM_PT_sequencer_shot_version_panel(SequencerPanel_Shot):
 
         layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
 
-        drawOperatorAndHelp(layout, 'bpm.bump_shot_version_edit', '', 'Shot-Version-Management')
+        draw_operator_and_help(layout, 'bpm.bump_shot_version_edit', '', 'Shot-Version-Management')
 
-        drawOperatorAndHelp(layout, 'bpm.change_shot_version_edit', '', 'Shot-Version-Management')
+        draw_operator_and_help(layout, 'bpm.change_shot_version_edit', '', 'Shot-Version-Management')
 
         row = layout.row(align=True)
         row.operator('bpm.change_shot_version_edit', text = "Last shot version").go_to_last_version = True
@@ -578,7 +582,7 @@ class BPM_PT_sequencer_shot_comment_panel(SequencerPanel_Shot):
         
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
 
-        comment_draw(layout, shot_settings.comments, "edit_shot")
+        draw_comment(layout, shot_settings.comments, "edit_shot")
 
 
 # sequencer display shot panel
@@ -594,7 +598,7 @@ class BPM_PT_sequencer_shot_display_panel(SequencerPanel_Shot):
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'shot_timeline_display', text = "Display")
-        drawWikiHelp(row, 'Timeline-Shot-Display-Mode')
+        draw_wiki_help(row, 'Timeline-Shot-Display-Mode')
 
         layout.prop(shot_settings, 'display_comments')
 
@@ -614,7 +618,7 @@ class BPM_PT_sequencer_shot_debug_panel(SequencerPanel_Shot):
         
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
 
-        drawDebugPanel(layout, shot_settings)
+        draw_debug_panel(layout, shot_settings)
 
 
 # sequencer asset library panel
@@ -633,9 +637,9 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel_Assets):
 
         layout = self.layout
 
-        drawOpenedWarning(layout, winman.bpm_generalsettings)
+        draw_opened_warning(layout, winman.bpm_generalsettings)
 
-        drawAssetLibrary(layout, winman)
+        draw_asset_library(layout, winman)
 
 
 # shot settings viewport panel
@@ -652,9 +656,9 @@ class BPM_PT_properties_shot_viewport_panel(ViewportPanel):
 
         layout = self.layout
 
-        drawOpenedWarning(layout, winman.bpm_generalsettings)
+        draw_opened_warning(layout, winman.bpm_generalsettings)
 
-        drawOperatorAndHelp(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
+        draw_operator_and_help(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
 
 
 # shot tracking viewport subpanel
@@ -674,12 +678,12 @@ class BPM_PT_properties_shot_tracking_viewport_subpanel(ViewportPanel):
         row.prop(shot_settings, 'shot_state', text="")
         if shot_settings.shot_state != "FINISHED":
             row.prop(shot_settings, getShotTaskComplete(shot_settings)[0], text="")
-        drawWikiHelp(row, 'Shot-Datas')
+        draw_wiki_help(row, 'Shot-Datas')
 
         row = layout.row(align=True)
         row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
         row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
-        drawWikiHelp(row, 'Shot-Task-System')
+        draw_wiki_help(row, 'Shot-Task-System')
 
 
 # shot sync viewport subpanel
@@ -695,13 +699,13 @@ class BPM_PT_properties_shot_sync_viewport_subpanel(ViewportPanel):
 
         layout = self.layout
 
-        drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
+        draw_operator_and_help(layout, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
 
-        drawOperatorAndHelp(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
+        draw_operator_and_help(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'auto_audio_sync')
-        drawWikiHelp(row, 'Shot-Audio-Synchronization')
+        draw_wiki_help(row, 'Shot-Audio-Synchronization')
 
 
 # shot comment viewport subpanel
@@ -713,7 +717,7 @@ class BPM_PT_properties_shot_comment_viewport_subpanel(ViewportPanel):
     def draw_header(self, context):
         row = self.layout.row()
         row.label(text = "Comments")
-        drawWikiHelp(row, "Comments")
+        draw_wiki_help(row, "Comments")
 
     def draw(self, context):
 
@@ -721,7 +725,7 @@ class BPM_PT_properties_shot_comment_viewport_subpanel(ViewportPanel):
 
         shot_settings = context.window_manager.bpm_shotsettings
 
-        comment_draw(self.layout, shot_settings.comments, "shot")
+        draw_comment(self.layout, shot_settings.comments, "shot")
 
 
 # shot render viewport subpanel
@@ -738,7 +742,7 @@ class BPM_PT_properties_shot_render_viewport_subpanel(ViewportPanel):
 
         row = layout.row(align=True)
         row.prop(shot_settings, 'shot_render_state', text = "Render")
-        drawWikiHelp(row, 'Render-Settings')
+        draw_wiki_help(row, 'Render-Settings')
 
 
 # shot debug viewport subpanel
@@ -758,7 +762,7 @@ class BPM_PT_properties_shot_debug_viewport_subpanel(ViewportPanel):
         winman = context.window_manager
         shot_settings = winman.bpm_shotsettings
 
-        drawDebugPanel(layout, shot_settings)
+        draw_debug_panel(layout, shot_settings)
 
 
 # asset settings viewport panel
@@ -779,7 +783,7 @@ class BPM_PT_properties_asset_viewport_panel(ViewportPanel):
 
         layout = self.layout
 
-        drawPropertiesAssetPanel(layout, asset_settings, general_settings)
+        draw_properties_asset_panel(layout, asset_settings, general_settings)
 
 
 # asset comment viewport subpanel
@@ -791,7 +795,7 @@ class BPM_PT_properties_asset_comments_viewport_subpanel(ViewportPanel):
     def draw_header(self, context):
         row = self.layout.row()
         row.label(text = "Comments")
-        drawWikiHelp(row, "Comments")
+        draw_wiki_help(row, "Comments")
 
     def draw(self, context):
         winman = context.window_manager
@@ -799,7 +803,7 @@ class BPM_PT_properties_asset_comments_viewport_subpanel(ViewportPanel):
 
         layout = self.layout
 
-        comment_draw(self.layout, asset_settings.comments, "asset")
+        draw_comment(self.layout, asset_settings.comments, "asset")
 
 
 # asset settings debug viewport subpanel
@@ -819,7 +823,7 @@ class BPM_PT_properties_asset_debug_viewport_subpanel(ViewportPanel):
         winman = context.window_manager
         asset_settings = winman.bpm_assetsettings
 
-        drawDebugAssetPanel(layout, asset_settings)
+        draw_debug_asset_panel(layout, asset_settings)
 
 
 # asset settings nodetree panel
@@ -840,7 +844,7 @@ class BPM_PT_properties_asset_nodetree_panel(NodetreePanel):
 
         layout = self.layout
 
-        drawPropertiesAssetPanel(layout, asset_settings, general_settings)
+        draw_properties_asset_panel(layout, asset_settings, general_settings)
 
 
 # asset comment nodetree subpanel
@@ -852,7 +856,7 @@ class BPM_PT_properties_asset_comments_nodetree_subpanel(NodetreePanel):
     def draw_header(self, context):
         row = self.layout.row()
         row.label(text = "Comments")
-        drawWikiHelp(row, "Comments")
+        draw_wiki_help(row, "Comments")
 
     def draw(self, context):
         winman = context.window_manager
@@ -860,7 +864,7 @@ class BPM_PT_properties_asset_comments_nodetree_subpanel(NodetreePanel):
 
         layout = self.layout
 
-        comment_draw(self.layout, asset_settings.comments, "asset")
+        draw_comment(self.layout, asset_settings.comments, "asset")
 
 
 # asset settings nodetree debug subpanel
@@ -880,7 +884,7 @@ class BPM_PT_properties_asset_debug_nodetree_subpanel(NodetreePanel):
         winman = context.window_manager
         asset_settings = winman.bpm_assetsettings
 
-        drawDebugAssetPanel(layout, asset_settings)
+        draw_debug_asset_panel(layout, asset_settings)
 
 
 # shot browse viewport panel
@@ -928,16 +932,16 @@ class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
     def draw_header(self, context):
         row = self.layout.row()
         row.label(text = "Assets")
-        drawWikiHelp(row, 'Asset-Management')
+        draw_wiki_help(row, 'Asset-Management')
 
     def draw(self, context):
         winman = context.window_manager
 
         layout = self.layout
 
-        drawOpenedWarning(layout, winman.bpm_generalsettings)
+        draw_opened_warning(layout, winman.bpm_generalsettings)
 
-        drawAssetLibrary(layout, winman)
+        draw_asset_library(layout, winman)
 
         if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
             layout.operator("bpm.import_asset", icon = "LINK_BLEND")
@@ -961,16 +965,16 @@ class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel):
     def draw_header(self, context):
         row = self.layout.row()
         row.label(text = "Assets")
-        drawWikiHelp(row, 'Asset-Management')
+        draw_wiki_help(row, 'Asset-Management')
 
     def draw(self, context):
         winman = context.window_manager
 
         layout = self.layout
 
-        drawOpenedWarning(layout, winman.bpm_generalsettings)
+        draw_opened_warning(layout, winman.bpm_generalsettings)
 
-        drawAssetLibrary(layout, winman)
+        draw_asset_library(layout, winman)
 
         if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
             layout.operator("bpm.import_asset", icon = "LINK_BLEND")
@@ -987,7 +991,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
 
         layout = self.layout
 
-        drawOpenedWarning(layout, general_settings)
+        draw_opened_warning(layout, general_settings)
         
         if not general_settings.is_project:
             layout.operator('bpm.create_project')  
@@ -1021,7 +1025,7 @@ class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
 
         row = layout.row(align=True)
         row.menu('BPM_MT_OpenFolder_Filebrowser_Menu')
-        drawWikiHelp(row, 'Project-Architecture')
+        draw_wiki_help(row, 'Project-Architecture')
         
         layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
 
@@ -1033,7 +1037,7 @@ class BPM_MT_OpenFolder_Explorer_Menu(bpy.types.Menu):
     def draw(self, context):
         layout = self.layout
         
-        drawOpenFoldersPanel(layout, False)
+        draw_open_folders_panel(layout, False)
 
 
 # open folder menu
@@ -1043,7 +1047,7 @@ class BPM_MT_OpenFolder_Filebrowser_Menu(bpy.types.Menu):
     def draw(self, context):
         layout = self.layout
         
-        drawOpenFoldersPanel(layout, True)
+        draw_open_folders_panel(layout, True)
 
 
 # right click sequencer general menu

@@ -230,7 +230,7 @@ def register():
     bpy.app.handlers.load_pre.append(deleteLockFileHandler)
 
     ### SPECIAL GUI ###
-    bpy.types.TOPBAR_HT_upper_bar.prepend(bpmTopbarFunction)
+    bpy.types.TOPBAR_HT_upper_bar.prepend(draw_topbar)
     bpy.types.SEQUENCER_MT_context_menu.prepend(drawRightClickSequencerMenu)
 
 
@@ -271,7 +271,7 @@ def unregister():
     bpy.app.handlers.load_pre.remove(deleteLockFileHandler)
 
     ### SPECIAL GUI ###
-    bpy.types.TOPBAR_HT_upper_bar.remove(bpmTopbarFunction)
+    bpy.types.TOPBAR_HT_upper_bar.remove(draw_topbar)
     bpy.types.SEQUENCER_MT_context_menu.remove(drawRightClickSequencerMenu)
 
     ### TIMER ###
