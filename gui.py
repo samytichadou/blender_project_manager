@@ -214,10 +214,30 @@ def draw_browse_panel(container):
 ### panel classes ###
 
 # sequencer class
-class SequencerPanel(bpy.types.Panel):
+class SequencerPanel_Project(bpy.types.Panel):
     bl_space_type = "SEQUENCE_EDITOR"
     bl_region_type = "UI"
-    bl_category = "BPM"
+    bl_category = "BPM Project"
+
+class SequencerPanel_Editing(bpy.types.Panel):
+    bl_space_type = "SEQUENCE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM Editing"
+
+class SequencerPanel_Shot(bpy.types.Panel):
+    bl_space_type = "SEQUENCE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM Shot"
+
+class SequencerPanel_Assets(bpy.types.Panel):
+    bl_space_type = "SEQUENCE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM Assets"
+
+class SequencerPanel_Render(bpy.types.Panel):
+    bl_space_type = "SEQUENCE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM Render"
 
 # viewport class
 class ViewportPanel(bpy.types.Panel):
@@ -239,8 +259,8 @@ class FilebrowserPanel(bpy.types.Panel):
 
 
 # sequencer management
-class BPM_PT_sequencer_management_panel(SequencerPanel):
-    bl_label = "Project"
+class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
+    bl_label = "Management"
 
     @classmethod
     def poll(cls, context):
@@ -255,19 +275,25 @@ class BPM_PT_sequencer_management_panel(SequencerPanel):
 
         drawOpenedWarning(layout, general_settings)
 
-        drawOperatorAndHelp(layout, 'bpm.create_shot', '', 'Create-Shot-Operator')
+        #drawOperatorAndHelp(layout, 'bpm.create_shot', '', 'Create-Shot-Operator')
 
         drawOperatorAndHelp(layout, 'bpm.delete_unused_shots', '', 'Delete-Unused-Shots')
 
         drawOperatorAndHelp(layout, 'bpm.empty_recycle_bin', '', 'Empty-Recycle-Bin')
 
-        drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
+        draw_browse_panel(layout)
 
-        drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
+        layout.operator('bpm.display_modify_project_settings')
+        
+        layout.operator('bpm.display_modify_render_settings')
+
+        # drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
+
+        # drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
 
 
 # sequencer management comment subpanel
-class BPM_PT_sequencer_management_comment_subpanel(SequencerPanel):
+class BPM_PT_sequencer_management_comment_subpanel(SequencerPanel_Editing):
     bl_label = ""
     bl_parent_id = "BPM_PT_sequencer_management_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -296,7 +322,7 @@ class BPM_PT_sequencer_management_comment_subpanel(SequencerPanel):
 
 
 # sequencer browse subpanel
-class BPM_PT_sequencer_browse_subpanel(SequencerPanel):
+class BPM_PT_sequencer_browse_subpanel(SequencerPanel_Project):
     bl_label = "Browse"
     bl_parent_id = "BPM_PT_sequencer_management_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -307,7 +333,7 @@ class BPM_PT_sequencer_browse_subpanel(SequencerPanel):
 
 
 # sequencer management debug subpanel
-class BPM_PT_sequencer_management_debug_subpanel(SequencerPanel):
+class BPM_PT_sequencer_management_debug_subpanel(SequencerPanel_Project):
     bl_label = "Debug"
     bl_parent_id = "BPM_PT_sequencer_management_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -326,7 +352,7 @@ class BPM_PT_sequencer_management_debug_subpanel(SequencerPanel):
 
 
 # sequencer shot panel
-class BPM_PT_sequencer_shot_panel(SequencerPanel):
+class BPM_PT_sequencer_shot_panel(SequencerPanel_Shot):
     bl_label = "Shot"
 
     @classmethod
@@ -348,7 +374,7 @@ class BPM_PT_sequencer_shot_panel(SequencerPanel):
 
 
 # sequencer tracking shot subpanel
-class BPM_PT_sequencer_shot_tracking_subpanel(SequencerPanel):
+class BPM_PT_sequencer_shot_tracking_subpanel(SequencerPanel_Shot):
     bl_label = "Tracking"
     bl_parent_id = "BPM_PT_sequencer_shot_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -374,7 +400,7 @@ class BPM_PT_sequencer_shot_tracking_subpanel(SequencerPanel):
 
 
 # sequencer version shot subpanel
-class BPM_PT_sequencer_shot_version_subpanel(SequencerPanel):
+class BPM_PT_sequencer_shot_version_subpanel(SequencerPanel_Shot):
     bl_label = "Version"
     bl_parent_id = "BPM_PT_sequencer_shot_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -398,7 +424,7 @@ class BPM_PT_sequencer_shot_version_subpanel(SequencerPanel):
 
 
 # sequencer sync shot subpanel
-class BPM_PT_sequencer_shot_sync_subpanel(SequencerPanel):
+class BPM_PT_sequencer_shot_sync_subpanel(SequencerPanel_Shot):
     bl_label = "Sync"
     bl_parent_id = "BPM_PT_sequencer_shot_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -417,7 +443,7 @@ class BPM_PT_sequencer_shot_sync_subpanel(SequencerPanel):
 
 
 # sequencer comment shot subpanel
-class BPM_PT_sequencer_shot_comment_subpanel(SequencerPanel):
+class BPM_PT_sequencer_shot_comment_subpanel(SequencerPanel_Shot):
     bl_label = ""
     bl_parent_id = "BPM_PT_sequencer_shot_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -437,7 +463,7 @@ class BPM_PT_sequencer_shot_comment_subpanel(SequencerPanel):
 
 
 # sequencer display shot subpanel
-class BPM_PT_sequencer_shot_display_subpanel(SequencerPanel):
+class BPM_PT_sequencer_shot_display_subpanel(SequencerPanel_Shot):
     bl_label = "Display"
     bl_parent_id = "BPM_PT_sequencer_shot_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -457,7 +483,7 @@ class BPM_PT_sequencer_shot_display_subpanel(SequencerPanel):
 
 
 # sequencer render shot subpanel
-class BPM_PT_sequencer_shot_render_subpanel(SequencerPanel):
+class BPM_PT_sequencer_shot_render_subpanel(SequencerPanel_Shot):
     bl_label = "Render"
     bl_parent_id = "BPM_PT_sequencer_shot_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -477,7 +503,7 @@ class BPM_PT_sequencer_shot_render_subpanel(SequencerPanel):
 
 
 # sequencer shot debug subpanel
-class BPM_PT_sequencer_shot_debug_subpanel(SequencerPanel):
+class BPM_PT_sequencer_shot_debug_subpanel(SequencerPanel_Shot):
     bl_label = "Debug"
     bl_parent_id = "BPM_PT_sequencer_shot_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -496,7 +522,7 @@ class BPM_PT_sequencer_shot_debug_subpanel(SequencerPanel):
 
 
 # sequencer asset library panel
-class BPM_PT_sequencer_asset_library_panel(SequencerPanel):
+class BPM_PT_sequencer_asset_library_panel(SequencerPanel_Assets):
     bl_label = ""
 
     @classmethod
@@ -522,7 +548,7 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel):
 
 
 # sequencer UI panel
-class BPM_PT_sequencer_ui_panel(SequencerPanel):
+class BPM_PT_sequencer_ui_panel(SequencerPanel_Editing):
     bl_label = ""
 
     @classmethod
@@ -545,7 +571,7 @@ class BPM_PT_sequencer_ui_panel(SequencerPanel):
 
 
 # sequencer UI shot subpanel
-class BPM_PT_sequencer_ui_shot_subpanel(SequencerPanel):
+class BPM_PT_sequencer_ui_shot_subpanel(SequencerPanel_Editing):
     bl_label = "Shots"
     bl_parent_id = "BPM_PT_sequencer_ui_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -583,7 +609,7 @@ class BPM_PT_sequencer_ui_shot_subpanel(SequencerPanel):
 
 
 # sequencer UI shot subpanel
-class BPM_PT_sequencer_ui_shot_state_subpanel(SequencerPanel):
+class BPM_PT_sequencer_ui_shot_state_subpanel(SequencerPanel_Editing):
     bl_label = "State"
     bl_parent_id = "BPM_PT_sequencer_ui_shot_subpanel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -617,7 +643,7 @@ class BPM_PT_sequencer_ui_shot_state_subpanel(SequencerPanel):
 
 
 # sequencer UI frame comment subpanel
-class BPM_PT_sequencer_ui_frame_comment_subpanel(SequencerPanel):
+class BPM_PT_sequencer_ui_frame_comment_subpanel(SequencerPanel_Editing):
     bl_label = "Comments"
     bl_parent_id = "BPM_PT_sequencer_ui_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -648,7 +674,7 @@ class BPM_PT_sequencer_ui_frame_comment_subpanel(SequencerPanel):
 
 
 # sequencer UI preview subpanel
-class BPM_PT_sequencer_ui_preview_subpanel(SequencerPanel):
+class BPM_PT_sequencer_ui_preview_subpanel(SequencerPanel_Editing):
     bl_label = "Preview"
     bl_parent_id = "BPM_PT_sequencer_ui_panel"
     bl_options = {'DEFAULT_CLOSED'}
