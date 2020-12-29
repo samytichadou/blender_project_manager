@@ -237,7 +237,7 @@ def refreshTimelineShotDatas(context, sequencer):
             if debug: print(missing_shot_file_statement + " for " + strip.name) #debug
 
         # load comments
-        reload_comments(bpy.context, "edit_shot")
+        reload_comments(bpy.context, "edit_shot", strip)
 
     general_settings.bypass_update_tag = False
 

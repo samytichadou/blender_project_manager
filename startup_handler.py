@@ -185,7 +185,7 @@ def bpmStartupHandler(scene):
                 if debug: print(refreshed_timeline_shot_datas_statement) #debug
 
                 # load edit comments
-                reload_comments(bpy.context, "edit")
+                reload_comments(bpy.context, "edit", None)
 
             # load shot settings
             elif general_settings.file_type == 'SHOT':
@@ -211,7 +211,7 @@ def bpmStartupHandler(scene):
                     if debug: print(missing_shot_file_statement) #debug
 
                 # load shot comments
-                reload_comments(bpy.context, "shot")
+                reload_comments(bpy.context, "shot", None)
 
             # load asset settings
             elif general_settings.file_type == 'ASSET':
@@ -219,7 +219,7 @@ def bpmStartupHandler(scene):
                 asset_settings.name = getBlendName()
 
                 # load asset comments
-                reload_comments(bpy.context, "asset")
+                reload_comments(bpy.context, "asset", None)
 
         else:
             print(no_datas_statement)

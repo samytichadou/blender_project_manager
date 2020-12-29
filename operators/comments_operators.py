@@ -88,6 +88,9 @@ class BPMAddComment(bpy.types.Operator):
         debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
+        edit = None 
+        shot = None 
+        active = None
         if self.comment_type == "edit_shot":
             edit, shot, active = check_edit_poll_function(context)
             if not shot or active.lock:
@@ -98,7 +101,7 @@ class BPMAddComment(bpy.types.Operator):
         if debug: print(start_edit_comment_statement) #debug
 
         # get comment collection and folder path
-        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
+        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
 
         if debug: print(editing_comment_statement + self.comment) #debug
 
@@ -163,6 +166,9 @@ class BPMRemoveComment(bpy.types.Operator):
         debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
+        edit = None 
+        shot = None 
+        active = None
         if self.comment_type == "edit_shot":
             edit, shot, active = check_edit_poll_function(context)
             if not shot or active.lock:
@@ -173,7 +179,7 @@ class BPMRemoveComment(bpy.types.Operator):
         if debug: print(start_edit_comment_statement) #debug
 
         # get comment collection and folder path
-        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
+        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
 
         if debug: print(editing_comment_statement + comment_collection[self.index].name) #debug
 
@@ -218,13 +224,15 @@ class BPMModifyComment(bpy.types.Operator):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
 
+        if self.comment_type == "edit_shot":
+            active = context.scene.sequence_editor.active_strip
+
         # get comment collection and folder path
-        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
+        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
         active_comment = comment_collection[self.index]
 
         if self.comment_type == "edit_shot":
             if self.frame_comment:
-                active = context.scene.sequence_editor.active_strip
                 frame = get_shot_comment_frame(active_comment, active)
             else:
                 frame = context.scene.frame_current
@@ -256,6 +264,9 @@ class BPMModifyComment(bpy.types.Operator):
         debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
+        edit = None 
+        shot = None 
+        active = None
         if self.comment_type == "edit_shot":
             edit, shot, active = check_edit_poll_function(context)
             if not shot or active.lock:
@@ -266,7 +277,7 @@ class BPMModifyComment(bpy.types.Operator):
         if debug: print(start_edit_comment_statement) #debug
 
         # get comment collection and folder path
-        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
+        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
             
         active_comment = comment_collection[self.index]
 
@@ -324,6 +335,9 @@ class BPMReloadComment(bpy.types.Operator):
         debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
+        edit = None 
+        shot = None 
+        active = None
         if self.comment_type == "edit_shot":
             edit, shot, active = check_edit_poll_function(context)
             if not shot:
@@ -334,8 +348,8 @@ class BPMReloadComment(bpy.types.Operator):
         if debug: print(loading_comments_statement) #debug
 
         # get comment collection and folder path
-        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context)
+        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
 
-        reload_comments(context, self.comment_type)
+        reload_comments(context, self.comment_type, active)
         
         return {'FINISHED'}

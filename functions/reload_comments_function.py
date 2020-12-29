@@ -12,13 +12,16 @@ from ..global_variables import (
 
 
 
-def return_commentcoll_folderpath(comment_type, context):
+def return_commentcoll_folderpath(comment_type, context, strip):
     winman = context.window_manager
 
     if comment_type == "edit_shot":
-        shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-        comment_collection = shot_settings.comments
-        folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
+        if strip is not None:
+            shot_settings = strip.bpm_shotsettings
+            comment_collection = shot_settings.comments
+            folder_path = os.path.dirname(bpy.path.abspath(shot_settings.shot_filepath))
+        else:
+            comment_collection = folder_path = None
 
     elif comment_type == "shot":
         shot_settings = winman.bpm_shotsettings
@@ -38,14 +41,14 @@ def return_commentcoll_folderpath(comment_type, context):
     return (comment_collection, folder_path)
 
 
-def reload_comments(context, comment_type):
+def reload_comments(context, comment_type, strip):
     winman = context.window_manager
     general_settings = winman.bpm_generalsettings
     debug = winman.bpm_projectdatas.debug
 
     if debug: print(loading_comments_statement) #debug
 
-    comment_collection, folderpath = return_commentcoll_folderpath(comment_type, context)
+    comment_collection, folderpath = return_commentcoll_folderpath(comment_type, context, strip)
 
     comment_filepath = os.path.join(folderpath, comment_file)
 
