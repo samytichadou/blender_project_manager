@@ -1,22 +1,48 @@
 EDIT FILE
 -> sequencer
-	-> Project
-		-> Actions
-		-> settings
+	-> Project (management)
+		-> episode management (if serie)
+			-o create episode
+			-o modify episode settings
+			-o open episode
+			-o delete episode
+		-o delete unused shots
+		-o empty recycle bin
+		-o open folder
+		-o Project settings
+		-o render settings
 		-> debug
-	-> Timeline Comments
-	-> Shot
-		-> Tracking (integrate verrsion subpanel here)
-		-> Sync
+	-> Editing (timeline related)
+		-o create shot
+		-o synchronize audio edit
+		-o refresh shot datas
+		-o update shot duration
+		-o render selected shot(s)
+		-> Timeline comments
+		-> Timeline UI
+	-> Shots
+		-> Tracking
+		-> Versioning
 		-> Shot Comments
-		-> Display
-		-> Render
-		-> debug
-	-> asset library
-	-> UI
-		-> shots
-		-> comments
-		-> preview
+		-> Timeline Display
+		-o Render State
+		-> Debug
+	-> Assets
+		-> asset library
+		-> selected asset comment
+		-> selected asset infos (tag system)
+		-> asset debug
+	-> Render
+		-> render jobs
+		
+-> Topbar
+	-t project name
+	-> Manage Users
+		-o add user
+		-o modify user
+		-o delete user
+	-o log in
+	-o log out
 
 SHOT FILE
 -> viewport
