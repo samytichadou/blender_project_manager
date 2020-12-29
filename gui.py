@@ -266,17 +266,6 @@ class SequencerPanel_Assets(bpy.types.Panel):
         if edit:
             return True
 
-class SequencerPanel_Render(bpy.types.Panel):
-    bl_space_type = "SEQUENCE_EDITOR"
-    bl_region_type = "UI"
-    bl_category = "BPM Render"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    @classmethod
-    def poll(cls, context):
-        edit, shot, active = check_edit_poll_function(context)
-        if edit:
-            return True
 
 # viewport class
 class ViewportPanel(bpy.types.Panel):
