@@ -24,7 +24,9 @@ def drawOperatorAndHelp(container, operator_bl_idname, icon, wikipage):
 # draw all props for debug
 def drawDebugPanel(container, dataset):
 
-    container.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
+    box = container.box()
+    box.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
+    container.separator()
     for p in dataset.bl_rna.properties:
         if not p.is_readonly and p.identifier != 'name':
             row = container.row()
@@ -109,10 +111,12 @@ def split_string_on_spaces(string, char_limit):
 def comment_draw(container, comments, c_type):
 
     row = container.row(align=True)
-    op = row.operator("bpm.add_comment")
+    op = row.operator("bpm.add_comment", text="Add")
     op.comment_type = c_type
     op2 = row.operator("bpm.reload_comment", text = "", icon = "FILE_REFRESH")
     op2.comment_type = c_type
+    row.separator()
+    drawWikiHelp(row, "Comments")
 
     bigcol = container.column(align=True)
 
@@ -172,13 +176,13 @@ def drawAssetLibrary(container, winman):
 
     general_settings = winman.bpm_generalsettings
 
-    container.operator("bpm.create_asset")
+    drawOperatorAndHelp(container, 'bpm.create_asset', '', 'Asset-Management')
 
     container.prop(general_settings, 'panel_asset_display', text="Display")
 
     container.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
 
-    container.operator("bpm.open_asset_file", icon = "FILE_FOLDER")
+    drawOperatorAndHelp(container, 'bpm.open_asset_file', 'FILE_FOLDER', 'Asset-Management')
 
 
 # bpm function topbar back/open operators
@@ -306,21 +310,15 @@ class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
 
         drawOpenedWarning(layout, general_settings)
 
-        #drawOperatorAndHelp(layout, 'bpm.create_shot', '', 'Create-Shot-Operator')
-
         drawOperatorAndHelp(layout, 'bpm.delete_unused_shots', '', 'Delete-Unused-Shots')
 
         drawOperatorAndHelp(layout, 'bpm.empty_recycle_bin', '', 'Empty-Recycle-Bin')
 
-        layout.operator('bpm.display_modify_project_settings')
+        drawOperatorAndHelp(layout, 'bpm.display_modify_project_settings', '', 'Project-Settings')
         
-        layout.operator('bpm.display_modify_render_settings')
+        drawOperatorAndHelp(layout, 'bpm.display_modify_render_settings', '', 'Render-Settings')
 
         draw_browse_panel(layout)
-
-        # drawOperatorAndHelp(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
-
-        # drawOperatorAndHelp(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
 
 
 # sequencer management debug subpanel
@@ -390,7 +388,7 @@ class BPM_PT_sequencer_edit_ui_panel(SequencerPanel_Editing):
 
         drawOpenedWarning(layout, general_settings)
 
-        row = layout.row()
+        row = layout.row(align=True)
         row.prop(scn_settings, "extra_ui", text = "UI")
         drawWikiHelp(row, 'Extra-UI-in-Sequencer')
 

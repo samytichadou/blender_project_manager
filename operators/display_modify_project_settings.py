@@ -27,7 +27,7 @@ def reloadProjectSettingsFromJson(self, context):
 class BpmDisplayModifyProjectSettings(bpy.types.Operator):
     """Display and Modify Project Settings"""
     bl_idname = "bpm.display_modify_project_settings"
-    bl_label = "Display/Modify Project Settings"
+    bl_label = "Project Settings"
 
     modify: bpy.props.BoolProperty(name = "Modify", default = False, update = reloadProjectSettingsFromJson)
 

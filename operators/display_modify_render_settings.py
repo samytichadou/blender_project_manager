@@ -34,7 +34,7 @@ def reloadRenderSettingsFromJson(self, context):
 class BpmDisplayModifyRenderSettings(bpy.types.Operator):
     """Display and Render Settings"""
     bl_idname = "bpm.display_modify_render_settings"
-    bl_label = "Display/Modify Render Settings"
+    bl_label = "Render Settings"
 
     shot_render_state_extended_items = shot_render_state_items.copy()
     shot_render_state_extended_items.append((render_playblast_folder, render_playblast_folder, ""))
