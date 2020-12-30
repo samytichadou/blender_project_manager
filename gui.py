@@ -2,7 +2,7 @@ import bpy
 
 from .properties import getAssetIcon
 from .functions.project_data_functions import getShotTaskDeadline, getShotTaskComplete
-from .functions.check_edit_poll_function import check_edit_poll_function
+from .functions.check_file_poll_function import check_file_poll_function
 
 
 ### process functions ###
@@ -230,8 +230,8 @@ class SequencerPanel_Project(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        edit, shot, active = check_edit_poll_function(context)
-        if edit:
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "EDIT":
             return True
 
 class SequencerPanel_Editing(bpy.types.Panel):
@@ -242,8 +242,8 @@ class SequencerPanel_Editing(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        edit, shot, active = check_edit_poll_function(context)
-        if edit:
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "EDIT":
             return True
 
 class SequencerPanel_Shot(bpy.types.Panel):
@@ -254,8 +254,8 @@ class SequencerPanel_Shot(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        edit, shot, active = check_edit_poll_function(context)
-        if edit and shot:
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "EDIT" and active is not None:
             return True
 
 class SequencerPanel_Assets(bpy.types.Panel):
@@ -266,8 +266,8 @@ class SequencerPanel_Assets(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        edit, shot, active = check_edit_poll_function(context)
-        if edit:
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "EDIT":
             return True
 
 
@@ -275,7 +275,8 @@ class SequencerPanel_Assets(bpy.types.Panel):
 class ViewportPanel(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "BPM"
+    bl_category = "BPM Project"
+    bl_options = {'DEFAULT_CLOSED'}
 
 # nodetree class
 class NodetreePanel(bpy.types.Panel):

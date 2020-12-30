@@ -52,7 +52,9 @@ SHOT FILE
 			-o render settings
 			-> Render Jobs
 	-> Shot
-		-o Render playblast
+		-> Render
+			-o Render playblast
+			-o Render shot BG
 		-> Tracking
 			-o Render State
 		-> Versioning

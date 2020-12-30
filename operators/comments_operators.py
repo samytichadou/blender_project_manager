@@ -1,7 +1,7 @@
 import bpy, os, string
 
 
-from ..functions.check_edit_poll_function import check_edit_poll_function
+from ..functions.check_file_poll_function import check_file_poll_function
 from ..functions.json_functions import create_json_file, createJsonDatasetFromProperties
 from ..functions.date_functions import getDateTimeString, getDateTimeID
 from ..functions.file_functions import absolutePath
@@ -92,8 +92,8 @@ class BPMAddComment(bpy.types.Operator):
         shot = None 
         active = None
         if self.comment_type == "edit_shot":
-            edit, shot, active = check_edit_poll_function(context)
-            if not shot or active.lock:
+            project, file_type, active = check_file_poll_function(context)
+            if active is None or active.lock:
                 self.report({'INFO'}, no_active_shot_message)
                 if general_settings.debug: print(no_active_shot_statement) #debug
                 return {'FINISHED'}
@@ -170,8 +170,8 @@ class BPMRemoveComment(bpy.types.Operator):
         shot = None 
         active = None
         if self.comment_type == "edit_shot":
-            edit, shot, active = check_edit_poll_function(context)
-            if not shot or active.lock:
+            project, file_type, active = check_file_poll_function(context)
+            if active is None or active.lock:
                 self.report({'INFO'}, no_active_shot_message)
                 if debug: print(no_active_shot_statement) #debug
                 return {'FINISHED'}
@@ -268,8 +268,8 @@ class BPMModifyComment(bpy.types.Operator):
         shot = None 
         active = None
         if self.comment_type == "edit_shot":
-            edit, shot, active = check_edit_poll_function(context)
-            if not shot or active.lock:
+            project, file_type, active = check_file_poll_function(context)
+            if active is None or active.lock:
                 self.report({'INFO'}, no_active_shot_message)
                 if debug: print(no_active_shot_statement) #debug
                 return {'FINISHED'}
@@ -339,8 +339,8 @@ class BPMReloadComment(bpy.types.Operator):
         shot = None 
         active = None
         if self.comment_type == "edit_shot":
-            edit, shot, active = check_edit_poll_function(context)
-            if not shot:
+            project, file_type, active = check_file_poll_function(context)
+            if active is None:
                 self.report({'INFO'}, no_active_shot_message)
                 if debug: print(no_active_shot_statement) #debug
                 return {'FINISHED'}
