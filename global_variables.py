@@ -163,6 +163,9 @@ refreshed_timeline_shot_display_mode = bpm_statement + "Timeline shots available
 no_active_shot_message = "No active shot"
 no_active_shot_statement = bpm_statement + no_active_shot_message
 
+lock_strip_message = "Locked strip"
+lock_strip_statement = bpm_statement + lock_strip_message
+
 
 # shot update statement
 start_update_shot_statement = bpm_statement + "Starting update shot(s) from timeline"
