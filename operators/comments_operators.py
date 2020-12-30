@@ -18,6 +18,8 @@ from ..global_variables import (
                                 bypass_shot_settings_update_statement,
                                 no_active_shot_message,
                                 no_active_shot_statement,
+                                lock_strip_message,
+                                lock_strip_statement,
                                 loading_comments_statement,
                             )
 
@@ -84,7 +86,6 @@ class BPMAddComment(bpy.types.Operator):
     def execute(self, context):
 
         winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
         debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
@@ -93,9 +94,13 @@ class BPMAddComment(bpy.types.Operator):
         active = None
         if self.comment_type == "edit_shot":
             project, file_type, active = check_file_poll_function(context)
-            if active is None or active.lock:
+            if active is None:
                 self.report({'INFO'}, no_active_shot_message)
-                if general_settings.debug: print(no_active_shot_statement) #debug
+                if debug: print(no_active_shot_statement) #debug
+                return {'FINISHED'}
+            elif active.lock:
+                self.report({'INFO'}, lock_strip_message)
+                if debug: print(lock_strip_statement) #debug
                 return {'FINISHED'}
 
         if debug: print(start_edit_comment_statement) #debug
@@ -111,6 +116,8 @@ class BPMAddComment(bpy.types.Operator):
         elif self.comment_type == "edit_shot":
             active = context.scene.sequence_editor.active_strip
             frame = getShotCommentPosition(self.frame, active)
+        else:
+            frame = self.frame
 
         # add new comment to strip settings
         new_comment = comment_collection.add()
@@ -162,7 +169,6 @@ class BPMRemoveComment(bpy.types.Operator):
     def execute(self, context):
 
         winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
         debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
@@ -171,9 +177,13 @@ class BPMRemoveComment(bpy.types.Operator):
         active = None
         if self.comment_type == "edit_shot":
             project, file_type, active = check_file_poll_function(context)
-            if active is None or active.lock:
+            if active is None:
                 self.report({'INFO'}, no_active_shot_message)
                 if debug: print(no_active_shot_statement) #debug
+                return {'FINISHED'}
+            elif active.lock:
+                self.report({'INFO'}, lock_strip_message)
+                if debug: print(lock_strip_statement) #debug
                 return {'FINISHED'}
 
         if debug: print(start_edit_comment_statement) #debug
@@ -260,7 +270,6 @@ class BPMModifyComment(bpy.types.Operator):
     def execute(self, context):
 
         winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
         debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
@@ -269,9 +278,13 @@ class BPMModifyComment(bpy.types.Operator):
         active = None
         if self.comment_type == "edit_shot":
             project, file_type, active = check_file_poll_function(context)
-            if active is None or active.lock:
+            if active is None:
                 self.report({'INFO'}, no_active_shot_message)
                 if debug: print(no_active_shot_statement) #debug
+                return {'FINISHED'}
+            elif active.lock:
+                self.report({'INFO'}, lock_strip_message)
+                if debug: print(lock_strip_statement) #debug
                 return {'FINISHED'}
 
         if debug: print(start_edit_comment_statement) #debug
@@ -331,7 +344,6 @@ class BPMReloadComment(bpy.types.Operator):
     def execute(self, context):
 
         winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
         debug = winman.bpm_projectdatas.debug
 
         # return if no active shot
