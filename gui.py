@@ -272,10 +272,22 @@ class SequencerPanel_Assets(bpy.types.Panel):
 
 
 # viewport class
-class ViewportPanel(bpy.types.Panel):
+class ViewportPanel_Project(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "BPM Project"
+    bl_options = {'DEFAULT_CLOSED'}
+
+class ViewportPanel_Shot(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "BPM Shot"
+    bl_options = {'DEFAULT_CLOSED'}
+
+class ViewportPanel_Assets(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "BPM Assets"
     bl_options = {'DEFAULT_CLOSED'}
 
 # nodetree class
@@ -626,13 +638,6 @@ class BPM_PT_sequencer_shot_debug_panel(SequencerPanel_Shot):
 class BPM_PT_sequencer_asset_library_panel(SequencerPanel_Assets):
     bl_label = "Asset Library"
 
-    @classmethod
-    def poll(cls, context):
-        if context.window_manager.bpm_generalsettings.is_project:
-            if context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-                if context.window_manager.bpm_projectdatas.edit_scene_keyword in context.scene.name:
-                    return True
-
     def draw(self, context):
         winman = context.window_manager
 
@@ -643,30 +648,9 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel_Assets):
         draw_asset_library(layout, winman)
 
 
-# shot settings viewport panel
-class BPM_PT_properties_shot_viewport_panel(ViewportPanel):
-    bl_label = "Shot"
-
-    @classmethod
-    def poll(cls, context):
-        return context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'SHOT'
-
-    def draw(self, context):
-        winman = context.window_manager
-        shot_settings = winman.bpm_shotsettings
-
-        layout = self.layout
-
-        draw_opened_warning(layout, winman.bpm_generalsettings)
-
-        draw_operator_and_help(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
-
-
 # shot tracking viewport subpanel
-class BPM_PT_properties_shot_tracking_viewport_subpanel(ViewportPanel):
+class BPM_PT_viewport_shot_tracking_panel(ViewportPanel_Shot):
     bl_label = "Tracking"
-    bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
-    bl_options = {'DEFAULT_CLOSED'}
 
     def draw(self, context):
 
@@ -686,20 +670,6 @@ class BPM_PT_properties_shot_tracking_viewport_subpanel(ViewportPanel):
         row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
         draw_wiki_help(row, 'Shot-Task-System')
 
-
-# shot sync viewport subpanel
-class BPM_PT_properties_shot_sync_viewport_subpanel(ViewportPanel):
-    bl_label = "Sync"
-    bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    def draw(self, context):
-
-        winman = context.window_manager
-        shot_settings = winman.bpm_shotsettings
-
-        layout = self.layout
-
         draw_operator_and_help(layout, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
 
         draw_operator_and_help(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
@@ -708,17 +678,27 @@ class BPM_PT_properties_shot_sync_viewport_subpanel(ViewportPanel):
         row.prop(shot_settings, 'auto_audio_sync')
         draw_wiki_help(row, 'Shot-Audio-Synchronization')
 
+        row = layout.row(align=True)
+        row.prop(shot_settings, 'shot_render_state', text = "Render")
+        draw_wiki_help(row, 'Render-Settings')
+       
 
 # shot comment viewport subpanel
-class BPM_PT_properties_shot_comment_viewport_subpanel(ViewportPanel):
-    bl_label = ""
-    bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
-    bl_options = {'DEFAULT_CLOSED'}
+class BPM_PT_viewport_shot_version_panel(ViewportPanel_Shot):
+    bl_label = "Version"
 
-    def draw_header(self, context):
-        row = self.layout.row()
-        row.label(text = "Comments")
-        draw_wiki_help(row, "Comments")
+    def draw(self, context):
+
+        layout = self.layout
+
+        shot_settings = context.window_manager.bpm_shotsettings
+
+        layout.label(text = "Coming Soon")
+
+
+# shot comment viewport subpanel
+class BPM_PT_viewport_shot_comment_panel(ViewportPanel_Shot):
+    bl_label = "Comments"
 
     def draw(self, context):
 
@@ -730,10 +710,8 @@ class BPM_PT_properties_shot_comment_viewport_subpanel(ViewportPanel):
 
 
 # shot render viewport subpanel
-class BPM_PT_properties_shot_render_viewport_subpanel(ViewportPanel):
+class BPM_PT_viewport_shot_render_panel(ViewportPanel_Shot):
     bl_label = "Render"
-    bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
-    bl_options = {'DEFAULT_CLOSED'}
 
     def draw(self, context):
 
@@ -741,16 +719,12 @@ class BPM_PT_properties_shot_render_viewport_subpanel(ViewportPanel):
 
         shot_settings = context.window_manager.bpm_shotsettings
 
-        row = layout.row(align=True)
-        row.prop(shot_settings, 'shot_render_state', text = "Render")
-        draw_wiki_help(row, 'Render-Settings')
+        draw_operator_and_help(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
 
 
 # shot debug viewport subpanel
-class BPM_PT_properties_shot_debug_viewport_subpanel(ViewportPanel):
+class BPM_PT_viewport_shot_debug_panel(ViewportPanel_Shot):
     bl_label = "Debug"
-    bl_parent_id = "BPM_PT_properties_shot_viewport_panel"
-    bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
     def poll(cls, context):
@@ -767,7 +741,7 @@ class BPM_PT_properties_shot_debug_viewport_subpanel(ViewportPanel):
 
 
 # asset settings viewport panel
-class BPM_PT_properties_asset_viewport_panel(ViewportPanel):
+class BPM_PT_properties_asset_viewport_panel(ViewportPanel_Assets):
     bl_label = "Asset"
 
     @classmethod
@@ -788,7 +762,7 @@ class BPM_PT_properties_asset_viewport_panel(ViewportPanel):
 
 
 # asset comment viewport subpanel
-class BPM_PT_properties_asset_comments_viewport_subpanel(ViewportPanel):
+class BPM_PT_properties_asset_comments_viewport_subpanel(ViewportPanel_Assets):
     bl_label = ""
     bl_parent_id = "BPM_PT_properties_asset_viewport_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -808,7 +782,7 @@ class BPM_PT_properties_asset_comments_viewport_subpanel(ViewportPanel):
 
 
 # asset settings debug viewport subpanel
-class BPM_PT_properties_asset_debug_viewport_subpanel(ViewportPanel):
+class BPM_PT_properties_asset_debug_viewport_subpanel(ViewportPanel_Assets):
     bl_label = "Debug"
     bl_parent_id = "BPM_PT_properties_asset_viewport_panel"
     bl_options = {'DEFAULT_CLOSED'}
@@ -889,7 +863,7 @@ class BPM_PT_properties_asset_debug_nodetree_subpanel(NodetreePanel):
 
 
 # shot browse viewport panel
-class BPM_PT_properties_browse_viewport_panel(ViewportPanel):
+class BPM_PT_properties_browse_viewport_panel(ViewportPanel_Project):
     bl_label = "Browse"
 
     @classmethod
@@ -949,8 +923,8 @@ class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
 
 
 # asset library viewport panel
-class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel):
-    bl_label = ""
+class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel_Assets):
+    bl_label = "Asset Library"
 
     @classmethod
     def poll(cls, context):
@@ -962,11 +936,6 @@ class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel):
             elif general_settings.file_type == 'ASSET':
                 if winman.bpm_assetsettings.asset_type not in {'NODEGROUP', 'MATERIAL'}:
                     return True
-
-    def draw_header(self, context):
-        row = self.layout.row()
-        row.label(text = "Assets")
-        draw_wiki_help(row, 'Asset-Management')
 
     def draw(self, context):
         winman = context.window_manager
