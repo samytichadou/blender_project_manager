@@ -146,4 +146,7 @@ class BPMCreateAsset(bpy.types.Operator):
 
         if debug: print(asset_created_statement + self.name) #debug
 
+        for area in context.screen.areas:
+            area.tag_redraw()
+
         return {'FINISHED'}
