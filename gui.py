@@ -271,6 +271,8 @@ class SequencerPanel_Assets(bpy.types.Panel):
             return True
 
 
+### PANEL CLASSES ###
+
 # viewport class
 class ViewportPanel_Project(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
@@ -278,17 +280,35 @@ class ViewportPanel_Project(bpy.types.Panel):
     bl_category = "BPM Project"
     bl_options = {'DEFAULT_CLOSED'}
 
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type in {"SHOT", "ASSET"}:
+            return True
+
 class ViewportPanel_Shot(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "BPM Shot"
     bl_options = {'DEFAULT_CLOSED'}
 
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "SHOT":
+            return True
+
 class ViewportPanel_Assets(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "BPM Assets"
     bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type in {"SHOT", "ASSET"}:
+            return True
 
 # nodetree class
 class NodetreePanel(bpy.types.Panel):
@@ -302,6 +322,8 @@ class FilebrowserPanel(bpy.types.Panel):
     bl_region_type = 'TOOLS'
     bl_category = "BPM"
 
+
+### SEQUENCER PANELS ###
 
 # sequencer management
 class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
@@ -648,6 +670,8 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel_Assets):
         draw_asset_library(layout, winman)
 
 
+### VIEWPORT PANELS ###
+
 # shot tracking viewport subpanel
 class BPM_PT_viewport_shot_tracking_panel(ViewportPanel_Shot):
     bl_label = "Tracking"
@@ -717,8 +741,6 @@ class BPM_PT_viewport_shot_render_panel(ViewportPanel_Shot):
 
         layout = self.layout
 
-        shot_settings = context.window_manager.bpm_shotsettings
-
         draw_operator_and_help(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
 
 
@@ -738,6 +760,22 @@ class BPM_PT_viewport_shot_debug_panel(ViewportPanel_Shot):
         shot_settings = winman.bpm_shotsettings
 
         draw_debug_panel(layout, shot_settings)
+
+
+# asset library viewport panel
+class BPM_PT_viewport_asset_library_panel(ViewportPanel_Assets):
+    bl_label = "Asset Library"
+
+    def draw(self, context):
+        winman = context.window_manager
+
+        layout = self.layout
+
+        draw_opened_warning(layout, winman.bpm_generalsettings)
+
+        draw_asset_library(layout, winman)
+
+        layout.operator("bpm.import_asset", icon = "LINK_BLEND")
 
 
 # asset settings viewport panel
@@ -908,34 +946,6 @@ class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
         row = self.layout.row()
         row.label(text = "Assets")
         draw_wiki_help(row, 'Asset-Management')
-
-    def draw(self, context):
-        winman = context.window_manager
-
-        layout = self.layout
-
-        draw_opened_warning(layout, winman.bpm_generalsettings)
-
-        draw_asset_library(layout, winman)
-
-        if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
-            layout.operator("bpm.import_asset", icon = "LINK_BLEND")
-
-
-# asset library viewport panel
-class BPM_PT_properties_asset_library_viewport_panel(ViewportPanel_Assets):
-    bl_label = "Asset Library"
-
-    @classmethod
-    def poll(cls, context):
-        winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        if general_settings.is_project:
-            if general_settings.file_type == 'SHOT':
-                return True
-            elif general_settings.file_type == 'ASSET':
-                if winman.bpm_assetsettings.asset_type not in {'NODEGROUP', 'MATERIAL'}:
-                    return True
 
     def draw(self, context):
         winman = context.window_manager
