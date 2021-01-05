@@ -67,7 +67,7 @@ def bpmStartupHandler(scene):
     print(startup_statement)
 
     #load project datas
-    project_data_file, project_folder, file_type = getProjectDataFile(winman)
+    project_data_file, project_folder, file_type = getProjectDataFile()
     if project_data_file is not None:
 
         if chekIfBpmProject(winman, project_data_file, file_type):

@@ -25,7 +25,7 @@ from .reload_comments_function import reload_comments
 
 
 # get project data file
-def getProjectDataFile(winman):
+def getProjectDataFile():
     if bpy.data.is_saved:
         # edit file
         parent_folder = os.path.dirname(bpy.data.filepath)

@@ -236,19 +236,69 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
 
 
+# general settings
+class BPMGeneralSettings(bpy.types.PropertyGroup) :
+    '''name : StringProperty() '''
+    is_project : bpy.props.BoolProperty(default=False)
+    file_type = [
+        ('EDIT', 'Edit', ""),
+        ('SHOT', 'Shot', ""),
+        ('ASSET', 'Asset', ""),
+        ('NONE', 'None', ""),
+        ]
+    file_type : bpy.props.EnumProperty(items = file_type, default='NONE')
+    project_folder : bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
+
+    bypass_update_tag : bpy.props.BoolProperty(default=False)
+
+    custom_folders_index : bpy.props.IntProperty(update = updateFilebrowserPath)
+
+    panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL', update = updateAssetDisplayType)
+
+    asset_list_index : bpy.props.IntProperty(min = -1)
+
+    blend_already_opened : bpy.props.BoolProperty(default=False)
+
+    today_date : bpy.props.StringProperty(name = "Today date")
+
+
+def display_panels_callback(scene, context):
+
+    items = [
+        ("PROJECT", "Project", ""),
+    ]
+
+    f_type = context.window_manager.bpm_generalsettings.file_type
+
+    if f_type == "EDIT":
+        items.extend(
+                [
+                ('EDIT', 'Edit', ""),
+                ('SHOT', 'Shot', ""),
+                ('ASSETS', 'Assets', ""),
+                ]
+            )
+    elif f_type == "SHOT":
+        items.extend(
+                [
+                ('SHOT', 'Shot', ""),
+                ('ASSETS', 'Assets', ""),
+                ]
+            )
+
+    elif f_type == "ASSET":
+        items.append(
+            ('ASSETS', 'Assets', ""),
+            )
+    
+    return items
+
 # scene settings
 class BPMSceneSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
 
     # Panels
-    # sequencer
-    display_panels_sequencer_items = [
-        ('PROJECT', 'Project', ""),
-        ('EDIT', 'Edit', ""),
-        ('SHOT', 'Shot', ""),
-        ('ASSETS', 'Assets', ""),
-        ]
-    display_panels_sequencer : bpy.props.EnumProperty(name = "Interface", items = display_panels_sequencer_items, default = 'PROJECT')
+    display_panels : bpy.props.EnumProperty(name = "Interface", items = display_panels_callback)
 
     extra_ui : bpy.props.BoolProperty(name = "Extra UI", default=True)
 
@@ -309,31 +359,6 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     shot_deadline_preview_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString())-10, default = int(getDateYearString()))
     shot_deadline_preview_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12, default = int(getDateMonthString()))
     shot_deadline_preview_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31, default = int(getDateDayString()))
-
-# general settings
-class BPMGeneralSettings(bpy.types.PropertyGroup) :
-    '''name : StringProperty() '''
-    is_project : bpy.props.BoolProperty(default=False)
-    file_type = [
-        ('EDIT', 'Edit', ""),
-        ('SHOT', 'Shot', ""),
-        ('ASSET', 'Asset', ""),
-        ('NONE', 'None', ""),
-        ]
-    file_type : bpy.props.EnumProperty(items = file_type, default='NONE')
-    project_folder : bpy.props.StringProperty(name = 'Project Folder', subtype = 'DIR_PATH')
-
-    bypass_update_tag : bpy.props.BoolProperty(default=False)
-
-    custom_folders_index : bpy.props.IntProperty(update = updateFilebrowserPath)
-
-    panel_asset_display : bpy.props.EnumProperty(name = "Asset type", items = asset_type_display_items, default='ALL', update = updateAssetDisplayType)
-
-    asset_list_index : bpy.props.IntProperty(min = -1)
-
-    blend_already_opened : bpy.props.BoolProperty(default=False)
-
-    today_date : bpy.props.StringProperty(name = "Today date")
 
 
 # render settings

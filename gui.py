@@ -227,7 +227,6 @@ class SequencerPanel_General(bpy.types.Panel):
     bl_space_type = "SEQUENCE_EDITOR"
     bl_region_type = "UI"
     bl_category = "BPM"
-    bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
     def poll(cls, context):
@@ -245,7 +244,7 @@ class SequencerPanel_Project(bpy.types.Panel):
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "EDIT":
-            return context.scene.bpm_scenesettings.display_panels_sequencer == "PROJECT"
+            return context.scene.bpm_scenesettings.display_panels == "PROJECT"
 
 class SequencerPanel_Project_Debug(bpy.types.Panel):
     bl_space_type = "SEQUENCE_EDITOR"
@@ -257,7 +256,7 @@ class SequencerPanel_Project_Debug(bpy.types.Panel):
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "EDIT":
-            if context.scene.bpm_scenesettings.display_panels_sequencer == "PROJECT":
+            if context.scene.bpm_scenesettings.display_panels == "PROJECT":
                 return context.window_manager.bpm_projectdatas.debug
 
 class SequencerPanel_Editing(bpy.types.Panel):
@@ -270,7 +269,7 @@ class SequencerPanel_Editing(bpy.types.Panel):
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "EDIT":
-            return context.scene.bpm_scenesettings.display_panels_sequencer == "EDIT"
+            return context.scene.bpm_scenesettings.display_panels == "EDIT"
 
 class SequencerPanel_Shot(bpy.types.Panel):
     bl_space_type = "SEQUENCE_EDITOR"
@@ -282,7 +281,7 @@ class SequencerPanel_Shot(bpy.types.Panel):
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "EDIT" and active is not None:
-            return context.scene.bpm_scenesettings.display_panels_sequencer == "SHOT"
+            return context.scene.bpm_scenesettings.display_panels == "SHOT"
 
 class SequencerPanel_Shot_Debug(bpy.types.Panel):
     bl_space_type = "SEQUENCE_EDITOR"
@@ -294,7 +293,7 @@ class SequencerPanel_Shot_Debug(bpy.types.Panel):
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "EDIT" and active is not None:
-            if context.scene.bpm_scenesettings.display_panels_sequencer == "SHOT":
+            if context.scene.bpm_scenesettings.display_panels == "SHOT":
                 return context.window_manager.bpm_projectdatas.debug
 
 class SequencerPanel_Assets(bpy.types.Panel):
@@ -307,15 +306,14 @@ class SequencerPanel_Assets(bpy.types.Panel):
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "EDIT":
-            return context.scene.bpm_scenesettings.display_panels_sequencer == "ASSETS"
+            return context.scene.bpm_scenesettings.display_panels == "ASSETS"
 
 
 # viewport class
-class ViewportPanel_Project(bpy.types.Panel):
+class ViewportPanel_General(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "BPM Project"
-    bl_options = {'DEFAULT_CLOSED'}
+    bl_category = "BPM"
 
     @classmethod
     def poll(cls, context):
@@ -323,29 +321,54 @@ class ViewportPanel_Project(bpy.types.Panel):
         if file_type in {"SHOT", "ASSET"}:
             return True
 
+class ViewportPanel_Project(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type in {"SHOT", "ASSET"}:
+            return context.scene.bpm_scenesettings.display_panels == "PROJECT"
+
 class ViewportPanel_Shot(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "BPM Shot"
+    bl_category = "BPM"
     bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "SHOT":
-            return True
+            return context.scene.bpm_scenesettings.display_panels == "SHOT"
+
+class ViewportPanel_Shot_Debug(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "SHOT":
+            if context.scene.bpm_scenesettings.display_panels == "SHOT":
+                return context.window_manager.bpm_projectdatas.debug
 
 class ViewportPanel_Assets(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "BPM Assets"
+    bl_category = "BPM"
     bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type in {"SHOT", "ASSET"}:
-            return True
+            return context.scene.bpm_scenesettings.display_panels == "ASSETS"
 
 # nodetree class
 class NodetreePanel(bpy.types.Panel):
@@ -374,7 +397,7 @@ class BPM_PT_sequencer_panels_display_panel(SequencerPanel_General):
 
         draw_opened_warning(layout, general_settings)
 
-        layout.prop(scn_settings, "display_panels_sequencer", expand=True)
+        layout.prop(scn_settings, "display_panels", expand=True)
 
 
 # sequencer management
@@ -703,6 +726,21 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel_Assets):
 
 ### VIEWPORT PANELS ###
 
+# viewport panels display
+class BPM_PT_viewport_panels_display_panel(ViewportPanel_General):
+    bl_label = "Interface"
+
+    def draw(self, context):
+        scn_settings = context.scene.bpm_scenesettings
+        general_settings = context.window_manager.bpm_generalsettings
+
+        layout = self.layout
+
+        draw_opened_warning(layout, general_settings)
+
+        layout.prop(scn_settings, "display_panels", expand=True)
+
+
 # shot tracking viewport subpanel
 class BPM_PT_viewport_shot_tracking_panel(ViewportPanel_Shot):
     bl_label = "Tracking"
@@ -776,12 +814,8 @@ class BPM_PT_viewport_shot_render_panel(ViewportPanel_Shot):
 
 
 # shot debug viewport subpanel
-class BPM_PT_viewport_shot_debug_panel(ViewportPanel_Shot):
+class BPM_PT_viewport_shot_debug_panel(ViewportPanel_Shot_Debug):
     bl_label = "Debug"
-
-    @classmethod
-    def poll(cls, context):
-        return context.window_manager.bpm_projectdatas.debug
 
     def draw(self, context):
 
@@ -929,37 +963,6 @@ class BPM_PT_properties_asset_debug_nodetree_subpanel(NodetreePanel):
         asset_settings = winman.bpm_assetsettings
 
         draw_debug_asset_panel(layout, asset_settings)
-
-
-# shot browse viewport panel
-class BPM_PT_properties_browse_viewport_panel(ViewportPanel_Project):
-    bl_label = "Browse"
-
-    @classmethod
-    def poll(cls, context):
-        general_settings = context.window_manager.bpm_generalsettings
-        if general_settings.is_project:
-            return general_settings.file_type in {"SHOT", "ASSET"}
- 
-    def draw(self, context):
-
-        draw_browse_panel(self.layout)
-
-
-# shot browse nodetree panel
-class BPM_PT_properties_browse_nodetree_panel(NodetreePanel):
-    bl_label = "Browse"
-
-    @classmethod
-    def poll(cls, context):
-        winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        asset_settings = winman.bpm_assetsettings
-        return general_settings.is_project and general_settings.file_type == "ASSET" and asset_settings.asset_type in {"NODEGROUP","MATERIAL"}
-
-    def draw(self, context):
-
-        draw_browse_panel(self.layout)
 
 
 # asset library nodetree panel
