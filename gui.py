@@ -179,6 +179,47 @@ def draw_asset_library(container, winman):
     draw_operator_and_help(container, 'bpm.open_asset_file', 'FILE_FOLDER', 'Asset-Management')
 
 
+# draw shot tracking
+def draw_shot_tracking_shot_file(container, winman):
+
+    shot_settings = winman.bpm_shotsettings
+
+    row = container.row(align=True)
+    row.prop(shot_settings, 'shot_state', text="")
+    if shot_settings.shot_state != "FINISHED":
+        row.prop(shot_settings, getShotTaskComplete(shot_settings)[0], text="")
+    draw_wiki_help(row, 'Shot-Datas')
+
+    row = container.row(align=True)
+    row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
+    row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
+    draw_wiki_help(row, 'Shot-Task-System')
+
+    draw_operator_and_help(container, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
+
+    draw_operator_and_help(container, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
+
+    row = container.row(align=True)
+    row.prop(shot_settings, 'auto_audio_sync')
+    draw_wiki_help(row, 'Shot-Audio-Synchronization')
+
+    row = container.row(align=True)
+    row.prop(shot_settings, 'shot_render_state', text = "Render")
+    draw_wiki_help(row, 'Render-Settings')
+
+
+# draw shot version
+def draw_shot_version_shot_file(container):
+    
+    container.label(text = "Coming Soon")
+
+
+# draw shot render
+def draw_shot_render_shot_file(container):
+    
+    draw_operator_and_help(container, 'bpm.render_shot_playlast', '', 'Render-Settings')
+
+
 # draw debug for assets
 def draw_debug_asset(container, dataset):
 
@@ -913,35 +954,13 @@ class BPM_PT_viewport_shot_tracking_panel(ViewportPanel_Shot):
     def draw(self, context):
 
         winman = context.window_manager
-        shot_settings = winman.bpm_shotsettings
 
         layout = self.layout
 
-        row = layout.row(align=True)
-        row.prop(shot_settings, 'shot_state', text="")
-        if shot_settings.shot_state != "FINISHED":
-            row.prop(shot_settings, getShotTaskComplete(shot_settings)[0], text="")
-        draw_wiki_help(row, 'Shot-Datas')
-
-        row = layout.row(align=True)
-        row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
-        row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
-        draw_wiki_help(row, 'Shot-Task-System')
-
-        draw_operator_and_help(layout, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
-
-        draw_operator_and_help(layout, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
-
-        row = layout.row(align=True)
-        row.prop(shot_settings, 'auto_audio_sync')
-        draw_wiki_help(row, 'Shot-Audio-Synchronization')
-
-        row = layout.row(align=True)
-        row.prop(shot_settings, 'shot_render_state', text = "Render")
-        draw_wiki_help(row, 'Render-Settings')
+        draw_shot_tracking_shot_file(layout, winman)
        
 
-# shot comment viewport subpanel
+# shot version viewport subpanel
 class BPM_PT_viewport_shot_version_panel(ViewportPanel_Shot):
     bl_label = "Version"
 
@@ -949,9 +968,7 @@ class BPM_PT_viewport_shot_version_panel(ViewportPanel_Shot):
 
         layout = self.layout
 
-        shot_settings = context.window_manager.bpm_shotsettings
-
-        layout.label(text = "Coming Soon")
+        draw_shot_version_shot_file(layout)
 
 
 # shot comment viewport subpanel
@@ -964,7 +981,7 @@ class BPM_PT_viewport_shot_comment_panel(ViewportPanel_Shot):
 
         shot_settings = context.window_manager.bpm_shotsettings
 
-        draw_comment(self.layout, shot_settings.comments, "shot")
+        draw_comment(layout, shot_settings.comments, "shot")
 
 
 # shot render viewport subpanel
@@ -975,7 +992,7 @@ class BPM_PT_viewport_shot_render_panel(ViewportPanel_Shot):
 
         layout = self.layout
 
-        draw_operator_and_help(layout, 'bpm.render_shot_playlast', '', 'Render-Settings')
+        draw_shot_render_shot_file(layout)
 
 
 # shot debug viewport subpanel
@@ -1081,7 +1098,7 @@ class BPM_PT_nodetree_management_panel(NodetreePanel_Project):
         draw_management(layout)
 
 
-# nodetree management debug subpanel
+# nodetree management debug panel
 class BPM_PT_nodetree_management_debug_panel(NodetreePanel_Project_Debug):
     bl_label = "Debug"
 
@@ -1092,6 +1109,68 @@ class BPM_PT_nodetree_management_debug_panel(NodetreePanel_Project_Debug):
         general_settings = context.window_manager.bpm_generalsettings
 
         draw_debug(layout, general_settings)
+
+
+# nodetree shot tracking panel
+class BPM_PT_nodetree_shot_tracking_panel(NodetreePanel_Shot):
+    bl_label = "Tracking"
+
+    def draw(self, context):
+
+        winman = context.window_manager
+
+        layout = self.layout
+
+        draw_shot_tracking_shot_file(layout, winman)
+
+
+# nodetree shot version panel
+class BPM_PT_nodetree_shot_version_panel(NodetreePanel_Shot):
+    bl_label = "Version"
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        draw_shot_version_shot_file(layout)
+
+
+# nodetree shot comment panel
+class BPM_PT_nodetree_shot_comment_panel(NodetreePanel_Shot):
+    bl_label = "Comments"
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        shot_settings = context.window_manager.bpm_shotsettings
+
+        draw_comment(layout, shot_settings.comments, "shot")
+
+
+# nodetree shot render panel
+class BPM_PT_nodetree_shot_render_panel(NodetreePanel_Shot):
+    bl_label = "Render"
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        draw_shot_render_shot_file(layout)
+
+
+# nodetree shot debug panel
+class BPM_PT_nodetree_shot_debug_panel(NodetreePanel_Shot_Debug):
+    bl_label = "Debug"
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        winman = context.window_manager
+        shot_settings = winman.bpm_shotsettings
+
+        draw_debug(layout, shot_settings)
 
 
 # asset settings nodetree panel
