@@ -128,7 +128,8 @@ def updateChangingAssetType(self, context):
 
     general_settings.bypass_update_tag = False
 
-    asset.bpm_isasset = True
+    if asset is not None:
+        asset.bpm_isasset = True
 
     if debug: print(cleared_old_asset_statement)
 
