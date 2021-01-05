@@ -45,50 +45,6 @@ def draw_operator_and_help(container, operator_bl_idname, icon, wikipage):
     row.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
 
 
-# draw all props for debug
-def draw_debug_panel(container, dataset):
-
-    box = container.box()
-    box.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
-
-    for p in dataset.bl_rna.properties:
-        if not p.is_readonly and p.identifier != 'name':
-            row = container.row()
-            row.prop(dataset, '%s' % p.identifier)
-
-
-# draw debug for assets
-def draw_debug_asset_panel(container, dataset):
-
-    draw_debug_panel(container, dataset)
-
-    container.label(text = 'Debug', icon = 'ERROR')
-
-    container.label(text = 'Collections', icon = 'GROUP')
-    col = container.column(align=True)
-    for i in bpy.data.collections:
-        row = col.row(align=True)
-        row.prop(i, 'bpm_isasset', text=i.name)
-
-    container.label(text = 'Materials', icon = 'MATERIAL')
-    col = container.column(align=True)
-    for i in bpy.data.materials:
-        row = col.row(align=True)
-        row.prop(i, 'bpm_isasset', text=i.name)
-
-    container.label(text = 'Nodegroups', icon = 'NODETREE')
-    col = container.column(align=True)
-    for i in bpy.data.node_groups:
-        row = col.row(align=True)
-        row.prop(i, 'bpm_isasset', text=i.name)
-
-    container.label(text = 'Worlds', icon = 'WORLD')
-    col = container.column(align=True)
-    for i in bpy.data.worlds:
-        row = col.row(align=True)
-        row.prop(i, 'bpm_isasset', text=i.name)
-
-
 # draw already opened blend warning
 def draw_opened_warning(container, general_settings):
     if general_settings.blend_already_opened:
@@ -96,8 +52,16 @@ def draw_opened_warning(container, general_settings):
         #container.label(text="File already opened", icon='ERROR')
 
 
+# draw browse panel
+def draw_browse_folder(container):
+
+    row = container.row(align=True)
+    row.menu('BPM_MT_OpenFolder_Explorer_Menu')
+    draw_wiki_help(row, 'Project-Architecture')
+
+
 # draw open folders panel
-def draw_open_folders_panel(container, filebrowser):
+def draw_open_folders_menu(container, filebrowser):
 
     col = container.column(align=True)
 
@@ -109,6 +73,20 @@ def draw_open_folders_panel(container, filebrowser):
     col.operator('bpm.open_shot_folder', text='Active Shot').filebrowser=filebrowser
     
     col.operator('bpm.open_shot_render_folder', text='Active Render').filebrowser=filebrowser
+
+
+# draw management panel
+def draw_management(container):
+
+    draw_operator_and_help(container, 'bpm.delete_unused_shots', '', 'Delete-Unused-Shots')
+
+    draw_operator_and_help(container, 'bpm.empty_recycle_bin', '', 'Empty-Recycle-Bin')
+
+    draw_operator_and_help(container, 'bpm.display_modify_project_settings', '', 'Project-Settings')
+    
+    draw_operator_and_help(container, 'bpm.display_modify_render_settings', '', 'Render-Settings')
+
+    draw_browse_folder(container)
 
 
 # sequencer shot comment function 
@@ -155,9 +133,21 @@ def draw_comment(container, comments, c_type):
                 if c.edit_time:
                     col.label(text="Edited on " + c.edit_time)
 
+                    
+# draw all props for debug
+def draw_debug(container, dataset):
+
+    box = container.box()
+    box.label(text = str(dataset.bl_rna.identifier) + ' - Be careful', icon='ERROR')
+
+    for p in dataset.bl_rna.properties:
+        if not p.is_readonly and p.identifier != 'name':
+            row = container.row()
+            row.prop(dataset, '%s' % p.identifier)
+
 
 # draw asset settings prop panel
-def draw_properties_asset_panel(container, asset_settings, general_settings):
+def draw_asset_settings(container, asset_settings, general_settings):
 
     draw_opened_warning(container, general_settings)
     
@@ -189,12 +179,36 @@ def draw_asset_library(container, winman):
     draw_operator_and_help(container, 'bpm.open_asset_file', 'FILE_FOLDER', 'Asset-Management')
 
 
-# draw browse panel
-def draw_browse_panel(container):
+# draw debug for assets
+def draw_debug_asset(container, dataset):
 
-    row = container.row(align=True)
-    row.menu('BPM_MT_OpenFolder_Explorer_Menu')
-    draw_wiki_help(row, 'Project-Architecture')
+    draw_debug(container, dataset)
+
+    container.label(text = 'Debug', icon = 'ERROR')
+
+    container.label(text = 'Collections', icon = 'GROUP')
+    col = container.column(align=True)
+    for i in bpy.data.collections:
+        row = col.row(align=True)
+        row.prop(i, 'bpm_isasset', text=i.name)
+
+    container.label(text = 'Materials', icon = 'MATERIAL')
+    col = container.column(align=True)
+    for i in bpy.data.materials:
+        row = col.row(align=True)
+        row.prop(i, 'bpm_isasset', text=i.name)
+
+    container.label(text = 'Nodegroups', icon = 'NODETREE')
+    col = container.column(align=True)
+    for i in bpy.data.node_groups:
+        row = col.row(align=True)
+        row.prop(i, 'bpm_isasset', text=i.name)
+
+    container.label(text = 'Worlds', icon = 'WORLD')
+    col = container.column(align=True)
+    for i in bpy.data.worlds:
+        row = col.row(align=True)
+        row.prop(i, 'bpm_isasset', text=i.name)
 
 
 # bpm function topbar back/open operators
@@ -333,6 +347,19 @@ class ViewportPanel_Project(bpy.types.Panel):
         if file_type in {"SHOT", "ASSET"}:
             return context.scene.bpm_scenesettings.display_panels == "PROJECT"
 
+class ViewportPanel_Project_Debug(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type in {"SHOT", "ASSET"}:
+            if context.scene.bpm_scenesettings.display_panels == "PROJECT":
+                return context.window_manager.bpm_projectdatas.debug
+
 class ViewportPanel_Shot(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
@@ -358,7 +385,7 @@ class ViewportPanel_Shot_Debug(bpy.types.Panel):
             if context.scene.bpm_scenesettings.display_panels == "SHOT":
                 return context.window_manager.bpm_projectdatas.debug
 
-class ViewportPanel_Assets(bpy.types.Panel):
+class ViewportPanel_Assets_Library(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = "BPM"
@@ -370,11 +397,130 @@ class ViewportPanel_Assets(bpy.types.Panel):
         if file_type in {"SHOT", "ASSET"}:
             return context.scene.bpm_scenesettings.display_panels == "ASSETS"
 
-# nodetree class
-class NodetreePanel(bpy.types.Panel):
-    bl_space_type = 'NODE_EDITOR'
-    bl_region_type = 'UI'
+class ViewportPanel_Assets(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
     bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "ASSET":
+            return context.scene.bpm_scenesettings.display_panels == "ASSETS"
+
+class ViewportPanel_Assets_Debug(bpy.types.Panel):
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type in {"SHOT", "ASSET"}:
+            if context.scene.bpm_scenesettings.display_panels == "ASSETS":
+                return context.window_manager.bpm_projectdatas.debug
+
+
+# nodetree class
+class NodetreePanel_General(bpy.types.Panel):
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        return file_type in {"SHOT", "ASSET"}
+
+class NodetreePanel_Project(bpy.types.Panel):
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type in {"SHOT", "ASSET"}:
+            return context.scene.bpm_scenesettings.display_panels == "PROJECT"
+
+class NodetreePanel_Project_Debug(bpy.types.Panel):
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type in {"SHOT", "ASSET"}:
+            if context.scene.bpm_scenesettings.display_panels == "PROJECT":
+                return context.window_manager.bpm_projectdatas.debug
+
+class NodetreePanel_Shot(bpy.types.Panel):
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "SHOT":
+            return context.scene.bpm_scenesettings.display_panels == "SHOT"
+
+class NodetreePanel_Shot_Debug(bpy.types.Panel):
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "SHOT":
+            if context.scene.bpm_scenesettings.display_panels == "SHOT":
+                return context.window_manager.bpm_projectdatas.debug
+
+class NodetreePanel_Assets_Library(bpy.types.Panel):
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type in {"SHOT", "ASSET"}:
+            return context.scene.bpm_scenesettings.display_panels == "ASSETS"
+
+class NodetreePanel_Assets(bpy.types.Panel):
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "ASSET":
+            return context.scene.bpm_scenesettings.display_panels == "ASSETS"
+
+class NodetreePanel_Assets_Debug(bpy.types.Panel):
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type in {"SHOT", "ASSET"}:
+            if context.scene.bpm_scenesettings.display_panels == "ASSETS":
+                return context.window_manager.bpm_projectdatas.debug
+
 
 # filebrowser class
 class FilebrowserPanel(bpy.types.Panel):
@@ -406,22 +552,13 @@ class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
 
     def draw(self, context):
         winman = context.window_manager
-        project_data = context.window_manager.bpm_projectdatas
-        general_settings = context.window_manager.bpm_generalsettings
+        general_settings = winman.bpm_generalsettings
 
         layout = self.layout
 
         draw_opened_warning(layout, general_settings)
 
-        draw_operator_and_help(layout, 'bpm.delete_unused_shots', '', 'Delete-Unused-Shots')
-
-        draw_operator_and_help(layout, 'bpm.empty_recycle_bin', '', 'Empty-Recycle-Bin')
-
-        draw_operator_and_help(layout, 'bpm.display_modify_project_settings', '', 'Project-Settings')
-        
-        draw_operator_and_help(layout, 'bpm.display_modify_render_settings', '', 'Render-Settings')
-
-        draw_browse_panel(layout)
+        draw_management(layout)
 
 
 # sequencer management debug subpanel
@@ -434,7 +571,7 @@ class BPM_PT_sequencer_management_debug_panel(SequencerPanel_Project_Debug):
         
         general_settings = context.window_manager.bpm_generalsettings
 
-        draw_debug_panel(layout, general_settings)
+        draw_debug(layout, general_settings)
 
 
 # sequencer edit panel
@@ -707,7 +844,7 @@ class BPM_PT_sequencer_shot_debug_panel(SequencerPanel_Shot_Debug):
         
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
 
-        draw_debug_panel(layout, shot_settings)
+        draw_debug(layout, shot_settings)
 
 
 # sequencer asset library panel
@@ -739,6 +876,34 @@ class BPM_PT_viewport_panels_display_panel(ViewportPanel_General):
         draw_opened_warning(layout, general_settings)
 
         layout.prop(scn_settings, "display_panels", expand=True)
+
+
+# viewport management
+class BPM_PT_viewport_management_panel(ViewportPanel_Project):
+    bl_label = "Management"
+
+    def draw(self, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+
+        layout = self.layout
+
+        draw_opened_warning(layout, general_settings)
+
+        draw_management(layout)
+
+
+# viewport management debug subpanel
+class BPM_PT_viewport_management_debug_panel(ViewportPanel_Project_Debug):
+    bl_label = "Debug"
+
+    def draw(self, context):
+
+        layout = self.layout
+        
+        general_settings = context.window_manager.bpm_generalsettings
+
+        draw_debug(layout, general_settings)
 
 
 # shot tracking viewport subpanel
@@ -824,12 +989,26 @@ class BPM_PT_viewport_shot_debug_panel(ViewportPanel_Shot_Debug):
         winman = context.window_manager
         shot_settings = winman.bpm_shotsettings
 
-        draw_debug_panel(layout, shot_settings)
+        draw_debug(layout, shot_settings)
+
+
+# asset settings viewport panel
+class BPM_PT_viewport_asset_settings_panel(ViewportPanel_Assets):
+    bl_label = "Settings"
+
+    def draw(self, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        asset_settings = winman.bpm_assetsettings
+
+        layout = self.layout
+
+        draw_asset_settings(layout, asset_settings, general_settings)
 
 
 # asset library viewport panel
-class BPM_PT_viewport_asset_library_panel(ViewportPanel_Assets):
-    bl_label = "Asset Library"
+class BPM_PT_viewport_asset_library_panel(ViewportPanel_Assets_Library):
+    bl_label = "Library"
 
     def draw(self, context):
         winman = context.window_manager
@@ -843,37 +1022,9 @@ class BPM_PT_viewport_asset_library_panel(ViewportPanel_Assets):
         layout.operator("bpm.import_asset", icon = "LINK_BLEND")
 
 
-# asset settings viewport panel
-class BPM_PT_properties_asset_viewport_panel(ViewportPanel_Assets):
-    bl_label = "Asset"
-
-    @classmethod
-    def poll(cls, context):
-        winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        asset_settings = winman.bpm_assetsettings
-        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type not in {'NODEGROUP', 'MATERIAL'}
-
-    def draw(self, context):
-        winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        asset_settings = winman.bpm_assetsettings
-
-        layout = self.layout
-
-        draw_properties_asset_panel(layout, asset_settings, general_settings)
-
-
 # asset comment viewport subpanel
-class BPM_PT_properties_asset_comments_viewport_subpanel(ViewportPanel_Assets):
-    bl_label = ""
-    bl_parent_id = "BPM_PT_properties_asset_viewport_panel"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    def draw_header(self, context):
-        row = self.layout.row()
-        row.label(text = "Comments")
-        draw_wiki_help(row, "Comments")
+class BPM_PT_viewport_asset_comment_panel(ViewportPanel_Assets):
+    bl_label = "Comments"
 
     def draw(self, context):
         winman = context.window_manager
@@ -881,39 +1032,71 @@ class BPM_PT_properties_asset_comments_viewport_subpanel(ViewportPanel_Assets):
 
         layout = self.layout
 
-        draw_comment(self.layout, asset_settings.comments, "asset")
+        draw_comment(layout, asset_settings.comments, "asset")
 
 
 # asset settings debug viewport subpanel
-class BPM_PT_properties_asset_debug_viewport_subpanel(ViewportPanel_Assets):
+class BPM_PT_viewport_asset_debug_panel(ViewportPanel_Assets_Debug):
     bl_label = "Debug"
-    bl_parent_id = "BPM_PT_properties_asset_viewport_panel"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.window_manager.bpm_projectdatas.debug
 
     def draw(self, context):
-
-        layout = self.layout
 
         winman = context.window_manager
         asset_settings = winman.bpm_assetsettings
 
-        draw_debug_asset_panel(layout, asset_settings)
+        layout = self.layout
+
+        draw_debug_asset(layout, asset_settings)
+
+
+### NODETREE PANELS ###
+
+# nodetree panels display
+class BPM_PT_nodetree_panels_display_panel(NodetreePanel_General):
+    bl_label = "Interface"
+
+    def draw(self, context):
+        scn_settings = context.scene.bpm_scenesettings
+        general_settings = context.window_manager.bpm_generalsettings
+
+        layout = self.layout
+
+        draw_opened_warning(layout, general_settings)
+
+        layout.prop(scn_settings, "display_panels", expand=True)
+
+
+# nodetree management
+class BPM_PT_nodetree_management_panel(NodetreePanel_Project):
+    bl_label = "Management"
+
+    def draw(self, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+
+        layout = self.layout
+
+        draw_opened_warning(layout, general_settings)
+
+        draw_management(layout)
+
+
+# nodetree management debug subpanel
+class BPM_PT_nodetree_management_debug_panel(NodetreePanel_Project_Debug):
+    bl_label = "Debug"
+
+    def draw(self, context):
+
+        layout = self.layout
+        
+        general_settings = context.window_manager.bpm_generalsettings
+
+        draw_debug(layout, general_settings)
 
 
 # asset settings nodetree panel
-class BPM_PT_properties_asset_nodetree_panel(NodetreePanel):
-    bl_label = "Asset"
-
-    @classmethod
-    def poll(cls, context):
-        winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        asset_settings = winman.bpm_assetsettings
-        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type in {'NODEGROUP', 'MATERIAL'}
+class BPM_PT_nodetree_asset_settings_panel(NodetreePanel_Assets):
+    bl_label = "Settings"
 
     def draw(self, context):
         winman = context.window_manager
@@ -922,19 +1105,12 @@ class BPM_PT_properties_asset_nodetree_panel(NodetreePanel):
 
         layout = self.layout
 
-        draw_properties_asset_panel(layout, asset_settings, general_settings)
+        draw_asset_settings(layout, asset_settings, general_settings)
 
 
 # asset comment nodetree subpanel
-class BPM_PT_properties_asset_comments_nodetree_subpanel(NodetreePanel):
-    bl_label = ""
-    bl_parent_id = "BPM_PT_properties_asset_nodetree_panel"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    def draw_header(self, context):
-        row = self.layout.row()
-        row.label(text = "Comments")
-        draw_wiki_help(row, "Comments")
+class BPM_PT_nodetree_asset_comment_panel(NodetreePanel_Assets):
+    bl_label = "Comments"
 
     def draw(self, context):
         winman = context.window_manager
@@ -942,44 +1118,12 @@ class BPM_PT_properties_asset_comments_nodetree_subpanel(NodetreePanel):
 
         layout = self.layout
 
-        draw_comment(self.layout, asset_settings.comments, "asset")
-
-
-# asset settings nodetree debug subpanel
-class BPM_PT_properties_asset_debug_nodetree_subpanel(NodetreePanel):
-    bl_label = "Debug"
-    bl_parent_id = "BPM_PT_properties_asset_nodetree_panel"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.window_manager.bpm_projectdatas.debug
-
-    def draw(self, context):
-
-        layout = self.layout
-
-        winman = context.window_manager
-        asset_settings = winman.bpm_assetsettings
-
-        draw_debug_asset_panel(layout, asset_settings)
+        draw_comment(layout, asset_settings.comments, "asset")
 
 
 # asset library nodetree panel
-class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
-    bl_label = ""
-
-    @classmethod
-    def poll(cls, context):
-        winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
-        asset_settings = winman.bpm_assetsettings
-        return general_settings.is_project and general_settings.file_type == 'ASSET' and asset_settings.asset_type in {'NODEGROUP', 'MATERIAL'}
-
-    def draw_header(self, context):
-        row = self.layout.row()
-        row.label(text = "Assets")
-        draw_wiki_help(row, 'Asset-Management')
+class BPM_PT_nodetree_asset_library_panel(NodetreePanel_Assets_Library):
+    bl_label = "Library"
 
     def draw(self, context):
         winman = context.window_manager
@@ -992,6 +1136,20 @@ class BPM_PT_properties_asset_library_nodetree_panel(NodetreePanel):
 
         if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
             layout.operator("bpm.import_asset", icon = "LINK_BLEND")
+
+
+# asset settings nodetree debug subpanel
+class BPM_PT_nodetree_asset_debug_panel(NodetreePanel_Assets_Debug):
+    bl_label = "Debug"
+
+    def draw(self, context):
+
+        layout = self.layout
+
+        winman = context.window_manager
+        asset_settings = winman.bpm_assetsettings
+
+        draw_debug_asset(layout, asset_settings)
 
 
 # topbar file menu
@@ -1051,7 +1209,7 @@ class BPM_MT_OpenFolder_Explorer_Menu(bpy.types.Menu):
     def draw(self, context):
         layout = self.layout
         
-        draw_open_folders_panel(layout, False)
+        draw_open_folders_menu(layout, False)
 
 
 # open folder menu
@@ -1061,7 +1219,7 @@ class BPM_MT_OpenFolder_Filebrowser_Menu(bpy.types.Menu):
     def draw(self, context):
         layout = self.layout
         
-        draw_open_folders_panel(layout, True)
+        draw_open_folders_menu(layout, True)
 
 
 # right click sequencer general menu
