@@ -14,6 +14,7 @@ from ..global_variables import (
                             render_playblast_folder,
                             render_shots_folder,
                         )
+from ..functions.check_file_poll_function import check_file_poll_function
 
 
 # opening function
@@ -43,24 +44,17 @@ class BPMOpenShotFolder(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        general_settings = context.window_manager.bpm_generalsettings
-        if general_settings.is_project:
-            if general_settings.file_type == 'SHOT':
-                return True
-            elif general_settings.file_type == 'EDIT':
-                keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
-                if keyword in context.scene.name:
-                    if context.scene.sequence_editor:
-                        if context.scene.sequence_editor.active_strip:
-                            active = context.scene.sequence_editor.active_strip
-                            if active.type in {'SCENE', 'IMAGE'}:
-                                if not active.lock:
-                                    if active.bpm_shotsettings.is_shot:
-                                        return True
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "SHOT":
+            return True
+        elif active is not None:
+            return not active.lock
 
     def execute(self, context):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
+
+        debug = winman.bpm_projectdatas.debug
 
         folder_path = None
 
@@ -73,7 +67,7 @@ class BPMOpenShotFolder(bpy.types.Operator):
             folder_path = os.path.dirname(bpy.data.filepath)
 
         # open if available        
-        openFolderFilebrowserOption(folder_path, self.filebrowser, context, general_settings.debug)
+        openFolderFilebrowserOption(folder_path, self.filebrowser, context, debug)
 
         return {'FINISHED'}
 
@@ -89,24 +83,17 @@ class BPMOpenShotRenderFolder(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        general_settings = context.window_manager.bpm_generalsettings
-        if general_settings.is_project:
-            if general_settings.file_type == 'SHOT':
-                return True
-            elif general_settings.file_type == 'EDIT':
-                keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
-                if keyword in context.scene.name:
-                    if context.scene.sequence_editor:
-                        if context.scene.sequence_editor.active_strip:
-                            active = context.scene.sequence_editor.active_strip
-                            if active.type in {'SCENE', 'IMAGE'}:
-                                if not active.lock:
-                                    if active.bpm_shotsettings.is_shot:
-                                        return True
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "SHOT":
+            return True
+        elif active is not None:
+            return not active.lock
 
     def execute(self, context):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
+
+        debug = winman.bpm_projectdatas.debug
 
         folder_path = None
 
@@ -123,7 +110,7 @@ class BPMOpenShotRenderFolder(bpy.types.Operator):
         folder_path = os.path.dirname(returnRenderFilePathFromShot(shot_filepath, winman, render_state))
 
         # open if available        
-        openFolderFilebrowserOption(folder_path, self.filebrowser, context, general_settings.debug)
+        openFolderFilebrowserOption(folder_path, self.filebrowser, context, debug)
 
         return {'FINISHED'}
 
@@ -145,6 +132,8 @@ class BPMOpenProjectFolder(bpy.types.Operator):
     def execute(self, context):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
+
+        debug = winman.bpm_projectdatas.debug
 
         folder_path = None
 
@@ -168,6 +157,6 @@ class BPMOpenProjectFolder(bpy.types.Operator):
             folder_path = os.path.join(render_shot_folderpath, render_playblast_folder)
 
         # open if available  
-        openFolderFilebrowserOption(folder_path, self.filebrowser, context, general_settings.debug)
+        openFolderFilebrowserOption(folder_path, self.filebrowser, context, debug)
 
         return {'FINISHED'}
