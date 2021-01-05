@@ -219,13 +219,14 @@ def draw_topbar(self, context):
         layout.menu('BPM_MT_topbar_menu')
 
 
-### panel classes ###
+
+### PANEL CLASSES ###
 
 # sequencer class
-class SequencerPanel_Project(bpy.types.Panel):
+class SequencerPanel_General(bpy.types.Panel):
     bl_space_type = "SEQUENCE_EDITOR"
     bl_region_type = "UI"
-    bl_category = "BPM Project"
+    bl_category = "BPM"
     bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
@@ -233,45 +234,81 @@ class SequencerPanel_Project(bpy.types.Panel):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "EDIT":
             return True
+
+class SequencerPanel_Project(bpy.types.Panel):
+    bl_space_type = "SEQUENCE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "EDIT":
+            return context.scene.bpm_scenesettings.display_panels_sequencer == "PROJECT"
+
+class SequencerPanel_Project_Debug(bpy.types.Panel):
+    bl_space_type = "SEQUENCE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "EDIT":
+            if context.scene.bpm_scenesettings.display_panels_sequencer == "PROJECT":
+                return context.window_manager.bpm_projectdatas.debug
 
 class SequencerPanel_Editing(bpy.types.Panel):
     bl_space_type = "SEQUENCE_EDITOR"
     bl_region_type = "UI"
-    bl_category = "BPM Editing"
+    bl_category = "BPM"
     bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "EDIT":
-            return True
+            return context.scene.bpm_scenesettings.display_panels_sequencer == "EDIT"
 
 class SequencerPanel_Shot(bpy.types.Panel):
     bl_space_type = "SEQUENCE_EDITOR"
     bl_region_type = "UI"
-    bl_category = "BPM Shot"
+    bl_category = "BPM"
     bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "EDIT" and active is not None:
-            return True
+            return context.scene.bpm_scenesettings.display_panels_sequencer == "SHOT"
+
+class SequencerPanel_Shot_Debug(bpy.types.Panel):
+    bl_space_type = "SEQUENCE_EDITOR"
+    bl_region_type = "UI"
+    bl_category = "BPM"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    @classmethod
+    def poll(cls, context):
+        project, file_type, active = check_file_poll_function(context)
+        if file_type == "EDIT" and active is not None:
+            if context.scene.bpm_scenesettings.display_panels_sequencer == "SHOT":
+                return context.window_manager.bpm_projectdatas.debug
 
 class SequencerPanel_Assets(bpy.types.Panel):
     bl_space_type = "SEQUENCE_EDITOR"
     bl_region_type = "UI"
-    bl_category = "BPM Assets"
+    bl_category = "BPM"
     bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
     def poll(cls, context):
         project, file_type, active = check_file_poll_function(context)
         if file_type == "EDIT":
-            return True
+            return context.scene.bpm_scenesettings.display_panels_sequencer == "ASSETS"
 
-
-### PANEL CLASSES ###
 
 # viewport class
 class ViewportPanel_Project(bpy.types.Panel):
@@ -325,6 +362,21 @@ class FilebrowserPanel(bpy.types.Panel):
 
 ### SEQUENCER PANELS ###
 
+# sequencer panels display
+class BPM_PT_sequencer_panels_display_panel(SequencerPanel_General):
+    bl_label = "Interface"
+
+    def draw(self, context):
+        scn_settings = context.scene.bpm_scenesettings
+        general_settings = context.window_manager.bpm_generalsettings
+
+        layout = self.layout
+
+        draw_opened_warning(layout, general_settings)
+
+        layout.prop(scn_settings, "display_panels_sequencer", expand=True)
+
+
 # sequencer management
 class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
     bl_label = "Management"
@@ -350,12 +402,8 @@ class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
 
 
 # sequencer management debug subpanel
-class BPM_PT_sequencer_management_debug_panel(SequencerPanel_Project):
+class BPM_PT_sequencer_management_debug_panel(SequencerPanel_Project_Debug):
     bl_label = "Debug"
-
-    @classmethod
-    def poll(cls, context):
-        return context.window_manager.bpm_projectdatas.debug
 
     def draw(self, context):
 
@@ -426,10 +474,6 @@ class BPM_PT_sequencer_edit_ui_shot_subpanel(SequencerPanel_Editing):
     bl_label = "Shots"
     bl_parent_id = "BPM_PT_sequencer_edit_ui_panel"
 
-    @classmethod
-    def poll(cls, context):
-        return context.scene.bpm_scenesettings.extra_ui
-
     def draw(self, context):
 
         scn_settings = context.scene.bpm_scenesettings
@@ -464,7 +508,6 @@ class BPM_PT_sequencer_edit_ui_shot_state_subpanel(SequencerPanel_Editing):
     bl_parent_id = "BPM_PT_sequencer_edit_ui_shot_subpanel"
 
     def draw_header(self, context):
-        
         scn_settings = context.scene.bpm_scenesettings
         self.layout.prop(scn_settings, "display_shot_state", text = "")
 
@@ -496,10 +539,6 @@ class BPM_PT_sequencer_edit_ui_frame_comment_subpanel(SequencerPanel_Editing):
     bl_label = "Comments"
     bl_parent_id = "BPM_PT_sequencer_edit_ui_panel"
 
-    @classmethod
-    def poll(cls, context):
-        return context.scene.bpm_scenesettings.extra_ui
-
     def draw(self, context):
 
         scn_settings = context.scene.bpm_scenesettings
@@ -525,10 +564,6 @@ class BPM_PT_sequencer_edit_ui_frame_comment_subpanel(SequencerPanel_Editing):
 class BPM_PT_sequencer_edit_ui_preview_subpanel(SequencerPanel_Editing):
     bl_label = "Preview"
     bl_parent_id = "BPM_PT_sequencer_edit_ui_panel"
-
-    @classmethod
-    def poll(cls, context):
-        return context.scene.bpm_scenesettings.extra_ui
 
     def draw(self, context):
 
@@ -639,13 +674,9 @@ class BPM_PT_sequencer_shot_display_panel(SequencerPanel_Shot):
 
 
 # sequencer shot debug panel
-class BPM_PT_sequencer_shot_debug_panel(SequencerPanel_Shot):
+class BPM_PT_sequencer_shot_debug_panel(SequencerPanel_Shot_Debug):
     bl_label = "Debug"
     bl_options = {'DEFAULT_CLOSED'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.window_manager.bpm_projectdatas.debug
 
     def draw(self, context):
 

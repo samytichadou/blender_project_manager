@@ -239,6 +239,17 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
 # scene settings
 class BPMSceneSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
+
+    # Panels
+    # sequencer
+    display_panels_sequencer_items = [
+        ('PROJECT', 'Project', ""),
+        ('EDIT', 'Edit', ""),
+        ('SHOT', 'Shot', ""),
+        ('ASSETS', 'Assets', ""),
+        ]
+    display_panels_sequencer : bpy.props.EnumProperty(name = "Interface", items = display_panels_sequencer_items, default = 'PROJECT')
+
     extra_ui : bpy.props.BoolProperty(name = "Extra UI", default=True)
 
     display_shot_strip : bpy.props.BoolProperty(name = "Shot strips", default=True)
