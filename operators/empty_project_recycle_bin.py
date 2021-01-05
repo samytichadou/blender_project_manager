@@ -3,6 +3,17 @@ import os
 import shutil
 
 
+from ..functions.check_file_poll_function import check_file_poll_function
+from ..global_variables import (
+                            old_folder,
+                            starting_empty_recycle_bin_statement,
+                            emptying_folder_statement,
+                            folder_emptied_statement,
+                            empty_recycle_bin_completed_statement,
+                        )
+from ..functions.file_functions import deleteFolderContent
+
+
 class BPMEmptyRecycleBin(bpy.types.Operator):
     """Empty project recycle bin"""
     bl_idname = "bpm.empty_recycle_bin"
@@ -11,10 +22,8 @@ class BPMEmptyRecycleBin(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
-        if context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-            if keyword in context.scene.name:
-                return True
+        project, file_type, active = check_file_poll_function(context)
+        return project
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
@@ -24,15 +33,6 @@ class BPMEmptyRecycleBin(bpy.types.Operator):
         layout.label(text = "Continue ?")
 
     def execute(self, context):
-        # import variables and functions
-        from ..global_variables import (
-                            old_folder,
-                            starting_empty_recycle_bin_statement,
-                            emptying_folder_statement,
-                            folder_emptied_statement,
-                            empty_recycle_bin_completed_statement,
-                        )
-        from ..functions.file_functions import deleteFolderContent
 
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
