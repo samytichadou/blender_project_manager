@@ -3,6 +3,28 @@ import os
 import shutil
 
 
+from ..functions.check_file_poll_function import check_file_poll_function
+from ..global_variables import (
+                            shot_folder, 
+                            used_shots_list_statement,
+                            existing_shots_list_statement,
+                            unused_shots_list_statement,
+                            no_unused_shots_message,
+                            no_unused_shots_statement,
+                            old_folder,
+                            starting_delete_shots_statement,
+                            starting_delete_specific_shot_statement,
+                            deleting_scene_statement,
+                            starting_moving_folder,
+                            moved_folder_statement,
+                            starting_deleting_folder,
+                            deleted_folder_statement,
+                        )
+from ..functions.strip_functions import getListSequencerShots
+from ..functions.project_data_functions import getAvailableShotsList, findLibFromShot
+from ..functions.utils_functions import listDifference, clearDataUsers
+
+
 class BPMDeleteUnusedShots(bpy.types.Operator):
     """Delete shots in the project not present on the timeline"""
     bl_idname = "bpm.delete_unused_shots"
@@ -18,24 +40,12 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
-        if context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-            if keyword in context.scene.name:
-                return True
+        project, file_type, active = check_file_poll_function(context)
+        return file_type == "EDIT"
 
     def invoke(self, context, event):
         # import statements and functions
-        from ..global_variables import (
-                            shot_folder, 
-                            used_shots_list_statement,
-                            existing_shots_list_statement,
-                            unused_shots_list_statement,
-                            no_unused_shots_message,
-                            no_unused_shots_statement,
-                        )
-        from ..functions.strip_functions import getListSequencerShots
-        from ..functions.project_data_functions import getAvailableShotsList
-        from ..functions.utils_functions import listDifference
+        
         
         # reset permanently delete
         self.permanently_delete = False
@@ -82,22 +92,7 @@ class BPMDeleteUnusedShots(bpy.types.Operator):
         layout.prop(self, 'permanently_delete')
         layout.label(text = "Continue ?")
 
-    def execute(self, context):
-        # import statements and functions
-        from ..global_variables import (
-                            shot_folder, 
-                            old_folder,
-                            starting_delete_shots_statement,
-                            starting_delete_specific_shot_statement,
-                            deleting_scene_statement,
-                            starting_moving_folder,
-                            moved_folder_statement,
-                            starting_deleting_folder,
-                            deleted_folder_statement,
-                        )
-        from ..functions.project_data_functions import findLibFromShot
-        
-        from ..functions.utils_functions import clearDataUsers
+    def execute(self, context):       
 
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
