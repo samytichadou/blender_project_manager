@@ -234,6 +234,8 @@ class BPMModifyComment(bpy.types.Operator):
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
 
+        active = None
+
         if self.comment_type == "edit_shot":
             active = context.scene.sequence_editor.active_strip
 
