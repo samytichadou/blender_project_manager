@@ -243,13 +243,13 @@ class BPMModifyComment(bpy.types.Operator):
         comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
         active_comment = comment_collection[self.index]
 
-        if self.comment_type == "edit_shot":
-            if self.frame_comment:
+        if self.frame_comment:
+            if self.comment_type == "edit_shot":
                 frame = get_shot_comment_frame(active_comment, active)
             else:
-                frame = context.scene.frame_current
+                frame = active_comment.frame
         else:
-            frame = active_comment.frame
+            frame = context.scene.frame_current
 
         self.author = active_comment.author
         self.comment = active_comment.comment
@@ -298,14 +298,14 @@ class BPMModifyComment(bpy.types.Operator):
 
         if debug: print(editing_comment_statement + active_comment.comment) #debug
 
-        if self.comment_type == "edit_shot":
-            if self.frame_comment:
+        if self.frame_comment:
+            if self.comment_type == "edit_shot":
                 active = context.scene.sequence_editor.active_strip
                 frame = getShotCommentPosition(self.frame, active)
             else:
-                frame = -1
+                frame = self.frame
         else:
-            frame = self.frame
+            frame = -1
 
         # modify comment to strip settings
         active_comment.comment = self.comment
