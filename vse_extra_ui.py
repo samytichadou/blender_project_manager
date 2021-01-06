@@ -53,7 +53,7 @@ def get_shot_comment_frame(comment, strip):
     return comment_frame
 
 
-# get link scene comments fram
+# get comments frame
 def getCommentFrameFromShotStrip(strip):
     comment_list = []
     shot_settings = strip.bpm_shotsettings
@@ -63,6 +63,34 @@ def getCommentFrameFromShotStrip(strip):
             if comment_frame >= strip.frame_final_start and comment_frame < strip.frame_final_end:
                 comment_list.append((comment.comment, comment_frame))
     return comment_list
+
+
+# get timeline comments frame
+def get_timeline_comments_list(context, region, dpi_fac):
+    project_settings = context.window_manager.bpm_projectdatas
+    comment_list = []
+
+    for c in project_settings.comments:
+        if c.frame_comment:
+            comment_list.append((c.comment, get_timeline_comments_coordinates(c.frame, region, dpi_fac)))
+
+    return comment_list
+
+
+# get timeline comments coordinates
+def get_timeline_comments_coordinates(frame, region, dpi_fac):
+    m_width = 6
+    m_height = 9
+    m_pos_y = 0.035
+    t_pos_x = 3
+    t_pos_y = 7
+    x, y =region.view2d.view_to_region(frame, 0, clip=False)
+    y = 1
+    v1 = (x - m_width * dpi_fac, y)
+    v2 = (x + m_width * dpi_fac, y)
+    v3 = (x, y + m_height * dpi_fac)
+    v4 = (x + t_pos_x, y + t_pos_y)
+    return ((v1, v2, v3), v4)
 
 
 # get comments coordinates
@@ -170,8 +198,8 @@ def drawShader(vertices, indices, color):
     BMP_batch.draw(BPM_shader,)
 
    
-# ui draw callback
-def drawBpmSequencerCallbackPx():
+# ui draw strip callback
+def draw_bpm_sequencer_strip_callback_px():
     context = bpy.context
 
     scn = context.scene
@@ -195,12 +223,10 @@ def drawBpmSequencerCallbackPx():
     # setup comments
     vertices_m = ()
     indices_m = ()
-    #color_m = (1, 1, 1, 1)
     color_m = scene_settings.color_comments
     n_m = 0
 
     # setup comments text
-    #text_size = int(12 * dpi_fac)
     id_m = comments_font["font_id"]
     text_size = 12
     blf.color(id_m, *color_m)
@@ -210,7 +236,6 @@ def drawBpmSequencerCallbackPx():
     # setup comments bounding box
     vertices_m_bb = ()
     indices_m_bb = ()
-    #color_m_bb = (0, 0, 0, 0.5)
     color_m_bb = scene_settings.color_comments_boxes
     n_m_bb = 0
 
@@ -484,6 +509,7 @@ def drawBpmSequencerCallbackPx():
                             indices_m_bb += ((n_m_bb, n_m_bb + 1, n_m_bb + 2), (n_m_bb + 2, n_m_bb + 1, n_m_bb + 3))
                             n_m_bb += 4
     
+
     ### DRAW SHADERS ###
 
     #bgl.glBlendFunc(bgl.GL_SRC_ALPHA, bgl.GL_ONE)
@@ -536,13 +562,48 @@ def drawBpmSequencerCallbackPx():
         # comments
         drawShader(vertices_m, indices_m, color_m)
 
-
         # draw comments texts
         if c_n_display != "NONE":
             for t in comments_texts:
                 drawText(t[0], t[1], id_m)
 
             bgl.glDisable(bgl.GL_BLEND)
+
+
+# ui draw timeline comments callback
+def draw_bpm_sequencer_timeline_callback_px():
+
+    context = bpy.context
+
+    scn = context.scene
+    scene_settings = scn.bpm_scenesettings
+    
+    if not scene_settings.extra_ui: return
+
+    sequencer = scn.sequence_editor
+    region = context.region
+
+    # compute dpi_fac on every draw dynamically
+    dpi = context.preferences.system.dpi
+    dpi_fac = getDpiFactorFromContext(context)
+
+    # setup timeline comments
+    vertices_tc = ()
+    indices_tc = ()
+    n_tc = 0
+    color_tc = scene_settings.color_comments
+
+    # timeline comments
+    for c in get_timeline_comments_list(context, region, dpi_fac):
+        comment = c[0]
+        coord = c[1]
+        vertices_tc += coord[0]
+        indices_tc += ((n_tc, n_tc + 1, n_tc + 2),)
+        n_tc += 3 
+
+    # timeline comments
+    drawShader(vertices_tc, indices_tc, color_tc)
+
 
 #enable callback
 cb_handle = []
@@ -553,7 +614,10 @@ def enableSequencerCallback():
     initializeExternalFontId(comments_font, font_file)
 
     cb_handle.append(bpy.types.SpaceSequenceEditor.draw_handler_add(
-        drawBpmSequencerCallbackPx, (), 'WINDOW', 'POST_PIXEL'))
+        draw_bpm_sequencer_strip_callback_px, (), 'WINDOW', 'POST_PIXEL'))
+
+    cb_handle.append(bpy.types.SpaceSequenceEditor.draw_handler_add(
+        draw_bpm_sequencer_timeline_callback_px, (), 'WINDOW', 'POST_PIXEL'))
 
     winman = bpy.context.window_manager
     debug = winman.bpm_projectdatas.debug
@@ -566,7 +630,10 @@ def disableSequencerCallback():
 
     unloadExternalFontId(comments_font, font_file)
 
-    bpy.types.SpaceSequenceEditor.draw_handler_remove(cb_handle[0], 'WINDOW')
+    # bpy.types.SpaceSequenceEditor.draw_handler_remove(cb_handle[0], 'WINDOW')
+
+    for h in cb_handle:
+        bpy.types.SpaceSequenceEditor.draw_handler_remove(h, 'WINDOW')
     cb_handle.clear()
 
     winman = bpy.context.window_manager
