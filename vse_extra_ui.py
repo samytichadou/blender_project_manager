@@ -492,15 +492,19 @@ def draw_bpm_sequencer_strip_callback_px():
                     n_m += 3   
 
                     # comments text
-                    if (c_n_display == "ALL") \
-                    or (c_n_display == "CURRENT" and scn.frame_current == m[1]):
+                    if (c_n_display in {"CURRENT_STRIPPED", "CURRENT_ENTIRE"} and scn.frame_current == m[1]) \
+                    or (c_n_display == "ALL_STRIPPED") \
+                    or (c_n_display == "ALL_STRIPPED_CURRENT_ENTIRE") :
+
                         text = m[0]
-                        limit = scene_settings.display_shot_comments_text_limit
-                        if len(text) > limit and limit != 0:
-                            if limit > 4:
-                                text = text[0:limit - 3] + "..."
-                            else:
-                                text = text[0:limit]
+                        if (c_n_display in {"CURRENT_STRIPPED", "ALL_STRIPPED"}) \
+                        or (c_n_display == "ALL_STRIPPED_CURRENT_ENTIRE" and scn.frame_current != m[1]):
+                            limit = scene_settings.display_shot_comments_text_limit
+                            if len(text) > limit and limit != 0:
+                                if limit > 4:
+                                    text = text[0:limit - 3] + "..."
+                                else:
+                                    text = text[0:limit]
                         comments_texts.append((coord[1], text))
 
                         # comments box
