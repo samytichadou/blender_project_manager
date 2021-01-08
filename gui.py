@@ -705,11 +705,12 @@ class BPM_PT_sequencer_edit_ui_shot_subpanel(SequencerPanel_Editing):
 
 # sequencer UI shot state subpanel
 class BPM_PT_sequencer_edit_ui_shot_state_subpanel(SequencerPanel_Editing):
-    bl_label = "State"
+    bl_label = ""
     bl_parent_id = "BPM_PT_sequencer_edit_ui_shot_subpanel"
 
     def draw_header(self, context):
         scn_settings = context.scene.bpm_scenesettings
+        self.layout.label(text = "State")
         self.layout.prop(scn_settings, "display_shot_state", text = "")
 
     def draw(self, context):
@@ -736,9 +737,14 @@ class BPM_PT_sequencer_edit_ui_shot_state_subpanel(SequencerPanel_Editing):
 
 
 # sequencer UI frame comment subpanel
-class BPM_PT_sequencer_edit_ui_frame_comment_subpanel(SequencerPanel_Editing):
-    bl_label = "Comments"
-    bl_parent_id = "BPM_PT_sequencer_edit_ui_panel"
+class BPM_PT_sequencer_edit_ui_shot_frame_comment_subpanel(SequencerPanel_Editing):
+    bl_label = ""
+    bl_parent_id = "BPM_PT_sequencer_edit_ui_shot_subpanel"
+
+    def draw_header(self, context):
+        scn_settings = context.scene.bpm_scenesettings
+        self.layout.label(text = "Comments")
+        self.layout.prop(scn_settings, "display_shot_comments", text = "")
 
     def draw(self, context):
 
@@ -747,23 +753,22 @@ class BPM_PT_sequencer_edit_ui_frame_comment_subpanel(SequencerPanel_Editing):
         layout = self.layout
 
         row = layout.row()
-        row.prop(scn_settings, 'display_comments', text = "")
-        row.prop(scn_settings, 'color_comments', text="")
+        row.prop(scn_settings, 'color_shot_comments', text="")
 
         row = layout.row()
         row.label(text = "Names")
-        row.prop(scn_settings, 'display_comments_names', text = "")
+        row.prop(scn_settings, 'display_shot_comments_names', text = "")
 
         row = layout.row()
-        row.prop(scn_settings, 'display_comments_boxes', text = "Boxes")
-        row.prop(scn_settings, 'color_comments_boxes', text="")
+        row.prop(scn_settings, 'display_shot_comments_boxes', text = "Boxes")
+        row.prop(scn_settings, 'color_shot_comments_boxes', text="")
 
-        layout.prop(scn_settings, 'display_comments_text_limit')
+        layout.prop(scn_settings, 'display_shot_comments_text_limit')
 
 
 # sequencer UI preview subpanel
 class BPM_PT_sequencer_edit_ui_preview_subpanel(SequencerPanel_Editing):
-    bl_label = "Preview"
+    bl_label = "Scheduling"
     bl_parent_id = "BPM_PT_sequencer_edit_ui_panel"
 
     def draw(self, context):
@@ -771,9 +776,6 @@ class BPM_PT_sequencer_edit_ui_preview_subpanel(SequencerPanel_Editing):
         scn_settings = context.scene.bpm_scenesettings
 
         layout = self.layout
-
-        row = layout.row()
-        row.label(text = "Scheduling")
 
         row = layout.row()
         row.prop(scn_settings, 'display_shot_todo', text="")

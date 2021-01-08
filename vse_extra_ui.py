@@ -208,8 +208,8 @@ def draw_bpm_sequencer_strip_callback_px():
     date = context.window_manager.bpm_generalsettings.today_date
     preview_date = formatDateFromYrMoDa(scene_settings.shot_deadline_preview_yr, scene_settings.shot_deadline_preview_mn, scene_settings.shot_deadline_preview_da)
 
-    c_display = scene_settings.display_comments
-    c_n_display = scene_settings.display_comments_names
+    c_display = scene_settings.display_shot_comments
+    c_n_display = scene_settings.display_shot_comments_names
     
     if not scene_settings.extra_ui: return
 
@@ -223,7 +223,7 @@ def draw_bpm_sequencer_strip_callback_px():
     # setup comments
     vertices_m = ()
     indices_m = ()
-    color_m = scene_settings.color_comments
+    color_m = scene_settings.color_shot_comments
     n_m = 0
 
     # setup comments text
@@ -236,7 +236,7 @@ def draw_bpm_sequencer_strip_callback_px():
     # setup comments bounding box
     vertices_m_bb = ()
     indices_m_bb = ()
-    color_m_bb = scene_settings.color_comments_boxes
+    color_m_bb = scene_settings.color_shot_comments_boxes
     n_m_bb = 0
 
     # setup extras
@@ -483,7 +483,7 @@ def draw_bpm_sequencer_strip_callback_px():
         # comments
         if c_display != 'NONE' :
             if (c_display == 'SELECTED' and strip.select) \
-            or (c_display == 'PERSTRIP' and strip.bpm_shotsettings.display_comments) \
+            or (c_display == 'PERSTRIP' and strip.bpm_shotsettings.display_shot_comments) \
             or (c_display == 'ALL'):
                 for m in getCommentFrameFromShotStrip(strip):
                     coord = getCommentsCoordinates(m[1], strip.channel, region, dpi_fac)
@@ -495,7 +495,7 @@ def draw_bpm_sequencer_strip_callback_px():
                     if (c_n_display == "ALL") \
                     or (c_n_display == "CURRENT" and scn.frame_current == m[1]):
                         text = m[0]
-                        limit = scene_settings.display_comments_text_limit
+                        limit = scene_settings.display_shot_comments_text_limit
                         if len(text) > limit and limit != 0:
                             if limit > 4:
                                 text = text[0:limit - 3] + "..."
@@ -504,7 +504,7 @@ def draw_bpm_sequencer_strip_callback_px():
                         comments_texts.append((coord[1], text))
 
                         # comments box
-                        if scene_settings.display_comments_boxes:
+                        if scene_settings.display_shot_comments_boxes:
                             vertices_m_bb += getBoundingBoxCoordinates(coord[1], text, text_size, dpi_fac)
                             indices_m_bb += ((n_m_bb, n_m_bb + 1, n_m_bb + 2), (n_m_bb + 2, n_m_bb + 1, n_m_bb + 3))
                             n_m_bb += 4
@@ -556,7 +556,7 @@ def draw_bpm_sequencer_strip_callback_px():
     if c_display != 'NONE' :
 
         # comments bounding boxes
-        if c_n_display != "NONE" and scene_settings.display_comments_boxes:
+        if c_n_display != "NONE" and scene_settings.display_shot_comments_boxes:
             drawShader(vertices_m_bb, indices_m_bb, color_m_bb)
 
         # comments
@@ -591,7 +591,7 @@ def draw_bpm_sequencer_timeline_callback_px():
     vertices_tc = ()
     indices_tc = ()
     n_tc = 0
-    color_tc = scene_settings.color_comments
+    color_tc = scene_settings.color_shot_comments
 
     # timeline comments
     for c in get_timeline_comments_list(context, region, dpi_fac):
