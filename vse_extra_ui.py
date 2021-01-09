@@ -47,6 +47,11 @@ def unloadExternalFontId(font_id, file_font):
     blf.unload(file_font)
 
 
+# get area width
+def get_area_height(area):
+    return area.height
+
+
 # get shot comment frame in timeline
 def get_shot_comment_frame(comment, strip):
     comment_frame = (comment.frame - strip.bpm_shotsettings.shot_frame_start) + strip.frame_start
@@ -72,20 +77,19 @@ def get_timeline_comments_list(context, region, dpi_fac):
 
     for c in project_settings.comments:
         if c.frame_comment:
-            comment_list.append((c.comment, get_timeline_comments_coordinates(c.frame, region, dpi_fac)))
+            comment_list.append((c.comment, get_timeline_comments_coordinates(c.frame, region, dpi_fac, get_area_height(context.area))))
 
     return comment_list
 
 
 # get timeline comments coordinates
-def get_timeline_comments_coordinates(frame, region, dpi_fac):
+def get_timeline_comments_coordinates(frame, region, dpi_fac, area_height):
     m_width = 6
     m_height = 9
-    m_pos_y = 0.035
     t_pos_x = 3
     t_pos_y = 7
     x, y =region.view2d.view_to_region(frame, 0, clip=False)
-    y = 1
+    y = area_height - 84 * dpi_fac
     v1 = (x - m_width * dpi_fac, y)
     v2 = (x + m_width * dpi_fac, y)
     v3 = (x, y + m_height * dpi_fac)
@@ -582,7 +586,9 @@ def draw_bpm_sequencer_timeline_callback_px():
     scn = context.scene
     scene_settings = scn.bpm_scenesettings
     
-    if not scene_settings.extra_ui: return
+    if not scene_settings.extra_ui \
+    or not scene_settings.display_timeline_comments:
+        return
 
     sequencer = scn.sequence_editor
     region = context.region
