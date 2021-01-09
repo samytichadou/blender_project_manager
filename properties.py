@@ -375,6 +375,8 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     shot_deadline_preview_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12, default = int(getDateMonthString()))
     shot_deadline_preview_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31, default = int(getDateDayString()))
 
+    test_prop : bpy.props.IntProperty(name = "Debug Prop")
+
 
 # render settings
 class BPMRenderSettings(bpy.types.PropertyGroup) :

@@ -764,6 +764,8 @@ class BPM_PT_sequencer_edit_ui_shot_frame_comment_subpanel(SequencerPanel_Editin
 
         layout.prop(scn_settings, 'display_shot_comments_text_limit')
 
+        #layout.prop(scn_settings, "test_prop")
+
 
 # sequencer UI frame comment subpanel
 class BPM_PT_sequencer_edit_ui_timeline_frame_comment_subpanel(SequencerPanel_Editing):
@@ -792,6 +794,8 @@ class BPM_PT_sequencer_edit_ui_timeline_frame_comment_subpanel(SequencerPanel_Ed
         row.prop(scn_settings, 'color_timeline_comments_boxes', text="")
 
         layout.prop(scn_settings, 'display_timeline_comments_text_limit')
+
+        #layout.prop(scn_settings, "test_prop")
 
 
 # sequencer UI scheduling subpanel
