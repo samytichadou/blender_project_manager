@@ -340,7 +340,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
 
     # timeline comments
     display_timeline_comments : bpy.props.BoolProperty(name = "Timeline comments", default = True)
-    color_timeline_comments : bpy.props.FloatVectorProperty(name="Timeline comments color", subtype='COLOR', default=(1, 1, 1, 1), min=0.0, max=1.0, size=4)
+    color_timeline_comments : bpy.props.FloatVectorProperty(name="Timeline comments color", subtype='COLOR', default=(1, 1, 0, 1), min=0.0, max=1.0, size=4)
     display_timeline_comments_names_items = [
         ('NONE', 'None', ""),
         ('CURRENT_STRIPPED', 'Current Stripped', ""),
@@ -350,7 +350,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
         ]
     display_timeline_comments_names : bpy.props.EnumProperty(name = "Timeline comments names", items = display_timeline_comments_names_items, default = 'ALL_STRIPPED_CURRENT_ENTIRE')
     display_timeline_comments_boxes : bpy.props.BoolProperty(name = "Timeline comments boxes", default=True)
-    color_timeline_comments_boxes : bpy.props.FloatVectorProperty(name="Timeline comments boxes color", subtype='COLOR', default=(0, 0, 0, 0.5), min=0.0, max=1.0, size=4)
+    color_timeline_comments_boxes : bpy.props.FloatVectorProperty(name="Timeline comments boxes color", subtype='COLOR', default=(0, 0, 0, 0.95), min=0.0, max=1.0, size=4)
     display_timeline_comments_text_limit : bpy.props.IntProperty(name = "Timeline comments text limit", default = 8, min = 0)
 
     display_shot_update_warning : bpy.props.BoolProperty(name = "Shot update warning", default=True)
