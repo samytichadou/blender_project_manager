@@ -317,6 +317,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
     display_audio_sync_warning : bpy.props.BoolProperty(name = "Shot audio sync warning", default=True)
     color_audio_sync : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1.0, 0.0, 0.924, 1.0), min=0.0, max=1.0, size=4)
 
+    # shot comments
     display_shot_comments_items = [
         ('NONE', 'None', ""),
         ('SELECTED', 'Selected', ""),
@@ -325,7 +326,6 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
         ]
     display_shot_comments : bpy.props.EnumProperty(name = "Shot comments", items = display_shot_comments_items, default = 'ALL')
     color_shot_comments : bpy.props.FloatVectorProperty(name="Shot comments color", subtype='COLOR', default=(1, 1, 1, 1), min=0.0, max=1.0, size=4)
-
     display_shot_comments_names_items = [
         ('NONE', 'None', ""),
         ('CURRENT_STRIPPED', 'Current Stripped', ""),
@@ -334,11 +334,24 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
         ('ALL_STRIPPED_CURRENT_ENTIRE', 'All Stripped/Current Entire', ""),
         ]
     display_shot_comments_names : bpy.props.EnumProperty(name = "Shot comments names", items = display_shot_comments_names_items, default = 'ALL_STRIPPED_CURRENT_ENTIRE')
-
     display_shot_comments_boxes : bpy.props.BoolProperty(name = "Shot comments boxes", default=True)
     color_shot_comments_boxes : bpy.props.FloatVectorProperty(name="Shot comments boxes color", subtype='COLOR', default=(0, 0, 0, 0.5), min=0.0, max=1.0, size=4)
-
     display_shot_comments_text_limit : bpy.props.IntProperty(name = "Shot comments text limit", default = 8, min = 0)
+
+    # timeline comments
+    display_timeline_comments : bpy.props.BoolProperty(name = "Timeline comments", default = True)
+    color_timeline_comments : bpy.props.FloatVectorProperty(name="Timeline comments color", subtype='COLOR', default=(1, 1, 1, 1), min=0.0, max=1.0, size=4)
+    display_timeline_comments_names_items = [
+        ('NONE', 'None', ""),
+        ('CURRENT_STRIPPED', 'Current Stripped', ""),
+        ('CURRENT_ENTIRE', 'Current Entire', ""),
+        ('ALL_STRIPPED', 'All Stripped', ""),
+        ('ALL_STRIPPED_CURRENT_ENTIRE', 'All Stripped/Current Entire', ""),
+        ]
+    display_timeline_comments_names : bpy.props.EnumProperty(name = "Timeline comments names", items = display_timeline_comments_names_items, default = 'ALL_STRIPPED_CURRENT_ENTIRE')
+    display_timeline_comments_boxes : bpy.props.BoolProperty(name = "Timeline comments boxes", default=True)
+    color_timeline_comments_boxes : bpy.props.FloatVectorProperty(name="Timeline comments boxes color", subtype='COLOR', default=(0, 0, 0, 0.5), min=0.0, max=1.0, size=4)
+    display_timeline_comments_text_limit : bpy.props.IntProperty(name = "Timeline comments text limit", default = 8, min = 0)
 
     display_shot_update_warning : bpy.props.BoolProperty(name = "Shot update warning", default=True)
     color_update_warning : bpy.props.FloatVectorProperty(name="Shot strip color", subtype='COLOR', default=(1, 0, 0, 1), min=0.0, max=1.0, size=4)

@@ -752,22 +752,50 @@ class BPM_PT_sequencer_edit_ui_shot_frame_comment_subpanel(SequencerPanel_Editin
 
         layout = self.layout
 
-        row = layout.row()
-        row.prop(scn_settings, 'color_shot_comments', text="")
+        layout.prop(scn_settings, 'color_shot_comments', text="Color")
 
         row = layout.row()
         row.label(text = "Names")
         row.prop(scn_settings, 'display_shot_comments_names', text = "")
 
         row = layout.row()
-        row.prop(scn_settings, 'display_shot_comments_boxes', text = "Boxes")
+        row.prop(scn_settings, 'display_shot_comments_boxes', text = "Name Boxes")
         row.prop(scn_settings, 'color_shot_comments_boxes', text="")
 
         layout.prop(scn_settings, 'display_shot_comments_text_limit')
 
 
-# sequencer UI preview subpanel
-class BPM_PT_sequencer_edit_ui_preview_subpanel(SequencerPanel_Editing):
+# sequencer UI frame comment subpanel
+class BPM_PT_sequencer_edit_ui_timeline_frame_comment_subpanel(SequencerPanel_Editing):
+    bl_label = ""
+    bl_parent_id = "BPM_PT_sequencer_edit_ui_panel"
+
+    def draw_header(self, context):
+        scn_settings = context.scene.bpm_scenesettings
+        self.layout.label(text = "Timeline Comments")
+        self.layout.prop(scn_settings, "display_timeline_comments", text = "")
+
+    def draw(self, context):
+
+        scn_settings = context.scene.bpm_scenesettings
+
+        layout = self.layout
+
+        layout.prop(scn_settings, 'color_timeline_comments', text="Color")
+        
+        row = layout.row()
+        row.label(text = "Names")
+        row.prop(scn_settings, 'display_timeline_comments_names', text = "")
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_timeline_comments_boxes', text = "Name Boxes")
+        row.prop(scn_settings, 'color_timeline_comments_boxes', text="")
+
+        layout.prop(scn_settings, 'display_timeline_comments_text_limit')
+
+
+# sequencer UI scheduling subpanel
+class BPM_PT_sequencer_edit_ui_scheduling_subpanel(SequencerPanel_Editing):
     bl_label = "Scheduling"
     bl_parent_id = "BPM_PT_sequencer_edit_ui_panel"
 
