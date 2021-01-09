@@ -331,6 +331,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
         ('CURRENT_STRIPPED', 'Current Stripped', ""),
         ('CURRENT_ENTIRE', 'Current Entire', ""),
         ('ALL_STRIPPED', 'All Stripped', ""),
+        ('ALL_ENTIRE', 'All Entire', ""),
         ('ALL_STRIPPED_CURRENT_ENTIRE', 'All Stripped/Current Entire', ""),
         ]
     display_shot_comments_names : bpy.props.EnumProperty(name = "Shot comments names", items = display_shot_comments_names_items, default = 'ALL_STRIPPED_CURRENT_ENTIRE')
@@ -346,6 +347,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
         ('CURRENT_STRIPPED', 'Current Stripped', ""),
         ('CURRENT_ENTIRE', 'Current Entire', ""),
         ('ALL_STRIPPED', 'All Stripped', ""),
+        ('ALL_ENTIRE', 'All Entire', ""),
         ('ALL_STRIPPED_CURRENT_ENTIRE', 'All Stripped/Current Entire', ""),
         ]
     display_timeline_comments_names : bpy.props.EnumProperty(name = "Timeline comments names", items = display_timeline_comments_names_items, default = 'ALL_STRIPPED_CURRENT_ENTIRE')

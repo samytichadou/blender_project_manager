@@ -29,6 +29,8 @@ comments_font = {
     "font_id": 0,
 }
 
+# text size
+text_size = 12
 
 # initialize fonts
 def initializeExternalFontId(font_id, file_font):
@@ -77,7 +79,7 @@ def get_timeline_comments_list(context, region, dpi_fac):
 
     for c in project_settings.comments:
         if c.frame_comment:
-            comment_list.append((c.comment, get_timeline_comments_coordinates(c.frame, region, dpi_fac, get_area_height(context.area))))
+            comment_list.append((c.comment, get_timeline_comments_coordinates(c.frame, region, dpi_fac, get_area_height(context.area)), c.frame))
 
     return comment_list
 
@@ -89,7 +91,7 @@ def get_timeline_comments_coordinates(frame, region, dpi_fac, area_height):
     t_pos_x = 3
     t_pos_y = 7
     x, y =region.view2d.view_to_region(frame, 0, clip=False)
-    y = area_height - 84 * dpi_fac
+    y = 20 * dpi_fac
     v1 = (x - m_width * dpi_fac, y)
     v2 = (x + m_width * dpi_fac, y)
     v3 = (x, y + m_height * dpi_fac)
@@ -232,7 +234,6 @@ def draw_bpm_sequencer_strip_callback_px():
 
     # setup comments text
     id_m = comments_font["font_id"]
-    text_size = 12
     blf.color(id_m, *color_m)
     blf.size(id_m, text_size, dpi)
     comments_texts = []
@@ -497,8 +498,7 @@ def draw_bpm_sequencer_strip_callback_px():
 
                     # comments text
                     if (c_n_display in {"CURRENT_STRIPPED", "CURRENT_ENTIRE"} and scn.frame_current == m[1]) \
-                    or (c_n_display == "ALL_STRIPPED") \
-                    or (c_n_display == "ALL_STRIPPED_CURRENT_ENTIRE") :
+                    or (c_n_display in {"ALL_STRIPPED", "ALL_ENTIRE", "ALL_STRIPPED_CURRENT_ENTIRE"}) :
 
                         text = m[0]
                         if (c_n_display in {"CURRENT_STRIPPED", "ALL_STRIPPED"}) \
@@ -590,8 +590,12 @@ def draw_bpm_sequencer_timeline_callback_px():
     or not scene_settings.display_timeline_comments:
         return
 
+    bgl.glEnable(bgl.GL_BLEND)
+
     sequencer = scn.sequence_editor
     region = context.region
+
+    t_display = scene_settings.display_timeline_comments_names
 
     # compute dpi_fac on every draw dynamically
     dpi = context.preferences.system.dpi
@@ -601,18 +605,64 @@ def draw_bpm_sequencer_timeline_callback_px():
     vertices_tc = ()
     indices_tc = ()
     n_tc = 0
-    color_tc = scene_settings.color_shot_comments
+    color_tc = scene_settings.color_timeline_comments
+
+    # setup comments text
+    id_m = comments_font["font_id"]
+    blf.color(id_m, *color_tc)
+    blf.size(id_m, text_size, dpi)
+    comments_texts = []
+
+    # setup timeline com bounding boxes
+    vertices_c_bb =()
+    indices_c_bb = ()
+    n_c_bb = 0
+    color_c_bb = scene_settings.color_timeline_comments_boxes
 
     # timeline comments
     for c in get_timeline_comments_list(context, region, dpi_fac):
         comment = c[0]
+        frame = c[2]
         coord = c[1]
         vertices_tc += coord[0]
         indices_tc += ((n_tc, n_tc + 1, n_tc + 2),)
-        n_tc += 3 
+        n_tc += 3
+
+        if (t_display in {"CURRENT_STRIPPED", "CURRENT_ENTIRE"} and scn.frame_current == frame) \
+        or (t_display in {"ALL_STRIPPED", "ALL_ENTIRE", "ALL_STRIPPED_CURRENT_ENTIRE"}) :
+
+            text = c[0]
+            if (t_display in {"CURRENT_STRIPPED", "ALL_STRIPPED"}) \
+            or (t_display == "ALL_STRIPPED_CURRENT_ENTIRE" and scn.frame_current != frame):
+                limit = scene_settings.display_timeline_comments_text_limit
+                if len(text) > limit and limit != 0:
+                    if limit > 4:
+                        text = text[0:limit - 3] + "..."
+                    else:
+                        text = text[0:limit]
+            
+            comments_texts.append((coord[1], text))
+
+            # comments box
+            if scene_settings.display_shot_comments_boxes:
+                vertices_c_bb += getBoundingBoxCoordinates(coord[1], text, text_size, dpi_fac)
+                indices_c_bb += ((n_c_bb, n_c_bb + 1, n_c_bb + 2), (n_c_bb + 2, n_c_bb + 1, n_c_bb + 3))
+                n_c_bb += 4
+
+    # comments bounding boxes
+    if t_display != "NONE" and scene_settings.display_shot_comments_boxes:
+        drawShader(vertices_c_bb, indices_c_bb, color_c_bb)
 
     # timeline comments
     drawShader(vertices_tc, indices_tc, color_tc)
+
+    # draw comments texts
+    if t_display != "NONE":
+
+        for t in comments_texts:
+            drawText(t[0], t[1], comments_font["font_id"])
+
+    bgl.glDisable(bgl.GL_BLEND)
 
 
 #enable callback
