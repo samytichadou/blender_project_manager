@@ -55,8 +55,8 @@ def get_area_height(area):
 
 
 # get shot comment frame in timeline
-def get_shot_comment_frame(comment, strip):
-    comment_frame = (comment.frame - strip.bpm_shotsettings.shot_frame_start) + strip.frame_start
+def get_shot_comment_frame(comment_frame, strip):
+    comment_frame = (comment_frame - strip.bpm_shotsettings.shot_frame_start) + strip.frame_start
     return comment_frame
 
 
@@ -66,7 +66,7 @@ def getCommentFrameFromShotStrip(strip):
     shot_settings = strip.bpm_shotsettings
     for comment in shot_settings.comments:
         if comment.frame_comment:
-            comment_frame = get_shot_comment_frame(comment, strip)
+            comment_frame = get_shot_comment_frame(comment.frame, strip)
             if comment_frame >= strip.frame_final_start and comment_frame < strip.frame_final_end:
                 comment_list.append((comment.comment, comment_frame))
     return comment_list

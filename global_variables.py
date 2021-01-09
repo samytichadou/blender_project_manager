@@ -195,6 +195,10 @@ comment_file_updated_statement = bpm_statement + "Comment file updated"
 loading_comments_statement = bpm_statement + "Loading comments"
 no_comment_file_statement = bpm_statement + "Comment file not found : "
 comment_reloaded_statement = bpm_statement + "Comments successfully reloaded"
+getting_edit_comments_statement = bpm_statement + "Getting edit comments"
+getting_shot_comments_statement = bpm_statement + "Getting timeline comments"
+searching_comment_statement = bpm_statement + "Searching comments"
+no_more_comments_message = "No more comments to jump to in this direction"
 
 
 # extra ui statements

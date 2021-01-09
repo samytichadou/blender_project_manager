@@ -245,7 +245,7 @@ class BPMModifyComment(bpy.types.Operator):
 
         if self.frame_comment:
             if self.comment_type == "edit_shot":
-                frame = get_shot_comment_frame(active_comment, active)
+                frame = get_shot_comment_frame(active_comment.frame, active)
             else:
                 frame = active_comment.frame
         else:

@@ -89,6 +89,23 @@ def draw_management(container):
     draw_browse_folder(container)
 
 
+# draw next previous comment panel
+def draw_next_previous_comment(container):
+
+    row = container.row(align = True)
+
+    op = row.operator("bpm.go_to_comment", text = "", icon = "TRIA_LEFT")
+    op.next = False
+    
+    op = row.operator("bpm.go_to_comment", text = "", icon = "TRIA_RIGHT")
+    op.next = True
+
+    row.label(text = "Comments")
+
+    row.separator()
+    draw_wiki_help(row, "Comments")
+
+
 # sequencer shot comment function 
 def draw_comment(container, comments, c_type):
 
@@ -637,6 +654,8 @@ class BPM_PT_sequencer_edit_panel(SequencerPanel_Editing):
         draw_operator_and_help(layout, 'bpm.update_shot_duration', '', 'Update-Shot-Operator')
 
         draw_operator_and_help(layout, 'bpm.render_shot_edit', '', 'Shot-Rendering')
+
+        draw_next_previous_comment(layout)
 
 
 # sequencer edit comment panel
