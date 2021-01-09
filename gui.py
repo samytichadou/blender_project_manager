@@ -641,7 +641,7 @@ class BPM_PT_sequencer_edit_panel(SequencerPanel_Editing):
 
 # sequencer edit comment panel
 class BPM_PT_sequencer_edit_comment_panel(SequencerPanel_Editing):
-    bl_label = "Edit Comments"
+    bl_label = "Comments"
 
     def draw(self, context):
 
@@ -654,7 +654,7 @@ class BPM_PT_sequencer_edit_comment_panel(SequencerPanel_Editing):
 
 # sequencer UI panel
 class BPM_PT_sequencer_edit_ui_panel(SequencerPanel_Editing):
-    bl_label = "Edit UI"
+    bl_label = "UI"
 
     def draw(self, context):
 
@@ -879,7 +879,7 @@ class BPM_PT_sequencer_shot_version_panel(SequencerPanel_Shot):
 
 # sequencer comment shot panel
 class BPM_PT_sequencer_shot_comment_panel(SequencerPanel_Shot):
-    bl_label = "Shot Comments"
+    bl_label = "Comments"
 
     def draw(self, context):
 
