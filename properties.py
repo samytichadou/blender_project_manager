@@ -338,7 +338,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
         ('ALL', 'All', ""),
         ]
     display_shot_comments : bpy.props.EnumProperty(name = "Shot comments", items = display_shot_comments_items, default = 'ALL')
-    color_shot_comments : bpy.props.FloatVectorProperty(name="Shot comments color", subtype='COLOR', default=(1, 1, 1, 1), min=0.0, max=1.0, size=4)
+    color_shot_comments : bpy.props.FloatVectorProperty(name="Shot comments color", subtype='COLOR', default=(1, 1, 0, 1), min=0.0, max=1.0, size=4)
     display_shot_comments_names_items = [
         ('NONE', 'None', ""),
         ('CURRENT_STRIPPED', 'Current Stripped', ""),
@@ -349,7 +349,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
         ]
     display_shot_comments_names : bpy.props.EnumProperty(name = "Shot comments names", items = display_shot_comments_names_items, default = 'CURRENT_ENTIRE')
     display_shot_comments_boxes : bpy.props.BoolProperty(name = "Shot comments boxes", default=True)
-    color_shot_comments_boxes : bpy.props.FloatVectorProperty(name="Shot comments boxes color", subtype='COLOR', default=(0, 0, 0, 0.5), min=0.0, max=1.0, size=4)
+    color_shot_comments_boxes : bpy.props.FloatVectorProperty(name="Shot comments boxes color", subtype='COLOR', default=(0, 0, 0, 0.95), min=0.0, max=1.0, size=4)
     display_shot_comments_text_limit : bpy.props.IntProperty(name = "Shot comments text limit", default = 8, min = 0)
 
     # timeline comments
