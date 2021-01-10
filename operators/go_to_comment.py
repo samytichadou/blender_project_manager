@@ -8,6 +8,7 @@ from ..global_variables import (
                             getting_edit_comments_statement,
                             getting_shot_comments_statement,
                             searching_comment_statement,
+                            getting_asset_comments_statement,
                         )
 
 
@@ -58,15 +59,28 @@ class BPM_OT_go_to_comment(bpy.types.Operator):
 
         frames = []
 
-        # get edit comments
-        if debug: print(getting_edit_comments_statement) #debug
-        frames.extend(return_frame_from_comments(winman.bpm_projectdatas.comments))
+        file_type = winman.bpm_generalsettings.file_type
 
-        # get all shot comments
-        if debug: print(getting_shot_comments_statement) #debug
-        for s in returnShotStrips(context.scene.sequence_editor):
-            for f in return_frame_from_comments(s.bpm_shotsettings.comments):
-                frames.append(get_shot_comment_frame(f, s))
+        if file_type == "EDIT":
+            # get edit comments
+            if debug: print(getting_edit_comments_statement) #debug
+            frames.extend(return_frame_from_comments(winman.bpm_projectdatas.comments))
+
+            # get all shot comments
+            if debug: print(getting_shot_comments_statement) #debug
+            for s in returnShotStrips(context.scene.sequence_editor):
+                for f in return_frame_from_comments(s.bpm_shotsettings.comments):
+                    frames.append(get_shot_comment_frame(f, s))
+
+        elif file_type == "SHOT":
+            # get shot comments
+            if debug: print(getting_shot_comments_statement) #debug
+            frames.extend(return_frame_from_comments(winman.bpm_shotsettings.comments))
+
+        elif file_type == "ASSET":
+            # get asset comments
+            if debug: print(getting_asset_comments_statement) #debug
+            frames.extend(return_frame_from_comments(winman.bpm_assetsettings.comments))
 
         current = scn.frame_current
 
