@@ -376,5 +376,8 @@ class BPMReloadComment(bpy.types.Operator):
         comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
 
         reload_comments(context, self.comment_type, active)
+
+        for area in context.screen.areas:
+            area.tag_redraw()
         
         return {'FINISHED'}
