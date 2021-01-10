@@ -184,7 +184,7 @@ classes = (BPMOpenShot,
             BPM_MT_topbar_menu,
             BPM_MT_OpenFolder_Explorer_Menu,
             BPM_MT_OpenFolder_Filebrowser_Menu,
-            BPM_MT_RightClickSequencerManagement_Menu,
+            BPM_MT_RightClickSequencerEdit_Menu,
             BPM_MT_RightClickSequencerShot_Menu,
             )
 

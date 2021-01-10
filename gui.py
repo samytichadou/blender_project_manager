@@ -1378,8 +1378,8 @@ class BPM_MT_OpenFolder_Filebrowser_Menu(bpy.types.Menu):
 
 
 # right click sequencer general menu
-class BPM_MT_RightClickSequencerManagement_Menu(bpy.types.Menu):
-    bl_label = "BPM Management"
+class BPM_MT_RightClickSequencerEdit_Menu(bpy.types.Menu):
+    bl_label = "BPM Edit"
 
     def draw(self, context):
         layout = self.layout
@@ -1410,7 +1410,7 @@ def drawRightClickSequencerMenu(self, context):
     if general_settings.is_project and general_settings.file_type == 'EDIT':
 
         layout = self.layout
-        layout.menu('BPM_MT_RightClickSequencerManagement_Menu')
+        layout.menu('BPM_MT_RightClickSequencerEdit_Menu')
 
         if scn.sequence_editor.active_strip:
             active_strip = scn.sequence_editor.active_strip
