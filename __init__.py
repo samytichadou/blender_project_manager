@@ -114,7 +114,7 @@ classes = (BPMOpenShot,
             BPMRenderShotPlayblast,
             BPMModifyShotTasksDeadline,
             BPMRenderShotEdit,
-            BPM_OT_go_to_comment,
+            BPM_OT_goto_next_previous_comment,
 
             BPMOpenShotFolder,
             BPMOpenShotRenderFolder,

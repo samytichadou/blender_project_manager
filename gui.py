@@ -94,10 +94,10 @@ def draw_next_previous_comment(container):
 
     row = container.row(align = True)
 
-    op = row.operator("bpm.go_to_comment", text = "", icon = "TRIA_LEFT")
+    op = row.operator("bpm.goto_next_previous_comment", text = "", icon = "TRIA_LEFT")
     op.next = False
     
-    op = row.operator("bpm.go_to_comment", text = "", icon = "TRIA_RIGHT")
+    op = row.operator("bpm.goto_next_previous_comment", text = "", icon = "TRIA_RIGHT")
     op.next = True
 
     row.label(text = "Comments")

@@ -38,9 +38,9 @@ def return_previous_next_int_from_list(integer_list, target):
     return previous, next
 
 
-class BPM_OT_go_to_comment(bpy.types.Operator):
+class BPM_OT_goto_next_previous_comment(bpy.types.Operator):
     """Go to Previous/Next Comment"""
-    bl_idname = "bpm.go_to_comment"
+    bl_idname = "bpm.goto_next_previous_comment"
     bl_label = "Go to Comment"
     bl_options = {"REGISTER", "INTERNAL"}
 
