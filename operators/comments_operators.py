@@ -242,13 +242,17 @@ class BPMModifyComment(bpy.types.Operator):
         comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
         active_comment = comment_collection[self.index]
 
-        if self.frame_comment:
+        print(str(active_comment.frame))
+
+        if active_comment.frame_comment:
             if self.comment_type == "edit_shot":
-                frame = get_shot_comment_frame(active_comment.frame, active)
+                frame = active_comment.timeline_frame
             else:
                 frame = active_comment.frame
         else:
             frame = context.scene.frame_current
+
+        print(str(frame))
 
         self.author = active_comment.author
         self.comment = active_comment.comment
@@ -312,6 +316,10 @@ class BPMModifyComment(bpy.types.Operator):
         active_comment.frame = frame
         active_comment.author = self.author
         active_comment.edit_time = getDateTimeString()
+
+        # timeline frame comment
+        if self.comment_type == "edit_shot":
+            active_comment.timeline_frame = self.frame
 
         # update json file
         update_comments_json_file(comment_collection, folder_path)
