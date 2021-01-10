@@ -127,6 +127,10 @@ class BPMAddComment(bpy.types.Operator):
         new_comment.time = getDateTimeString()
         new_comment.author = self.author
 
+        # timeline frame comment
+        if self.comment_type == "edit_shot":
+            new_comment.timeline_frame = self.frame
+
         # update json file
         update_comments_json_file(comment_collection, folder_path)
         if debug: print(comment_file_updated_statement) #debug
