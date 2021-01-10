@@ -1,7 +1,7 @@
 import bpy
 
 
-from ..functions.strip_functions import returnShotStrips, getShotCommentPosition
+from ..functions.strip_functions import returnShotStrips
 from ..vse_extra_ui import get_shot_comment_frame
 from ..global_variables import (
                             no_more_comments_message,
