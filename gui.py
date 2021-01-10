@@ -1384,9 +1384,12 @@ class BPM_MT_RightClickSequencerEdit_Menu(bpy.types.Menu):
     def draw(self, context):
         layout = self.layout
 
-        layout.operator('bpm.create_shot')
-        layout.operator('bpm.synchronize_audio_edit')
-        layout.operator('bpm.refresh_shot_datas_edit')
+        layout.operator("bpm.create_shot")
+        layout.operator("bpm.synchronize_audio_edit")
+        layout.operator("bpm.refresh_shot_datas_edit")
+        layout.separator()
+        layout.operator("bpm.goto_next_previous_comment", text = "Previous Comment").next = False
+        layout.operator("bpm.goto_next_previous_comment", text = "Next Comment").next = True
 
 
 # right click sequencer active shot menu
