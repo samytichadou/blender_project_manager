@@ -107,7 +107,7 @@ def draw_next_previous_comment(container):
 
 
 # sequencer shot comment function 
-def draw_comment(container, comments, c_type):
+def draw_comment(container, comments, c_type, context):
 
     row = container.row(align=True)
     op = row.operator("bpm.add_comment", text="Add")
@@ -129,11 +129,26 @@ def draw_comment(container, comments, c_type):
         else:
             icon = "DISCLOSURE_TRI_DOWN"
         row.prop(c, "hide", text="", icon=icon, emboss=False)
+
         row.label(text=c.author + " - " + c.time)
+
+        if c.frame_comment:
+            if c_type == "edit_shot":
+                target_frame = c.timeline_frame
+            else:
+                target_frame = c.frame
+            if context.scene.frame_current == target_frame:
+                icon = "MARKER_HLT"
+            else:
+                icon = "MARKER"
+            row.label(text = "", icon = icon)
+
         if c.edit_time:
-            row.label(text="", icon="OUTLINER_DATA_GP_LAYER")
+            icon = "OUTLINER_DATA_GP_LAYER"
+        else:
+            icon = "GREASEPENCIL"
         idx = comments.find(c.name)
-        op = row.operator("bpm.modify_comment", text="", icon="GREASEPENCIL")
+        op = row.operator("bpm.modify_comment", text="", icon=icon)
         op.index = idx
         op.comment_type = c_type
         op = row.operator("bpm.remove_comment", text="", icon="X")
@@ -147,6 +162,8 @@ def draw_comment(container, comments, c_type):
                 col.separator()
                 if c.frame_comment:
                     col.label(text="Frame : " + str(c.frame))
+                    if c_type == "edit_shot":
+                        col.label(text="Timeline Frame : " + str(c.timeline_frame))
                 if c.edit_time:
                     col.label(text="Edited on " + c.edit_time)
 
@@ -668,7 +685,7 @@ class BPM_PT_sequencer_edit_comment_panel(SequencerPanel_Editing):
         
         comments = context.window_manager.bpm_projectdatas.comments
 
-        draw_comment(layout, comments, "edit")
+        draw_comment(layout, comments, "edit", context)
 
 
 # sequencer UI panel
@@ -906,7 +923,7 @@ class BPM_PT_sequencer_shot_comment_panel(SequencerPanel_Shot):
         
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
 
-        draw_comment(layout, shot_settings.comments, "edit_shot")
+        draw_comment(layout, shot_settings.comments, "edit_shot", context)
 
 
 # sequencer display shot panel
@@ -957,7 +974,7 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel_Assets):
 
 ### VIEWPORT PANELS ###
 
-# viewport panels display
+# viewport display panel
 class BPM_PT_viewport_panels_display_panel(ViewportPanel_General):
     bl_label = "Interface"
 
@@ -972,7 +989,7 @@ class BPM_PT_viewport_panels_display_panel(ViewportPanel_General):
         layout.prop(scn_settings, "display_panels", expand=True)
 
 
-# viewport management
+# viewport management panel
 class BPM_PT_viewport_management_panel(ViewportPanel_Project):
     bl_label = "Management"
 
@@ -987,7 +1004,7 @@ class BPM_PT_viewport_management_panel(ViewportPanel_Project):
         draw_management(layout)
 
 
-# viewport management debug subpanel
+# viewport management debug panel
 class BPM_PT_viewport_management_debug_panel(ViewportPanel_Project_Debug):
     bl_label = "Debug"
 
@@ -1000,7 +1017,7 @@ class BPM_PT_viewport_management_debug_panel(ViewportPanel_Project_Debug):
         draw_debug(layout, general_settings)
 
 
-# shot tracking viewport subpanel
+# shot tracking viewport panel
 class BPM_PT_viewport_shot_tracking_panel(ViewportPanel_Shot):
     bl_label = "Tracking"
 
@@ -1013,7 +1030,7 @@ class BPM_PT_viewport_shot_tracking_panel(ViewportPanel_Shot):
         draw_shot_tracking_shot_file(layout, winman)
        
 
-# shot version viewport subpanel
+# shot version viewport panel
 class BPM_PT_viewport_shot_version_panel(ViewportPanel_Shot):
     bl_label = "Version"
 
@@ -1024,7 +1041,7 @@ class BPM_PT_viewport_shot_version_panel(ViewportPanel_Shot):
         draw_shot_version_shot_file(layout)
 
 
-# shot comment viewport subpanel
+# shot comment viewport panel
 class BPM_PT_viewport_shot_comment_panel(ViewportPanel_Shot):
     bl_label = "Comments"
 
@@ -1034,7 +1051,9 @@ class BPM_PT_viewport_shot_comment_panel(ViewportPanel_Shot):
 
         shot_settings = context.window_manager.bpm_shotsettings
 
-        draw_comment(layout, shot_settings.comments, "shot")
+        draw_next_previous_comment(layout)
+
+        draw_comment(layout, shot_settings.comments, "shot", context)
 
 
 # shot render viewport subpanel
@@ -1092,7 +1111,7 @@ class BPM_PT_viewport_asset_library_panel(ViewportPanel_Assets_Library):
         layout.operator("bpm.import_asset", icon = "LINK_BLEND")
 
 
-# asset comment viewport subpanel
+# asset comment viewport panel
 class BPM_PT_viewport_asset_comment_panel(ViewportPanel_Assets):
     bl_label = "Comments"
 
@@ -1102,10 +1121,12 @@ class BPM_PT_viewport_asset_comment_panel(ViewportPanel_Assets):
 
         layout = self.layout
 
-        draw_comment(layout, asset_settings.comments, "asset")
+        draw_next_previous_comment(layout)
+
+        draw_comment(layout, asset_settings.comments, "asset", context)
 
 
-# asset settings debug viewport subpanel
+# asset settings debug viewport panel
 class BPM_PT_viewport_asset_debug_panel(ViewportPanel_Assets_Debug):
     bl_label = "Debug"
 
@@ -1198,7 +1219,7 @@ class BPM_PT_nodetree_shot_comment_panel(NodetreePanel_Shot):
 
         shot_settings = context.window_manager.bpm_shotsettings
 
-        draw_comment(layout, shot_settings.comments, "shot")
+        draw_comment(layout, shot_settings.comments, "shot", context)
 
 
 # nodetree shot render panel
@@ -1250,7 +1271,7 @@ class BPM_PT_nodetree_asset_comment_panel(NodetreePanel_Assets):
 
         layout = self.layout
 
-        draw_comment(layout, asset_settings.comments, "asset")
+        draw_comment(layout, asset_settings.comments, "asset", context)
 
 
 # asset library nodetree panel

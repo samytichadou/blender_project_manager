@@ -2,7 +2,7 @@ import bpy
 
 
 from ..functions.strip_functions import returnShotStrips
-from ..vse_extra_ui import get_shot_comment_frame
+from ..functions.reload_comments_function import get_shot_comment_frame
 from ..global_variables import (
                             no_more_comments_message,
                             getting_edit_comments_statement,

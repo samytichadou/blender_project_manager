@@ -96,6 +96,19 @@ class BPMShotComments(bpy.types.PropertyGroup):
     hide : bpy.props.BoolProperty(name = "Hide Comment", default = True)
 
 
+# shot comments
+class BPMShotCommentsStrips(bpy.types.PropertyGroup):
+    '''name : StringProperty() '''
+    comment : bpy.props.StringProperty(name = "Comment")
+    frame_comment : bpy.props.BoolProperty(name = "Frame Comment")
+    frame : bpy.props.IntProperty(name = "Comment Frame")
+    timeline_frame : bpy.props.IntProperty(name = "Timeline Comment Frame")
+    time : bpy.props.StringProperty(name = "Creation Date")
+    edit_time : bpy.props.StringProperty(name = "Edition Date")
+    author : bpy.props.StringProperty(name = "Author")
+    hide : bpy.props.BoolProperty(name = "Hide Comment", default = True)
+
+
 # project settings
 class BPMProjectSettings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
@@ -193,7 +206,7 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = updateShotSettingsProperties)
 
     # comments
-    comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
+    comments : bpy.props.CollectionProperty(type = BPMShotCommentsStrips, name="Comments")
 
 
 # shot settings file

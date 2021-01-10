@@ -15,6 +15,7 @@ from .global_variables import (
                         )
 from .functions.project_data_functions import getShotTaskDeadline, getShotTaskComplete
 from .functions.date_functions import formatDateFromYrMoDa, returnPriorDate
+from .functions.reload_comments_function import get_shot_comment_frame
 
 
 # compute dpi_fac on every blender startup
@@ -52,12 +53,6 @@ def unloadExternalFontId(font_id, file_font):
 # get area width
 def get_area_height(area):
     return area.height
-
-
-# get shot comment frame in timeline
-def get_shot_comment_frame(comment_frame, strip):
-    comment_frame = (comment_frame - strip.bpm_shotsettings.shot_frame_start) + strip.frame_start
-    return comment_frame
 
 
 # get comments frame

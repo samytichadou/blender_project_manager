@@ -11,6 +11,11 @@ from ..global_variables import (
                         )
 
 
+# get shot comment frame in timeline
+def get_shot_comment_frame(comment_frame, strip):
+    comment_frame = (comment_frame - strip.bpm_shotsettings.shot_frame_start) + strip.frame_start
+    return comment_frame
+
 
 def return_commentcoll_folderpath(comment_type, context, strip):
     winman = context.window_manager
@@ -65,5 +70,11 @@ def reload_comments(context, comment_type, strip):
         if debug: print(editing_comment_statement + c['name'])
         dataset_out = comment_collection.add()
         setPropertiesFromJsonDataset(c, dataset_out, debug, ())
+    
+    # set timeline frame for shots
+    if comment_type == "edit_shot":
+        for c in comment_collection:
+            c.timeline_frame = get_shot_comment_frame(c.frame, strip)
+
 
     if debug: print(comment_reloaded_statement) #debug

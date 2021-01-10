@@ -6,8 +6,7 @@ from ..functions.json_functions import create_json_file, createJsonDatasetFromPr
 from ..functions.date_functions import getDateTimeString, getDateTimeID
 from ..functions.file_functions import absolutePath
 from ..functions.strip_functions import getShotCommentPosition
-from ..functions.reload_comments_function import return_commentcoll_folderpath, reload_comments
-from ..vse_extra_ui import get_shot_comment_frame
+from ..functions.reload_comments_function import return_commentcoll_folderpath, reload_comments, get_shot_comment_frame
 from ..global_variables import (
                                 comment_file,
                                 start_edit_comment_statement,

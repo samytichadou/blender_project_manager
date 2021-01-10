@@ -125,6 +125,7 @@ classes = (BPMOpenShot,
             BPMAddonPrefs,
 
             BPMShotComments,
+            BPMShotCommentsStrips,
             BPMProjectSettings,
             BPMCustomFolders,
             BPMAssetList,
