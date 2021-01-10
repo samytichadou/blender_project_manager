@@ -141,17 +141,19 @@ def draw_comment(container, comments, c_type, context):
                 icon = "MARKER_HLT"
             else:
                 icon = "MARKER"
-            row.label(text = "", icon = icon)
+            
+            op = row.operator("bpm.goto_comment", text = "", icon = icon, emboss = False)
+            op.frame = target_frame
 
         if c.edit_time:
             icon = "OUTLINER_DATA_GP_LAYER"
         else:
             icon = "GREASEPENCIL"
         idx = comments.find(c.name)
-        op = row.operator("bpm.modify_comment", text="", icon=icon)
+        op = row.operator("bpm.modify_comment", text="", icon=icon, emboss = False)
         op.index = idx
         op.comment_type = c_type
-        op = row.operator("bpm.remove_comment", text="", icon="X")
+        op = row.operator("bpm.remove_comment", text="", icon="X", emboss = False)
         op.index = idx
         op.comment_type = c_type
 

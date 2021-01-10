@@ -198,7 +198,7 @@ comment_reloaded_statement = bpm_statement + "Comments successfully reloaded"
 getting_edit_comments_statement = bpm_statement + "Getting edit comments"
 getting_shot_comments_statement = bpm_statement + "Getting shot comments"
 getting_asset_comments_statement = bpm_statement + "Getting asset comments"
-searching_comment_statement = bpm_statement + "Searching comments"
+searching_comment_statement = bpm_statement + "Searching comment"
 no_more_comments_message = "No more comments to jump to in this direction"
 
 

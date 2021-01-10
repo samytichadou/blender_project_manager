@@ -101,3 +101,29 @@ class BPM_OT_goto_next_previous_comment(bpy.types.Operator):
             
 
         return {'FINISHED'}
+
+
+class BPM_OT_goto_comment(bpy.types.Operator):
+    """Go to Comment"""
+    bl_idname = "bpm.goto_comment"
+    bl_label = "Go to Comment"
+    bl_options = {"REGISTER", "INTERNAL"}
+
+    frame : bpy.props.IntProperty()
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+
+        winman = context.window_manager
+        scn = context.scene
+
+        debug = winman.bpm_projectdatas.debug
+
+        if debug: print(searching_comment_statement) #debug
+            
+        scn.frame_current = self.frame            
+
+        return {'FINISHED'}
