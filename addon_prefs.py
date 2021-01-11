@@ -68,10 +68,10 @@ class BPMAddonPrefs(bpy.types.AddonPreferences):
         update = updateTimer,
         )
 
-    timer_timeline_refresh : bpy.props.BoolProperty(
-        name="Refresh timeline datas", 
+    timer_datas_refresh : bpy.props.BoolProperty(
+        name="Refresh file datas", 
         default = True,
-        description="Refresh timeline datas on timer",
+        description="Refresh file datas on timer",
         )    
 
 
@@ -97,7 +97,7 @@ class BPMAddonPrefs(bpy.types.AddonPreferences):
             col.enabled = False
 
         row = col.row()
-        row.prop(self, "timer_timeline_refresh")
+        row.prop(self, "timer_datas_refresh")
 
 
 # get addon preferences

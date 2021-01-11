@@ -2,6 +2,18 @@ import bpy
 import os
 
 
+from ..functions.project_data_functions import refreshTimelineShotDatas, loadJsonDataToDataset, getShotSettingsFileFromBlend
+from ..functions.reload_comments_function import reload_comments
+from ..global_variables import (
+                                refreshing_timeline_shot_datas_statement,
+                                refreshed_timeline_shot_datas_statement,
+                                shot_loading_statement,
+                                shot_loaded_statement,
+                                missing_shot_file_message,
+                                missing_shot_file_statement,
+                            )
+
+
 class BPM_OT_refresh_edit_datas(bpy.types.Operator):
     """Refresh timeline datas from edit"""
     bl_idname = "bpm.refresh_edit_datas"
@@ -16,13 +28,7 @@ class BPM_OT_refresh_edit_datas(bpy.types.Operator):
         return general_settings.is_project and general_settings.file_type == 'EDIT' and keyword in context.scene.name
 
     def execute(self, context):
-        # import statements and functions
-        from ..functions.project_data_functions import refreshTimelineShotDatas
-        from ..global_variables import (
-                                    refreshing_timeline_shot_datas_statement,
-                                    refreshed_timeline_shot_datas_statement,
-                                )
-
+        
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
 
@@ -33,6 +39,34 @@ class BPM_OT_refresh_edit_datas(bpy.types.Operator):
         if debug: print(refreshed_timeline_shot_datas_statement) #debug
 
         return {'FINISHED'}
+
+
+# refresh shot datas func
+def refresh_shot_datas(context):
+    winman = context.window_manager
+    debug = winman.bpm_projectdatas.debug
+    general_settings = winman.bpm_generalsettings
+
+    shot_json = getShotSettingsFileFromBlend()
+
+    if shot_json is None:
+        return False
+
+    if debug: print(shot_loading_statement + shot_json) #debug
+
+    # load json in props
+    shot_settings = winman.bpm_shotsettings
+
+    general_settings.bypass_update_tag = True
+    loadJsonDataToDataset(winman, shot_settings, shot_json, ())
+    general_settings.bypass_update_tag = False
+
+    # refresh comments
+    reload_comments(context, "shot", None)
+
+    if debug: print(shot_loaded_statement) #debug
+
+    return True
 
 
 class BPM_OT_refresh_shot_datas(bpy.types.Operator):
@@ -49,38 +83,12 @@ class BPM_OT_refresh_shot_datas(bpy.types.Operator):
                 return True
 
     def execute(self, context):
-        # import statements and functions
-        from ..functions.project_data_functions import loadJsonDataToDataset, getShotSettingsFileFromBlend
-        from ..global_variables import (
-                                    shot_loading_statement,
-                                    shot_loaded_statement,
-                                    missing_shot_file_message,
-                                    missing_shot_file_statement,
-                                )
 
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
-        general_settings = winman.bpm_generalsettings
 
-        shot_json = getShotSettingsFileFromBlend()
-
-        if shot_json is None:
+        if not refresh_shot_datas(context):
             self.report({'INFO'}, missing_shot_file_message)
-            if debug: print(missing_shot_file_statement) #debug
             return {'FINISHED'}
     
-        if debug: print(shot_loading_statement + shot_json) #debug
-
-        # load json in props
-        shot_settings = winman.bpm_shotsettings
-
-        general_settings.bypass_update_tag = True
-        loadJsonDataToDataset(winman, shot_settings, shot_json, ())
-        general_settings.bypass_update_tag = False
-
-        if debug: print(shot_loaded_statement) #debug
-
         return {'FINISHED'}
-
-
-    

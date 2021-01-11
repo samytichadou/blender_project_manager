@@ -6,6 +6,7 @@ from .functions.utils_functions import getCurrentPID
 from .functions.lock_file_functions import getLockFilepath
 from .functions.json_functions import read_json
 from .functions.project_data_functions import refreshTimelineShotDatas
+from .operators.refresh_shot_datas import refresh_shot_datas
 from .addon_prefs import getAddonPreferences
 
 
@@ -42,11 +43,13 @@ def bpmTimerFunction():
     if prefs.use_lock_file_system:
         check_lock_file(context)
 
-    # refresh timeline datas
-    if prefs.timer_timeline_refresh:
+    # refresh datas
+    if prefs.timer_datas_refresh:
         if general_settings.file_type == 'EDIT':
             refreshTimelineShotDatas(context, context.scene.sequence_editor)
         elif general_settings.file_type == 'SHOT':
+            refresh_shot_datas(context)
+        elif general_settings.file_type == 'ASSET':
             pass
 
     return interval

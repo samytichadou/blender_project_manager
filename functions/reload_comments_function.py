@@ -48,7 +48,6 @@ def return_commentcoll_folderpath(comment_type, context, strip):
 
 def reload_comments(context, comment_type, strip):
     winman = context.window_manager
-    general_settings = winman.bpm_generalsettings
     debug = winman.bpm_projectdatas.debug
 
     if debug: print(loading_comments_statement) #debug
@@ -56,6 +55,11 @@ def reload_comments(context, comment_type, strip):
     comment_collection, folderpath = return_commentcoll_folderpath(comment_type, context, strip)
 
     comment_filepath = os.path.join(folderpath, comment_file)
+
+    # get hide status
+    hide_list = []
+    for c in comment_collection:
+        hide_list.append((c.name, c.hide))
 
     # empty comment collection
     comment_collection.clear()
@@ -71,9 +75,13 @@ def reload_comments(context, comment_type, strip):
         dataset_out = comment_collection.add()
         setPropertiesFromJsonDataset(c, dataset_out, debug, ())
     
-    # set timeline frame for shots
-    if comment_type == "edit_shot":
-        for c in comment_collection:
+    # set hide and timeline frame for shots
+    for c in comment_collection:
+        for oc in hide_list:
+            if oc[0] == c.name:
+                c.hide = oc[1]
+                break
+        if comment_type == "edit_shot":
             c.timeline_frame = get_shot_comment_frame(c.frame, strip)
 
 
