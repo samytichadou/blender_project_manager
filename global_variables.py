@@ -47,7 +47,7 @@ saved_to_json_statement = bpm_statement + "Successfully saved to json"
 
 adding_dataset_to_json = bpm_statement + "Adding dataset to json : "
 
-setting_prop_statement = bpm_statement + "Setting property from "
+setting_prop_statement = bpm_statement + "Setting properties from "
 setting_prop_error_statement = bpm_statement + "Unable to set property : "
 prop_avoided_statement = bpm_statement + "Property avoided : "
 
