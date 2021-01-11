@@ -247,6 +247,6 @@ def updateShotDisplayMode(self, context):
     sequencer.active_strip = new_strip
 
     # reload comments
-    reload_comments(context, "edit_shot", None)
+    reload_comments(context, "edit_shot", new_strip)
 
     general_settings.bypass_update_tag = False
