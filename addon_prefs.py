@@ -59,14 +59,20 @@ class BPMAddonPrefs(bpy.types.AddonPreferences):
         )
     
     timer_frequency : bpy.props.FloatProperty(
-        name='Timer frequency (s)', 
+        name="Timer frequency (s)", 
         precision=2, 
         min=0.01, 
         max=3600.00, 
         default=60.00, 
-        description='Frequency for timer function',
+        description="Frequency for timer function",
         update = updateTimer,
         )
+
+    timer_timeline_refresh : bpy.props.BoolProperty(
+        name="Refresh timeline datas", 
+        default = True,
+        description="Refresh timeline datas on timer",
+        )    
 
 
     def draw(self, context):
@@ -75,13 +81,23 @@ class BPMAddonPrefs(bpy.types.AddonPreferences):
         row = layout.row()
         row.prop(self, "use_lock_file_system")
 
-        row = layout.row()
+        # timer
+        box = layout.box()
+        row = box.row()
         row.prop(self, "use_timer_refresh")
 
         subrow = row.row()
         if not self.use_timer_refresh:
             subrow.enabled = False
         subrow.prop(self, "timer_frequency")
+
+        col = box.column(align=True)
+
+        if not self.use_timer_refresh:
+            col.enabled = False
+
+        row = col.row()
+        row.prop(self, "timer_timeline_refresh")
 
 
 # get addon preferences
