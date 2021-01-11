@@ -231,7 +231,7 @@ def draw_shot_tracking_shot_file(container, winman):
     row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
     draw_wiki_help(row, 'Shot-Task-System')
 
-    draw_operator_and_help(container, 'bpm.refresh_shot_datas_shot', '', 'Shot-Datas')
+    draw_operator_and_help(container, 'bpm.refresh_shot_datas', '', 'Shot-Datas')
 
     draw_operator_and_help(container, 'bpm.synchronize_audio_shot', '', 'Shot-Audio-Synchronization')
 
@@ -668,7 +668,7 @@ class BPM_PT_sequencer_edit_panel(SequencerPanel_Editing):
 
         draw_operator_and_help(layout, 'bpm.synchronize_audio_edit', '', 'Shot-Audio-Synchronization')
 
-        draw_operator_and_help(layout, 'bpm.refresh_shot_datas_edit', '', 'Shot-Datas')
+        draw_operator_and_help(layout, 'bpm.refresh_edit_datas', '', 'Shot-Datas')
 
         draw_operator_and_help(layout, 'bpm.update_shot_duration', '', 'Update-Shot-Operator')
 
@@ -1386,7 +1386,7 @@ class BPM_MT_RightClickSequencerEdit_Menu(bpy.types.Menu):
 
         layout.operator("bpm.create_shot")
         layout.operator("bpm.synchronize_audio_edit")
-        layout.operator("bpm.refresh_shot_datas_edit")
+        layout.operator("bpm.refresh_edit_datas")
         layout.separator()
         layout.operator("bpm.goto_next_previous_comment", text = "Previous Comment").next = False
         layout.operator("bpm.goto_next_previous_comment", text = "Next Comment").next = True

@@ -2,10 +2,10 @@ import bpy
 import os
 
 
-class BPMRefreshShotDatasEdit(bpy.types.Operator):
-    """Refresh shot datas from edit"""
-    bl_idname = "bpm.refresh_shot_datas_edit"
-    bl_label = "Refresh shot datas"
+class BPM_OT_refresh_edit_datas(bpy.types.Operator):
+    """Refresh timeline datas from edit"""
+    bl_idname = "bpm.refresh_edit_datas"
+    bl_label = "Refresh timeline datas"
     bl_options = {'REGISTER'}
 
 
@@ -35,9 +35,9 @@ class BPMRefreshShotDatasEdit(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class BPMRefreshShotDatasShot(bpy.types.Operator):
+class BPM_OT_refresh_shot_datas(bpy.types.Operator):
     """Refresh shot datas from shot"""
-    bl_idname = "bpm.refresh_shot_datas_shot"
+    bl_idname = "bpm.refresh_shot_datas"
     bl_label = "Refresh shot datas"
     bl_options = {'REGISTER'}
 
