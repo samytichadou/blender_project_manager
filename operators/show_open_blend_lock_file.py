@@ -7,6 +7,7 @@ from ..functions.json_functions import read_json
 from ..functions.utils_functions import returnFormatedTimestamp, getCurrentPID
 from ..addon_prefs import getAddonPreferences
 
+
 class BPMShowOpenBlendLockFile(bpy.types.Operator):
     """Show list of user for this blend file"""
     bl_idname = "bpm.show_open_blend_lock_file"
@@ -36,6 +37,9 @@ class BPMShowOpenBlendLockFile(bpy.types.Operator):
         datas = read_json(self.lock_filepath)
 
         layout = self.layout
+
+        op = layout.operator('bpm.open_wiki_page', text="Lock file system Help", icon='QUESTION')
+        op.wiki_page = "Lock-File-System"
 
         split = layout.split(align=True)
         col1 = split.column(align=True)
