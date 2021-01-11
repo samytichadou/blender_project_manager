@@ -69,4 +69,8 @@ class BPMClearLockFileUser(bpy.types.Operator):
             if chk_free:
                 general_settings.blend_already_opened = False
 
+            # redraw
+            for area in context.screen.areas:
+                area.tag_redraw()
+
         return {'FINISHED'}
