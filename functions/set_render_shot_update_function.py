@@ -37,6 +37,7 @@ def setRenderShot(context, shot_render_state):
     render.filepath = bpy.path.relpath(output_filepath)
 
     #props
+    if debug: print(setting_prop_statement + "render settings") #debug
     for p in render_settings.bl_rna.properties:
         if not p.is_readonly and p.identifier != 'name':
             # set dataset
@@ -59,7 +60,6 @@ def setRenderShot(context, shot_render_state):
 
             # set props
             try:
-                if debug: print(setting_prop_statement + identif) #debug
                 setattr(dataset, identif, getattr(render_settings, p.identifier))
             except (KeyError, AttributeError, TypeError):
                 if debug: print(setting_prop_error_statement + identif) #debug
