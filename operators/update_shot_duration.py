@@ -3,10 +3,12 @@ import os
 
 
 from ..functions.file_functions import absolutePath
+from ..functions.reload_comments_function import reload_comments
 
 
 def updateShotDurationEndFunction(strip):
     strip.bpm_shotsettings.is_working = False
+    reload_comments(bpy.context, "edit_shot", strip)
     bpy.ops.sequencer.refresh_all()
 
 
