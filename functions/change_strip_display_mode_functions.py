@@ -26,7 +26,7 @@ from ..global_variables import (
                             created_strip_statement,
                             setting_strip_properties_statement,
                             setting_strip_display_mode_statement,
-                            bypass_shot_settings_update_statement,
+                            bypass_settings_update_statement,
                             missing_file_image,
                             library_cleared_statement,
                             shot_display_no_render_images_statement,
@@ -217,7 +217,7 @@ def updateShotDisplayMode(self, context):
     active = sequencer.active_strip
 
     if general_settings.bypass_update_tag:
-        if debug: print(bypass_shot_settings_update_statement) #debug
+        #if debug: print(bypass_settings_update_statement) #debug
         return
 
     general_settings.bypass_update_tag = True

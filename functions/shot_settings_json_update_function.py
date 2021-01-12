@@ -6,7 +6,7 @@ from ..global_variables import (
                             saving_to_json_statement,
                             saved_to_json_statement,
                             shot_file,
-                            bypass_shot_settings_update_statement,
+                            bypass_settings_update_statement,
                         )
 from .json_functions import create_json_file, createJsonDatasetFromProperties
 from .set_render_shot_update_function import setRenderShot
@@ -20,7 +20,7 @@ def updateShotSettingsProperties(self, context):
     debug = winman.bpm_projectdatas.debug
 
     if general_settings.bypass_update_tag:
-        if debug: print(bypass_shot_settings_update_statement) #debug
+        #if debug: print(bypass_settings_update_statement) #debug
         return
 
     # create the json file

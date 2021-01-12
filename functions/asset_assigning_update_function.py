@@ -6,7 +6,7 @@ from .project_data_functions import getAssetFile, clearOldAssetBpmIsasset
 from .json_functions import read_json, createJsonDatasetFromProperties, create_json_file
 from .file_functions import getBlendName
 from ..global_variables import (
-                            bypass_shot_settings_update_statement,
+                            bypass_settings_update_statement,
                             cleared_old_asset_statement,
                             set_asset_statement,
                             saving_to_json_statement,
@@ -20,7 +20,7 @@ def saveAssetToJson(self, context):
     debug = winman.bpm_projectdatas.debug
 
     if winman.bpm_generalsettings.bypass_update_tag:
-        if debug: print(bypass_shot_settings_update_statement) #debug
+        #if debug: print(bypass_settings_update_statement) #debug
         return
 
     assets_json_file, asset_file_exist = getAssetFile(winman)
@@ -65,7 +65,7 @@ def updateAssetAssigning(self, context):
     debug = winman.bpm_projectdatas.debug
 
     if winman.bpm_generalsettings.bypass_update_tag:
-        if debug: print(bypass_shot_settings_update_statement) #debug
+        #if debug: print(bypass_settings_update_statement) #debug
         return
     
     if self.asset_type == 'SHADER':
@@ -98,7 +98,7 @@ def updateChangingAssetType(self, context):
     debug = winman.bpm_projectdatas.debug
 
     if general_settings.bypass_update_tag:
-        if debug: print(bypass_shot_settings_update_statement) #debug
+        #if debug: print(bypass_settings_update_statement) #debug
         return
     
     general_settings.bypass_update_tag = True

@@ -27,7 +27,6 @@ invalid_shot_version_message = "Not an existing shot version"
 invalid_shot_version_statement = bpm_statement + invalid_shot_version_message
 already_loaded_shot_version_message = "Already loaded shot version"
 already_loaded_shot_version_statement = bpm_statement + already_loaded_shot_version_message
-bypass_shot_settings_update_statement = bpm_statement + "Bypassing shot settings update"
 
 
 # project datas statements
@@ -86,6 +85,8 @@ completed_render_statement = bpm_statement + "Render completed : "
 strip_already_working_statement = bpm_statement + "Avoiding strip, already working : "
 
 date_set_statement = bpm_statement + "Current date set"
+
+bypass_settings_update_statement = bpm_statement + "Bypassing shot settings update"
 
 
 # deadlines statements

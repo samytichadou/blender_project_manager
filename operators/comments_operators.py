@@ -14,7 +14,7 @@ from ..global_variables import (
                                 edited_comment_statement,
                                 removed_comment_statement,
                                 comment_file_updated_statement,
-                                bypass_shot_settings_update_statement,
+                                bypass_settings_update_statement,
                                 no_active_shot_message,
                                 no_active_shot_statement,
                                 lock_strip_message,
@@ -41,7 +41,7 @@ def update_comment_frame_property(self, context):
     debug = winman.bpm_projectdatas.debug
 
     if general_settings.bypass_update_tag:
-        if debug: print(bypass_shot_settings_update_statement) #debug
+        #if debug: print(bypass_settings_update_statement) #debug
         return
 
     context.scene.frame_current = self.frame
