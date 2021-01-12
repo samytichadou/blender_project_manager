@@ -45,13 +45,6 @@ def draw_operator_and_help(container, operator_bl_idname, icon, wikipage):
     row.operator('bpm.open_wiki_page', text="", icon='QUESTION').wiki_page = wikipage
 
 
-# draw already opened blend warning
-def draw_opened_warning(container, general_settings):
-    if general_settings.blend_already_opened:
-        draw_operator_and_help(container, 'bpm.show_open_blend_lock_file', 'ERROR', "Lock-File-System")
-        #container.label(text="File already opened", icon='ERROR')
-
-
 # draw browse panel
 def draw_browse_folder(container):
 
@@ -184,8 +177,6 @@ def draw_debug(container, dataset):
 
 # draw asset settings prop panel
 def draw_asset_settings(container, asset_settings, general_settings):
-
-    draw_opened_warning(container, general_settings)
     
     if asset_settings.asset_type == 'SHADER': target_prop = 'asset_material'
     elif asset_settings.asset_type == 'NODEGROUP': target_prop = 'asset_nodegroup'
@@ -296,9 +287,6 @@ def draw_topbar(self, context):
 
         if general_settings.is_project:
 
-            if general_settings.blend_already_opened:
-                draw_opened_warning(layout, general_settings)
-
             if general_settings.file_type in {'SHOT', 'ASSET'}:
 
                 draw_operator_and_help(layout, 'bpm.back_to_edit', '', 'Open-Shot-and-Back-to-Edit')
@@ -307,7 +295,11 @@ def draw_topbar(self, context):
 
                 draw_operator_and_help(layout, 'bpm.open_shot', '', 'Open-Shot-and-Back-to-Edit')
 
-        layout.menu('BPM_MT_topbar_menu')
+        # draw menu
+        if general_settings.blend_already_opened:
+            layout.menu('BPM_MT_topbar_menu', icon = "ERROR")
+        else:
+            layout.menu('BPM_MT_topbar_menu')
 
 
 
@@ -618,8 +610,6 @@ class BPM_PT_sequencer_panels_display_panel(SequencerPanel_General):
 
         layout = self.layout
 
-        draw_opened_warning(layout, general_settings)
-
         layout.prop(scn_settings, "display_panels", expand=True)
 
 
@@ -632,8 +622,6 @@ class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
         general_settings = winman.bpm_generalsettings
 
         layout = self.layout
-
-        draw_opened_warning(layout, general_settings)
 
         draw_management(layout)
 
@@ -661,8 +649,6 @@ class BPM_PT_sequencer_edit_panel(SequencerPanel_Editing):
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
-
-        draw_opened_warning(layout, general_settings)
 
         draw_operator_and_help(layout, 'bpm.create_shot', '', 'Create-Shot-Operator')
 
@@ -700,8 +686,6 @@ class BPM_PT_sequencer_edit_ui_panel(SequencerPanel_Editing):
         scn_settings = context.scene.bpm_scenesettings
 
         layout = self.layout
-
-        draw_opened_warning(layout, general_settings)
 
         row = layout.row(align=True)
         row.prop(scn_settings, "extra_ui", text = "UI")
@@ -969,8 +953,6 @@ class BPM_PT_sequencer_asset_library_panel(SequencerPanel_Assets):
 
         layout = self.layout
 
-        draw_opened_warning(layout, winman.bpm_generalsettings)
-
         draw_asset_library(layout, winman)
 
 
@@ -986,8 +968,6 @@ class BPM_PT_viewport_panels_display_panel(ViewportPanel_General):
 
         layout = self.layout
 
-        draw_opened_warning(layout, general_settings)
-
         layout.prop(scn_settings, "display_panels", expand=True)
 
 
@@ -1000,8 +980,6 @@ class BPM_PT_viewport_management_panel(ViewportPanel_Project):
         general_settings = winman.bpm_generalsettings
 
         layout = self.layout
-
-        draw_opened_warning(layout, general_settings)
 
         draw_management(layout)
 
@@ -1106,8 +1084,6 @@ class BPM_PT_viewport_asset_library_panel(ViewportPanel_Assets_Library):
 
         layout = self.layout
 
-        draw_opened_warning(layout, winman.bpm_generalsettings)
-
         draw_asset_library(layout, winman)
 
         layout.operator("bpm.import_asset", icon = "LINK_BLEND")
@@ -1154,8 +1130,6 @@ class BPM_PT_nodetree_panels_display_panel(NodetreePanel_General):
 
         layout = self.layout
 
-        draw_opened_warning(layout, general_settings)
-
         layout.prop(scn_settings, "display_panels", expand=True)
 
 
@@ -1168,8 +1142,6 @@ class BPM_PT_nodetree_management_panel(NodetreePanel_Project):
         general_settings = winman.bpm_generalsettings
 
         layout = self.layout
-
-        draw_opened_warning(layout, general_settings)
 
         draw_management(layout)
 
@@ -1285,8 +1257,6 @@ class BPM_PT_nodetree_asset_library_panel(NodetreePanel_Assets_Library):
 
         layout = self.layout
 
-        draw_opened_warning(layout, winman.bpm_generalsettings)
-
         draw_asset_library(layout, winman)
 
         if winman.bpm_generalsettings.file_type in {'SHOT', 'ASSET'}:
@@ -1317,16 +1287,16 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
         general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
-
-        draw_opened_warning(layout, general_settings)
-        
+      
         if not general_settings.is_project:
-            layout.operator('bpm.create_project')  
+            layout.operator('bpm.create_project')
         
         else:
-
             project_data = winman.bpm_projectdatas
             layout.label(text = project_data.name)
+
+            # opened blend
+            layout.operator("bpm.show_open_blend_lock_file", icon = "ERROR")
                                 
 
 # project folder ui list
