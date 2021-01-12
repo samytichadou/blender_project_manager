@@ -1296,7 +1296,9 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             layout.label(text = project_data.name)
 
             # opened blend
-            layout.operator("bpm.show_open_blend_lock_file", icon = "ERROR")
+            if general_settings.blend_already_opened:
+                layout.separator()
+                layout.operator("bpm.show_open_blend_lock_file", icon = "ERROR")
                                 
 
 # project folder ui list
