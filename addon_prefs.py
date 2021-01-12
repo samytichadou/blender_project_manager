@@ -53,7 +53,7 @@ class BPMAddonPrefs(bpy.types.AddonPreferences):
 
     use_timer_refresh : bpy.props.BoolProperty(
         name = "Use timer function",
-        default = False,
+        default = True,
         description = "Use timer function to refresh project information every N seconds",
         update = updateTimer,
         )
