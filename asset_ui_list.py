@@ -10,6 +10,8 @@ class BPM_UL_Asset_UI_List(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         
         icon = getAssetIcon(item.asset_type)
+
+        file_type = context.window_manager.bpm_generalsettings.file_type
         
         if item.is_thisassetfile:
             layout.enabled = False
@@ -20,12 +22,14 @@ class BPM_UL_Asset_UI_List(bpy.types.UIList):
 
         if self.layout_type in {'DEFAULT', 'COMPACT'}: 
             layout.label(text = item.name, icon = icon)
-            layout.label(text = "", icon = isthis_icon)
+            if file_type == "ASSET":
+                layout.label(text = "", icon = isthis_icon)
             
         elif self.layout_type in {'GRID'}: 
             layout.alignment = 'CENTER' 
             layout.label(text = "", icon = icon)
-            layout.label(text = "", icon = isthis_icon)
+            if file_type == "ASSET":
+                layout.label(text = "", icon = isthis_icon)
 
 
     # Called once to filter/reorder items.
