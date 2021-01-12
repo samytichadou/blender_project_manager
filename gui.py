@@ -95,9 +95,6 @@ def draw_next_previous_comment(container):
 
     row.label(text = "Comments")
 
-    row.separator()
-    draw_wiki_help(row, "Comments")
-
 
 # sequencer shot comment function 
 def draw_comment(container, comments, c_type, context):
@@ -1193,6 +1190,8 @@ class BPM_PT_nodetree_shot_comment_panel(NodetreePanel_Shot):
 
         shot_settings = context.window_manager.bpm_shotsettings
 
+        draw_next_previous_comment(layout)
+
         draw_comment(layout, shot_settings.comments, "shot", context)
 
 
@@ -1244,6 +1243,8 @@ class BPM_PT_nodetree_asset_comment_panel(NodetreePanel_Assets):
         asset_settings = winman.bpm_assetsettings
 
         layout = self.layout
+
+        draw_next_previous_comment(layout)
 
         draw_comment(layout, asset_settings.comments, "asset", context)
 
