@@ -204,10 +204,12 @@ no_more_comments_message = "No more comments to jump to in this direction"
 
 
 # extra ui statements
-add_extra_ui_statement = bpm_statement + "Sequencer UI handler added"
-remove_extra_ui_statement = bpm_statement + "Sequencer UI handler removed"
+add_sequencer_extra_ui_statement = bpm_statement + "Sequencer UI handler added"
+remove_sequencer_extra_ui_statement = bpm_statement + "Sequencer UI handler removed"
 load_font_statement = bpm_statement + "External font loaded : "
 unload_font_statement = bpm_statement + "External font unloaded : "
+add_dopesheet_extra_ui_statement = bpm_statement + "Dope sheet handler added"
+remove_dopesheet_extra_ui_statement = bpm_statement + "Dope sheet UI handler removed"
 
 
 # asset statements

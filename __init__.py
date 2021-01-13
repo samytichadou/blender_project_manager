@@ -79,7 +79,7 @@ from .gui import *
 from .asset_ui_list import *
 from .addon_prefs import BPMAddonPrefs
 
-from .vse_extra_ui import disableSequencerCallback
+from .vse_extra_ui import disableSequencerUICallback
 
 
 # register
@@ -252,7 +252,7 @@ def register():
 def unregister():
 
     ### DISABLE EXTRA UI IF EXISTING ###
-    disableSequencerCallback()
+    disableSequencerUICallback()
     
     ### OPERATORS ###
     from bpy.utils import unregister_class

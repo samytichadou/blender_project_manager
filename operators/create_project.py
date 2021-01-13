@@ -89,7 +89,7 @@ class BpmCreateProject(bpy.types.Operator):
                                     shot_startup_file,
                                     asset_startup_file,
                                 )
-        from ..vse_extra_ui import enableSequencerCallback
+        from ..vse_extra_ui import enableSequencerUICallback
 
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
@@ -258,7 +258,7 @@ class BpmCreateProject(bpy.types.Operator):
 
         
         # add extra ui
-        enableSequencerCallback()
+        enableSequencerUICallback()
 
         # reload vse areas
         redrawAreas(context, 'SEQUENCE_EDITOR')

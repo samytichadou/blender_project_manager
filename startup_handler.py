@@ -47,7 +47,7 @@ from .global_variables import (
                             timer_function_removed_statement,
                             date_set_statement,
                         )
-from .vse_extra_ui import enableSequencerCallback, disableSequencerCallback
+from .vse_extra_ui import enableSequencerUICallback, disableSequencerUICallback
 from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
 from .functions.lock_file_functions import setupLockFile, getLockFilepath
@@ -230,8 +230,8 @@ def bpmStartupHandler(scene):
     # ui callback
     if general_settings.is_project and general_settings.file_type == 'EDIT':
         # load ui if needed
-        enableSequencerCallback()
+        enableSequencerUICallback()
 
     else:
         # unload ui if needed
-       disableSequencerCallback()
+       disableSequencerUICallback()

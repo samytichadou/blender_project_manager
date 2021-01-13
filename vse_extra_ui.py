@@ -8,8 +8,8 @@ from gpu_extras.batch import batch_for_shader
 from .functions.strip_functions import returnShotStrips
 from .global_variables import (
                             font_file, 
-                            add_extra_ui_statement, 
-                            remove_extra_ui_statement, 
+                            add_sequencer_extra_ui_statement, 
+                            remove_sequencer_extra_ui_statement, 
                             load_font_statement, 
                             unload_font_statement,
                         )
@@ -662,7 +662,7 @@ def draw_bpm_sequencer_timeline_callback_px():
 
 #enable callback
 cb_handle = []
-def enableSequencerCallback():
+def enableSequencerUICallback():
     if cb_handle:
         return
     
@@ -676,10 +676,10 @@ def enableSequencerCallback():
 
     winman = bpy.context.window_manager
     debug = winman.bpm_projectdatas.debug
-    if debug: print(add_extra_ui_statement)#debug
+    if debug: print(add_sequencer_extra_ui_statement)#debug
 
 #disable callback
-def disableSequencerCallback():
+def disableSequencerUICallback():
     if not cb_handle:
         return
 
@@ -693,4 +693,4 @@ def disableSequencerCallback():
 
     winman = bpy.context.window_manager
     debug = winman.bpm_projectdatas.debug
-    if debug: print(remove_extra_ui_statement) #debug
+    if debug: print(remove_sequencer_extra_ui_statement) #debug
