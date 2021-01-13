@@ -1037,6 +1037,23 @@ class BPM_PT_viewport_shot_comment_panel(ViewportPanel_Shot):
         draw_comment(layout, shot_settings.comments, "shot", context)
 
 
+# shot comment ui viewport subpanel
+class BPM_PT_viewport_shot_ui_comment_subpanel(ViewportPanel_Shot):
+    bl_label = ""
+    bl_parent_id = "BPM_PT_viewport_shot_comment_panel"
+
+    def draw_header(self, context):
+        scn_settings = context.scene.bpm_scenesettings
+        self.layout.label(text = "Comments UI")
+        self.layout.prop(scn_settings, "extra_ui", text = "")
+
+    def draw(self, context):
+
+        scn_settings = context.scene.bpm_scenesettings
+
+        draw_shot_comments_ui(self.layout, scn_settings)
+
+
 # shot render viewport subpanel
 class BPM_PT_viewport_shot_render_panel(ViewportPanel_Shot):
     bl_label = "Render"
@@ -1103,6 +1120,23 @@ class BPM_PT_viewport_asset_comment_panel(ViewportPanel_Assets):
         draw_next_previous_comment(layout)
 
         draw_comment(layout, asset_settings.comments, "asset", context)
+
+
+# shot comment ui viewport subpanel
+class BPM_PT_viewport_asset_ui_comment_subpanel(ViewportPanel_Assets):
+    bl_label = ""
+    bl_parent_id = "BPM_PT_viewport_asset_comment_panel"
+
+    def draw_header(self, context):
+        scn_settings = context.scene.bpm_scenesettings
+        self.layout.label(text = "Comments UI")
+        self.layout.prop(scn_settings, "extra_ui", text = "")
+
+    def draw(self, context):
+
+        scn_settings = context.scene.bpm_scenesettings
+
+        draw_shot_comments_ui(self.layout, scn_settings)
 
 
 # asset settings debug viewport panel

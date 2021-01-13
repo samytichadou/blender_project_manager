@@ -80,6 +80,7 @@ from .asset_ui_list import *
 from .addon_prefs import BPMAddonPrefs
 
 from .vse_extra_ui import disableSequencerUICallback
+from .dopesheet_extra_ui import disable_dope_sheet_ui_callback
 
 
 # register
@@ -160,10 +161,12 @@ classes = (BPMOpenShot,
             BPM_PT_viewport_shot_tracking_panel,
             BPM_PT_viewport_shot_version_panel,
             BPM_PT_viewport_shot_comment_panel,
+            BPM_PT_viewport_shot_ui_comment_subpanel,
             BPM_PT_viewport_shot_render_panel,
             BPM_PT_viewport_shot_debug_panel,
             BPM_PT_viewport_asset_settings_panel,
             BPM_PT_viewport_asset_comment_panel,
+            BPM_PT_viewport_asset_ui_comment_subpanel,
             BPM_PT_viewport_asset_library_panel,
             BPM_PT_viewport_asset_debug_panel,
             BPM_PT_nodetree_panels_display_panel,
@@ -253,6 +256,7 @@ def unregister():
 
     ### DISABLE EXTRA UI IF EXISTING ###
     disableSequencerUICallback()
+    disable_dope_sheet_ui_callback()
     
     ### OPERATORS ###
     from bpy.utils import unregister_class
