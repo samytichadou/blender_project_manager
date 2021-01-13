@@ -96,6 +96,24 @@ def draw_next_previous_comment(container):
     row.label(text = "Comments")
 
 
+# draw shot comments ui
+def draw_shot_comments_ui(container, scene_settings):
+
+    container.prop(scene_settings, 'color_shot_comments', text="Color")
+
+    row = container.row()
+    row.label(text = "Names")
+    row.prop(scene_settings, 'display_shot_comments_names', text = "")
+
+    row = container.row()
+    row.prop(scene_settings, 'display_shot_comments_boxes', text = "Name Boxes")
+    row.prop(scene_settings, 'color_shot_comments_boxes', text="")
+
+    container.prop(scene_settings, 'display_shot_comments_text_limit')
+
+    #container.prop(scene_settings, "test_prop")
+
+
 # sequencer shot comment function 
 def draw_comment(container, comments, c_type, context):
 
@@ -769,21 +787,7 @@ class BPM_PT_sequencer_edit_ui_shot_frame_comment_subpanel(SequencerPanel_Editin
 
         scn_settings = context.scene.bpm_scenesettings
 
-        layout = self.layout
-
-        layout.prop(scn_settings, 'color_shot_comments', text="Color")
-
-        row = layout.row()
-        row.label(text = "Names")
-        row.prop(scn_settings, 'display_shot_comments_names', text = "")
-
-        row = layout.row()
-        row.prop(scn_settings, 'display_shot_comments_boxes', text = "Name Boxes")
-        row.prop(scn_settings, 'color_shot_comments_boxes', text="")
-
-        layout.prop(scn_settings, 'display_shot_comments_text_limit')
-
-        #layout.prop(scn_settings, "test_prop")
+        draw_shot_comments_ui(self.layout, scn_settings)
 
 
 # sequencer UI frame comment subpanel
