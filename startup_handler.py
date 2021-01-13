@@ -48,6 +48,7 @@ from .global_variables import (
                             date_set_statement,
                         )
 from .vse_extra_ui import enableSequencerUICallback, disableSequencerUICallback
+from .dopesheet_extra_ui import enable_dope_sheet_ui_callback, disable_dope_sheet_ui_callback
 from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
 from .functions.lock_file_functions import setupLockFile, getLockFilepath
@@ -228,10 +229,9 @@ def bpmStartupHandler(scene):
         print(no_datas_statement)
     
     # ui callback
-    if general_settings.is_project and general_settings.file_type == 'EDIT':
-        # load ui if needed
-        enableSequencerUICallback()
-
-    else:
-        # unload ui if needed
-       disableSequencerUICallback()
+    # load ui if needed
+    if general_settings.is_project:
+        if general_settings.file_type == 'EDIT':
+            enableSequencerUICallback()
+        elif general_settings.file_type in {"SHOT", "ASSET"}:
+            enable_dope_sheet_ui_callback()
