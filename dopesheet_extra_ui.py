@@ -84,7 +84,20 @@ def enable_dope_sheet_ui_callback():
     
     initializeExternalFontId(comments_font, font_file)
 
+    # dopesheet
     cb_handle.append(bpy.types.SpaceDopeSheetEditor.draw_handler_add(
+        draw_bpm_dope_sheet_comments_callback_px, (), 'WINDOW', 'POST_PIXEL'))
+
+    # graph editor
+    cb_handle.append(bpy.types.SpaceGraphEditor.draw_handler_add(
+        draw_bpm_dope_sheet_comments_callback_px, (), 'WINDOW', 'POST_PIXEL'))
+
+    # nla
+    cb_handle.append(bpy.types.SpaceNLA.draw_handler_add(
+        draw_bpm_dope_sheet_comments_callback_px, (), 'WINDOW', 'POST_PIXEL'))
+
+    # sequencer
+    cb_handle.append(bpy.types.SpaceSequenceEditor.draw_handler_add(
         draw_bpm_dope_sheet_comments_callback_px, (), 'WINDOW', 'POST_PIXEL'))
 
     winman = bpy.context.window_manager
@@ -102,7 +115,14 @@ def disable_dope_sheet_ui_callback():
     # bpy.types.SpaceSequenceEditor.draw_handler_remove(cb_handle[0], 'WINDOW')
 
     for h in cb_handle:
+        # dopesheet
         bpy.types.SpaceDopeSheetEditor.draw_handler_remove(h, 'WINDOW')
+        # graph editor
+        bpy.types.SpaceGraphEditor.draw_handler_remove(h, 'WINDOW')
+        # nla
+        bpy.types.SpaceNLA.draw_handler_remove(h, 'WINDOW')
+        # sequencer
+        bpy.types.SpaceSequenceEditor.draw_handler_remove(h, 'WINDOW')
     cb_handle.clear()
 
     winman = bpy.context.window_manager
