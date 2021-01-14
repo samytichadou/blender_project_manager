@@ -73,8 +73,6 @@ def draw_bpm_dope_sheet_comments_callback_px():
 
     bgl.glDisable(bgl.GL_BLEND) # disable transparency
 
-    return
-
 
 #enable callback
 cb_handle = []
