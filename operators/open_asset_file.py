@@ -1,5 +1,6 @@
 import bpy
 import os
+import subprocess
 
 
 class BPMOpenAssetFile(bpy.types.Operator):
@@ -7,6 +8,8 @@ class BPMOpenAssetFile(bpy.types.Operator):
     bl_idname = "bpm.open_asset_file"
     bl_label = "Open asset file"
     bl_options = {'REGISTER'}
+
+    new_blender_instance : bpy.props.BoolProperty()
 
     @classmethod
     def poll(cls, context):
@@ -48,7 +51,11 @@ class BPMOpenAssetFile(bpy.types.Operator):
 
         # save
         bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
+
         # open
-        bpy.ops.wm.open_mainfile(filepath=specific_asset_filepath)
+        if self.new_blender_instance:
+            subprocess.Popen([bpy.app.binary_path, specific_asset_filepath])
+        else:
+            bpy.ops.wm.open_mainfile(filepath=specific_asset_filepath)
         
         return {'FINISHED'}

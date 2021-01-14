@@ -218,7 +218,10 @@ def draw_asset_library(container, winman):
 
     container.template_list("BPM_UL_Asset_UI_List", "", winman, "bpm_assets", general_settings, "asset_list_index", rows = 3)
 
-    draw_operator_and_help(container, 'bpm.open_asset_file', 'FILE_FOLDER', 'Asset-Management')
+    row = container.row(align=True)
+    row.operator("bpm.open_asset_file", icon = "FILE_FOLDER").new_blender_instance = False
+    row.operator("bpm.open_asset_file", text = "", icon = "BLENDER").new_blender_instance = True
+    draw_wiki_help(row, "Asset-Management")
 
 
 # draw shot tracking
