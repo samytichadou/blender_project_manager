@@ -123,16 +123,14 @@ def getStripRectangle(strip):
 # format text comments
 def get_formatted_comment_text(text, target_frame, display_mode, current_frame, text_limit):
 
-    if (display_mode in {"CURRENT_STRIPPED", "CURRENT_ENTIRE"} and current_frame == target_frame) \
-    or (display_mode in {"ALL_STRIPPED", "ALL_ENTIRE", "ALL_STRIPPED_CURRENT_ENTIRE"}) :
+    if (display_mode in {"CURRENT_STRIPPED", "ALL_STRIPPED"}) \
+    or (display_mode == "ALL_STRIPPED_CURRENT_ENTIRE" and current_frame != target_frame):
+        if len(text) > text_limit and text_limit != 0:
 
-        if (display_mode in {"CURRENT_STRIPPED", "ALL_STRIPPED"}) \
-        or (display_mode == "ALL_STRIPPED_CURRENT_ENTIRE" and current_frame != target_frame):
-            if len(text) > text_limit and text_limit != 0:
-                if text_limit > 4:
-                    text_limit = text[0:text_limit - 3] + "..."
-                else:
-                    text = text[0:text_limit]
+            if text_limit > 4:
+                text = text[0:text_limit - 3] + "..."
+            else:
+                text = text[0:text_limit]
 
     return text
 
