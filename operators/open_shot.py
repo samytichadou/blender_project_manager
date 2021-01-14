@@ -1,5 +1,6 @@
 import bpy
 import os
+import subprocess
 
 
 from ..functions.file_functions import absolutePath
@@ -10,6 +11,8 @@ class BPMOpenShot(bpy.types.Operator):
     bl_idname = "bpm.open_shot"
     bl_label = "Open Shot"
     bl_options = {'REGISTER'}
+
+    new_blender_instance : bpy.props.BoolProperty()
 
     @classmethod
     def poll(cls, context):
@@ -38,7 +41,11 @@ class BPMOpenShot(bpy.types.Operator):
 
         # save if not temp
         bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
+
         # open
-        bpy.ops.wm.open_mainfile(filepath=filepath)
+        if self.new_blender_instance:
+            subprocess.Popen([bpy.app.binary_path, filepath])
+        else:
+            bpy.ops.wm.open_mainfile(filepath=filepath)
         
         return {'FINISHED'}

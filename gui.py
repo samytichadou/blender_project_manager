@@ -307,8 +307,10 @@ def draw_topbar(self, context):
                 draw_operator_and_help(layout, 'bpm.back_to_edit', '', 'Open-Shot-and-Back-to-Edit')
 
             elif general_settings.file_type == 'EDIT':
-
-                draw_operator_and_help(layout, 'bpm.open_shot', '', 'Open-Shot-and-Back-to-Edit')
+                row = layout.row(align=True)
+                row.operator("bpm.open_shot", icon = "FILE_FOLDER").new_blender_instance = False
+                row.operator("bpm.open_shot", text = "", icon = "BLENDER").new_blender_instance = True
+                draw_wiki_help(row, "Open-Shot-and-Back-to-Edit")
 
         # draw menu
         if general_settings.blend_already_opened:
