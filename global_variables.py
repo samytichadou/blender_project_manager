@@ -209,7 +209,7 @@ remove_sequencer_extra_ui_statement = bpm_statement + "Sequencer UI handler remo
 load_font_statement = bpm_statement + "External font loaded : "
 unload_font_statement = bpm_statement + "External font unloaded : "
 add_dopesheet_extra_ui_statement = bpm_statement + "Dope sheet handler added"
-remove_dopesheet_extra_ui_statement = bpm_statement + "Dope sheet UI handler removed"
+remove_shot_asset_extra_ui_statement = bpm_statement + "Dope sheet UI handler removed"
 
 
 # asset statements

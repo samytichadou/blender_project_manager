@@ -216,6 +216,7 @@ def drawShader(vertices, indices, color):
    
 # ui draw strip callback
 def draw_bpm_sequencer_strip_callback_px():
+
     context = bpy.context
 
     scn = context.scene
@@ -579,7 +580,7 @@ def draw_bpm_sequencer_strip_callback_px():
             for t in comments_texts:
                 drawText(t[0], t[1], id_m)
 
-            bgl.glDisable(bgl.GL_BLEND)
+    bgl.glDisable(bgl.GL_BLEND)
 
 
 # ui draw timeline comments callback

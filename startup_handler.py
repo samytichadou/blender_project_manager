@@ -232,6 +232,12 @@ def bpmStartupHandler(scene):
     # load ui if needed
     if general_settings.is_project:
         if general_settings.file_type == 'EDIT':
+            disable_dope_sheet_ui_callback()
             enableSequencerUICallback()
         elif general_settings.file_type in {"SHOT", "ASSET"}:
+            disableSequencerUICallback()
             enable_dope_sheet_ui_callback()
+    #unload ui if needed
+    else:
+        disableSequencerUICallback()
+        disable_dope_sheet_ui_callback()
