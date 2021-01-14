@@ -120,6 +120,23 @@ def getStripRectangle(strip):
     return [x1, y1, x2, y2]
 
 
+# format text comments
+def get_formatted_comment_text(text, target_frame, display_mode, current_frame, text_limit):
+
+    if (display_mode in {"CURRENT_STRIPPED", "CURRENT_ENTIRE"} and current_frame == target_frame) \
+    or (display_mode in {"ALL_STRIPPED", "ALL_ENTIRE", "ALL_STRIPPED_CURRENT_ENTIRE"}) :
+
+        if (display_mode in {"CURRENT_STRIPPED", "ALL_STRIPPED"}) \
+        or (display_mode == "ALL_STRIPPED_CURRENT_ENTIRE" and current_frame != target_frame):
+            if len(text) > text_limit and text_limit != 0:
+                if text_limit > 4:
+                    text_limit = text[0:text_limit - 3] + "..."
+                else:
+                    text = text[0:text_limit]
+
+    return text
+
+
 # get text bounding box
 def getBoundingBoxCoordinates(pos, text, text_size, dpi_fac):
     step = text_size / 2 + 1
@@ -492,18 +509,12 @@ def draw_bpm_sequencer_strip_callback_px():
                     n_m += 3   
 
                     # comments text
+
                     if (c_n_display in {"CURRENT_STRIPPED", "CURRENT_ENTIRE"} and scn.frame_current == m[1]) \
                     or (c_n_display in {"ALL_STRIPPED", "ALL_ENTIRE", "ALL_STRIPPED_CURRENT_ENTIRE"}) :
+                        
+                        text = get_formatted_comment_text(m[0], m[1], c_n_display, scn.frame_current, scene_settings.display_shot_comments_text_limit)
 
-                        text = m[0]
-                        if (c_n_display in {"CURRENT_STRIPPED", "ALL_STRIPPED"}) \
-                        or (c_n_display == "ALL_STRIPPED_CURRENT_ENTIRE" and scn.frame_current != m[1]):
-                            limit = scene_settings.display_shot_comments_text_limit
-                            if len(text) > limit and limit != 0:
-                                if limit > 4:
-                                    text = text[0:limit - 3] + "..."
-                                else:
-                                    text = text[0:limit]
                         comments_texts.append((coord[1], text))
 
                         # comments box
