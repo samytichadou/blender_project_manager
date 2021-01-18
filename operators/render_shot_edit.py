@@ -2,6 +2,10 @@ import bpy
 
 
 from ..global_variables import completed_render_statement, launching_command_statement
+from ..functions.file_functions import absolutePath
+from ..functions.command_line_functions import buildBlenderCommandBackgroundRender
+from ..functions.threading_functions import launchSeparateThread
+
 
 def renderShotEndFunction(shot_strip, debug):
     if debug: print(completed_render_statement + shot_strip.name) #debug
@@ -32,10 +36,7 @@ class BPMRenderShotEdit(bpy.types.Operator):
                                     return False
 
     def execute(self, context):
-        from ..functions.file_functions import absolutePath
-        from ..functions.command_line_functions import buildBlenderCommandBackgroundRender
-        from ..functions.threading_functions import launchSeparateThread
-
+        
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
 
