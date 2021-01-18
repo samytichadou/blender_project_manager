@@ -38,7 +38,6 @@ class BPMRenderShotEdit(bpy.types.Operator):
 
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
-        general_settings = winman.bpm_generalsettings
 
         active_strip = context.scene.sequence_editor.active_strip
 
@@ -54,7 +53,7 @@ class BPMRenderShotEdit(bpy.types.Operator):
 
         #launch command
         if debug: print(launching_command_statement + command) #debug
-        launchSeparateThread([command, general_settings.debug, renderShotEndFunction, active_strip, general_settings.debug])
+        launchSeparateThread([command, debug, renderShotEndFunction, active_strip, debug])
 
         #store render pid
 
