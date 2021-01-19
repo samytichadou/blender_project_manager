@@ -67,6 +67,7 @@ from .operators.modify_shot_tasks_deadlines import *
 from .operators.open_folder import *
 from .operators.render_shot_edit import *
 from .operators.go_to_comment import *
+from .operators.custom_folder_operator import *
 
 
 from .operators.display_modify_project_settings import *
@@ -117,6 +118,7 @@ classes = (BPMOpenShot,
             BPMRenderShotEdit,
             BPM_OT_goto_next_previous_comment,
             BPM_OT_goto_comment,
+            BPM_OT_Custom_Folder_Actions,
 
             BPMOpenShotFolder,
             BPMOpenShotRenderFolder,

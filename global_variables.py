@@ -39,6 +39,12 @@ loading_statement = bpm_statement + "Datas found, loading from "
 folders_loading_statement = bpm_statement + "Project folders found, loading from "
 currently_loading_statement = bpm_statement + "Currently loading "
 
+custom_folder_not_selected_message = "Custom folder not selected"
+unable_to_move_custom_folder_message = "Unable to move custom folder in this direction"
+
+custom_folder_added_statement = bpm_statement + "Custom folder added"
+custom_folder_moved_statement = bpm_statement + "Custom folder moved"
+
 reading_json_statement = bpm_statement + "Reading datas from json file : "
 initialize_json_statement = bpm_statement + "Initializing json : "
 

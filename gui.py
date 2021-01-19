@@ -1349,7 +1349,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
 class BPM_UL_Folders_Uilist(bpy.types.UIList):
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag):
-        layout.label(text = item.name)
+        layout.prop(item, "name", text="", emboss=False)
 
 
 # filebrowser gui
@@ -1366,11 +1366,28 @@ class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
 
         layout = self.layout
 
-        row = layout.row(align=True)
+        row = layout.row(align = True)
         row.menu('BPM_MT_OpenFolder_Filebrowser_Menu')
         draw_wiki_help(row, 'Project-Architecture')
         
-        layout.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
+        row = layout.row(align = True)
+        row.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
+
+        col = row.column(align = True)
+
+        op = col.operator("bpm.custom_folder_actions", text = "", icon = "ADD")
+        op.action = "ADD"
+
+        op = col.operator("bpm.custom_folder_actions", text = "", icon = "REMOVE")
+        op.action = "REMOVE"
+
+        col.separator()
+
+        op = col.operator("bpm.custom_folder_actions", text = "", icon = "TRIA_UP")
+        op.action = "UP"
+
+        op = col.operator("bpm.custom_folder_actions", text = "", icon = "TRIA_DOWN")
+        op.action = "DOWN"
 
 
 # open folder menu
