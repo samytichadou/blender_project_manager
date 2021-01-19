@@ -21,7 +21,7 @@ Created by Samy Tichadou (tonton)
 bl_info = {  
  "name": "BPM - Blender Project Manager",  
  "author": "Samy Tichadou (tonton)",  
- "version": (0, 1),  
+ "version": (0, 2, 0),  
  "blender": (2, 83, 0),  
  "location": "Timeline",  
  "description": "Manage small animation project from Blender",  
