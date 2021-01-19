@@ -1,12 +1,27 @@
 import bpy
 import os
 
+
+from .functions.lock_file_functions import setupLockFile, clearLockFile
+from .functions.project_data_functions import getProjectDataFile
+from .global_variables import (
+                            timer_function_added_statement,
+                            timer_function_removed_statement,
+                            timer_function_updated_statement,
+                            deleted_lock_file_statement,
+                            created_lock_file_statement,
+                        )
+
 addon_name = os.path.basename(os.path.dirname(__file__))
 
 # update function for timer refresh
 def updateTimer(self, context):
+
     from .timer_function import bpmTimerFunction
-    from .global_variables import timer_function_added_statement, timer_function_removed_statement, timer_function_updated_statement
+
+
+    if getProjectDataFile()[0] is None:
+        return
 
     debug = context.window_manager.bpm_projectdatas.debug
 
@@ -28,9 +43,10 @@ def updateTimer(self, context):
 
 # update function for lock file on/off
 def updateLockFileToggle(self, context):
-    from .functions.lock_file_functions import setupLockFile, clearLockFile
-    from .global_variables import deleted_lock_file_statement, created_lock_file_statement
 
+    if getProjectDataFile()[0] is None:
+        return
+    
     debug = context.window_manager.bpm_projectdatas.debug
 
     if self.use_lock_file_system:
