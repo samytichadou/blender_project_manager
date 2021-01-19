@@ -1371,7 +1371,7 @@ class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
         draw_wiki_help(row, 'Project-Architecture')
         
         row = layout.row(align = True)
-        row.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
+        row.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=5)
 
         col = row.column(align = True)
 
@@ -1388,6 +1388,10 @@ class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
 
         op = col.operator("bpm.custom_folder_actions", text = "", icon = "TRIA_DOWN")
         op.action = "DOWN"
+
+        col.separator()
+
+        draw_wiki_help(col, "Project-Custom-Folders")
 
 
 # open folder menu
