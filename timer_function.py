@@ -6,6 +6,7 @@ from .functions.utils_functions import getCurrentPID
 from .functions.lock_file_functions import getLockFilepath
 from .functions.json_functions import read_json
 from .functions.project_data_functions import refreshTimelineShotDatas
+from .functions.load_asset_settings import reload_asset_library, reload_asset_setings
 from .operators.refresh_shot_datas import refresh_shot_datas
 from .addon_prefs import getAddonPreferences
 
@@ -50,6 +51,10 @@ def bpmTimerFunction():
         elif general_settings.file_type == 'SHOT':
             refresh_shot_datas(context)
         elif general_settings.file_type == 'ASSET':
-            pass
+            reload_asset_setings(winman)
+
+        # refresh asset library
+        reload_asset_library(winman)
+
 
     return interval

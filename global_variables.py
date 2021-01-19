@@ -232,6 +232,7 @@ asset_file_creation_statement = bpm_statement + "Asset file creation : "
 assets_settings_loading_statement = bpm_statement + "Loading asset settings"
 assets_settings_loaded_statement = bpm_statement + "Asset settings successfully loaded"
 asset_missing_in_list_statement = bpm_statement + "Asset not found in project asset list"
+no_asset_json_file_statement = bpm_statement + "No existing asset json file"
 
 
 # help statements

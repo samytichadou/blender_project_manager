@@ -54,6 +54,7 @@ from .functions.file_functions import getBlendName
 from .functions.lock_file_functions import setupLockFile, getLockFilepath
 from .functions.date_functions import getDateString
 from .functions.reload_comments_function import reload_comments
+from .functions.load_asset_settings import reload_asset_library, reload_asset_setings
 from .timer_function import bpmTimerFunction
 from .addon_prefs import getAddonPreferences
 
@@ -121,13 +122,7 @@ def bpmStartupHandler(scene):
                 if debug: print(loaded_folders_statement) #debug
 
             # load available assets
-            asset_file, asset_file_exist = getAssetFile(winman)
-            if asset_file_exist:
-                if debug: print(assets_loading_statement + asset_file) #debug
-                asset_coll = winman.bpm_assets
-                asset_datas = loadJsonInCollection(winman, asset_file, asset_coll, 'assets')
-                if debug: print(assets_loaded_statement) #debug
-
+            reload_asset_library(winman)
 
             if general_settings.file_type in {'EDIT', 'SHOT'}:
 
@@ -187,38 +182,8 @@ def bpmStartupHandler(scene):
 
             # load asset settings
             elif general_settings.file_type == 'ASSET':
-                
-                # set name of current asset
-                asset_settings = winman.bpm_assetsettings
-                asset_settings.name = getBlendName()
 
-                # set this blend file asset
-                try:
-                    asset_coll[asset_settings.name].is_thisassetfile = True
-                except KeyError:
-                    if debug: print(asset_missing_in_list_statement) #debug
-
-                asset_settings = winman.bpm_assetsettings
-                specific_asset_datas = getAssetDatasFromJson(asset_datas)
-
-                if specific_asset_datas is not None:
-                    if debug: print(assets_settings_loading_statement) #debug
-
-                    general_settings.bypass_update_tag = True
-                    
-                    setPropertiesFromJsonDataset(specific_asset_datas, asset_settings, debug, ('asset_collection', 'asset_material'))
-                    setAssetCollectionFromJsonDataset(asset_settings, specific_asset_datas, debug)
-                    
-                    general_settings.bypass_update_tag = False
-
-                    if debug: print(assets_settings_loaded_statement) #debug
-
-                # asset does not exist in list error
-                else:
-                    if debug: print(asset_missing_in_list_statement) #debug
-
-                # load asset comments
-                reload_comments(bpy.context, "asset", None)
+                reload_asset_setings(winman)
 
         else:
             print(no_datas_statement)
