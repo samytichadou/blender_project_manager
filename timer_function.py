@@ -56,5 +56,7 @@ def bpmTimerFunction():
         # refresh asset library
         reload_asset_library(winman)
 
+    # refresh custom project folders
+
 
     return interval

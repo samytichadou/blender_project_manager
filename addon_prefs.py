@@ -25,6 +25,7 @@ def updateTimer(self, context):
             bpy.app.timers.unregister(bpmTimerFunction)
             if debug: print(timer_function_removed_statement) #debug
 
+
 # update function for lock file on/off
 def updateLockFileToggle(self, context):
     from .functions.lock_file_functions import setupLockFile, clearLockFile
@@ -72,7 +73,13 @@ class BPMAddonPrefs(bpy.types.AddonPreferences):
         name="Refresh file datas", 
         default = True,
         description="Refresh file datas on timer",
-        )    
+        )
+
+    timer_custom_folders_refresh : bpy.props.BoolProperty(
+        name="Refresh custom folders", 
+        default = True,
+        description="Refresh project custom folders datas on timer",
+        )  
 
 
     def draw(self, context):
@@ -96,8 +103,9 @@ class BPMAddonPrefs(bpy.types.AddonPreferences):
         if not self.use_timer_refresh:
             col.enabled = False
 
-        row = col.row()
-        row.prop(self, "timer_datas_refresh")
+        col.prop(self, "timer_datas_refresh")
+
+        col.prop(self, "timer_custom_folders_refresh")
 
 
 # get addon preferences
