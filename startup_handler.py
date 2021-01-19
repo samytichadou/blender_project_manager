@@ -187,6 +187,8 @@ def bpmStartupHandler(scene):
 
             # load asset settings
             elif general_settings.file_type == 'ASSET':
+                
+                # set name of current asset
                 asset_settings = winman.bpm_assetsettings
                 asset_settings.name = getBlendName()
 
