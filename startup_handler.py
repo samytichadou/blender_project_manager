@@ -193,9 +193,8 @@ def bpmStartupHandler(scene):
                 asset_settings.name = getBlendName()
 
                 # set this blend file asset
-                blend_name = os.path.splitext(os.path.basename(bpy.data.filepath))[0]
                 try:
-                    asset_coll[blend_name].is_thisassetfile = True
+                    asset_coll[asset_settings.name].is_thisassetfile = True
                 except KeyError:
                     if debug: print(asset_missing_in_list_statement) #debug
 
