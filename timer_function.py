@@ -7,6 +7,7 @@ from .functions.lock_file_functions import getLockFilepath
 from .functions.json_functions import read_json
 from .functions.project_data_functions import refreshTimelineShotDatas
 from .functions.load_asset_settings import reload_asset_library, reload_asset_setings
+from .functions.load_project_custom_folder import load_custom_folders
 from .operators.refresh_shot_datas import refresh_shot_datas
 from .addon_prefs import getAddonPreferences
 
@@ -57,6 +58,7 @@ def bpmTimerFunction():
         reload_asset_library(winman)
 
     # refresh custom project folders
-
+    if prefs.timer_custom_folders_refresh:
+        load_custom_folders(winman)
 
     return interval

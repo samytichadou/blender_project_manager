@@ -33,6 +33,7 @@ already_loaded_shot_version_statement = bpm_statement + already_loaded_shot_vers
 startup_statement = bpm_statement + "Looking for project datas"
 loaded_datas_statement = bpm_statement + "Project datas loaded"
 loaded_folders_statement = bpm_statement + "Project folders loaded"
+no_custom_folder_file_statement = bpm_statement + "No custom project folder file found"
 no_datas_statement = bpm_statement + "Datas not found"
 loading_statement = bpm_statement + "Datas found, loading from "
 folders_loading_statement = bpm_statement + "Project folders found, loading from "
