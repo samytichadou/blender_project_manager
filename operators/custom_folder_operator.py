@@ -26,7 +26,7 @@ class BPM_OT_Custom_Folder_Actions(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return True
+        return context.window_manager.bpm_generalsettings.is_project
 
     def execute(self, context):
 
