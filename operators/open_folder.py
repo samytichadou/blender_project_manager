@@ -33,6 +33,7 @@ def openFolderFilebrowserOption(folder_path, filebrowser, context, debug):
     else:
         if debug: print(no_folder_statement + folder_path) #debug
 
+
 # shot folder
 class BPMOpenShotFolder(bpy.types.Operator):
     """Open Shot Folder"""
