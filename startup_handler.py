@@ -116,12 +116,6 @@ def bpmStartupHandler(scene):
 
             # load project custom folders
             load_custom_folders(winman)
-            # custom_folders_file, is_folder_file = getCustomFoldersFile(winman)
-            # if is_folder_file:
-            #     if debug: print(folders_loading_statement + custom_folders_file) #debug
-            #     custom_folders_coll = winman.bpm_customfolders
-            #     loadJsonInCollection(winman, custom_folders_file, custom_folders_coll, 'folders')
-            #     if debug: print(loaded_folders_statement) #debug
 
             # load available assets
             reload_asset_library(winman)

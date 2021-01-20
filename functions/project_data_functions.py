@@ -103,10 +103,8 @@ def loadJsonDataToDataset(winman, dataset, json_file, avoid_list):
 def getCustomFoldersFile(winman):
     project_folder = winman.bpm_generalsettings.project_folder
     folders_file = os.path.join(project_folder, custom_folders_file)
-    if os.path.isfile(folders_file):
-        return folders_file, True
-    else:
-        return folders_file, False
+
+    return folders_file, os.path.isfile(folders_file)
 
 
 # get asset file
