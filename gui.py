@@ -334,6 +334,10 @@ def draw_custom_folder_template_list(container, winman, filebrowser):
     row.operator("bpm.refresh_custom_folders", text = "", icon = "FILE_REFRESH")
     draw_wiki_help(row, "Project-Custom-Folders")
 
+    if len(custom_folders_coll) == 0 and not filebrowser:
+        box.label(text = "No custom folders", icon = "INFO")
+        return
+
     col1 = box.column(align=True)
 
     row = col1.row(align=True)
