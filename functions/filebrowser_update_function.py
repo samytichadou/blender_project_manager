@@ -1,19 +1,31 @@
 import bpy
+import os
+
+
+from ..global_variables import custom_folder_not_found_statement
 
 
 #update function for filebrowser custom path
 def updateFilebrowserPath(self, context):
     winman = context.window_manager
+    debug = winman.bpm_projectdatas.debug
     folders_coll = winman.bpm_customfolders
     general_settings = context.window_manager.bpm_generalsettings
 
-    if general_settings.bypass_update_tag:
+    if general_settings.bypass_update_tag or len(folders_coll) == 0:
         return
-    
-    area = context.area
 
-    try:
+    idx = general_settings.custom_folders_index
+    
+    if idx in range(0, len(folders_coll)-1):
         folder = folders_coll[general_settings.custom_folders_index]
-        area.spaces[0].params.directory = str.encode(folder.filepath)
-    except IndexError:
-        pass
+        context.area.spaces[0].params.directory = str.encode(folder.filepath)
+
+        if not os.path.isdir(folder.filepath):
+            if debug: print(custom_folder_not_found_statement) #debug
+
+    # try:
+    #     folder = folders_coll[general_settings.custom_folders_index]
+    #     area.spaces[0].params.directory = str.encode(folder.filepath)
+    # except IndexError:
+    #     pass
