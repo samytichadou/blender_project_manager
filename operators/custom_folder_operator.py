@@ -2,6 +2,7 @@ import bpy
 import os
 
 
+from ..functions.update_custom_folder_file import update_custom_folder_file
 from ..global_variables import (
                             custom_folder_added_statement,
                             custom_folder_moved_statement,
@@ -33,18 +34,24 @@ class BPM_OT_Custom_Folder_Actions(bpy.types.Operator):
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
         custom_folders_coll = winman.bpm_customfolders
+        general_settings = winman.bpm_generalsettings
         area = context.area
+
+        # refresh list
+        
+        # actions
+        general_settings.bypass_update_tag = True
 
         if self.action == "ADD":
             new = custom_folders_coll.add()
 
             new.filepath = bytes.decode(area.spaces[0].params.directory)
             new.name = os.path.basename(os.path.normpath(new.filepath))
+            general_settings.custom_folders_index = len(custom_folders_coll) - 1
 
             if debug: print(custom_folder_added_statement) #debug
 
         else:
-            general_settings = winman.bpm_generalsettings
             idx = general_settings.custom_folders_index
 
             if idx not in range(0, len(custom_folders_coll)):
@@ -52,6 +59,7 @@ class BPM_OT_Custom_Folder_Actions(bpy.types.Operator):
                 return {'FINISHED'}
 
             if self.action == 'REMOVE':
+                general_settings.bypass_update_tag = False
                 custom_folders_coll.remove(idx)
                 if idx > 0:
                     general_settings.custom_folders_index -= 1
@@ -68,5 +76,10 @@ class BPM_OT_Custom_Folder_Actions(bpy.types.Operator):
 
             else:
                 self.report({'INFO'}, unable_to_move_custom_folder_message)
+
+        general_settings.bypass_update_tag = False
+
+        # save to json
+        update_custom_folder_file(winman)
         
         return {'FINISHED'}
