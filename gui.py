@@ -79,8 +79,6 @@ def draw_management(container):
     
     draw_operator_and_help(container, 'bpm.display_modify_render_settings', '', 'Render-Settings')
 
-    draw_browse_folder(container)
-
 
 # draw next previous comment panel
 def draw_next_previous_comment(container):
@@ -680,7 +678,7 @@ class BPM_PT_sequencer_panels_display_panel(SequencerPanel_General):
         layout.prop(scn_settings, "display_panels", expand=True)
 
 
-# sequencer management
+# sequencer management panel
 class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
     bl_label = "Management"
 
@@ -692,11 +690,12 @@ class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
         draw_management(layout)
 
 
-# sequencer files
+# sequencer files panel
 class BPM_PT_sequencer_files_panel(SequencerPanel_Project):
     bl_label = "Files"
 
     def draw(self, context):
+
         winman = context.window_manager
 
         layout = self.layout
@@ -704,7 +703,7 @@ class BPM_PT_sequencer_files_panel(SequencerPanel_Project):
         draw_files_general_panel(layout, winman)
 
 
-# sequencer management debug subpanel
+# sequencer management debug panel
 class BPM_PT_sequencer_management_debug_panel(SequencerPanel_Project_Debug):
     bl_label = "Debug"
 
@@ -1048,6 +1047,19 @@ class BPM_PT_viewport_management_panel(ViewportPanel_Project):
         draw_management(layout)
 
 
+# viewport files panel
+class BPM_PT_viewport_files_panel(ViewportPanel_Project):
+    bl_label = "Files"
+
+    def draw(self, context):
+
+        winman = context.window_manager
+
+        layout = self.layout
+
+        draw_files_general_panel(layout, winman)
+
+
 # viewport management debug panel
 class BPM_PT_viewport_management_debug_panel(ViewportPanel_Project_Debug):
     bl_label = "Debug"
@@ -1242,6 +1254,19 @@ class BPM_PT_nodetree_management_panel(NodetreePanel_Project):
         layout = self.layout
 
         draw_management(layout)
+
+
+# nodetree files panel
+class BPM_PT_nodetree_files_panel(NodetreePanel_Project):
+    bl_label = "Files"
+
+    def draw(self, context):
+
+        winman = context.window_manager
+
+        layout = self.layout
+
+        draw_files_general_panel(layout, winman)
 
 
 # nodetree management debug panel
