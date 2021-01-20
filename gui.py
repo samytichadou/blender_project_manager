@@ -330,7 +330,7 @@ def draw_custom_folder_template_list(container, winman, filebrowser):
     box = container.box()
 
     row = box.row(align=True)
-    row.label(text = "Project Custom Folders")
+    row.label(text = "Custom Folders")
     row.operator("bpm.refresh_custom_folders", text = "", icon = "FILE_REFRESH")
     draw_wiki_help(row, "Project-Custom-Folders")
 
