@@ -35,7 +35,7 @@ def openFolderFilebrowserOption(folder_path, filebrowser, context, debug):
 
 
 # shot folder
-class BPMOpenShotFolder(bpy.types.Operator):
+class BPM_OT_open_shot_folder(bpy.types.Operator):
     """Open Shot Folder"""
     bl_idname = "bpm.open_shot_folder"
     bl_label = "Open Shot Folder"
@@ -74,7 +74,7 @@ class BPMOpenShotFolder(bpy.types.Operator):
 
 
 # shot render folder
-class BPMOpenShotRenderFolder(bpy.types.Operator):
+class BPM_OT_open_shot_render_folder(bpy.types.Operator):
     """Open Shot Render Folder"""
     bl_idname = "bpm.open_shot_render_folder"
     bl_label = "Open Shot Render Folder"
@@ -117,7 +117,7 @@ class BPMOpenShotRenderFolder(bpy.types.Operator):
 
 
 # general folders
-class BPMOpenProjectFolder(bpy.types.Operator):
+class BPM_OT_open_project_folder(bpy.types.Operator):
     """Open Project Folder"""
     bl_idname = "bpm.open_project_folder"
     bl_label = "Open Project Folder"
