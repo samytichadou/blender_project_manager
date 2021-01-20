@@ -16,16 +16,10 @@ def updateFilebrowserPath(self, context):
         return
 
     idx = general_settings.custom_folders_index
-    
+
     if idx in range(0, len(folders_coll)-1):
         folder = folders_coll[general_settings.custom_folders_index]
         context.area.spaces[0].params.directory = str.encode(folder.filepath)
 
         if not os.path.isdir(folder.filepath):
             if debug: print(custom_folder_not_found_statement) #debug
-
-    # try:
-    #     folder = folders_coll[general_settings.custom_folders_index]
-    #     area.spaces[0].params.directory = str.encode(folder.filepath)
-    # except IndexError:
-    #     pass
