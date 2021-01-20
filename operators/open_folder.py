@@ -161,3 +161,40 @@ class BPMOpenProjectFolder(bpy.types.Operator):
         openFolderFilebrowserOption(folder_path, self.filebrowser, context, debug)
 
         return {'FINISHED'}
+
+
+# custom folders
+class BPM_OT_open_custom_folder(bpy.types.Operator):
+    """Open project custom folder"""
+    bl_idname = "bpm.open_custom_folder"
+    bl_label = "Open Custom Folder"
+    bl_options = {'REGISTER', 'INTERNAL'}
+
+
+    @classmethod
+    def poll(cls, context):
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+
+        if general_settings.is_project:
+            custom_folders_coll = winman.bpm_customfolders
+            return general_settings.custom_folders_index in range(0, len(custom_folders_coll))
+
+
+    def execute(self, context):
+        winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
+        
+        general_settings = winman.bpm_generalsettings
+
+        folder = winman.bpm_customfolders[general_settings.custom_folders_index]
+
+        if not os.path.isdir(folder.filepath):
+            self.report({'INFO'}, no_folder_statement + folder.filepath)
+            return
+
+        openFolderInExplorer(folder.filepath)
+
+        if debug: print(opening_folder_statement + folder.filepath) #debug
+
+        return {'FINISHED'}

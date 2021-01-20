@@ -356,8 +356,11 @@ def draw_custom_folder_template_list(container, winman, filebrowser):
     op.action = "DOWN"
 
     if idx in range(0, len(custom_folders_coll)):
-        row = col1.row(align=True)
-        row.label(text = custom_folders_coll[idx].filepath)
+        col1.label(text = custom_folders_coll[idx].filepath)
+
+    col1.separator()
+
+    col1.operator("bpm.open_custom_folder", text = "Open in explorer")
 
 
 # draw files general panel

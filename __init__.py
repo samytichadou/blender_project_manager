@@ -123,6 +123,7 @@ classes = (BPMOpenShot,
             BPMOpenShotFolder,
             BPMOpenShotRenderFolder,
             BPMOpenProjectFolder,
+            BPM_OT_open_custom_folder,
 
             BPMOpenWikiPage,
 
