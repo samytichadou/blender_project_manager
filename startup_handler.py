@@ -21,7 +21,6 @@ from .global_variables import (
                             startup_statement, 
                             loaded_datas_statement, 
                             no_datas_statement, 
-                            folders_loading_statement, 
                             loaded_folders_statement, 
                             loaded_project_folder,
                             assets_loading_statement,

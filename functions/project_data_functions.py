@@ -5,7 +5,6 @@ from ..global_variables import (
                             file_project, 
                             loading_statement, 
                             currently_loading_statement, 
-                            folders_loading_statement, 
                             custom_folders_file, 
                             bpm_statement,
                             asset_folder,

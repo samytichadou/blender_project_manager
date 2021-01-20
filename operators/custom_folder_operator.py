@@ -3,6 +3,8 @@ import os
 
 
 from ..functions.update_custom_folder_file import update_custom_folder_file
+from ..functions.load_project_custom_folder import load_custom_folders
+
 from ..global_variables import (
                             custom_folder_added_statement,
                             custom_folder_moved_statement,
@@ -37,10 +39,12 @@ class BPM_OT_Custom_Folder_Actions(bpy.types.Operator):
         general_settings = winman.bpm_generalsettings
         area = context.area
 
+        general_settings.bypass_update_tag = True
+
         # refresh list
+        load_custom_folders(winman)
         
         # actions
-        general_settings.bypass_update_tag = True
 
         if self.action == "ADD":
             new = custom_folders_coll.add()
