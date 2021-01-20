@@ -112,10 +112,8 @@ def getAssetFile(winman):
     project_folder = winman.bpm_generalsettings.project_folder
     asset_folder_path = os.path.join(project_folder, asset_folder)
     asset_file_path = os.path.join(asset_folder_path, asset_file)
-    if os.path.isfile(asset_file_path):
-        return asset_file_path, True
-    else:
-        return asset_file_path, False
+
+    return asset_file_path, os.path.isfile(asset_file_path)
 
 
 # get render settings file
@@ -123,10 +121,8 @@ def getRenderSettingsFile(winman):
     project_folder = winman.bpm_generalsettings.project_folder
     render_folder_path = os.path.join(project_folder, render_folder)
     render_filepath = os.path.join(render_folder_path, render_file)
-    if os.path.isfile(render_filepath):
-        return render_filepath, True
-    else:
-        return render_filepath, False
+
+    return render_filepath, os.path.isfile(render_filepath)
 
 
 # load json in collection
