@@ -11,15 +11,20 @@ def updateFilebrowserPath(self, context):
     debug = winman.bpm_projectdatas.debug
     folders_coll = winman.bpm_customfolders
     general_settings = context.window_manager.bpm_generalsettings
+    area = context.area
 
-    if general_settings.bypass_update_tag or len(folders_coll) == 0:
+    if general_settings.bypass_update_tag:
+        return
+    elif len(folders_coll) == 0:
+        return
+    elif area.type != "FILE_BROWSER":
         return
 
     idx = general_settings.custom_folders_index
 
     if idx in range(0, len(folders_coll)):
         folder = folders_coll[general_settings.custom_folders_index]
-        context.area.spaces[0].params.directory = str.encode(folder.filepath)
+        area.spaces[0].params.directory = str.encode(folder.filepath)
 
         if not os.path.isdir(folder.filepath):
             if debug: print(custom_folder_not_found_statement) #debug

@@ -323,21 +323,28 @@ def draw_topbar(self, context):
 
 
 # draw custom folder ui list
-def draw_custom_folder_template_list(container, winman):
+def draw_custom_folder_template_list(container, winman, filebrowser):
 
     general_settings = winman.bpm_generalsettings
     idx = general_settings.custom_folders_index
     custom_folders_coll = winman.bpm_customfolders
 
-    col1 = container.column(align=True)
+    box = container.box()
+
+    row = box.row()
+    row.label(text = "Project Custom Folders")
+    draw_wiki_help(row, "Project-Custom-Folders")
+
+    col1 = box.column(align=True)
 
     row = col1.row(align = True)
-    row.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=5)
+    row.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
 
     col2 = row.column(align = True)
 
-    op = col2.operator("bpm.custom_folder_actions", text = "", icon = "ADD")
-    op.action = "ADD"
+    if filebrowser:
+        op = col2.operator("bpm.custom_folder_actions", text = "", icon = "ADD")
+        op.action = "ADD"
 
     op = col2.operator("bpm.custom_folder_actions", text = "", icon = "REMOVE")
     op.action = "REMOVE"
@@ -350,13 +357,17 @@ def draw_custom_folder_template_list(container, winman):
     op = col2.operator("bpm.custom_folder_actions", text = "", icon = "TRIA_DOWN")
     op.action = "DOWN"
 
-    col2.separator()
-
-    draw_wiki_help(col2, "Project-Custom-Folders")
-
     if idx in range(0, len(custom_folders_coll)):
         row = col1.row(align=True)
         row.label(text = custom_folders_coll[idx].filepath)
+
+
+# draw files general panel
+def draw_files_general_panel(container, winman):
+
+    draw_browse_folder(container)
+
+    draw_custom_folder_template_list(container, winman, False)
 
 
 ### PANEL CLASSES ###
@@ -675,11 +686,22 @@ class BPM_PT_sequencer_management_panel(SequencerPanel_Project):
 
     def draw(self, context):
         winman = context.window_manager
-        general_settings = winman.bpm_generalsettings
 
         layout = self.layout
 
         draw_management(layout)
+
+
+# sequencer files
+class BPM_PT_sequencer_files_panel(SequencerPanel_Project):
+    bl_label = "Files"
+
+    def draw(self, context):
+        winman = context.window_manager
+
+        layout = self.layout
+
+        draw_files_general_panel(layout, winman)
 
 
 # sequencer management debug subpanel
@@ -1405,7 +1427,7 @@ class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
         row.menu('BPM_MT_OpenFolder_Filebrowser_Menu')
         draw_wiki_help(row, 'Project-Architecture')
         
-        draw_custom_folder_template_list(layout.box(), winman)
+        draw_custom_folder_template_list(layout, winman, True)
 
 
 # open folder menu
