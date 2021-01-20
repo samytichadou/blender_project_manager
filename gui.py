@@ -322,6 +322,42 @@ def draw_topbar(self, context):
             layout.menu('BPM_MT_topbar_menu')
 
 
+# draw custom folder ui list
+def draw_custom_folder_template_list(container, winman):
+
+    general_settings = winman.bpm_generalsettings
+    idx = general_settings.custom_folders_index
+    custom_folders_coll = winman.bpm_customfolders
+
+    col1 = container.column(align=True)
+
+    row = col1.row(align = True)
+    row.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=5)
+
+    col2 = row.column(align = True)
+
+    op = col2.operator("bpm.custom_folder_actions", text = "", icon = "ADD")
+    op.action = "ADD"
+
+    op = col2.operator("bpm.custom_folder_actions", text = "", icon = "REMOVE")
+    op.action = "REMOVE"
+
+    col2.separator()
+
+    op = col2.operator("bpm.custom_folder_actions", text = "", icon = "TRIA_UP")
+    op.action = "UP"
+
+    op = col2.operator("bpm.custom_folder_actions", text = "", icon = "TRIA_DOWN")
+    op.action = "DOWN"
+
+    col2.separator()
+
+    draw_wiki_help(col2, "Project-Custom-Folders")
+
+    if idx in range(0, len(custom_folders_coll)):
+        row = col1.row(align=True)
+        row.label(text = custom_folders_coll[idx].filepath)
+
 
 ### PANEL CLASSES ###
 
@@ -1362,10 +1398,6 @@ class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
     
     def draw(self, context):
         winman = context.window_manager
-        general_settings = context.window_manager.bpm_generalsettings
-        
-        idx = general_settings.custom_folders_index
-        custom_folders_coll = winman.bpm_customfolders
 
         layout = self.layout
 
@@ -1373,32 +1405,7 @@ class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
         row.menu('BPM_MT_OpenFolder_Filebrowser_Menu')
         draw_wiki_help(row, 'Project-Architecture')
         
-        row = layout.row(align = True)
-        row.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=5)
-
-        col = row.column(align = True)
-
-        op = col.operator("bpm.custom_folder_actions", text = "", icon = "ADD")
-        op.action = "ADD"
-
-        op = col.operator("bpm.custom_folder_actions", text = "", icon = "REMOVE")
-        op.action = "REMOVE"
-
-        col.separator()
-
-        op = col.operator("bpm.custom_folder_actions", text = "", icon = "TRIA_UP")
-        op.action = "UP"
-
-        op = col.operator("bpm.custom_folder_actions", text = "", icon = "TRIA_DOWN")
-        op.action = "DOWN"
-
-        col.separator()
-
-        draw_wiki_help(col, "Project-Custom-Folders")
-
-        if idx in range(0, len(custom_folders_coll)):
-            row = layout.row(align = True)
-            row.label(text = custom_folders_coll[idx].filepath)
+        draw_custom_folder_template_list(layout.box(), winman)
 
 
 # open folder menu
