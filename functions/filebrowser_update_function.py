@@ -17,7 +17,7 @@ def updateFilebrowserPath(self, context):
 
     idx = general_settings.custom_folders_index
 
-    if idx in range(0, len(folders_coll)-1):
+    if idx in range(0, len(folders_coll)):
         folder = folders_coll[general_settings.custom_folders_index]
         context.area.spaces[0].params.directory = str.encode(folder.filepath)
 
