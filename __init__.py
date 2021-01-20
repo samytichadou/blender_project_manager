@@ -119,6 +119,7 @@ classes = (BPMOpenShot,
             BPM_OT_goto_next_previous_comment,
             BPM_OT_goto_comment,
             BPM_OT_Custom_Folder_Actions,
+            BPM_OT_refresh_custom_folders,
 
             BPM_OT_open_shot_folder,
             BPM_OT_open_shot_render_folder,

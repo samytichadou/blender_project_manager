@@ -329,16 +329,17 @@ def draw_custom_folder_template_list(container, winman, filebrowser):
 
     box = container.box()
 
-    row = box.row()
+    row = box.row(align=True)
     row.label(text = "Project Custom Folders")
+    row.operator("bpm.refresh_custom_folders", text = "", icon = "FILE_REFRESH")
     draw_wiki_help(row, "Project-Custom-Folders")
 
     col1 = box.column(align=True)
 
-    row = col1.row(align = True)
+    row = col1.row(align=True)
     row.template_list("BPM_UL_Folders_Uilist", "", winman, "bpm_customfolders", general_settings, "custom_folders_index", rows=4)
 
-    col2 = row.column(align = True)
+    col2 = row.column(align=True)
 
     if filebrowser:
         op = col2.operator("bpm.custom_folder_actions", text = "", icon = "ADD")

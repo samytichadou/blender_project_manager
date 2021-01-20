@@ -32,11 +32,14 @@ already_loaded_shot_version_statement = bpm_statement + already_loaded_shot_vers
 # project datas statements
 startup_statement = bpm_statement + "Looking for project datas"
 loaded_datas_statement = bpm_statement + "Project datas loaded"
-loaded_folders_statement = bpm_statement + "Project folders loaded"
-no_custom_folder_file_statement = bpm_statement + "No custom project folder file found"
 no_datas_statement = bpm_statement + "Datas not found"
 loading_statement = bpm_statement + "Datas found, loading from "
 currently_loading_statement = bpm_statement + "Currently loading "
+
+loaded_folders_message = "Project custom folders loaded"
+no_custom_folder_file_message = "No project custom folder file found"
+loaded_folders_statement = bpm_statement + loaded_folders_message
+no_custom_folder_file_statement = bpm_statement + no_custom_folder_file_message
 
 custom_folder_not_selected_message = "Custom folder not selected"
 unable_to_move_custom_folder_message = "Unable to move custom folder in this direction"
