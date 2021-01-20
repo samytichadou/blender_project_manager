@@ -1363,6 +1363,9 @@ class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
     def draw(self, context):
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
+        
+        idx = general_settings.custom_folders_index
+        custom_folders_coll = winman.bpm_customfolders
 
         layout = self.layout
 
@@ -1392,6 +1395,10 @@ class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
         col.separator()
 
         draw_wiki_help(col, "Project-Custom-Folders")
+
+        if idx in range(0, len(custom_folders_coll)):
+            row = layout.row(align = True)
+            row.label(text = custom_folders_coll[idx].filepath)
 
 
 # open folder menu
