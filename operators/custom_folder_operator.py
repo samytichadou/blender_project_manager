@@ -28,7 +28,7 @@ class BPM_OT_Custom_Folder_Actions(bpy.types.Operator):
                 ('ADD', "Add", ""),
                     )
 
-    action = bpy.props.EnumProperty(items = actions_items)
+    action : bpy.props.EnumProperty(items = actions_items)
 
     @classmethod
     def poll(cls, context):
