@@ -131,7 +131,8 @@ no_folder_statement = bpm_statement + "Folder does not exist : "
 # lock system
 created_lock_file_statement = bpm_statement + "Lock file created"
 deleted_lock_file_statement = bpm_statement + "Lock file deleted"
-locked_file_statement = bpm_statement + "Project already opened, proceed with caution"
+locked_file_message = "Project already opened"
+locked_file_statement = bpm_statement + locked_file_message
 starting_clear_user_statement = bpm_statement + "Starting clear lock file user"
 clearing_user_statement = bpm_statement + "Clearing lock file user : "
 registering_exit_function_statement = bpm_statement + "Registering exit function"

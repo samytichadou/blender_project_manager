@@ -63,5 +63,4 @@ class BPMShowOpenBlendLockFile(bpy.types.Operator):
 
 
     def execute(self, context):
-
         return {'FINISHED'}

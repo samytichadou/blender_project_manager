@@ -6,10 +6,16 @@ import atexit
 from bpy.app.handlers import persistent
 
 
-from ..global_variables import lockfile_extension, deleted_lock_file_statement
+from ..global_variables import lockfile_extension, deleted_lock_file_statement, locked_file_message
 from .file_functions import suppressExistingFile
 from .utils_functions import getHostName, getTimestamp, getCurrentPID
 from .json_functions import initializeAssetJsonDatas, read_json, create_json_file
+
+
+# update function when finding lock file
+def update_function_already_opened(self, context):
+    if self.blend_already_opened:
+        bpy.ops.bpm.dialog_popups('INVOKE_DEFAULT', message = locked_file_message, icon = "ERROR", operator = "bpm.show_open_blend_lock_file")
 
 
 # get lock filepath

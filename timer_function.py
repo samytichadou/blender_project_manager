@@ -23,7 +23,8 @@ def check_lock_file(context):
     for o in datas['opened']:
 
         if o['pid'] != pid:
-            general_settings.blend_already_opened = True
+            if not general_settings.blend_already_opened:
+                general_settings.blend_already_opened = True
             return
     
     # if not open

@@ -15,7 +15,7 @@ class BPM_OT_dialog_popups(bpy.types.Operator):
  
     def draw(self, context):
         
-        layout = self.layout()
+        layout = self.layout
 
         row = layout.row()
 

@@ -94,11 +94,7 @@ def bpmStartupHandler(scene):
 
             prefs = getAddonPreferences()
 
-            # setup timer if needed
-            if prefs.use_timer_refresh:
-                bpy.app.timers.register(bpmTimerFunction)
-                if debug: print(timer_function_added_statement) #debug
-
+            # lock file system
             if prefs.use_lock_file_system:
                 # check for lock file
                 lock_filepath = getLockFilepath()
@@ -114,6 +110,10 @@ def bpmStartupHandler(scene):
                 if debug: print(registering_exit_function_statement) #debug
                 atexit.register(deleteLockFileExit, lock_filepath)
 
+            # setup timer if needed
+            if prefs.use_timer_refresh:
+                bpy.app.timers.register(bpmTimerFunction)
+                if debug: print(timer_function_added_statement) #debug
 
 
             ### common loading ###

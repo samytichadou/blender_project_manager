@@ -7,6 +7,7 @@ from .functions.asset_assigning_update_function import updateAssetAssigning, upd
 from .functions.date_functions import getDateStringPlusDays, getDateYearString, getDateMonthString, getDateDayString
 from .functions.change_strip_display_mode_functions import updateShotDisplayMode
 from .functions.update_custom_folder_file import update_custom_folder_file_from_name
+from .functions.lock_file_functions import update_function_already_opened
 
 from .global_variables import (
                             render_draft_folder,
@@ -271,7 +272,7 @@ class BPMGeneralSettings(bpy.types.PropertyGroup) :
 
     asset_list_index : bpy.props.IntProperty(min = -1)
 
-    blend_already_opened : bpy.props.BoolProperty(default=False)
+    blend_already_opened : bpy.props.BoolProperty(default=False, update = update_function_already_opened)
 
     today_date : bpy.props.StringProperty(name = "Today date")
 
