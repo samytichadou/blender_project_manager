@@ -68,6 +68,7 @@ from .operators.open_folder import *
 from .operators.render_shot_edit import *
 from .operators.go_to_comment import *
 from .operators.custom_folder_operator import *
+from .operators.dialog_popup import *
 
 
 from .operators.display_modify_project_settings import *
@@ -120,6 +121,7 @@ classes = (BPMOpenShot,
             BPM_OT_goto_comment,
             BPM_OT_Custom_Folder_Actions,
             BPM_OT_refresh_custom_folders,
+            BPM_OT_dialog_popups,
 
             BPM_OT_open_shot_folder,
             BPM_OT_open_shot_render_folder,
