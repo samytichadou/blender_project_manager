@@ -1,4 +1,4 @@
-import bpy, os
+import bpy, os, atexit
 from bpy.app.handlers import persistent
 
 
@@ -45,12 +45,13 @@ from .global_variables import (
                             timer_function_added_statement,
                             timer_function_removed_statement,
                             date_set_statement,
+                            registering_exit_function_statement,
                         )
 from .vse_extra_ui import enableSequencerUICallback, disableSequencerUICallback
 from .dopesheet_extra_ui import enable_dope_sheet_ui_callback, disable_dope_sheet_ui_callback
 from .functions.audio_sync_functions import syncAudioShot
 from .functions.file_functions import getBlendName
-from .functions.lock_file_functions import setupLockFile, getLockFilepath
+from .functions.lock_file_functions import setupLockFile, getLockFilepath, deleteLockFileExit
 from .functions.date_functions import getDateString
 from .functions.reload_comments_function import reload_comments
 from .functions.load_asset_settings import reload_asset_library, reload_asset_setings
@@ -107,8 +108,12 @@ def bpmStartupHandler(scene):
                     general_settings.blend_already_opened = True
                 
                 # setup lock file
-                setupLockFile()
+                lock_filepath = setupLockFile()
                 if debug: print(created_lock_file_statement) #debug
+                
+                if debug: print(registering_exit_function_statement) #debug
+                atexit.register(deleteLockFileExit, lock_filepath)
+
 
 
             ### common loading ###

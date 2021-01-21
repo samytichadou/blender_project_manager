@@ -1,0 +1,289 @@
+# Blender 2.91.0, Commit date: 2020-11-25 08:34, Hash 0f45cab862b8
+bpy.ops.bpm.back_to_edit()  # Operator
+
+# backtrace
+Exception Record:
+
+ExceptionCode         : EXCEPTION_ACCESS_VIOLATION
+Exception Address     : 0x0000000000000001
+Exception Module      : 
+Exception Flags       : 0x00000000
+Exception Parameters  : 0x2
+	Parameters[0] : 0x0000000000000008
+	Parameters[1] : 0x0000000000000001
+
+
+Stack trace:
+                    :0x0000000000000001  Symbols not available
+
+
+Loaded Modules :
+0x00007FF702EF0000 2.9.1.0              blender.exe C:\Program Files\Blender Foundation\Blender 2.91\blender.pdb 
+0x00007FF9F6310000 10.0.19041.662       ntdll.dll  
+0x00007FF9CD2F0000 20.10.5824.0         aswhook.dll  
+0x00007FF9F4CC0000 10.0.19041.662       KERNEL32.DLL  
+0x00007FF9F3A50000 10.0.19041.662       KERNELBASE.dll  
+0x00007FF9F5BA0000 10.0.19041.685       USER32.dll  
+0x00007FF9F3DD0000 10.0.19041.662       win32u.dll  
+0x00007FF9F6290000 10.0.19041.685       GDI32.dll  
+0x00007FF9F3E00000 10.0.19041.685       gdi32full.dll  
+0x00007FF9F4060000 10.0.19041.546       msvcp_win.dll  
+0x00007FF9F3F10000 10.0.19041.546       ucrtbase.dll  
+0x00007FF9F4490000 10.0.19041.662       SHELL32.dll  
+0x00007FF9F4010000 10.0.19041.546       CFGMGR32.dll  
+0x00007FF9F5A80000 10.0.19041.546       WS2_32.dll  
+0x00007FF9F5FA0000 10.0.19041.662       RPCRT4.dll  
+0x00007FF9F5D40000 10.0.19041.610       ADVAPI32.dll  
+0x00007FF9F4D80000 7.0.19041.546        msvcrt.dll  
+0x00007FF9F61E0000 10.0.19041.662       sechost.dll  
+0x00007FF9F5280000 10.0.19041.546       ole32.dll  
+0x00007FF9F4F20000 10.0.19041.662       combase.dll  
+0x00007FF9F62C0000 10.0.19041.546       PSAPI.DLL  
+0x00007FF9F58A0000 10.0.19041.546       SHLWAPI.dll  
+0x00007FF9F61B0000 10.0.19041.546       IMM32.dll  
+0x00007FF9EF280000 2019.9.0.0           tbb.dll  
+0x00007FF9EF270000 10.0.19041.1         SHFOLDER.dll  
+0x00007FF9A2B60000 7.0.0.0              openvdb.dll  
+0x00007FF9D8620000 10.0.19041.546       OPENGL32.dll  
+0x00007FF9950B0000 3.7.7150.1013        python37.dll  
+0x00007FF987A00000 58.54.100.0          avcodec-58.dll  
+0x00007FF998060000 58.29.100.0          avformat-58.dll  
+0x00007FF9EF240000 58.8.100.0           avdevice-58.dll  
+0x00007FF9F5900000 10.0.19041.546       OLEAUT32.dll  
+0x00007FF9CE710000 56.31.100.0          avutil-56.dll  
+0x00007FF9F3DA0000 10.0.19041.662       bcrypt.dll  
+0x00007FF9D3070000 5.5.100.0            swscale-5.dll  
+0x0000000070440000 1.0.28.0             libsndfile-1.dll  
+0x00007FF9A2570000 1.20.1.0             OpenAL32.dll  
+0x00007FF9A2220000 2.0.12.0             SDL2.dll  
+0x00007FF9F5430000 10.0.19041.546       SETUPAPI.dll  
+0x000000006ACC0000                      libgmp-10.dll  
+0x00007FF9EF230000 2019.9.0.0           tbbmalloc_proxy.dll  
+0x00007FF9D2F30000 14.26.28720.3        MSVCP140.dll  
+0x00007FF9EF210000 14.26.28720.3        VCRUNTIME140.dll  
+0x00007FF9EF200000 14.26.28720.3        VCRUNTIME140_1.dll  
+0x00007FF9EF1D0000 10.0.19041.1         AVIFIL32.dll  
+0x00007FF9E68E0000 6.10.19041.488       COMCTL32.dll  
+0x00007FF9EEED0000 10.0.19041.546       VERSION.dll  
+0x00007FF9EE170000 10.0.19041.488       dbghelp.dll  
+0x0000000070680000                      libfftw3-3.dll  
+0x00007FF9ECF90000 10.0.19041.546       GLU32.dll  
+0x00007FF9E5890000 3.5.100.0            swresample-3.dll  
+0x00007FF9DF7D0000 10.0.19041.546       Secur32.dll  
+0x00007FF9EF1B0000 10.0.19041.1         AVICAP32.dll  
+0x00007FF9E9D80000 10.0.19041.546       WINMM.dll  
+0x00007FF9D3030000 2019.9.0.0           tbbmalloc.dll  
+0x00007FF9D2F00000 10.0.19041.1         MSVFW32.dll  
+0x00007FF9CEB00000 10.0.19041.1         MSACM32.dll  
+0x00007FF9D08E0000 10.0.19041.1         winmmbase.dll  
+0x00007FF9F3930000 10.0.19041.662       SSPICLI.DLL  
+0x00007FF9F5AF0000 10.0.19041.662       shcore.dll  
+0x00007FF9F19C0000 10.0.19041.546       kernel.appcore.dll  
+0x00007FF9F1BC0000 10.0.19041.662       windows.storage.dll  
+0x00007FF9F34C0000 10.0.19041.662       Wldp.dll  
+0x00007FF9F1460000 10.0.19041.610       uxtheme.dll  
+0x00007FF9F3D20000 10.0.19041.662       bcryptPrimitives.dll  
+0x00007FF9F3980000 10.0.19041.546       profapi.dll  
+0x00007FF9F59D0000 2001.12.10941.16384  clbcatq.dll  
+0x00007FF9EC380000 10.0.19041.546       MMDevApi.dll  
+0x00007FF9F3800000 10.0.19041.546       DEVOBJ.dll  
+0x00007FF9C94E0000 10.0.19041.662       AUDIOSES.DLL  
+0x00007FF9F3000000 10.0.19041.546       powrprof.dll  
+0x00007FF9F2EC0000                      UMPDC.dll  
+0x00007FF9F15E0000 10.0.19041.546       resourcepolicyclient.dll  
+0x00007FF9F4370000 10.0.19041.662       MSCTF.dll  
+0x00007FF9CF8A0000 10.0.19041.546       dataexchange.dll  
+0x00007FF9F0000000 10.0.19041.546       d3d11.dll  
+0x00007FF9F0830000 10.0.19041.662       dcomp.dll  
+0x00007FF9F23A0000 10.0.19041.546       dxgi.dll  
+0x00007FF9ED4B0000 10.0.19041.546       twinapi.appcore.dll  
+0x00007FF9EBEA0000 10.0.19041.662       AppXDeploymentClient.dll  
+0x00007FF985070000 27.21.14.6089        nvoglv64.dll  
+0x00007FF9EF6B0000 10.0.19041.546       WTSAPI32.dll  
+0x00007FF9F3640000 10.0.19041.546       msasn1.dll  
+0x00007FF9EED90000 10.0.19041.546       cryptnet.dll  
+0x00007FF9F4210000 10.0.19041.546       CRYPT32.dll  
+0x00007FF9F3430000 10.0.19041.546       cryptbase.dll  
+0x00007FF9F4100000 10.0.19041.662       WINTRUST.dll  
+0x00007FF9F2790000 10.0.19041.546       ntmarta.dll  
+0x00007FF9EAB80000 10.0.19041.546       dxcore.dll  
+0x00007FF9F16D0000 10.0.19041.546       dwmapi.dll  
+0x00007FF9F2800000 10.0.19041.546       WINSTA.dll  
+0x00007FF9E80A0000 10.0.19041.662       textinputframework.dll  
+0x00007FF9F0DA0000 10.0.19041.546       CoreUIComponents.dll  
+0x00007FF9F1100000 10.0.19041.610       CoreMessaging.dll  
+0x00007FF9EFA40000 10.0.19041.662       wintypes.dll  
+0x00007FF9D2ED0000 1.5.2.0              Wintab32.dll  
+0x00007FF9C82A0000 10.0.19041.546       explorerframe.dll  
+0x00007FF9EEDD0000 7.0.19041.546        propsys.dll  
+0x00007FF9DA4D0000 10.0.19041.546       MPR.dll  
+0x0000000180000000 2017.0.28.77         cbfsconnectNetRdr2017.dll  
+0x00007FF9EE480000 10.0.19041.546       NETAPI32.dll  
+0x00007FF9DD650000 10.0.19041.546       SRVCLI.DLL  
+0x0000020E65FC0000 6.1.183.327          cbfsNetRdr6.dll  
+0x00007FF9CBB80000 10.0.19041.546       drprov.dll  
+0x00007FF9CBB60000 10.0.19041.546       ntlanman.dll  
+0x00007FF9CBB40000 10.0.19041.546       davclnt.dll  
+0x00007FF9CBAB0000 10.0.19041.546       DAVHLPR.dll  
+0x00007FF9CBA90000 10.0.19041.1         nfsnp.dll  
+0x00007FF9E5130000 10.0.19041.1         WSOCK32.dll  
+0x00007FF9F2C90000 10.0.19041.546       wkscli.dll  
+0x00007FF9D8FC0000 10.0.19041.546       cscapi.dll  
+0x00007FF9F2F20000 10.0.19041.546       netutils.dll  
+0x00007FF9F3410000 10.0.19041.546       CRYPTSP.dll  
+0x00007FF9F2B60000 10.0.19041.546       rsaenh.dll  
+0x00007FF9EE4C0000 3.7.7150.1013        python3.dll  
+0x00007FF995BC0000                      _multiarray_umath.cp37-win_amd64.pyd  
+0x00007FF9ED7B0000                      _multiarray_tests.cp37-win_amd64.pyd  
+0x00007FF9D2E50000 3.7.7150.1013        _ctypes.pyd  
+0x00007FF9CDC90000                      lapack_lite.cp37-win_amd64.pyd  
+0x00007FF994E90000                      _umath_linalg.cp37-win_amd64.pyd  
+0x00007FF9D8600000 3.7.7150.1013        _bz2.pyd  
+0x00007FF9D2E10000 3.7.7150.1013        _lzma.pyd  
+0x00007FF9D2CD0000 3.7.7150.1013        _decimal.pyd  
+0x00007FF9D2EB0000                      _pocketfft_internal.cp37-win_amd64.pyd  
+0x00007FF9B6070000                      mtrand.cp37-win_amd64.pyd  
+0x00007FF9D2DE0000                      common.cp37-win_amd64.pyd  
+0x00007FF9D0910000                      bounded_integers.cp37-win_amd64.pyd  
+0x00007FF9D2D60000                      mt19937.cp37-win_amd64.pyd  
+0x00007FF9CD320000                      bit_generator.cp37-win_amd64.pyd  
+0x00007FF9E5880000 3.7.7150.1013        _hashlib.pyd  
+0x00007FF991C50000 1.1.1.4              libcrypto-1_1.dll  
+0x00007FF9D2D30000                      philox.cp37-win_amd64.pyd  
+0x00007FF9CE6F0000                      pcg64.cp37-win_amd64.pyd  
+0x00007FF9C9E40000                      sfc64.cp37-win_amd64.pyd  
+0x00007FF9B5ED0000                      generator.cp37-win_amd64.pyd  
+0x00007FF9D82F0000                      test_compile.cp37-win_amd64.pyd  
+0x00007FF9D5D20000                      murmurhash3.cp37-win_amd64.pyd  
+0x00007FF9D2CC0000                      utils.cp37-win_amd64.pyd  
+0x00007FF9C46B0000                      implementations.cp37-win_amd64.pyd  
+0x00007FF9C4690000                      clist.cp37-win_amd64.pyd  
+0x00007FF9957C0000                      base_lists.cp37-win_amd64.pyd  
+0x00007FF9CF1E0000                      geometry.cp37-win_amd64.pyd  
+0x00007FF9CE550000                      vector.cp37-win_amd64.pyd  
+0x00007FF9C4670000                      conversion.cp37-win_amd64.pyd  
+0x00007FF9CD310000                      list_operations.cp37-win_amd64.pyd  
+0x00007FF9CA200000                      matrix.cp37-win_amd64.pyd  
+0x00007FF9C53A0000                      rotation_conversion.cp37-win_amd64.pyd  
+0x00007FF9C4F00000                      utils.cp37-win_amd64.pyd  
+0x00007FF9BBC60000                      polygon_indices_list.cp37-win_amd64.pyd  
+0x00007FF9BBC30000                      virtual_list.cp37-win_amd64.pyd  
+0x00007FF9A3060000                      virtual_clists.cp37-win_amd64.pyd  
+0x00007FF9C45F0000                      default_list.cp37-win_amd64.pyd  
+0x00007FF9BBC20000                      c_default_list.cp37-win_amd64.pyd  
+0x00007FF9A3020000                      mesh_data.cp37-win_amd64.pyd  
+0x00007FF9BBC10000                      number.cp37-win_amd64.pyd  
+0x00007FF9B2BC0000                      validate.cp37-win_amd64.pyd  
+0x00007FF9A3000000                      triangulate_mesh.cp37-win_amd64.pyd  
+0x00007FF9A2FE0000                      poly_spline.cp37-win_amd64.pyd  
+0x00007FF9A2B30000                      base_spline.cp37-win_amd64.pyd  
+0x00007FF9B6040000                      lists.cp37-win_amd64.pyd  
+0x00007FF9A2FC0000                      bezier_spline.cp37-win_amd64.pyd  
+0x00007FF9A2B10000                      evaluation.cp37-win_amd64.pyd  
+0x00007FF9A2AF0000                      falloff_base.cp37-win_amd64.pyd  
+0x00007FF9B2BB0000                      types.cp37-win_amd64.pyd  
+0x00007FF9A2F90000                      pointers.cp37-win_amd64.pyd  
+0x00007FF9A2AD0000                      interpolation.cp37-win_amd64.pyd  
+0x00007FF9A2A00000                      action_base.cp37-win_amd64.pyd  
+0x00007FF9A2830000                      action_channels.cp37-win_amd64.pyd  
+0x00007FF9A27F0000                      action_types.cp37-win_amd64.pyd  
+0x00007FF9A29F0000                      clamp.cp37-win_amd64.pyd  
+0x00007FF9A29A0000                      limits.cp37-win_amd64.pyd  
+0x00007FF9A28E0000                      presets.cp37-win_amd64.pyd  
+0x00007FF9A27D0000                      shuffle.cp37-win_amd64.pyd  
+0x00007FF9A2550000                      reverse.cp37-win_amd64.pyd  
+0x00007FF9A2530000                      repeat.cp37-win_amd64.pyd  
+0x00007FF999A70000                      sample.cp37-win_amd64.pyd  
+0x00007FF9A27C0000                      splitmix64.cp37-win_amd64.pyd  
+0x00007FF9A2210000                      xoshiro256starstar.cp37-win_amd64.pyd  
+0x00007FF999A60000                      xoshiro256plus.cp37-win_amd64.pyd  
+0x00007FF999A40000                      fill.cp37-win_amd64.pyd  
+0x00007FF999A20000                      mask.cp37-win_amd64.pyd  
+0x00007FF999A00000                      repeat_elements.cp37-win_amd64.pyd  
+0x00007FF998F10000                      random.cp37-win_amd64.pyd  
+0x00007FF9990F0000                      py_interface.cp37-win_amd64.pyd  
+0x00007FF998EF0000                      symbol_string.cp37-win_amd64.pyd  
+0x00007FF998040000                      apply_rules.cp37-win_amd64.pyd  
+0x00007FF998020000                      geometry.cp37-win_amd64.pyd  
+0x00007FF998000000                      parsing.cp37-win_amd64.pyd  
+0x00007FF998F50000                      translation.cp37-win_amd64.pyd  
+0x00007FF998E20000                      rotation.cp37-win_amd64.pyd  
+0x00007FF998E00000                      scale.cp37-win_amd64.pyd  
+0x00007FF997190000                      points_scatter.cp37-win_amd64.pyd  
+0x00007FF997170000                      circle.cp37-win_amd64.pyd  
+0x00007FF9968C0000                      cylinder.cp37-win_amd64.pyd  
+0x00007FF9968A0000                      find_shortest_path.cp37-win_amd64.pyd  
+0x00007FF996880000                      line.cp37-win_amd64.pyd  
+0x00007FF996860000                      grid.cp37-win_amd64.pyd  
+0x00007FF996830000                      loft.cp37-win_amd64.pyd  
+0x00007FF996810000                      revolve.cp37-win_amd64.pyd  
+0x00007FF995BA0000                      perlin_noise.cp37-win_amd64.pyd  
+0x00007FF995B80000                      random.cp37-win_amd64.pyd  
+0x00007FF995B60000                      rotation_and_direction.cp37-win_amd64.pyd  
+0x00007FF995B00000                      convert.cp37-win_amd64.pyd  
+0x00007FF995AE0000                      to_blender.cp37-win_amd64.pyd  
+0x00007FF997FF0000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF995AC0000                      mesh_indices.cp37-win_amd64.pyd  
+0x00007FF994D80000                      wrapper.cp37-win_amd64.pyd  
+0x00007FF997160000                      color.cp37-win_amd64.pyd  
+0x00007FF996800000                      euler.cp37-win_amd64.pyd  
+0x00007FF995AB0000                      quaternion.cp37-win_amd64.pyd  
+0x00007FF995A90000                      action_from_object.cp37-win_amd64.pyd  
+0x00007FF9957A0000                      chain_actions.cp37-win_amd64.pyd  
+0x00007FF994990000                      delay_action.cp37-win_amd64.pyd  
+0x00007FF994970000                      follow_spline_action.cp37-win_amd64.pyd  
+0x00007FF994940000                      object_action_output.cp37-win_amd64.pyd  
+0x00007FF994920000                      overlay_action.cp37-win_amd64.pyd  
+0x00007FF994900000                      wiggle_action.cp37-win_amd64.pyd  
+0x00007FF9948E0000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF9948C0000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF9948A0000                      constant_falloff.cp37-win_amd64.pyd  
+0x00007FF994880000                      custom_falloff.cp37-win_amd64.pyd  
+0x00007FF994860000                      delay_falloff.cp37-win_amd64.pyd  
+0x00007FF994840000                      interpolate_falloff.cp37-win_amd64.pyd  
+0x00007FF994820000                      directional_falloff.cp37-win_amd64.pyd  
+0x00007FF994800000                      evaluate_falloff.cp37-win_amd64.pyd  
+0x00007FF9947E0000                      fade_falloff.cp37-win_amd64.pyd  
+0x00007FF9947C0000                      index_mask_falloff.cp37-win_amd64.pyd  
+0x00007FF9947A0000                      interpolate_list_falloff.cp37-win_amd64.pyd  
+0x00007FF994780000                      remap_falloff.cp37-win_amd64.pyd  
+0x00007FF994760000                      mesh_falloff.cp37-win_amd64.pyd  
+0x00007FF994730000                      mix_falloffs.cp37-win_amd64.pyd  
+0x00007FF994710000                      noise_falloff.cp37-win_amd64.pyd  
+0x00007FF9946E0000                      object_controller_falloff.cp37-win_amd64.pyd  
+0x00007FF991C30000                      radial_falloff.cp37-win_amd64.pyd  
+0x00007FF991C10000                      point_distance_falloff.cp37-win_amd64.pyd  
+0x00007FF991BF0000                      random_falloff.cp37-win_amd64.pyd  
+0x00007FF991BC0000                      sound_falloff.cp37-win_amd64.pyd  
+0x00007FF991BA0000                      spline_falloff.cp37-win_amd64.pyd  
+0x00007FF991B80000                      wiggle_falloff.cp37-win_amd64.pyd  
+0x00007FF991B60000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF991B40000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF991B20000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF991B00000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF991AE0000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF991AB0000                      distribute_matrices.cp37-win_amd64.pyd  
+0x00007FF991A80000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF991A60000                      offset_vector.cp37-win_amd64.pyd  
+0x00007FF991A30000                      float_math.cp37-win_amd64.pyd  
+0x00007FF991A00000                      vector_math.cp37-win_amd64.pyd  
+0x00007FF9919E0000                      object_matrix_output.cp37-win_amd64.pyd  
+0x00007FF994D70000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF9919C0000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF9919A0000                      c_utils.cp37-win_amd64.pyd  
+0x00007FF991980000                      splines_from_edges_utils.cp37-win_amd64.pyd  
+0x00007FF991960000 3.7.7150.1013        _socket.pyd  
+0x00007FF991950000 3.7.7150.1013        select.pyd  
+0x00007FF991930000 3.7.7150.1013        _ssl.pyd  
+0x00007FF991880000 1.1.1.4              libssl-1_1.dll  
+0x00007FF9F3240000 10.0.19041.546       mswsock.dll  
+0x00007FF991870000 3.7.7150.1013        _queue.pyd  
+0x00007FF991760000 3.7.7150.1013        unicodedata.pyd  
+0x00007FF9F2F30000 10.0.19041.610       DNSAPI.dll  
+0x00007FF9F2EE0000 10.0.19041.546       IPHLPAPI.DLL  
+0x00007FF9F6280000 10.0.19041.610       NSI.dll  
+0x0000000069650000 3.1.0.1              mdnsNSP.dll  
+0x00007FF9E8B50000 10.0.19041.546       rasadhlp.dll  
+0x00007FF9E8C60000 10.0.19041.546       fwpuclnt.dll  
+ 
+# Python backtrace

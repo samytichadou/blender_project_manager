@@ -16,6 +16,7 @@ from .json_functions import initializeAssetJsonDatas, read_json, create_json_fil
 def getLockFilepath():
     return os.path.splitext(bpy.data.filepath)[0] + lockfile_extension
 
+
 # format json opened entry
 def formatJsonOpenedEntry():
     json_dataset = {}
@@ -23,6 +24,7 @@ def formatJsonOpenedEntry():
     json_dataset['timestamp'] = getTimestamp()
     json_dataset['pid'] = getCurrentPID()
     return json_dataset
+
 
 # create lock file
 def setupLockFile():
@@ -37,11 +39,14 @@ def setupLockFile():
 
     create_json_file(datas, lock_filepath)
 
+    return lock_filepath
+
+
 # delete lock file if existing
-def clearLockFile():
-    lock_filepath = getLockFilepath()
+def clearLockFile(lock_filepath):
 
     if os.path.isfile(lock_filepath):
+
         pid = getCurrentPID()
         datas = read_json(lock_filepath)
         n = 0
@@ -60,15 +65,16 @@ def clearLockFile():
     else:
         return 'NONE'
 
+
 # delete on exit
-@atexit.register
-def deleteLockFileExit():
-    if clearLockFile() in {'UPDATED', 'DELETED'}:
+def deleteLockFileExit(lock_filepath):
+    if clearLockFile(lock_filepath) in {'UPDATED', 'DELETED'}:
         print(deleted_lock_file_statement) #debug
 
 # delete on load pre
 @persistent
 def deleteLockFileHandler(scene):
-    if bpy.data.window_managers[0].bpm_generalsettings.is_project:
-        if clearLockFile() in {'UPDATED', 'DELETED'}:
-            if bpy.data.window_managers[0].bpm_projectdatas.debug: print(deleted_lock_file_statement) #debug
+    winman = bpy.data.window_managers[0]
+    if winman.bpm_generalsettings.is_project:
+        if clearLockFile(getLockFilepath()) in {'UPDATED', 'DELETED'}:
+            if winman.bpm_projectdatas.debug: print(deleted_lock_file_statement) #debug
