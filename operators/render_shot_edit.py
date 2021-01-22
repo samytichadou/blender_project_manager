@@ -5,6 +5,7 @@ from ..global_variables import completed_render_statement, launching_command_sta
 from ..functions.file_functions import absolutePath
 from ..functions.command_line_functions import buildBlenderCommandBackgroundRender
 from ..functions.threading_functions import launchSeparateThread
+from ..functions.check_file_poll_function import check_file_poll_function
 
 
 def renderShotEndFunction(shot_strip, debug):
@@ -21,21 +22,13 @@ class BPMRenderShotEdit(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
-        if context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-            if keyword in context.scene.name:
-                if context.scene.sequence_editor.active_strip:
-                    if context.scene.sequence_editor:
-                        active = context.scene.sequence_editor.active_strip
-                        if active.type in {'SCENE', 'IMAGE'}:
-                            if not active.lock:
-                                try:
-                                    if active.bpm_shotsettings.is_shot:
-                                        if not active.bpm_shotsettings.is_working:
-                                            if not active.bpm_shotsettings.is_rendering:
-                                                return True
-                                except AttributeError:
-                                    return False
+        is_bpm_project, bpm_filetype, bpm_active_strip = check_file_poll_function(context)
+        if bpm_filetype == "EDIT" and bpm_active_strip:
+            if not bpm_active_strip.lock:
+                if not bpm_active_strip.bpm_shotsettings.is_working:
+                    if not bpm_active_strip.bpm_shotsettings.is_rendering:
+                        return True
+
 
     def execute(self, context):
         
