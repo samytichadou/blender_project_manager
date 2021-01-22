@@ -3,7 +3,7 @@ import bpy
 
 class BPM_OT_dialog_popups(bpy.types.Operator):
     bl_idname = "bpm.dialog_popups"
-    bl_label = "Dialog Popups"
+    bl_label = "BPM Infos"
     bl_options = {'INTERNAL'}
  
     message : bpy.props.StringProperty()

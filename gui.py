@@ -314,7 +314,7 @@ def draw_topbar(self, context):
                 draw_wiki_help(row, "Open-Shot-and-Back-to-Edit")
 
         # draw menu
-        if general_settings.blend_already_opened:
+        if general_settings.blend_already_opened or general_settings.update_needed:
             layout.menu('BPM_MT_topbar_menu', icon = "ERROR")
         else:
             layout.menu('BPM_MT_topbar_menu')
@@ -1439,6 +1439,12 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             if general_settings.blend_already_opened:
                 layout.separator()
                 layout.operator("bpm.show_open_blend_lock_file", icon = "ERROR")
+
+            # addon update needed
+            if general_settings.update_needed:
+                layout.separator()
+                op = layout.operator("bpm.open_url", text = "New addon version available", icon = "URL")
+                op.url = general_settings.update_download_url
                                 
 
 # project folder ui list
