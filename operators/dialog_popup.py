@@ -9,6 +9,7 @@ class BPM_OT_dialog_popups(bpy.types.Operator):
     message : bpy.props.StringProperty()
     icon : bpy.props.StringProperty()
     operator : bpy.props.StringProperty()
+    operator_icon : bpy.props.StringProperty()
  
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
@@ -19,12 +20,17 @@ class BPM_OT_dialog_popups(bpy.types.Operator):
 
         row = layout.row()
 
-        row.label(text = self.message)
+        if self.message:
+            row.label(text = self.message)
         
         if self.icon:
             row.label(text = "", icon = self.icon)
 
-        if self.operator:
+        if self.operator and self.operator_icon:
+            row = layout.row()
+            row.operator(self.operator, icon = self.operator_icon)
+
+        elif self.operator:
             row = layout.row()
             row.operator(self.operator)
 
