@@ -102,6 +102,9 @@ class BPM_OT_add_comment(bpy.types.Operator):
                 if debug: print(lock_strip_statement) #debug
                 return {'FINISHED'}
 
+        # reload comments
+        reload_comments(context, self.comment_type, active)
+
         if debug: print(start_edit_comment_statement) #debug
 
         # get comment collection and folder path
@@ -188,6 +191,9 @@ class BPM_OT_remove_comment(bpy.types.Operator):
                 self.report({'INFO'}, lock_strip_message)
                 if debug: print(lock_strip_statement) #debug
                 return {'FINISHED'}
+
+        # reload comments
+        reload_comments(context, self.comment_type, active)
 
         if debug: print(start_edit_comment_statement) #debug
 
@@ -295,6 +301,9 @@ class BPM_OT_modify_comment(bpy.types.Operator):
                 self.report({'INFO'}, lock_strip_message)
                 if debug: print(lock_strip_statement) #debug
                 return {'FINISHED'}
+
+        # reload comments
+        reload_comments(context, self.comment_type, active)
 
         if debug: print(start_edit_comment_statement) #debug
 
