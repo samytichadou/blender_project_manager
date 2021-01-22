@@ -3,8 +3,19 @@ import os
 import shutil
 
 
-from ..functions.file_functions import absolutePath
+from ..functions.file_functions import absolutePath, linkExternalScenes, createShotRenderFolders
 from ..functions.check_file_poll_function import check_file_poll_function
+from ..global_variables import (bumping_shot_statement, 
+                            copying_file_statement,
+                            deleting_scene_statement,
+                            library_cleared_statement,
+                            scenes_linked_statement,
+                            linked_to_strip_statement,
+                            scene_not_found_message,
+                            scene_not_found_statement,
+                        )
+from ..functions.utils_functions import clearDataUsers
+from ..functions.strip_functions import getListSequencerShots
 
 
 class BPMBumpShotVersionFromEdit(bpy.types.Operator):
@@ -42,19 +53,6 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
         layout.prop(self, 'file_to_copy', expand = True)
 
     def execute(self, context):
-        # import statements and functions
-        from ..global_variables import (bumping_shot_statement, 
-                                    copying_file_statement,
-                                    deleting_scene_statement,
-                                    library_cleared_statement,
-                                    scenes_linked_statement,
-                                    linked_to_strip_statement,
-                                    scene_not_found_message,
-                                    scene_not_found_statement,
-                                )
-        from ..functions.utils_functions import clearDataUsers
-        from ..functions.strip_functions import getListSequencerShots
-        from ..functions.file_functions import linkExternalScenes, createShotRenderFolders
 
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
