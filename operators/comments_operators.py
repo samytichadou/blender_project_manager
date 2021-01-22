@@ -377,9 +377,6 @@ class BPM_OT_reload_comments(bpy.types.Operator):
 
         if debug: print(loading_comments_statement) #debug
 
-        # get comment collection and folder path
-        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
-
         reload_comments(context, self.comment_type, active)
 
         for area in context.screen.areas:
