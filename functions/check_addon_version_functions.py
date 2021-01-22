@@ -82,10 +82,21 @@ def check_addon_version(winman):
 # update function for update_needed property
 def update_function_updateneeded(self, context):
     if self.update_needed:
-        bpy.ops.bpm.dialog_popups(
-                            'INVOKE_DEFAULT',
-                            operator = "bpm.open_url",
-                            operator_text = "New addon version available",
-                            operator_icon = "URL",
-                            operator_url = context.window_manager.bpm_generalsettings.update_download_url
-                            )
+        general_settings = context.window_manager.bpm_generalsettings
+        if self.update_message:
+            bpy.ops.bpm.dialog_popups(
+                                'INVOKE_DEFAULT',
+                                message = general_settings.update_message,
+                                operator = "bpm.open_url",
+                                operator_text = "New addon version available",
+                                operator_icon = "URL",
+                                operator_url = general_settings.update_download_url
+                                )
+        else:
+            bpy.ops.bpm.dialog_popups(
+                                'INVOKE_DEFAULT',
+                                operator = "bpm.open_url",
+                                operator_text = "New addon version available",
+                                operator_icon = "URL",
+                                operator_url = general_settings.update_download_url
+                                )
