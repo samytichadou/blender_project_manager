@@ -1,7 +1,7 @@
 import bpy
 
 
-class BPMRenderShotPlayblast(bpy.types.Operator):
+class BPM_OT_render_shot_playblast(bpy.types.Operator):
     """Find help on the wiki page"""
     bl_idname = "bpm.render_shot_playlast"
     bl_label = "Render playblast"

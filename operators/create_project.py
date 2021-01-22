@@ -5,7 +5,7 @@ import re
 
 
 # display project settings
-class BpmCreateProject(bpy.types.Operator):
+class BPM_OT_create_project(bpy.types.Operator):
     """Create new Blender Project Manager Project"""
     bl_idname = "bpm.create_project"
     bl_label = "Create BPM Project"

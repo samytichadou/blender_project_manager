@@ -2,7 +2,7 @@ import bpy
 import os
 
 
-class BPMSynchronizeAudioEdit(bpy.types.Operator):
+class BPM_OT_synchronize_audio_edit(bpy.types.Operator):
     """Synchronize audio edit file for shots"""
     bl_idname = "bpm.synchronize_audio_edit"
     bl_label = "Synchronize audio edit"

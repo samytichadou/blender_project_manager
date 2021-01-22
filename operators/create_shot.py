@@ -43,7 +43,7 @@ def linkSceneToStrip(strip, lib_file, scene_name, python_script, debug):
     suppressExistingFile(python_script)
 
 
-class BPMCreateShot(bpy.types.Operator):
+class BPM_OT_create_shot(bpy.types.Operator):
     """Create Shot from Timeline"""
     bl_idname = "bpm.create_shot"
     bl_label = "Create Shot"

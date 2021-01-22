@@ -4,7 +4,7 @@ import bpy
 from ..functions.date_functions import getDateYearString
 
 
-class BPMModifyShotTasksDeadline(bpy.types.Operator):
+class BPM_OT_modify_shot_task_deadline(bpy.types.Operator):
     """Modify shot tasks deadlines"""
     bl_idname = "bpm.modify_shot_tasks_deadlines"
     bl_label = "Modify deadlines"

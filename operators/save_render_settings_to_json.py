@@ -3,7 +3,7 @@ import bpy, os
 
 
 # display project settings
-class BpmSaveRenderSettingsToJson(bpy.types.Operator):
+class BPM_OT_save_render_settings_to_json(bpy.types.Operator):
     """Save Render Settings to json"""
     bl_idname = "bpm.save_render_settings_json"
     bl_label = "Save Project Settings"

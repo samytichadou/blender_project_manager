@@ -24,7 +24,7 @@ def reloadProjectSettingsFromJson(self, context):
 
 
 # display project settings
-class BpmDisplayModifyProjectSettings(bpy.types.Operator):
+class BPM_OT_display_modify_project_settings(bpy.types.Operator):
     """Display and Modify Project Settings"""
     bl_idname = "bpm.display_modify_project_settings"
     bl_label = "Project Settings"

@@ -2,7 +2,7 @@ import bpy, os
 
 
 # display project settings
-class BpmSaveProjectSettingsToJson(bpy.types.Operator):
+class BPM_OT_save_project_settings_to_json(bpy.types.Operator):
     """Save Project Settings to json"""
     bl_idname = "bpm.save_project_settings_json"
     bl_label = "Save Project Settings"

@@ -47,7 +47,7 @@ def update_comment_frame_property(self, context):
     context.scene.frame_current = self.frame
   
 
-class BPMAddComment(bpy.types.Operator):
+class BPM_OT_add_comment(bpy.types.Operator):
     """Add comment to active"""
     bl_idname = "bpm.add_comment"
     bl_label = "Add comment"
@@ -143,7 +143,7 @@ class BPMAddComment(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class BPMRemoveComment(bpy.types.Operator):
+class BPM_OT_remove_comment(bpy.types.Operator):
     """Remove comment"""
     bl_idname = "bpm.remove_comment"
     bl_label = "Remove comment"
@@ -211,7 +211,7 @@ class BPMRemoveComment(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class BPMModifyComment(bpy.types.Operator):
+class BPM_OT_modify_comment(bpy.types.Operator):
     """Modify comment"""
     bl_idname = "bpm.modify_comment"
     bl_label = "Modify comment"
@@ -337,9 +337,9 @@ class BPMModifyComment(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class BPMReloadComment(bpy.types.Operator):
+class BPM_OT_reload_comments(bpy.types.Operator):
     """Reload comments"""
-    bl_idname = "bpm.reload_comment"
+    bl_idname = "bpm.reload_comments"
     bl_label = "Reload comment"
     bl_options = {'REGISTER', 'INTERNAL'}
 

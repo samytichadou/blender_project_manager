@@ -87,7 +87,7 @@ def updateAssetDisplayType(self, context):
 
 
 # shot comments
-class BPMShotComments(bpy.types.PropertyGroup):
+class BPM_PR_shot_comments(bpy.types.PropertyGroup):
     '''name : StringProperty() '''
     comment : bpy.props.StringProperty(name = "Comment")
     frame_comment : bpy.props.BoolProperty(name = "Frame Comment")
@@ -99,7 +99,7 @@ class BPMShotComments(bpy.types.PropertyGroup):
 
 
 # shot comments
-class BPMShotCommentsStrips(bpy.types.PropertyGroup):
+class BPM_PR_shot_comments_strips(bpy.types.PropertyGroup):
     '''name : StringProperty() '''
     comment : bpy.props.StringProperty(name = "Comment")
     frame_comment : bpy.props.BoolProperty(name = "Frame Comment")
@@ -112,7 +112,7 @@ class BPMShotCommentsStrips(bpy.types.PropertyGroup):
 
 
 # project settings
-class BPMProjectSettings(bpy.types.PropertyGroup) :
+class BPM_PR_project_settings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     #name : bpy.props.StringProperty(name = "Name", default = "Project Name")
     project_prefix : bpy.props.StringProperty(name = "Project Prefix", default = "Project_prefix")
@@ -130,17 +130,17 @@ class BPMProjectSettings(bpy.types.PropertyGroup) :
     debug : bpy.props.BoolProperty(default = True)
 
     # comments
-    comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
+    comments : bpy.props.CollectionProperty(type = BPM_PR_shot_comments, name="Comments")
 
 
 # custom project folders
-class BPMCustomFolders(bpy.types.PropertyGroup) :
+class BPM_PR_custom_folders(bpy.types.PropertyGroup) :
     name : bpy.props.StringProperty(update = update_custom_folder_file_from_name)
     filepath : bpy.props.StringProperty(name = "Filepath")
 
 
 # asset list
-class BPMAssetList(bpy.types.PropertyGroup) :
+class BPM_PR_asset_list(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER')
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT')
@@ -152,7 +152,7 @@ class BPMAssetList(bpy.types.PropertyGroup) :
 
 
 # asset settings
-class BPMAssetSettings(bpy.types.PropertyGroup) :
+class BPM_PR_asset_settings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER', update = updateChangingAssetType)
     asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT', update = saveAssetToJson)
@@ -162,11 +162,11 @@ class BPMAssetSettings(bpy.types.PropertyGroup) :
     asset_world : bpy.props.PointerProperty(name="Asset world", type=bpy.types.World, update = updateAssetAssigning)
 
     # comments
-    comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
+    comments : bpy.props.CollectionProperty(type = BPM_PR_shot_comments, name="Comments")
 
 
 # shot settings strips
-class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
+class BPM_PR_shot_settings_strips(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_shot : bpy.props.BoolProperty(default=False)
     display_comments : bpy.props.BoolProperty(name = "Display comments", default=False)
@@ -211,11 +211,11 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     is_rendering : bpy.props.BoolProperty(update = updateShotSettingsProperties)
 
     # comments
-    comments : bpy.props.CollectionProperty(type = BPMShotCommentsStrips, name="Comments")
+    comments : bpy.props.CollectionProperty(type = BPM_PR_shot_comments_strips, name="Comments")
 
 
 # shot settings file
-class BPMShotSettings(bpy.types.PropertyGroup) :
+class BPM_PR_shot_settings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_shot : bpy.props.BoolProperty(default=False)
     display_comments : bpy.props.BoolProperty(name = "Display comments", default=False)
@@ -254,11 +254,11 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     is_rendering : bpy.props.BoolProperty(update = updateShotSettingsProperties)
 
     # comments
-    comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
+    comments : bpy.props.CollectionProperty(type = BPM_PR_shot_comments, name="Comments")
 
 
 # general settings
-class BPMGeneralSettings(bpy.types.PropertyGroup) :
+class BPM_PR_general_settings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_project : bpy.props.BoolProperty(default=False)
     file_type = [
@@ -315,7 +315,7 @@ def display_panels_callback(scene, context):
     return items
 
 # scene settings
-class BPMSceneSettings(bpy.types.PropertyGroup) :
+class BPM_PR_scene_settings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
 
     # Panels
@@ -405,7 +405,7 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
 
 
 # render settings
-class BPMRenderSettings(bpy.types.PropertyGroup) :
+class BPM_PR_render_settings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
 
     ### image settings ###

@@ -14,7 +14,7 @@ from ..global_variables import (
 from ..functions.file_functions import deleteFolderContent
 
 
-class BPMEmptyRecycleBin(bpy.types.Operator):
+class BPM_OT_empty_recycle_bin(bpy.types.Operator):
     """Empty project recycle bin"""
     bl_idname = "bpm.empty_recycle_bin"
     bl_label = "Empty recycle bin"

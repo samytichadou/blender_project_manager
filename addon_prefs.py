@@ -58,7 +58,7 @@ def updateLockFileToggle(self, context):
 
 
 # addon preferences
-class BPMAddonPrefs(bpy.types.AddonPreferences):
+class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
     bl_idname = addon_name
 
     use_lock_file_system : bpy.props.BoolProperty(

@@ -13,7 +13,7 @@ def updateShotDurationEndFunction(strip):
     bpy.ops.sequencer.refresh_all()
 
 
-class BPMUpdateShotDuration(bpy.types.Operator):
+class BPM_OT_update_shot_duration(bpy.types.Operator):
     """Update selected shot(s) duration"""
     bl_idname = "bpm.update_shot_duration"
     bl_label = "Update Shot(s) duration"

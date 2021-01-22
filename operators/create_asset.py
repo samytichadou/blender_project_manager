@@ -3,7 +3,7 @@ import os
 import shutil
 
 
-class BPMCreateAsset(bpy.types.Operator):
+class BPM_OT_create_asset(bpy.types.Operator):
     """Create new asset"""
     bl_idname = "bpm.create_asset"
     bl_label = "Create asset"

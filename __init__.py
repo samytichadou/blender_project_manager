@@ -79,7 +79,7 @@ from .operators.save_render_settings_to_json import *
 from .properties import *
 from .gui import *
 from .asset_ui_list import *
-from .addon_prefs import BPMAddonPrefs
+from .addon_prefs import BPM_PF_addon_prefs
 
 from .vse_extra_ui import disableSequencerUICallback
 from .dopesheet_extra_ui import disable_dope_sheet_ui_callback
@@ -88,35 +88,35 @@ from .dopesheet_extra_ui import disable_dope_sheet_ui_callback
 # register
 ##################################
 
-classes = (BPMOpenShot,
-            BPMBackToEdit,
-            BPMCreateShot,
-            BpmCreateProject,
-            BPMUpdateShotDuration,
-            BpmDisplayModifyProjectSettings,
-            BpmDisplayModifyRenderSettings,
-            BpmSaveProjectSettingsToJson,
-            BpmSaveRenderSettingsToJson,
-            BPMCreateAsset,
-            BPMAddComment,
-            BPMRemoveComment,
-            BPMModifyComment,
-            BPMReloadComment,
-            BPMDeleteUnusedShots,
-            BPMEmptyRecycleBin,
-            BPMBumpShotVersionFromEdit,
-            BPMBumpChangeShotVersionFromEdit,
-            BPMSynchronizeAudioEdit,
-            BPMSynchronizeAudioShot,
+classes = (BPM_OT_open_shot,
+            BPM_OT_back_to_edit,
+            BPM_OT_create_shot,
+            BPM_OT_create_project,
+            BPM_OT_update_shot_duration,
+            BPM_OT_display_modify_project_settings,
+            BPM_OT_display_modify_render_settings,
+            BPM_OT_save_project_settings_to_json,
+            BPM_OT_save_render_settings_to_json,
+            BPM_OT_create_asset,
+            BPM_OT_add_comment,
+            BPM_OT_remove_comment,
+            BPM_OT_modify_comment,
+            BPM_OT_reload_comments,
+            BPM_OT_delete_unused_shots,
+            BPM_OT_empty_recycle_bin,
+            BPM_OT_bump_shot_version,
+            BPM_OT_change_shot_version_edit,
+            BPM_OT_synchronize_audio_edit,
+            BPM_OT_synchronize_audio_shot,
             BPM_OT_refresh_edit_datas,
             BPM_OT_refresh_shot_datas,
-            BPMImportAsset,
-            BPMOpenAssetFile,
-            BPMShowOpenBlendLockFile,
-            BPMClearLockFileUser,
-            BPMRenderShotPlayblast,
-            BPMModifyShotTasksDeadline,
-            BPMRenderShotEdit,
+            BPM_OT_import_asset,
+            BPM_OT_open_asset_file,
+            BPM_OT_show_open_blend_lock_file,
+            BPM_OT_clear_lock_file_user,
+            BPM_OT_render_shot_playblast,
+            BPM_OT_modify_shot_task_deadline,
+            BPM_OT_render_shot_edit,
             BPM_OT_goto_next_previous_comment,
             BPM_OT_goto_comment,
             BPM_OT_Custom_Folder_Actions,
@@ -128,21 +128,21 @@ classes = (BPMOpenShot,
             BPM_OT_open_project_folder,
             BPM_OT_open_custom_folder,
 
-            BPMOpenWikiPage,
+            BPM_OT_open_wiki_page,
 
-            BPMAddonPrefs,
+            BPM_PF_addon_prefs,
 
-            BPMShotComments,
-            BPMShotCommentsStrips,
-            BPMProjectSettings,
-            BPMCustomFolders,
-            BPMAssetList,
-            BPMAssetSettings,
-            BPMShotSettingsStrips,
-            BPMShotSettings,
-            BPMSceneSettings,
-            BPMGeneralSettings,
-            BPMRenderSettings,
+            BPM_PR_shot_comments,
+            BPM_PR_shot_comments_strips,
+            BPM_PR_project_settings,
+            BPM_PR_custom_folders,
+            BPM_PR_asset_list,
+            BPM_PR_asset_settings,
+            BPM_PR_shot_settings_strips,
+            BPM_PR_shot_settings,
+            BPM_PR_scene_settings,
+            BPM_PR_general_settings,
+            BPM_PR_render_settings,
 
             BPM_PT_sequencer_panels_display_panel,
             BPM_PT_sequencer_management_panel,
@@ -211,34 +211,34 @@ def register():
     ### PROPERTIES ###
 
     bpy.types.WindowManager.bpm_generalsettings = \
-        bpy.props.PointerProperty(type = BPMGeneralSettings, name="BPM general settings")
+        bpy.props.PointerProperty(type = BPM_PR_general_settings, name="BPM general settings")
 
     bpy.types.WindowManager.bpm_projectdatas = \
-        bpy.props.PointerProperty(type = BPMProjectSettings, name="BPM project datas")
+        bpy.props.PointerProperty(type = BPM_PR_project_settings, name="BPM project datas")
 
     bpy.types.WindowManager.bpm_customfolders = \
-        bpy.props.CollectionProperty(type = BPMCustomFolders, name="BPM custom folders")
+        bpy.props.CollectionProperty(type = BPM_PR_custom_folders, name="BPM custom folders")
 
     bpy.types.WindowManager.bpm_assets = \
-        bpy.props.CollectionProperty(type = BPMAssetList, name="BPM assets")
+        bpy.props.CollectionProperty(type = BPM_PR_asset_list, name="BPM assets")
 
     bpy.types.WindowManager.bpm_assetsettings = \
-        bpy.props.PointerProperty(type = BPMAssetSettings, name="BPM asset settings")
+        bpy.props.PointerProperty(type = BPM_PR_asset_settings, name="BPM asset settings")
 
     bpy.types.WindowManager.bpm_shotsettings = \
-        bpy.props.PointerProperty(type = BPMShotSettings, name="BPM shot settings")
+        bpy.props.PointerProperty(type = BPM_PR_shot_settings, name="BPM shot settings")
 
     bpy.types.WindowManager.bpm_rendersettings = \
-        bpy.props.CollectionProperty(type = BPMRenderSettings, name="BPM render settings")
+        bpy.props.CollectionProperty(type = BPM_PR_render_settings, name="BPM render settings")
 
     bpy.types.SceneSequence.bpm_shotsettings = \
-        bpy.props.PointerProperty(type = BPMShotSettingsStrips, name="BPM shot settings")
+        bpy.props.PointerProperty(type = BPM_PR_shot_settings_strips, name="BPM shot settings")
 
     bpy.types.ImageSequence.bpm_shotsettings = \
-        bpy.props.PointerProperty(type = BPMShotSettingsStrips, name="BPM shot settings")
+        bpy.props.PointerProperty(type = BPM_PR_shot_settings_strips, name="BPM shot settings")
 
     bpy.types.Scene.bpm_scenesettings = \
-        bpy.props.PointerProperty(type = BPMSceneSettings, name="BPM scene settings")
+        bpy.props.PointerProperty(type = BPM_PR_scene_settings, name="BPM scene settings")
 
     bpy.types.Collection.bpm_isasset = \
         bpy.props.BoolProperty(default = False)

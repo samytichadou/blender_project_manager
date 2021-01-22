@@ -25,7 +25,7 @@ from ..functions.project_data_functions import getAvailableShotsList, findLibFro
 from ..functions.utils_functions import listDifference, clearDataUsers
 
 
-class BPMDeleteUnusedShots(bpy.types.Operator):
+class BPM_OT_delete_unused_shots(bpy.types.Operator):
     """Delete shots in the project not present on the timeline"""
     bl_idname = "bpm.delete_unused_shots"
     bl_label = "Delete unused shots"

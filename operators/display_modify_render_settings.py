@@ -31,7 +31,7 @@ def reloadRenderSettingsFromJson(self, context):
 
 
 # display project settings
-class BpmDisplayModifyRenderSettings(bpy.types.Operator):
+class BPM_OT_display_modify_render_settings(bpy.types.Operator):
     """Display and Render Settings"""
     bl_idname = "bpm.display_modify_render_settings"
     bl_label = "Render Settings"

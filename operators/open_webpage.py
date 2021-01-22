@@ -2,7 +2,7 @@ import bpy
 import webbrowser
 
 
-class BPMOpenWikiPage(bpy.types.Operator):
+class BPM_OT_open_wiki_page(bpy.types.Operator):
     """Find help on the wiki page"""
     bl_idname = "bpm.open_wiki_page"
     bl_label = "Help"

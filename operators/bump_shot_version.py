@@ -18,7 +18,7 @@ from ..functions.utils_functions import clearDataUsers
 from ..functions.strip_functions import getListSequencerShots
 
 
-class BPMBumpShotVersionFromEdit(bpy.types.Operator):
+class BPM_OT_bump_shot_version(bpy.types.Operator):
     """Create a new version of active shot"""
     bl_idname = "bpm.bump_shot_version_edit"
     bl_label = "Bump shot version"

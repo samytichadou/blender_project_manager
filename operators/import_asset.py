@@ -2,7 +2,7 @@ import bpy
 import os
 
 
-class BPMImportAsset(bpy.types.Operator):
+class BPM_OT_import_asset(bpy.types.Operator):
     """Import asset in shot"""
     bl_idname = "bpm.import_asset"
     bl_label = "Import asset"

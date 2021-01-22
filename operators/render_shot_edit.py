@@ -14,7 +14,7 @@ def renderShotEndFunction(shot_strip, debug):
     bpy.ops.sequencer.refresh_all()
 
 
-class BPMRenderShotEdit(bpy.types.Operator):
+class BPM_OT_render_shot_edit(bpy.types.Operator):
     """Render shot from edit"""
     bl_idname = "bpm.render_shot_edit"
     bl_label = "Render shot"

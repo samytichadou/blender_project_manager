@@ -2,7 +2,7 @@ import bpy
 import os
 
 
-class BPMClearLockFileUser(bpy.types.Operator):
+class BPM_OT_clear_lock_file_user(bpy.types.Operator):
     """Clear lock file user"""
     bl_idname = "bpm.clear_lock_file_user"
     bl_label = "Clear user"

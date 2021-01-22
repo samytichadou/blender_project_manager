@@ -6,7 +6,7 @@ import subprocess
 from ..functions.file_functions import absolutePath
 
 
-class BPMOpenShot(bpy.types.Operator):
+class BPM_OT_open_shot(bpy.types.Operator):
     """Open Shot from Timeline"""
     bl_idname = "bpm.open_shot"
     bl_label = "Open Shot"

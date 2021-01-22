@@ -8,7 +8,7 @@ from ..functions.utils_functions import returnFormatedTimestamp, getCurrentPID
 from ..addon_prefs import getAddonPreferences
 
 
-class BPMShowOpenBlendLockFile(bpy.types.Operator):
+class BPM_OT_show_open_blend_lock_file(bpy.types.Operator):
     """Show list of user for this blend file"""
     bl_idname = "bpm.show_open_blend_lock_file"
     bl_label = "File already opened"

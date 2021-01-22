@@ -3,7 +3,7 @@ import os
 import subprocess
 
 
-class BPMOpenAssetFile(bpy.types.Operator):
+class BPM_OT_open_asset_file(bpy.types.Operator):
     """Open asset file"""
     bl_idname = "bpm.open_asset_file"
     bl_label = "Open asset file"

@@ -1,7 +1,7 @@
 import bpy
 
 
-class BPMBackToEdit(bpy.types.Operator):
+class BPM_OT_back_to_edit(bpy.types.Operator):
     """Go Back to Edit Project"""
     bl_idname = "bpm.back_to_edit"
     bl_label = "Back to Edit"

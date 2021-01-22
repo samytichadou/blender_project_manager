@@ -118,7 +118,7 @@ def draw_comment(container, comments, c_type, context):
     row = container.row(align=True)
     op = row.operator("bpm.add_comment", text="Add")
     op.comment_type = c_type
-    op2 = row.operator("bpm.reload_comment", text = "", icon = "FILE_REFRESH")
+    op2 = row.operator("bpm.reload_comments", text = "", icon = "FILE_REFRESH")
     op2.comment_type = c_type
     row.separator()
     draw_wiki_help(row, "Comments")

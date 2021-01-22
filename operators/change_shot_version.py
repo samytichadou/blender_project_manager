@@ -23,7 +23,7 @@ from ..global_variables import (invalid_shot_version_message,
                             )
 
 
-class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
+class BPM_OT_change_shot_version_edit(bpy.types.Operator):
     """Change version of active shot"""
     bl_idname = "bpm.change_shot_version_edit"
     bl_label = "Change shot version"
