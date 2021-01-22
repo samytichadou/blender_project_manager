@@ -4,6 +4,7 @@ import shutil
 
 
 from ..functions.file_functions import absolutePath
+from ..functions.check_file_poll_function import check_file_poll_function
 
 
 class BPMBumpShotVersionFromEdit(bpy.types.Operator):
@@ -20,17 +21,12 @@ class BPMBumpShotVersionFromEdit(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
-        if context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-            if keyword in context.scene.name:
-                if context.scene.sequence_editor:
-                    if context.scene.sequence_editor.active_strip:
-                        active = context.scene.sequence_editor.active_strip
-                        if active.type in {'SCENE', 'IMAGE'}:
-                            if not active.lock:
-                                if active.bpm_shotsettings.is_shot:
-                                    #if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
-                                    return True
+        is_bpm_project, bpm_filetype, bpm_active_strip = check_file_poll_function(context)
+        if bpm_filetype == "EDIT" and bpm_active_strip:
+            if not bpm_active_strip.lock:
+                if not bpm_active_strip.bpm_shotsettings.is_working:
+                    if not bpm_active_strip.bpm_shotsettings.is_rendering:
+                        return True
 
     def invoke(self, context, event):
         self.file_to_copy = 'CURRENT'
