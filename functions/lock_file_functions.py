@@ -15,7 +15,11 @@ from .json_functions import initializeAssetJsonDatas, read_json, create_json_fil
 # update function when finding lock file
 def update_function_already_opened(self, context):
     if self.blend_already_opened:
-        bpy.ops.bpm.dialog_popups('INVOKE_DEFAULT', operator = "bpm.show_open_blend_lock_file", operator_icon = "ERROR")
+        bpy.ops.bpm.dialog_popups(
+                            'INVOKE_DEFAULT',
+                            operator = "bpm.show_open_blend_lock_file",
+                            operator_icon = "ERROR",
+                            )
 
 
 # get lock filepath

@@ -8,6 +8,7 @@ from .functions.date_functions import getDateStringPlusDays, getDateYearString, 
 from .functions.change_strip_display_mode_functions import updateShotDisplayMode
 from .functions.update_custom_folder_file import update_custom_folder_file_from_name
 from .functions.lock_file_functions import update_function_already_opened
+from .functions.check_addon_version_functions import update_function_updateneeded
 
 from .global_variables import (
                             render_draft_folder,
@@ -283,7 +284,7 @@ class BPM_PR_general_settings(bpy.types.PropertyGroup) :
     today_date : bpy.props.StringProperty(name = "Today date")
 
     # update
-    update_needed : bpy.props.BoolProperty()
+    update_needed : bpy.props.BoolProperty(update = update_function_updateneeded)
     update_message : bpy.props.StringProperty()
     update_download_url : bpy.props.StringProperty()
 

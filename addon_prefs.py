@@ -95,7 +95,7 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
         name="Refresh custom folders", 
         default = True,
         description="Refresh project custom folders datas on timer",
-        )  
+        )
 
 
     def draw(self, context):

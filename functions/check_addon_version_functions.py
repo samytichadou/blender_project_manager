@@ -1,3 +1,4 @@
+import bpy
 import socket
 import requests
 import addon_utils
@@ -64,10 +65,10 @@ def check_addon_version(winman):
     new_addon_infos = read_online_json(addon_version_url)
 
     if new_addon_infos["version"] != get_addon_version("BPM - Blender Project Manager"):
-        if not general_settings.update_needed:
-            general_settings.update_needed = True
         general_settings.update_message = new_addon_infos["message"]
         general_settings.update_download_url = new_addon_infos["download_url"]
+        if not general_settings.update_needed:
+            general_settings.update_needed = True
 
         if debug: print(addon_new_version_statement) #debug
 
@@ -76,3 +77,15 @@ def check_addon_version(winman):
     if debug: print(addon_up_to_date_statement) #debug
     
     return True
+
+
+# update function for update_needed property
+def update_function_updateneeded(self, context):
+    if self.update_needed:
+        bpy.ops.bpm.dialog_popups(
+                            'INVOKE_DEFAULT',
+                            operator = "bpm.open_url",
+                            operator_text = "New addon version available",
+                            operator_icon = "URL",
+                            operator_url = context.window_manager.bpm_generalsettings.update_download_url
+                            )
