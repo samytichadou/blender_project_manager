@@ -2,7 +2,6 @@ def check_file_poll_function(context):
 
     is_bpm_project = False
     bpm_filetype = None
-    is_bpm_strip = False
     bpm_active_strip = None
 
     winman = context.window_manager
