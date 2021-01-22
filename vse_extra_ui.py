@@ -325,6 +325,12 @@ def draw_bpm_sequencer_strip_callback_px():
     n_e_ws = 0
     color_e_ws = scene_settings.color_strip_working
 
+    #rendering strips
+    vertices_e_rnd = ()
+    indices_e_rnd = ()
+    n_e_rnd = 0
+    color_e_rnd = scene_settings.color_strip_rendering
+
     # info shot audio sync
     vertices_e_au = ()
     indices_e_au = ()
@@ -468,6 +474,23 @@ def draw_bpm_sequencer_strip_callback_px():
                 vertices_e_ws += (v1ws, v2ws, v3ws, v4ws)
                 indices_e_ws += ((n_e_ws, n_e_ws + 1, n_e_ws + 2), (n_e_ws + 2, n_e_ws + 1, n_e_ws + 3))
                 n_e_ws += 4
+        
+        # bpm is rendering
+        if scene_settings.display_rendering_warning:
+
+            if strip.bpm_shotsettings.is_rendering:
+               
+                y1rnd = y1 + 0.5 + strip_line_length
+                y2rnd = y1rnd + strip_line_length
+
+                v1rnd = region.view2d.view_to_region(x1, y1rnd, clip=False)
+                v2rnd = region.view2d.view_to_region(x2, y1rnd, clip=False)
+                v3rnd = region.view2d.view_to_region(x1, y2rnd, clip=False)
+                v4rnd = region.view2d.view_to_region(x2, y2rnd, clip=False)
+
+                vertices_e_rnd += (v1rnd, v2rnd, v3rnd, v4rnd)
+                indices_e_rnd += ((n_e_rnd, n_e_rnd + 1, n_e_rnd + 2), (n_e_rnd + 2, n_e_rnd + 1, n_e_rnd + 3))
+                n_e_rnd += 4
 
         # bpm shot audio sync
         if scene_settings.display_audio_sync_warning:
@@ -549,9 +572,13 @@ def draw_bpm_sequencer_strip_callback_px():
 
         drawShader(vertices_e_st_do, indices_e_st_do, color_e_st_fi)
 
-    #deadline preview
+    #working
     if scene_settings.display_working_warning:
         drawShader(vertices_e_ws, indices_e_ws, color_e_ws)
+
+    #rendering
+    if scene_settings.display_rendering_warning:
+        drawShader(vertices_e_rnd, indices_e_rnd, color_e_rnd)
 
     # audio sync info
     if scene_settings.display_audio_sync_warning:

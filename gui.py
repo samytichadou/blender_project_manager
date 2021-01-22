@@ -785,7 +785,6 @@ class BPM_PT_sequencer_edit_ui_shot_subpanel(SequencerPanel_Editing):
     def draw(self, context):
 
         scn_settings = context.scene.bpm_scenesettings
-        general_settings = context.window_manager.bpm_generalsettings
 
         layout = self.layout
 
@@ -808,6 +807,10 @@ class BPM_PT_sequencer_edit_ui_shot_subpanel(SequencerPanel_Editing):
         row = layout.row()
         row.prop(scn_settings, 'display_working_warning')
         row.prop(scn_settings, 'color_strip_working', text="")
+
+        row = layout.row()
+        row.prop(scn_settings, 'display_rendering_warning')
+        row.prop(scn_settings, 'color_strip_rendering', text="")
 
 
 # sequencer UI shot state subpanel

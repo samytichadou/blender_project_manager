@@ -9,7 +9,7 @@ from ..functions.threading_functions import launchSeparateThread
 
 def renderShotEndFunction(shot_strip, debug):
     if debug: print(completed_render_statement + shot_strip.name) #debug
-    shot_strip.bpm_shotsettings.is_working = False
+    shot_strip.bpm_shotsettings.is_rendering = False
     bpy.ops.sequencer.refresh_all()
 
 
@@ -30,8 +30,10 @@ class BPMRenderShotEdit(bpy.types.Operator):
                         if active.type in {'SCENE', 'IMAGE'}:
                             if not active.lock:
                                 try:
-                                    if active.bpm_shotsettings.is_shot and not active.bpm_shotsettings.is_working:
-                                        return True
+                                    if active.bpm_shotsettings.is_shot:
+                                        if not active.bpm_shotsettings.is_working:
+                                            if not active.bpm_shotsettings.is_rendering:
+                                                return True
                                 except AttributeError:
                                     return False
 
@@ -47,7 +49,7 @@ class BPMRenderShotEdit(bpy.types.Operator):
         shot_filepath = absolutePath(shot_settings.shot_filepath)
 
         #set rendering
-        shot_settings.is_working = True
+        shot_settings.is_rendering = True
 
         #build command
         command = buildBlenderCommandBackgroundRender(shot_filepath)

@@ -207,6 +207,9 @@ class BPMShotSettingsStrips(bpy.types.PropertyGroup) :
     rendering_done : bpy.props.BoolProperty(name = "Rendering done", update = updateShotSettingsProperties)
     compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = updateShotSettingsProperties)
 
+    # render 
+    is_rendering : bpy.props.BoolProperty(update = updateShotSettingsProperties)
+
     # comments
     comments : bpy.props.CollectionProperty(type = BPMShotCommentsStrips, name="Comments")
 
@@ -246,6 +249,9 @@ class BPMShotSettings(bpy.types.PropertyGroup) :
     lighting_done : bpy.props.BoolProperty(name = "Lighting done", update = updateShotSettingsProperties)
     rendering_done : bpy.props.BoolProperty(name = "Rendering done", update = updateShotSettingsProperties)
     compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = updateShotSettingsProperties)
+
+    # render 
+    is_rendering : bpy.props.BoolProperty(update = updateShotSettingsProperties)
 
     # comments
     comments : bpy.props.CollectionProperty(type = BPMShotComments, name="Comments")
@@ -387,6 +393,9 @@ class BPMSceneSettings(bpy.types.PropertyGroup) :
 
     display_working_warning : bpy.props.BoolProperty(name = "Shot working", default=True)
     color_strip_working : bpy.props.FloatVectorProperty(name="Working", subtype='COLOR', default=(1.0, 0.204, 0.0, 1), min=0.0, max=1.0, size=4)
+
+    display_rendering_warning : bpy.props.BoolProperty(name = "Shot rendering", default=True)
+    color_strip_rendering : bpy.props.FloatVectorProperty(name="Rendering", subtype='COLOR', default=(1, 0, 0, 1), min=0.0, max=1.0, size=4)
 
     shot_deadline_preview_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString())-10, default = int(getDateYearString()))
     shot_deadline_preview_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12, default = int(getDateMonthString()))
