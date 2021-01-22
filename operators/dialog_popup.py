@@ -20,13 +20,12 @@ class BPM_OT_dialog_popups(bpy.types.Operator):
         
         layout = self.layout
 
-        row = layout.row()
-
         if self.message:
+            row = layout.row()
             row.label(text = self.message)
         
-        if self.icon:
-            row.label(text = "", icon = self.icon)
+            if self.icon:
+                row.label(text = "", icon = self.icon)
 
         if self.operator:
             row = layout.row()
