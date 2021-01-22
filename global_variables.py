@@ -247,10 +247,6 @@ asset_missing_in_list_statement = bpm_statement + "Asset not found in project as
 no_asset_json_file_statement = bpm_statement + "No existing asset json file"
 
 
-# help statements
-opening_web_page_statement = bpm_statement + "Opening web page : "
-
-
 ### FILES AND PATHS ###
 
 file_project = "project_data.json"
@@ -301,5 +297,8 @@ tempfile_extension = ".tmp"
 
 
 ### WEB ###
+
+no_url_message = "No URL given"
+opening_web_page_statement = bpm_statement + "Opening web page : "
 
 wiki_url = "https://github.com/samytichadou/blender_project_manager/wiki/"

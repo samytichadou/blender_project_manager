@@ -128,6 +128,7 @@ classes = (BPM_OT_open_shot,
             BPM_OT_open_project_folder,
             BPM_OT_open_custom_folder,
 
+            BPM_OT_open_url,
             BPM_OT_open_wiki_page,
 
             BPM_PF_addon_prefs,
