@@ -252,8 +252,6 @@ class BPM_OT_modify_comment(bpy.types.Operator):
         comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
         active_comment = comment_collection[self.index]
 
-        print(str(active_comment.frame))
-
         if active_comment.frame_comment:
             if self.comment_type == "edit_shot":
                 frame = active_comment.timeline_frame
@@ -261,8 +259,6 @@ class BPM_OT_modify_comment(bpy.types.Operator):
                 frame = active_comment.frame
         else:
             frame = context.scene.frame_current
-
-        print(str(frame))
 
         self.author = active_comment.author
         self.comment = active_comment.comment
