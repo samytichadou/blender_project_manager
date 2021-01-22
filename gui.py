@@ -983,6 +983,8 @@ class BPM_PT_sequencer_shot_comment_panel(SequencerPanel_Shot):
         
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
 
+        draw_next_previous_comment(layout)
+
         draw_comment(layout, shot_settings.comments, "edit_shot", context)
 
 
