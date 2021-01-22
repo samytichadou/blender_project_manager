@@ -2,7 +2,7 @@ import bpy
 import os
 
 
-from .functions.lock_file_functions import setupLockFile, clearLockFile
+from .functions.lock_file_functions import setupLockFile, clearLockFile, getLockFilepath
 from .functions.project_data_functions import getProjectDataFile
 from .global_variables import (
                             timer_function_added_statement,
@@ -53,7 +53,7 @@ def updateLockFileToggle(self, context):
         setupLockFile()
         if debug: print(created_lock_file_statement) #debug
     else:
-        clearLockFile()
+        clearLockFile(getLockFilepath())
         if debug: print(deleted_lock_file_statement) #debug
 
 

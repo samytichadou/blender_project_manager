@@ -248,7 +248,11 @@ asset_missing_in_list_statement = bpm_statement + "Asset not found in project as
 no_asset_json_file_statement = bpm_statement + "No existing asset json file"
 
 
-# url statements
+# internet statements
+check_addon_version_statement = bpm_statement + "Checking for Addon New Version"
+no_internet_statement = bpm_statement + "No internet connection"
+addon_new_version_statement = bpm_statement + "New version of the addon found"
+addon_up_to_date_statement = bpm_statement + "Addon up to date"
 no_url_message = "No URL given"
 opening_web_page_statement = bpm_statement + "Opening web page : "
 

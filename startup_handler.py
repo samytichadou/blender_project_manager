@@ -186,6 +186,10 @@ def bpmStartupHandler(scene):
 
                 reload_asset_setings(winman)
 
+
+            # check for addon new version
+            check_addon_version(winman)
+
         else:
             print(no_datas_statement)
 
@@ -206,5 +210,4 @@ def bpmStartupHandler(scene):
         disableSequencerUICallback()
         disable_dope_sheet_ui_callback()
 
-    # check for addon new version
-    check_addon_version(None)
+    

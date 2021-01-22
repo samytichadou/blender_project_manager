@@ -282,6 +282,11 @@ class BPM_PR_general_settings(bpy.types.PropertyGroup) :
 
     today_date : bpy.props.StringProperty(name = "Today date")
 
+    # update
+    update_needed : bpy.props.BoolProperty()
+    update_message : bpy.props.StringProperty()
+    update_download_url : bpy.props.StringProperty()
+
 
 def display_panels_callback(scene, context):
 

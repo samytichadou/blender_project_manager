@@ -3,7 +3,14 @@ import requests
 import addon_utils
 
 
-from ..global_variables import error_statement, addon_version_url
+from ..global_variables import (
+                            error_statement,
+                            addon_version_url,
+                            check_addon_version_statement,
+                            no_internet_statement,
+                            addon_new_version_statement,
+                            addon_up_to_date_statement,
+                            )
 
 
 # check for internet connection
@@ -42,30 +49,30 @@ def get_addon_version(addon_name):
 
 
 # check for addon new version
-def check_addon_version(context):
+def check_addon_version(winman):
 
-    print("Checking for Addon New Version") #debug
+    debug = winman.bpm_projectdatas.debug
+
+    if debug: print(check_addon_version_statement) #debug
 
     if not is_connected():
-        print("No Internet Connection, unable to check for new version") #debug
+        if debug: print(no_internet_statement) #debug
         return False
-
-    # if context:
-    #     properties_coll = context.window_manager.an_templates_properties
-    # else:
-    #     properties_coll = bpy.data.window_managers[0].an_templates_properties
+    
+    general_settings = winman.bpm_generalsettings
 
     new_addon_infos = read_online_json(addon_version_url)
 
     if new_addon_infos["version"] != get_addon_version("BPM - Blender Project Manager"):
-        # properties_coll.update_needed = True
-        # properties_coll.update_message = new_addon_infos["message"]
-        # properties_coll.update_download_url = new_addon_infos["download_url"]
+        if not general_settings.update_needed:
+            general_settings.update_needed = True
+        general_settings.update_message = new_addon_infos["message"]
+        general_settings.update_download_url = new_addon_infos["download_url"]
 
-        print("New Version of the Addon Found") #debug
+        if debug: print(addon_new_version_statement) #debug
 
         return True
 
-    print("Addon Up to Date") #debug
+    if debug: print(addon_up_to_date_statement) #debug
     
     return True
