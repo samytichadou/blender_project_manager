@@ -3,7 +3,24 @@ import os
 import shutil
 
 
-from ..functions.file_functions import absolutePath
+from ..functions.file_functions import absolutePath, linkExternalScenes
+from ..functions.utils_functions import clearDataUsers
+from ..functions.strip_functions import getListSequencerShots
+from ..functions.check_file_poll_function import check_file_poll_function
+from ..global_variables import (invalid_shot_version_message,
+                                invalid_shot_version_statement,
+                                already_loaded_shot_version_message,
+                                already_loaded_shot_version_statement,
+                                changing_shot_version_statement,
+                                file_does_not_exist_message,
+                                file_does_not_exist_statement,
+                                deleting_scene_statement,
+                                library_cleared_statement,
+                                scenes_linked_statement,
+                                linked_to_strip_statement,
+                                scene_not_found_message,
+                                scene_not_found_statement,
+                            )
 
 
 class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
@@ -17,17 +34,12 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        keyword = context.window_manager.bpm_projectdatas.edit_scene_keyword
-        if context.window_manager.bpm_generalsettings.is_project and context.window_manager.bpm_generalsettings.file_type == 'EDIT':
-            if keyword in context.scene.name:
-                if context.scene.sequence_editor:
-                    if context.scene.sequence_editor.active_strip:
-                        active = context.scene.sequence_editor.active_strip
-                        if active.type in {'SCENE', 'IMAGE'}:
-                            if not active.lock:
-                                if active.bpm_shotsettings.is_shot:
-                                    #if os.path.isfile(absolutePath(active.bpm_shotsettings.shot_filepath)):
-                                    return True
+        is_bpm_project, bpm_filetype, bpm_active_strip = check_file_poll_function(context)
+        if bpm_filetype == "EDIT" and bpm_active_strip:
+            if not bpm_active_strip.lock:
+                if not bpm_active_strip.bpm_shotsettings.is_working:
+                    if not bpm_active_strip.bpm_shotsettings.is_rendering:
+                        return True
 
     def invoke(self, context, event):
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
@@ -56,24 +68,6 @@ class BPMBumpChangeShotVersionFromEdit(bpy.types.Operator):
             layout.label(text="Already loaded version", icon = 'ERROR')
 
     def execute(self, context):
-        # import statements and functions
-        from ..global_variables import (invalid_shot_version_message,
-                                    invalid_shot_version_statement,
-                                    already_loaded_shot_version_message,
-                                    already_loaded_shot_version_statement,
-                                    changing_shot_version_statement,
-                                    file_does_not_exist_message,
-                                    file_does_not_exist_statement,
-                                    deleting_scene_statement,
-                                    library_cleared_statement,
-                                    scenes_linked_statement,
-                                    linked_to_strip_statement,
-                                    scene_not_found_message,
-                                    scene_not_found_statement,
-                                )
-        from ..functions.file_functions import linkExternalScenes
-        from ..functions.utils_functions import clearDataUsers
-        from ..functions.strip_functions import getListSequencerShots
 
         # variables
         winman = context.window_manager
