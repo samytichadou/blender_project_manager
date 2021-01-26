@@ -18,8 +18,10 @@ class BPM_OT_synchronize_audio_edit(bpy.types.Operator):
         # import statements and functions
         from ..functions.audio_sync_functions import syncAudioEdit
 
-        general_settings = context.window_manager.bpm_generalsettings
+        winman = context.window_manager
+        general_settings = winman.bpm_generalsettings
+        debug = winman.bpm_projectdatas.debug
 
-        syncAudioEdit(general_settings.debug, general_settings.project_folder, context.scene)
+        syncAudioEdit(debug, general_settings.project_folder, context.scene)
         
         return {'FINISHED'}
