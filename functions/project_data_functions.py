@@ -214,7 +214,7 @@ def refreshTimelineShotDatas(context, sequencer):
     winman = context.window_manager
     debug = winman.bpm_projectdatas.debug
     general_settings = winman.bpm_generalsettings
-    avoid_list = ('is_shot', 'shot_version', 'is_working')
+    avoid_list = ('is_shot', 'shot_version_used', 'is_working')
 
     general_settings.bypass_update_tag = True
     # iterate through timeline strips

@@ -170,7 +170,7 @@ def bpmStartupHandler(scene):
                     general_settings.bypass_update_tag = False
 
                     # load version number
-                    shot_settings.shot_version = find_file_version(bpy.data.filepath, winman)
+                    shot_settings.shot_version_file = find_file_version(bpy.data.filepath, winman)
                     
                     if debug: print(shot_loaded_statement) #debug
 

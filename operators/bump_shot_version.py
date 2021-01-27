@@ -42,7 +42,7 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
     def invoke(self, context, event):
         self.file_to_copy = 'CURRENT'
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-        if shot_settings.shot_version != shot_settings.shot_last_version:
+        if shot_settings.shot_version_used != shot_settings.shot_last_version:
             return context.window_manager.invoke_props_dialog(self)
         else:
             return self.execute(context)
@@ -66,7 +66,7 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
         if debug: print(bumping_shot_statement) #debug
 
         # bump version number
-        shot_settings.shot_version = shot_settings.shot_last_version + 1
+        shot_settings.shot_version_used = shot_settings.shot_last_version + 1
 
         # get new shot path
         old_version_shot_filepath = absolutePath(shot_settings.shot_filepath)
@@ -74,7 +74,7 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
         old_version_shot_file = os.path.basename(old_version_shot_filepath)
         old_version_shot_name = os.path.splitext(old_version_shot_file)[0]
         shot_pattern = old_version_shot_name[:-(proj_datas.version_digits)]
-        new_shot_name = shot_pattern + str(shot_settings.shot_version).zfill(proj_datas.version_digits)
+        new_shot_name = shot_pattern + str(shot_settings.shot_version_used).zfill(proj_datas.version_digits)
         new_shot_path = os.path.join(shot_folder_path, new_shot_name + ".blend")
 
         if self.file_to_copy == 'LAST':
@@ -83,7 +83,7 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
 
         # bump shot last version number and make it last version
         shot_settings.not_last_version = False
-        shot_settings.shot_last_version = shot_settings.shot_version
+        shot_settings.shot_last_version = shot_settings.shot_version_used
 
         # copy the shot file
         if debug: print(copying_file_statement + old_version_shot_filepath + " - to - " + new_shot_path) #debug
@@ -172,7 +172,7 @@ class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
         # set data shot version
         shot_settings.not_last_version = True
         shot_settings.shot_last_version += 1
-        shot_settings.shot_version = shot_settings.shot_last_version
+        shot_settings.shot_version_file = shot_settings.shot_last_version
 
         # get new shot path
         old_version_shot_filepath = bpy.data.filepath

@@ -256,7 +256,9 @@ def draw_shot_version_shot_file(container, winman):
 
     shot_settings = winman.bpm_shotsettings
 
-    container.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
+    container.label(text = "version " + str(shot_settings.shot_version_file) + "/" + str(shot_settings.shot_last_version))
+
+    container.label(text = "version used " + str(shot_settings.shot_version_used) + "/" + str(shot_settings.shot_last_version))
     
     draw_operator_and_help(container, "bpm.bump_shot_version_shot", "", "Shot-Version-Management")
 
@@ -966,7 +968,7 @@ class BPM_PT_sequencer_shot_version_panel(SequencerPanel_Shot):
         active = context.scene.sequence_editor.active_strip
         shot_settings = active.bpm_shotsettings
 
-        layout.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
+        layout.label(text = "version " + str(shot_settings.shot_version_used) + "/" + str(shot_settings.shot_last_version))
 
         draw_operator_and_help(layout, 'bpm.bump_shot_version_edit', '', 'Shot-Version-Management')
 

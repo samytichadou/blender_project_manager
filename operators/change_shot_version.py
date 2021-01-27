@@ -49,13 +49,13 @@ class BPM_OT_change_shot_version_edit(bpy.types.Operator):
             self.go_to_last_version = False
             return self.execute(context)
 
-        self.version_number = shot_settings.shot_version
+        self.version_number = shot_settings.shot_version_used
 
         return context.window_manager.invoke_props_dialog(self)
  
     def draw(self, context):
         shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-        current = shot_settings.shot_version
+        current = shot_settings.shot_version_used
         last = shot_settings.shot_last_version
 
         layout = self.layout
@@ -84,7 +84,7 @@ class BPM_OT_change_shot_version_edit(bpy.types.Operator):
             if debug: print(invalid_shot_version_statement) #debug
             return {'FINISHED'}
 
-        elif self.version_number == shot_settings.shot_version:
+        elif self.version_number == shot_settings.shot_version_used:
             self.report({'INFO'}, already_loaded_shot_version_message)
             if debug: print(already_loaded_shot_version_statement) #debug
             return {'FINISHED'}
@@ -106,7 +106,7 @@ class BPM_OT_change_shot_version_edit(bpy.types.Operator):
             return {'FINISHED'}
         
         # change version number and set warning if needed
-        shot_settings.shot_version = self.version_number
+        shot_settings.shot_version_used = self.version_number
         if self.version_number != shot_settings.shot_last_version:
             shot_settings.not_last_version = True
         else:
