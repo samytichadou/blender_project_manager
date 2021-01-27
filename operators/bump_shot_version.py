@@ -1,6 +1,7 @@
 import bpy
 import os
 import shutil
+import atexit
 
 
 from ..functions.file_functions import absolutePath, linkExternalScenes, createShotRenderFolders
@@ -13,9 +14,14 @@ from ..global_variables import (bumping_shot_statement,
                             linked_to_strip_statement,
                             scene_not_found_message,
                             scene_not_found_statement,
+                            locked_file_statement,
+                            created_lock_file_statement,
+                            registering_exit_function_statement,
                         )
 from ..functions.utils_functions import clearDataUsers
 from ..functions.strip_functions import getListSequencerShots
+from ..functions.lock_file_functions import deleteLockFileExit, getLockFilepath, setupLockFile
+from ..addon_prefs import getAddonPreferences
 
 
 class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
@@ -164,6 +170,7 @@ class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
         debug = winman.bpm_projectdatas.debug
         shot_settings = winman.bpm_shotsettings
         proj_datas = winman.bpm_projectdatas
+        prefs = getAddonPreferences()
 
         if debug: print(bumping_shot_statement) #debug
 
@@ -183,8 +190,25 @@ class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
         new_shot_name = shot_pattern + str(shot_settings.shot_last_version).zfill(proj_datas.version_digits)
         new_shot_path = os.path.join(shot_folder_path, new_shot_name + ".blend")
 
+        
+
+        # delete lock file
+        if prefs.use_lock_file_system:
+            deleteLockFileExit(getLockFilepath())
+            atexit.unregister(deleteLockFileExit)
+
         # copy the shot file
         if debug: print(copying_file_statement + old_version_shot_filepath + " - to - " + new_shot_path) #debug
         bpy.ops.wm.save_as_mainfile(filepath = new_shot_path)
+
+        # update lock file
+        if prefs.use_lock_file_system:
+            if debug: print(locked_file_statement) #debug
+                
+            lock_filepath = setupLockFile()
+            if debug: print(created_lock_file_statement) #debug
+
+            atexit.register(deleteLockFileExit, lock_filepath)
+            if debug: print(registering_exit_function_statement) #debug
 
         return {'FINISHED'}

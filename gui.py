@@ -258,7 +258,7 @@ def draw_shot_version_shot_file(container, winman):
 
     container.label(text = "version " + str(shot_settings.shot_version_file) + "/" + str(shot_settings.shot_last_version))
 
-    container.label(text = "version used " + str(shot_settings.shot_version_used) + "/" + str(shot_settings.shot_last_version))
+    container.label(text = "used in edit " + str(shot_settings.shot_version_used) + "/" + str(shot_settings.shot_last_version))
     
     draw_operator_and_help(container, "bpm.bump_shot_version_shot", "", "Shot-Version-Management")
 
