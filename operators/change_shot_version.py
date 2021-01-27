@@ -105,12 +105,8 @@ class BPM_OT_change_shot_version_edit(bpy.types.Operator):
             if debug: print(file_does_not_exist_statement + target_shot_path) #debug
             return {'FINISHED'}
         
-        # change version number and set warning if needed
+        # change version number
         shot_settings.shot_version_used = self.version_number
-        if self.version_number != shot_settings.shot_last_version:
-            shot_settings.not_last_version = True
-        else:
-            shot_settings.not_last_version = False
 
         # set new filepath
         shot_settings.shot_filepath = bpy.path.relpath(target_shot_path)

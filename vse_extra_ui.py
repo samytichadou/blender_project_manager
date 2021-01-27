@@ -509,7 +509,7 @@ def draw_bpm_sequencer_strip_callback_px():
 
         # bpm not last version
         if scene_settings.display_shot_version_warning:
-            if strip.bpm_shotsettings.not_last_version:
+            if strip.bpm_shotsettings.shot_version_used != strip.bpm_shotsettings.shot_last_version:
                 if display_need_update:
                     vertices_e_v_w += getSecondWarningZoneStrip(*v4)
                     indices_e_v_w += ((n_e_v_w, n_e_v_w + 1, n_e_v_w + 2), (n_e_v_w + 2, n_e_v_w + 1, n_e_v_w + 3))

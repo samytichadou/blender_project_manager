@@ -88,7 +88,6 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
             old_version_shot_filepath = os.path.join(shot_folder_path, last_version_name + ".blend")
 
         # bump shot last version number and make it last version
-        shot_settings.not_last_version = False
         shot_settings.shot_last_version = shot_settings.shot_version_used
 
         # copy the shot file
@@ -177,7 +176,6 @@ class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
         bpy.ops.wm.save_as_mainfile(filepath = bpy.data.filepath)
 
         # set data shot version
-        shot_settings.not_last_version = True
         shot_settings.shot_last_version += 1
         shot_settings.shot_version_file = shot_settings.shot_last_version
 
