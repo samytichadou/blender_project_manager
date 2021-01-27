@@ -99,7 +99,7 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
         shot_settings.shot_filepath = bpy.path.relpath(new_shot_path)
 
         # create shot render folders
-        createShotRenderFolders(new_shot_path, winman)
+        #createShotRenderFolders(new_shot_path, winman)
 
         ### deal with scene if scene strip ###
         if active_strip.type == 'SCENE':

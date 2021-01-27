@@ -39,6 +39,10 @@ def completeRenderMissingImages(render_filepath, extension, start_frame, end_fra
 
     render_folderpath = os.path.dirname(render_filepath)
 
+    # create folder if needed
+    if not os.path.isdir(render_folderpath):
+        os.makedirs(render_folderpath, exist_ok=True)
+
     frame_list = returnAllFilesInFolder(render_folderpath)
     shot_frames = []
 

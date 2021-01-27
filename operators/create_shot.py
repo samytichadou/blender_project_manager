@@ -197,7 +197,7 @@ class BPM_OT_create_shot(bpy.types.Operator):
         # if debug: print(deleted_file_statement + temp_python_script) #debug
 
         # create render folders
-        createShotRenderFolders(next_shot_file, winman)
+        #createShotRenderFolders(next_shot_file, winman)
 
         # select created strip
         sequencer.active_strip = linked_strip
