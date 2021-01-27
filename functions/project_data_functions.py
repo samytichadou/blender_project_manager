@@ -214,7 +214,7 @@ def refreshTimelineShotDatas(context, sequencer):
     winman = context.window_manager
     debug = winman.bpm_projectdatas.debug
     general_settings = winman.bpm_generalsettings
-    avoid_list = ('is_shot', 'shot_version', 'not_last_version', 'is_working')
+    avoid_list = ('is_shot', 'shot_version', 'is_working')
 
     general_settings.bypass_update_tag = True
     # iterate through timeline strips
@@ -317,3 +317,17 @@ def returnRenderExtensionFromSettings(render_settings):
         extension = '.exr'
 
     return extension
+
+
+# find file version
+def find_file_version(filepath, winman):
+
+    proj_datas = winman.bpm_projectdatas
+
+    # get new shot path
+    file = os.path.basename(filepath)
+    name = os.path.splitext(file)[0]
+    version_string = name[-proj_datas.version_digits:]
+    version = int(version_string)
+
+    return version

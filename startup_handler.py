@@ -15,6 +15,7 @@ from .functions.project_data_functions import (
                                             refreshTimelineShotDatas,
                                             getAssetDatasFromJson,
                                             setAssetCollectionFromJsonDataset,
+                                            find_file_version,
                                         )
 from .functions.dataset_functions import setPropertiesFromJsonDataset
 from .global_variables import (
@@ -168,6 +169,9 @@ def bpmStartupHandler(scene):
                     shot_settings.shot_filepath = bpy.path.relpath(bpy.data.filepath)
                     general_settings.bypass_update_tag = False
 
+                    # load version number
+                    shot_settings.shot_version = find_file_version(bpy.data.filepath, winman)
+                    
                     if debug: print(shot_loaded_statement) #debug
 
                     # synchronize audio if needed

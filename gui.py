@@ -252,9 +252,13 @@ def draw_shot_tracking_shot_file(container, winman):
 
 
 # draw shot version
-def draw_shot_version_shot_file(container):
+def draw_shot_version_shot_file(container, winman):
+
+    shot_settings = winman.bpm_shotsettings
+
+    container.label(text = "version " + str(shot_settings.shot_version) + "/" + str(shot_settings.shot_last_version))
     
-    container.label(text = "Coming Soon")
+    draw_operator_and_help(container, "bpm.bump_shot_version_shot", "", "Shot-Version-Management")
 
 
 # draw shot render
@@ -1104,10 +1108,12 @@ class BPM_PT_viewport_shot_version_panel(ViewportPanel_Shot):
     bl_label = "Version"
 
     def draw(self, context):
+        
+        winman = context.window_manager
 
         layout = self.layout
 
-        draw_shot_version_shot_file(layout)
+        draw_shot_version_shot_file(layout, winman)
 
 
 # shot comment viewport panel

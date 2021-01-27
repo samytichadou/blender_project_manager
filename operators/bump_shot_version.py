@@ -18,7 +18,7 @@ from ..functions.utils_functions import clearDataUsers
 from ..functions.strip_functions import getListSequencerShots
 
 
-class BPM_OT_bump_shot_version(bpy.types.Operator):
+class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
     """Create a new version of active shot"""
     bl_idname = "bpm.bump_shot_version_edit"
     bl_label = "Bump shot version"
@@ -82,8 +82,8 @@ class BPM_OT_bump_shot_version(bpy.types.Operator):
             old_version_shot_filepath = os.path.join(shot_folder_path, last_version_name + ".blend")
 
         # bump shot last version number and make it last version
-        shot_settings.shot_last_version = shot_settings.shot_version
         shot_settings.not_last_version = False
+        shot_settings.shot_last_version = shot_settings.shot_version
 
         # copy the shot file
         if debug: print(copying_file_statement + old_version_shot_filepath + " - to - " + new_shot_path) #debug
@@ -140,5 +140,51 @@ class BPM_OT_bump_shot_version(bpy.types.Operator):
         ### deal with images if image strip ###
         elif active_strip.type == 'IMAGE':
             shot_settings.shot_timeline_display = shot_settings.shot_timeline_display
+
+        return {'FINISHED'}
+
+
+class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
+    """Create a new version of active shot"""
+    bl_idname = "bpm.bump_shot_version_shot"
+    bl_label = "Bump shot version"
+    bl_options = {'REGISTER'}
+
+
+    @classmethod
+    def poll(cls, context):
+        is_bpm_project, bpm_filetype, bpm_active_strip = check_file_poll_function(context)
+        if bpm_filetype == "SHOT":
+            return True
+
+
+    def execute(self, context):
+
+        winman = context.window_manager
+        debug = winman.bpm_projectdatas.debug
+        shot_settings = winman.bpm_shotsettings
+        proj_datas = winman.bpm_projectdatas
+
+        if debug: print(bumping_shot_statement) #debug
+
+        bpy.ops.wm.save_as_mainfile(filepath = bpy.data.filepath)
+
+        # set data shot version
+        shot_settings.not_last_version = True
+        shot_settings.shot_last_version += 1
+        shot_settings.shot_version = shot_settings.shot_last_version
+
+        # get new shot path
+        old_version_shot_filepath = bpy.data.filepath
+        shot_folder_path = os.path.dirname(old_version_shot_filepath)
+        old_version_shot_file = os.path.basename(old_version_shot_filepath)
+        old_version_shot_name = os.path.splitext(old_version_shot_file)[0]
+        shot_pattern = old_version_shot_name[:-(proj_datas.version_digits)]
+        new_shot_name = shot_pattern + str(shot_settings.shot_last_version).zfill(proj_datas.version_digits)
+        new_shot_path = os.path.join(shot_folder_path, new_shot_name + ".blend")
+
+        # copy the shot file
+        if debug: print(copying_file_statement + old_version_shot_filepath + " - to - " + new_shot_path) #debug
+        bpy.ops.wm.save_as_mainfile(filepath = new_shot_path)
 
         return {'FINISHED'}

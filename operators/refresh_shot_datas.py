@@ -58,7 +58,7 @@ def refresh_shot_datas(context):
     shot_settings = winman.bpm_shotsettings
 
     general_settings.bypass_update_tag = True
-    loadJsonDataToDataset(winman, shot_settings, shot_json, ())
+    loadJsonDataToDataset(winman, shot_settings, shot_json, ("shot_version"))
     general_settings.bypass_update_tag = False
 
     # refresh comments

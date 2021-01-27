@@ -224,7 +224,7 @@ class BPM_PR_shot_settings(bpy.types.PropertyGroup) :
     shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = render_draft_folder , update = updateShotRenderState)
     
     shot_version : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
-    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1)
+    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = updateShotSettingsProperties)
     not_last_version : bpy.props.BoolProperty(default=False)
     
     auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = updateShotSettingsProperties)
