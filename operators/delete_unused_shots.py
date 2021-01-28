@@ -44,9 +44,7 @@ class BPM_OT_delete_unused_shots(bpy.types.Operator):
         return file_type == "EDIT"
 
     def invoke(self, context, event):
-        # import statements and functions
-        
-        
+  
         # reset permanently delete
         self.permanently_delete = False
 
