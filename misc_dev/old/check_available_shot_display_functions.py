@@ -3,7 +3,7 @@ import os
 
 
 from .strip_functions import returnShotStrips
-from .file_functions import counFilesInFolder, returnRenderFolderFromStrip, absolutePath
+from .file_functions import returnRenderFolderFromStrip, absolutePath
 
 from ..properties import shot_render_state_items
 from ..global_variables import (

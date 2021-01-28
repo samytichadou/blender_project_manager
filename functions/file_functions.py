@@ -239,7 +239,7 @@ def linkAssetLibrary(filepath, asset, debug):
 
 
 # get file count in a folder
-def counFilesInFolder(folder):
+def count_files_in_folder(folder):
     n = 0
     for f in os.listdir(folder):
         if os.path.isfile(os.path.join(folder, f)):
