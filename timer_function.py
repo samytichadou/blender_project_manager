@@ -8,6 +8,7 @@ from .functions.json_functions import read_json
 from .functions.project_data_functions import refreshTimelineShotDatas
 from .functions.load_asset_settings import reload_asset_library, reload_asset_setings
 from .functions.load_project_custom_folder import load_custom_folders
+from .functions.audio_sync_functions import syncAudioEdit, syncAudioShot
 from .operators.refresh_shot_datas import refresh_shot_datas
 from .addon_prefs import getAddonPreferences
 
@@ -61,5 +62,12 @@ def bpmTimerFunction():
     # refresh custom project folders
     if prefs.timer_custom_folders_refresh:
         load_custom_folders(winman)
+
+    # syncrhonize audio
+    if prefs.timer_audio_sync:
+        if general_settings.file_type == 'EDIT':
+            syncAudioEdit(debug, general_settings.project_folder, context.scene)
+        elif general_settings.file_type == 'SHOT':
+            syncAudioShot(debug, general_settings.project_folder, context.scene)
 
     return interval

@@ -97,6 +97,12 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
         description="Refresh project custom folders datas on timer",
         )
 
+    timer_audio_sync : bpy.props.BoolProperty(
+        name="Synchronize audio", 
+        default = True,
+        description="Refresh audio synchronization datas on timer",
+        )
+
 
     def draw(self, context):
         layout = self.layout
@@ -122,6 +128,8 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
         col.prop(self, "timer_datas_refresh")
 
         col.prop(self, "timer_custom_folders_refresh")
+
+        col.prop(self, "timer_audio_sync")
 
 
 # get addon preferences
