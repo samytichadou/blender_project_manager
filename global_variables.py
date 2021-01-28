@@ -124,6 +124,7 @@ folder_emptied_statement = bpm_statement + "Folder successfully emptied"
 copying_file_statement = bpm_statement + "Copying file from : "
 file_does_not_exist_message = "File does not exist : "
 file_does_not_exist_statement = bpm_statement + file_does_not_exist_message
+render_files_removed_statement = bpm_statement + "Render files removed"
 
 opening_folder_statement = bpm_statement + "Opening folder : "
 no_folder_statement = bpm_statement + "Folder does not exist : "
