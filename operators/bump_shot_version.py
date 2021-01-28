@@ -4,7 +4,7 @@ import shutil
 import atexit
 
 
-from ..functions.file_functions import absolutePath, linkExternalScenes, createShotRenderFolders
+from ..functions.file_functions import absolutePath, linkExternalScenes, createShotRenderFolders, get_filename_from_filepath
 from ..functions.check_file_poll_function import check_file_poll_function
 from ..global_variables import (bumping_shot_statement, 
                             copying_file_statement,
@@ -76,9 +76,8 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
 
         # get new shot path
         old_version_shot_filepath = absolutePath(shot_settings.shot_filepath)
-        shot_folder_path = os.path.dirname(old_version_shot_filepath)
-        old_version_shot_file = os.path.basename(old_version_shot_filepath)
-        old_version_shot_name = os.path.splitext(old_version_shot_file)[0]
+        old_version_shot_name, shot_folder_path, extension = get_filename_from_filepath(old_version_shot_filepath)
+
         shot_pattern = old_version_shot_name[:-(proj_datas.version_digits)]
         new_shot_name = shot_pattern + str(shot_settings.shot_version_used).zfill(proj_datas.version_digits)
         new_shot_path = os.path.join(shot_folder_path, new_shot_name + ".blend")
@@ -180,15 +179,11 @@ class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
         shot_settings.shot_version_file = shot_settings.shot_last_version
 
         # get new shot path
-        old_version_shot_filepath = bpy.data.filepath
-        shot_folder_path = os.path.dirname(old_version_shot_filepath)
-        old_version_shot_file = os.path.basename(old_version_shot_filepath)
-        old_version_shot_name = os.path.splitext(old_version_shot_file)[0]
+        old_version_shot_name, shot_folder_path, extension = get_filename_from_filepath(bpy.data.filepath)
+
         shot_pattern = old_version_shot_name[:-(proj_datas.version_digits)]
         new_shot_name = shot_pattern + str(shot_settings.shot_last_version).zfill(proj_datas.version_digits)
         new_shot_path = os.path.join(shot_folder_path, new_shot_name + ".blend")
-
-        
 
         # delete lock file
         if prefs.use_lock_file_system:
@@ -196,7 +191,7 @@ class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
             atexit.unregister(deleteLockFileExit)
 
         # copy the shot file
-        if debug: print(copying_file_statement + old_version_shot_filepath + " - to - " + new_shot_path) #debug
+        if debug: print(copying_file_statement + bpy.data.filepath + " - to - " + new_shot_path) #debug
         bpy.ops.wm.save_as_mainfile(filepath = new_shot_path)
 
         # update lock file

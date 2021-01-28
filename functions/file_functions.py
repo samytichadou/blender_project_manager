@@ -313,3 +313,13 @@ def returnRenderFilePathFromShot(shot_filepath, winman, shot_render_state):
         output_filepath = os.path.join(shot_folder_path, shot_name + "_")
 
     return output_filepath
+
+
+# get clean name from filepath
+def get_filename_from_filepath(filepath):
+    directory_path = os.path.dirname(filepath)
+    file = os.path.basename(filepath)
+    name = os.path.splitext(file)[0]
+    extension = os.path.splitext(file)[1]
+
+    return name, directory_path, extension
