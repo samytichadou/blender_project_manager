@@ -112,6 +112,7 @@ class BPM_OT_delete_unused_shots(bpy.types.Operator):
             
             shot_folder_name = self.project_prefix + shot
             folder = os.path.join(self.shot_folder_path, shot_folder_name)
+            
             # move
             if not self.permanently_delete:
                 old_shot_folder = os.path.join(general_settings.project_folder, old_folder)
@@ -134,6 +135,7 @@ class BPM_OT_delete_unused_shots(bpy.types.Operator):
                 shutil.move(folder, dir_path)
 
                 if debug: print(moved_folder_statement) #debug
+
             # delete
             else:
                 if debug: print(starting_deleting_folder + shot_folder_name) #debug
