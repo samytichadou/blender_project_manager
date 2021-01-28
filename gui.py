@@ -120,7 +120,7 @@ def draw_comment(container, comments, c_type, context):
     op.comment_type = c_type
     op2 = row.operator("bpm.reload_comments", text = "", icon = "FILE_REFRESH")
     op2.comment_type = c_type
-    row.separator()
+    #row.separator()
     draw_wiki_help(row, "Comments")
 
     bigcol = container.column(align=True)
@@ -1006,7 +1006,7 @@ class BPM_PT_sequencer_shot_display_panel(SequencerPanel_Shot):
         shot_settings = active.bpm_shotsettings
 
         row = layout.row(align=True)
-        row.prop(shot_settings, 'shot_timeline_display', text = "Display")
+        row.prop(shot_settings, 'shot_timeline_display', text = "")
         draw_wiki_help(row, 'Timeline-Shot-Display-Mode')
 
         layout.prop(shot_settings, 'display_comments')
