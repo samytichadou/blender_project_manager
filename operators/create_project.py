@@ -103,6 +103,11 @@ class BPM_OT_create_project(bpy.types.Operator):
         createFolder(datas_folder_path)
         if debug: print(gv.folder_created_statement + datas_folder_path) #debug
 
+        #datas tasks
+        datas_tasks_path = os.path.join(datas_folder_path, gv.datas_tasks_folder)
+        createFolder(datas_tasks_path)
+        if debug: print(gv.folder_created_statement + datas_tasks_path) #debug
+
         #shot
         shot_folder_path = os.path.join(project_folder, gv.shot_folder)
         createFolder(shot_folder_path)
