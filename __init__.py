@@ -39,6 +39,7 @@ import bpy
 ##################################
 
 from .startup_handler import bpmStartupHandler
+from .render_handler import bpm_render_handler
 from .timer_function import bpmTimerFunction
 from .functions.lock_file_functions import deleteLockFileHandler
 from .functions.filebrowser_update_function import updateFilebrowserPath
@@ -257,6 +258,7 @@ def register():
     ### HANDLER ###
     bpy.app.handlers.load_post.append(bpmStartupHandler)
     bpy.app.handlers.load_pre.append(deleteLockFileHandler)
+    bpy.app.handlers.render_post.append(bpm_render_handler)
 
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.prepend(draw_topbar)
@@ -299,6 +301,7 @@ def unregister():
     ### HANDLER ###
     bpy.app.handlers.load_post.remove(bpmStartupHandler)
     bpy.app.handlers.load_pre.remove(deleteLockFileHandler)
+    bpy.app.handlers.render_post.remove(bpm_render_handler)
 
     ### SPECIAL GUI ###
     bpy.types.TOPBAR_HT_upper_bar.remove(draw_topbar)

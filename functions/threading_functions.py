@@ -3,19 +3,24 @@ import subprocess
 import threading
 
 
-from ..global_variables import thread_start_statement, thread_end_statement, thread_end_function_statement, thread_error_statement
+from .. import global_variables as gv
+
+from .task_functions import write_pid_task
 
 
 # launch command in separate thread
-def launchCommandFunction(command, debug, endfunction, *endfunction_args):
+def launchCommandFunction(command, debug, task_file, endfunction, *endfunction_args):
 
-    if debug: print(thread_start_statement) #debug
+    if debug: print(gv.thread_start_statement) #debug
 
     # launch command
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    
+    process = subprocess.Popen(command, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
     previous_line = ""
 
+    if task_file is not None:
+        write_pid_task(task_file, process.pid)
+    
     # check on it
     while True:
         line = process.stdout.readline()
@@ -26,17 +31,17 @@ def launchCommandFunction(command, debug, endfunction, *endfunction_args):
             if b"Blender quit" in line :
                 break
             elif b"EXCEPTION_ACCESS_VIOLATION" in line:
-                if debug: print(thread_error_statement) #debug
+                if debug: print(gv.thread_error_statement) #debug
                 break
             previous_line = line
         else:
             break
     
     # when ending
-    if debug: print(thread_end_statement) #debug
+    if debug: print(gv.thread_end_statement) #debug
 
     if endfunction is not None:
-        if debug: print(thread_end_function_statement) #debug
+        if debug: print(gv.thread_end_function_statement) #debug
         endfunction(*endfunction_args)
 
 

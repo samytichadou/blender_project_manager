@@ -190,7 +190,7 @@ class BPM_OT_create_shot(bpy.types.Operator):
         # launch the blend command
         command = buildBlenderCommandBackgroundPython(temp_python_script, next_shot_file, "")
         if debug: print(launching_command_statement + command) #debug
-        launchSeparateThread([command, debug, linkSceneToStrip, linked_strip, next_shot_file, name, temp_python_script, debug])
+        launchSeparateThread([command, debug, None, linkSceneToStrip, linked_strip, next_shot_file, name, temp_python_script, debug])
 
         # # delete the python temp
         # suppressExistingFile(temp_python_script)

@@ -145,7 +145,7 @@ class BPM_OT_update_shot_duration(bpy.types.Operator):
 
                             general_settings.bypass_update_tag = False
 
-                            launchSeparateThread([command, debug, updateShotDurationEndFunction, new_strip])               
+                            launchSeparateThread([command, debug, None, updateShotDurationEndFunction, new_strip])               
 
                             if debug: print(updated_shot_statement) #debug
                             

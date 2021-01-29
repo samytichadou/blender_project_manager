@@ -308,6 +308,7 @@ asset_startup_file = "blank_asset.blend"
 
 lockfile_extension = ".lck"
 tempfile_extension = ".tmp"
+taskfile_extension = ".tsk"
 
 
 ### WEB ###
