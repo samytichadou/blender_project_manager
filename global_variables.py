@@ -285,6 +285,7 @@ missing_file_image = os.path.join(ressources_folder, "missing_file_placeholder.e
 
 #new_project_name = "Project_name"
 
+datas_folder = "00_datas"
 asset_folder = "01_assets"
 shot_folder = "02_shots"
 render_folder = "03_renders"
