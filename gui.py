@@ -167,7 +167,6 @@ def draw_comment(container, comments, c_type, context):
             for line in split_string_on_spaces(c.comment, 25):
                 col.label(text=line)
             if c.frame_comment or c.edit_time:
-                col.separator()
                 if c.frame_comment:
                     col.label(text="Frame : " + str(c.frame))
                     if c_type == "edit_shot":
