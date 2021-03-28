@@ -27,8 +27,9 @@ class BPM_OT_save_render_settings_to_json(bpy.types.Operator):
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
         render_settings = winman.bpm_rendersettings
+        debug = winman.bpm_projectdatas.debug
 
-        if general_settings.debug: print(saving_to_json_statement)
+        if debug: print(saving_to_json_statement)
 
         render_folder_path = os.path.join(general_settings.project_folder, render_folder)
         render_filepath = os.path.join(render_folder_path, render_file)
@@ -42,6 +43,6 @@ class BPM_OT_save_render_settings_to_json(bpy.types.Operator):
         # create json file
         create_json_file(json_render_dataset, render_filepath)
 
-        if general_settings.debug: print(saved_to_json_statement)
+        if debug: print(saved_to_json_statement)
 
         return {'FINISHED'}
