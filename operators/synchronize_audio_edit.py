@@ -1,5 +1,4 @@
 import bpy
-import os
 
 
 class BPM_OT_synchronize_audio_edit(bpy.types.Operator):
@@ -25,3 +24,12 @@ class BPM_OT_synchronize_audio_edit(bpy.types.Operator):
         syncAudioEdit(debug, general_settings.project_folder, context.scene)
         
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_synchronize_audio_edit)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_synchronize_audio_edit)

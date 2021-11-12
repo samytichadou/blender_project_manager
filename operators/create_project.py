@@ -256,3 +256,12 @@ class BPM_OT_create_project(bpy.types.Operator):
             bpy.app.timers.register(bpmTimerFunction)
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_create_project)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_create_project)

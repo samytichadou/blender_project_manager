@@ -207,3 +207,12 @@ class BPM_OT_delete_unused_shots(bpy.types.Operator):
                 bpy.data.orphans_purge()
         
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_delete_unused_shots)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_delete_unused_shots)

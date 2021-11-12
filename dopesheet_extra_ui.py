@@ -2,23 +2,8 @@ import bpy
 import bgl
 import blf
 
-
-from .vse_extra_ui import (
-                        initializeExternalFontId,
-                        unloadExternalFontId,
-                        comments_font,
-                        getDpiFactorFromContext,
-                        drawShader,
-                        drawText,
-                        get_formatted_comment_text,
-                        getBoundingBoxCoordinates,
-                        text_size,
-                        )
-from .global_variables import (
-                        font_file,
-                        add_dopesheet_extra_ui_statement,
-                        remove_shot_asset_extra_ui_statement,
-                            )
+from . import vse_extra_ui as vse_ui
+from . import global_variables as g_var
 
 
 # get comments coordinates
@@ -55,7 +40,7 @@ def draw_bpm_shot_asset_comments_callback_px():
 
     region = context.region
     dpi = context.preferences.system.dpi
-    dpi_fac = getDpiFactorFromContext(context)
+    dpi_fac = vse_ui.getDpiFactorFromContext(context)
 
     comments = settings.comments
 
@@ -74,9 +59,9 @@ def draw_bpm_shot_asset_comments_callback_px():
     color_m_bb = scene_settings.color_shot_comments_boxes
 
     # setup comments text
-    id_m = comments_font["font_id"]
+    id_m = vse_ui.comments_font["font_id"]
     blf.color(id_m, *color_tc)
-    blf.size(id_m, text_size, dpi)
+    blf.size(id_m, vse_ui.text_size, dpi)
     comments_texts = []
 
     # iterate through comments
@@ -94,13 +79,13 @@ def draw_bpm_shot_asset_comments_callback_px():
             if (c_display_mode in {"CURRENT_STRIPPED", "CURRENT_ENTIRE"} and scn.frame_current == c.frame) \
             or (c_display_mode in {"ALL_STRIPPED", "ALL_ENTIRE", "ALL_STRIPPED_CURRENT_ENTIRE"}) :
                 
-                text = get_formatted_comment_text(c.comment, c.frame, c_display_mode, scn.frame_current, scene_settings.display_shot_comments_text_limit)
+                text = vse_ui.get_formatted_comment_text(c.comment, c.frame, c_display_mode, scn.frame_current, scene_settings.display_shot_comments_text_limit)
 
                 comments_texts.append((coord[1], text))
 
                 # comments box
                 if scene_settings.display_shot_comments_boxes:
-                    vertices_m_bb += getBoundingBoxCoordinates(coord[1], text, text_size, dpi_fac)
+                    vertices_m_bb += vse_ui.getBoundingBoxCoordinates(coord[1], text, vse_ui.text_size, dpi_fac)
                     indices_m_bb += ((n_m_bb, n_m_bb + 1, n_m_bb + 2), (n_m_bb + 2, n_m_bb + 1, n_m_bb + 3))
                     n_m_bb += 4
 
@@ -111,15 +96,15 @@ def draw_bpm_shot_asset_comments_callback_px():
 
     # comments bounding boxes
     if c_display_mode != "NONE" and vertices_m_bb:
-        drawShader(vertices_m_bb, indices_m_bb, color_m_bb)
+        vse_ui.drawShader(vertices_m_bb, indices_m_bb, color_m_bb)
 
     # timeline comments
-    drawShader(vertices_tc, indices_tc, color_tc)
+    vse_ui.drawShader(vertices_tc, indices_tc, color_tc)
 
     # draw comments texts
     if c_display_mode != "NONE":
         for t in comments_texts:
-            drawText(t[0], t[1], comments_font["font_id"])
+            vse_ui.drawText(t[0], t[1], vse_ui.comments_font["font_id"])
 
     bgl.glDisable(bgl.GL_BLEND) # disable transparency
 
@@ -130,7 +115,7 @@ def enable_dope_sheet_ui_callback():
     if cb_handle:
         return
     
-    initializeExternalFontId(comments_font, font_file)
+    vse_ui.initializeExternalFontId(vse_ui.comments_font, g_var.font_file)
 
     # dopesheet
     cb_handle.append((bpy.types.SpaceDopeSheetEditor.draw_handler_add(
@@ -150,7 +135,7 @@ def enable_dope_sheet_ui_callback():
 
     winman = bpy.context.window_manager
     debug = winman.bpm_projectdatas.debug
-    if debug: print(add_dopesheet_extra_ui_statement)#debug
+    if debug: print(g_var.add_dopesheet_extra_ui_statement)#debug
 
 
 #disable callback
@@ -158,7 +143,7 @@ def disable_dope_sheet_ui_callback():
     if not cb_handle:
         return
 
-    unloadExternalFontId(comments_font, font_file)
+    vse_ui.unloadExternalFontId(vse_ui.comments_font, g_var.font_file)
 
     # bpy.types.SpaceSequenceEditor.draw_handler_remove(cb_handle[0], 'WINDOW')
 
@@ -179,4 +164,13 @@ def disable_dope_sheet_ui_callback():
 
     winman = bpy.context.window_manager
     debug = winman.bpm_projectdatas.debug
-    if debug: print(remove_shot_asset_extra_ui_statement) #debug
+    if debug: print(g_var.remove_shot_asset_extra_ui_statement) #debug
+
+
+### REGISTER ---
+
+# def register():
+#     pass
+
+def unregister():
+    disable_dope_sheet_ui_callback()

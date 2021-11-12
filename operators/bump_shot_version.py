@@ -205,3 +205,14 @@ class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
             if debug: print(registering_exit_function_statement) #debug
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_bump_shot_version_edit)
+    bpy.utils.register_class(BPM_OT_bump_shot_version_shot)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_bump_shot_version_edit)
+    bpy.utils.unregister_class(BPM_OT_bump_shot_version_shot)

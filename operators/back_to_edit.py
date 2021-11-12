@@ -32,3 +32,12 @@ class BPM_OT_back_to_edit(bpy.types.Operator):
         bpy.ops.wm.open_mainfile(filepath=filepath)
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_back_to_edit)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_back_to_edit)

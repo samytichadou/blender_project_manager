@@ -1,7 +1,8 @@
-import bpy, os
+import bpy
+import os
 
 
-# display project settings
+# save project settings
 class BPM_OT_save_project_settings_to_json(bpy.types.Operator):
     """Save Project Settings to json"""
     bl_idname = "bpm.save_project_settings_json"
@@ -40,3 +41,12 @@ class BPM_OT_save_project_settings_to_json(bpy.types.Operator):
         if general_settings.debug: print(saved_to_json_statement)
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_save_project_settings_to_json)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_save_project_settings_to_json)

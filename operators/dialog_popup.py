@@ -48,3 +48,12 @@ class BPM_OT_dialog_popups(bpy.types.Operator):
 
     def execute(self, context):
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_dialog_popups)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_dialog_popups)

@@ -1,14 +1,13 @@
 import bpy
 
-
 from .global_variables import timer_function_processing_statement
 from .functions.utils_functions import getCurrentPID
 from .functions.lock_file_functions import getLockFilepath
 from .functions.json_functions import read_json
 from .functions.project_data_functions import refreshTimelineShotDatas
-from .functions.load_asset_settings import reload_asset_library, reload_asset_setings
+from .functions import load_asset_settings as ld_ast_stg
 from .functions.load_project_custom_folder import load_custom_folders
-from .functions.audio_sync_functions import syncAudioEdit, syncAudioShot
+from .functions import audio_sync_functions as aud_sync_fct
 from .operators.refresh_shot_datas import refresh_shot_datas
 from .addon_prefs import getAddonPreferences
 
@@ -31,7 +30,7 @@ def check_lock_file(context):
     # if not open
     general_settings.blend_already_opened = False
 
-
+# timer function
 def bpmTimerFunction():
     context = bpy.context
     winman = context.window_manager
@@ -54,10 +53,10 @@ def bpmTimerFunction():
         elif general_settings.file_type == 'SHOT':
             refresh_shot_datas(context)
         elif general_settings.file_type == 'ASSET':
-            reload_asset_setings(winman)
+            ld_ast_stg.reload_asset_setings(winman)
 
         # refresh asset library
-        reload_asset_library(winman)
+        ld_ast_stg.reload_asset_library(winman)
 
     # refresh custom project folders
     if prefs.timer_custom_folders_refresh:
@@ -66,8 +65,17 @@ def bpmTimerFunction():
     # syncrhonize audio
     if prefs.timer_audio_sync:
         if general_settings.file_type == 'EDIT':
-            syncAudioEdit(debug, general_settings.project_folder, context.scene)
+            aud_sync_fct.syncAudioEdit(debug, general_settings.project_folder, context.scene)
         elif general_settings.file_type == 'SHOT':
-            syncAudioShot(debug, general_settings.project_folder, context.scene)
+            aud_sync_fct.syncAudioShot(debug, general_settings.project_folder, context.scene)
 
     return interval
+
+### REGISTER ---
+
+# def register():
+#     bpy.app.handlers.load_post.append(bpmStartupHandler)
+    
+def unregister():
+    if bpy.app.timers.is_registered(bpmTimerFunction):
+        bpy.app.timers.unregister(bpmTimerFunction)

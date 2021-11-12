@@ -1,8 +1,8 @@
-import bpy, os
+import bpy
+import os
 
 
-
-# display project settings
+# save render settings
 class BPM_OT_save_render_settings_to_json(bpy.types.Operator):
     """Save Render Settings to json"""
     bl_idname = "bpm.save_render_settings_json"
@@ -46,3 +46,12 @@ class BPM_OT_save_render_settings_to_json(bpy.types.Operator):
         if debug: print(saved_to_json_statement)
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_save_render_settings_to_json)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_save_render_settings_to_json)

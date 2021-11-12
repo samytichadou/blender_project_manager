@@ -59,3 +59,12 @@ class BPM_OT_open_asset_file(bpy.types.Operator):
             bpy.ops.wm.open_mainfile(filepath=specific_asset_filepath)
         
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_open_asset_file)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_open_asset_file)

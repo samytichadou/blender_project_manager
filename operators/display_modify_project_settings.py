@@ -68,3 +68,12 @@ class BPM_OT_display_modify_project_settings(bpy.types.Operator):
         
     def execute(self, context):
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_display_modify_project_settings)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_display_modify_project_settings)

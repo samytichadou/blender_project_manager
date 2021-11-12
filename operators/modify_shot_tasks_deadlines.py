@@ -203,3 +203,12 @@ class BPM_OT_modify_shot_task_deadline(bpy.types.Operator):
         bpy.ops.sequencer.refresh_all()
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_modify_shot_task_deadline)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_modify_shot_task_deadline)

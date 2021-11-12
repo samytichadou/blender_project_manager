@@ -1,4 +1,5 @@
-import bpy, os
+import bpy
+import os
 from bpy.app.handlers import persistent
 
 from .functions.file_functions import get_filename_from_filepath
@@ -22,3 +23,12 @@ def bpm_render_handler(scene):
                     dataset["completion"] += 1
                     create_json_file(dataset, entry.path)
                     break
+
+
+### REGISTER ---
+
+def register():
+    bpy.app.handlers.render_post.append(bpm_render_handler)
+
+def unregister():
+    bpy.app.handlers.render_post.remove(bpm_render_handler)

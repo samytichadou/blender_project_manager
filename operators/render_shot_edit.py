@@ -72,3 +72,12 @@ class BPM_OT_render_shot_edit(bpy.types.Operator):
         bpy.ops.sequencer.refresh_all()
         
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_render_shot_edit)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_render_shot_edit)

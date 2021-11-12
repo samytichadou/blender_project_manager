@@ -1,16 +1,9 @@
 import bpy
 import os
 
-
-from .functions.lock_file_functions import setupLockFile, clearLockFile, getLockFilepath
 from .functions.project_data_functions import getProjectDataFile
-from .global_variables import (
-                            timer_function_added_statement,
-                            timer_function_removed_statement,
-                            timer_function_updated_statement,
-                            deleted_lock_file_statement,
-                            created_lock_file_statement,
-                        )
+from .functions import lock_file_functions as lck_fct
+from . import global_variables as g_var
 
 addon_name = os.path.basename(os.path.dirname(__file__))
 
@@ -29,16 +22,16 @@ def updateTimer(self, context):
 
         if bpy.app.timers.is_registered(bpmTimerFunction):
             bpy.app.timers.unregister(bpmTimerFunction)
-            if debug: print(timer_function_updated_statement) #debug
+            if debug: print(g_var.timer_function_updated_statement) #debug
         else:
-            if debug: print(timer_function_added_statement) #debug
+            if debug: print(g_var.timer_function_added_statement) #debug
 
         bpy.app.timers.register(bpmTimerFunction)
 
     else:
         if bpy.app.timers.is_registered(bpmTimerFunction):
             bpy.app.timers.unregister(bpmTimerFunction)
-            if debug: print(timer_function_removed_statement) #debug
+            if debug: print(g_var.timer_function_removed_statement) #debug
 
 
 # update function for lock file on/off
@@ -50,11 +43,11 @@ def updateLockFileToggle(self, context):
     debug = context.window_manager.bpm_projectdatas.debug
 
     if self.use_lock_file_system:
-        setupLockFile()
-        if debug: print(created_lock_file_statement) #debug
+        lck_fct.setupLockFile()
+        if debug: print(g_var.created_lock_file_statement) #debug
     else:
-        clearLockFile(getLockFilepath())
-        if debug: print(deleted_lock_file_statement) #debug
+        lck_fct.clearLockFile(lck_fct.getLockFilepath())
+        if debug: print(g_var.deleted_lock_file_statement) #debug
 
 
 # addon preferences
@@ -136,3 +129,12 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
 def getAddonPreferences():
     addon = bpy.context.preferences.addons.get(addon_name)
     return getattr(addon, "preferences", None)
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_PF_addon_prefs)
+
+def unregister():
+    bpy.utils.unregister_class(BPM_PF_addon_prefs)

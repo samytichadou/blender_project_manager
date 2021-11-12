@@ -119,3 +119,14 @@ class BPM_OT_refresh_custom_folders(bpy.types.Operator):
         self.report({'INFO'}, loaded_folders_message)
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_Custom_Folder_Actions)
+    bpy.utils.register_class(BPM_OT_refresh_custom_folders)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_Custom_Folder_Actions)
+    bpy.utils.unregister_class(BPM_OT_refresh_custom_folders)

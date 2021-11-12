@@ -92,3 +92,14 @@ class BPM_OT_refresh_shot_datas(bpy.types.Operator):
             return {'FINISHED'}
     
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_refresh_edit_datas)
+    bpy.utils.register_class(BPM_OT_refresh_shot_datas)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_refresh_edit_datas)
+    bpy.utils.unregister_class(BPM_OT_refresh_shot_datas)

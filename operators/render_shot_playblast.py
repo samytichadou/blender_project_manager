@@ -52,3 +52,12 @@ class BPM_OT_render_shot_playblast(bpy.types.Operator):
         if debug: print(completed_playblast_statement) #debug
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_render_shot_playblast)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_render_shot_playblast)

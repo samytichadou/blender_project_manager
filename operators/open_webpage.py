@@ -56,3 +56,14 @@ class BPM_OT_open_wiki_page(bpy.types.Operator):
         webbrowser.open(url)
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_open_url)
+    bpy.utils.register_class(BPM_OT_open_wiki_page)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_open_url)
+    bpy.utils.unregister_class(BPM_OT_open_wiki_page)

@@ -1,4 +1,6 @@
-import bpy, os, string
+import bpy
+import os
+import string
 
 
 from ..functions.check_file_poll_function import check_file_poll_function
@@ -383,3 +385,18 @@ class BPM_OT_reload_comments(bpy.types.Operator):
             area.tag_redraw()
         
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_add_comment)
+    bpy.utils.register_class(BPM_OT_remove_comment)
+    bpy.utils.register_class(BPM_OT_modify_comment)
+    bpy.utils.register_class(BPM_OT_reload_comments)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_add_comment)
+    bpy.utils.unregister_class(BPM_OT_remove_comment)
+    bpy.utils.unregister_class(BPM_OT_modify_comment)
+    bpy.utils.unregister_class(BPM_OT_reload_comments)

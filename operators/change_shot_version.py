@@ -1,7 +1,5 @@
 import bpy
 import os
-import shutil
-
 
 from ..functions.file_functions import absolutePath, linkExternalScenes
 from ..functions.utils_functions import clearDataUsers
@@ -157,3 +155,12 @@ class BPM_OT_change_shot_version_edit(bpy.types.Operator):
             shot_settings.shot_timeline_display = shot_settings.shot_timeline_display
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_change_shot_version_edit)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_change_shot_version_edit)

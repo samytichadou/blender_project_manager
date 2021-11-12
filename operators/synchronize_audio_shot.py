@@ -1,5 +1,4 @@
 import bpy
-import os
 
 
 class BPM_OT_synchronize_audio_shot(bpy.types.Operator):
@@ -32,3 +31,12 @@ class BPM_OT_synchronize_audio_shot(bpy.types.Operator):
             self.report({'INFO'}, shot_not_used_message)
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_synchronize_audio_shot)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_synchronize_audio_shot)

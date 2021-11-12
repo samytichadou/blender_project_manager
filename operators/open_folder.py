@@ -198,3 +198,18 @@ class BPM_OT_open_custom_folder(bpy.types.Operator):
         if debug: print(opening_folder_statement + folder.filepath) #debug
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_open_shot_folder)
+    bpy.utils.register_class(BPM_OT_open_shot_render_folder)
+    bpy.utils.register_class(BPM_OT_open_project_folder)
+    bpy.utils.register_class(BPM_OT_open_custom_folder)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_open_shot_folder)
+    bpy.utils.unregister_class(BPM_OT_open_shot_render_folder)
+    bpy.utils.unregister_class(BPM_OT_open_project_folder)
+    bpy.utils.unregister_class(BPM_OT_open_custom_folder)

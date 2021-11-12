@@ -10,7 +10,6 @@ from ..functions.file_functions import (
                                     replaceContentInPythonScript, 
                                     suppressExistingFile,
                                     absolutePath,
-                                    createShotRenderFolders,
                                 )
 from ..functions.utils_functions import clearDataUsers
 
@@ -210,3 +209,12 @@ class BPM_OT_create_shot(bpy.types.Operator):
             syncAudioEdit(debug, general_settings.project_folder, scn)
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_create_shot)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_create_shot)

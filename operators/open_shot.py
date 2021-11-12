@@ -49,3 +49,12 @@ class BPM_OT_open_shot(bpy.types.Operator):
             bpy.ops.wm.open_mainfile(filepath=filepath)
         
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_open_shot)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_open_shot)

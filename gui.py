@@ -1,8 +1,7 @@
 import bpy
 
-from .properties import getAssetIcon
-from .functions.project_data_functions import getShotTaskDeadline, getShotTaskComplete
 from .functions.check_file_poll_function import check_file_poll_function
+from .functions import project_data_functions
 
 
 ### process functions ###
@@ -229,11 +228,11 @@ def draw_shot_tracking_shot_file(container, winman):
     row = container.row(align=True)
     row.prop(shot_settings, 'shot_state', text="")
     if shot_settings.shot_state != "FINISHED":
-        row.prop(shot_settings, getShotTaskComplete(shot_settings)[0], text="")
+        row.prop(shot_settings, project_data_functions.getShotTaskComplete(shot_settings)[0], text="")
     draw_wiki_help(row, 'Shot-Datas')
 
     row = container.row(align=True)
-    row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
+    row.label(text = "Deadline : " + project_data_functions.getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
     row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
     draw_wiki_help(row, 'Shot-Task-System')
 
@@ -938,11 +937,11 @@ class BPM_PT_sequencer_shot_tracking_panel(SequencerPanel_Shot):
         row = layout.row(align=True)
         row.prop(shot_settings, 'shot_state', text="")
         if shot_settings.shot_state != "FINISHED":
-            row.prop(shot_settings, getShotTaskComplete(shot_settings)[0], text="")
+            row.prop(shot_settings, project_data_functions.getShotTaskComplete(shot_settings)[0], text="")
         draw_wiki_help(row, 'Shot-Datas')
 
         row = layout.row(align=True)
-        row.label(text = "Deadline : " + getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
+        row.label(text = "Deadline : " + project_data_functions.getShotTaskDeadline(shot_settings)[1], icon = 'TIME')
         row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='GREASEPENCIL').behavior = 'active_strip'
         row.operator('bpm.modify_shot_tasks_deadlines', text='', icon='SEQ_STRIP_DUPLICATE').behavior = 'selected_strips'
         draw_wiki_help(row, 'Shot-Task-System')
@@ -1454,13 +1453,6 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
                 op.url = general_settings.update_download_url
                                 
 
-# project folder ui list
-class BPM_UL_Folders_Uilist(bpy.types.UIList):
-
-    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, flt_flag):
-        layout.prop(item, "name", text="", emboss=False)
-
-
 # filebrowser gui
 class BPM_PT_FileBrowser_Panel(FilebrowserPanel):
     bl_label = "BPM"
@@ -1531,6 +1523,7 @@ class BPM_MT_RightClickSequencerShot_Menu(bpy.types.Menu):
 
 # right click sequencer menu
 def drawRightClickSequencerMenu(self, context):
+
     general_settings = context.window_manager.bpm_generalsettings
     scn = context.scene
 
@@ -1547,3 +1540,82 @@ def drawRightClickSequencerMenu(self, context):
                     layout.menu('BPM_MT_RightClickSequencerShot_Menu')
 
         layout.separator()
+
+
+### REGISTER ---
+
+classes = (
+    #SEQUENCER
+    BPM_PT_sequencer_panels_display_panel,
+    BPM_PT_sequencer_management_panel,
+    BPM_PT_sequencer_files_panel,
+    BPM_PT_sequencer_management_debug_panel,
+    BPM_PT_sequencer_edit_panel,
+    BPM_PT_sequencer_edit_comment_panel,
+    BPM_PT_sequencer_edit_ui_panel,
+    BPM_PT_sequencer_edit_ui_shot_subpanel,
+    BPM_PT_sequencer_edit_ui_shot_state_subpanel,
+    BPM_PT_sequencer_edit_ui_shot_frame_comment_subpanel,
+    BPM_PT_sequencer_edit_ui_timeline_frame_comment_subpanel,
+    BPM_PT_sequencer_edit_ui_scheduling_subpanel,
+    BPM_PT_sequencer_shot_tracking_panel,
+    BPM_PT_sequencer_shot_version_panel,
+    BPM_PT_sequencer_shot_comment_panel,
+    BPM_PT_sequencer_shot_display_panel,
+    BPM_PT_sequencer_shot_debug_panel,
+    BPM_PT_sequencer_asset_library_panel,
+    #VIEWPORT
+    BPM_PT_viewport_panels_display_panel,
+    BPM_PT_viewport_management_panel,
+    BPM_PT_viewport_files_panel,
+    BPM_PT_viewport_management_debug_panel,
+    BPM_PT_viewport_shot_tracking_panel,
+    BPM_PT_viewport_shot_version_panel,
+    BPM_PT_viewport_shot_comment_panel,
+    BPM_PT_viewport_shot_ui_comment_subpanel,
+    BPM_PT_viewport_shot_render_panel,
+    BPM_PT_viewport_shot_debug_panel,
+    BPM_PT_viewport_asset_settings_panel,
+    BPM_PT_viewport_asset_comment_panel,
+    BPM_PT_viewport_asset_ui_comment_subpanel,
+    BPM_PT_viewport_asset_library_panel,
+    BPM_PT_viewport_asset_debug_panel,
+    #NODETREE
+    BPM_PT_nodetree_panels_display_panel,
+    BPM_PT_nodetree_management_panel,
+    BPM_PT_nodetree_files_panel,
+    BPM_PT_nodetree_management_debug_panel,
+    BPM_PT_nodetree_shot_tracking_panel,
+    BPM_PT_nodetree_shot_version_panel,
+    BPM_PT_nodetree_shot_comment_panel,
+    BPM_PT_nodetree_shot_render_panel,
+    BPM_PT_nodetree_shot_debug_panel,
+    BPM_PT_nodetree_asset_settings_panel,
+    BPM_PT_nodetree_asset_comment_panel,
+    BPM_PT_nodetree_asset_library_panel,
+    BPM_PT_nodetree_asset_debug_panel,
+    #FILEBROSER
+    BPM_PT_FileBrowser_Panel,
+    #MENUS
+    BPM_MT_topbar_menu,
+    BPM_MT_OpenFolder_Explorer_Menu,
+    BPM_MT_OpenFolder_Filebrowser_Menu,
+    BPM_MT_RightClickSequencerEdit_Menu,
+    BPM_MT_RightClickSequencerShot_Menu,
+)
+
+def register():
+    for cls in classes :
+        bpy.utils.register_class(cls)   
+
+    ### SPECIAL GUI ###
+    bpy.types.TOPBAR_HT_upper_bar.prepend(draw_topbar)
+    bpy.types.SEQUENCER_MT_context_menu.prepend(drawRightClickSequencerMenu)
+
+def unregister():
+    for cls in reversed(classes) :
+        bpy.utils.unregister_class(cls)
+
+    ### SPECIAL GUI ###
+    bpy.types.TOPBAR_HT_upper_bar.remove(draw_topbar)
+    bpy.types.SEQUENCER_MT_context_menu.remove(drawRightClickSequencerMenu)

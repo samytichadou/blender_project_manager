@@ -57,3 +57,12 @@ class BPM_OT_empty_recycle_bin(bpy.types.Operator):
         if debug: print(empty_recycle_bin_completed_statement) #debug
         
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_empty_recycle_bin)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_empty_recycle_bin)

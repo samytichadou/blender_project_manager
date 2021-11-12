@@ -60,3 +60,12 @@ class BPM_OT_import_asset(bpy.types.Operator):
             if debug: print(asset_imported_statement) #debug
         
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_import_asset)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_import_asset)

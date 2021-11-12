@@ -64,3 +64,12 @@ class BPM_OT_show_open_blend_lock_file(bpy.types.Operator):
 
     def execute(self, context):
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_show_open_blend_lock_file)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_show_open_blend_lock_file)

@@ -74,3 +74,12 @@ class BPM_OT_clear_lock_file_user(bpy.types.Operator):
                 area.tag_redraw()
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_clear_lock_file_user)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_clear_lock_file_user)

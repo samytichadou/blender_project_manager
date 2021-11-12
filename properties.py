@@ -1,20 +1,15 @@
 import bpy
 
-
 from .functions.filebrowser_update_function import updateFilebrowserPath
-from .functions.shot_settings_json_update_function import updateShotSettingsProperties, updateShotRenderState
-from .functions.asset_assigning_update_function import updateAssetAssigning, updateChangingAssetType, saveAssetToJson
-from .functions.date_functions import getDateStringPlusDays, getDateYearString, getDateMonthString, getDateDayString
 from .functions.change_strip_display_mode_functions import updateShotDisplayMode
 from .functions.update_custom_folder_file import update_custom_folder_file_from_name
 from .functions.lock_file_functions import update_function_already_opened
 from .functions.check_addon_version_functions import update_function_updateneeded
 
-from .global_variables import (
-                            render_draft_folder,
-                            render_render_folder,
-                            render_final_folder,
-                        )
+from .functions import shot_settings_json_update_function as shot_js_up_fct
+from .functions import asset_assigning_update_function as asset_up_fct
+from .functions import date_functions
+from . import global_variables as g_var
 
 
 # get asset icon from identifier
@@ -59,9 +54,9 @@ shot_state_items = [
         ]
 
 shot_render_state_items = [
-        (render_draft_folder, render_draft_folder, ""),
-        (render_render_folder, render_render_folder, ""),
-        (render_final_folder, render_final_folder, ""),
+        (g_var.render_draft_folder, g_var.render_draft_folder, ""),
+        (g_var.render_render_folder, g_var.render_render_folder, ""),
+        (g_var.render_final_folder, g_var.render_final_folder, ""),
         ]
 
 shot_display_items = shot_render_state_items.copy()
@@ -155,12 +150,12 @@ class BPM_PR_asset_list(bpy.types.PropertyGroup) :
 # asset settings
 class BPM_PR_asset_settings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
-    asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER', update = updateChangingAssetType)
-    asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT', update = saveAssetToJson)
-    asset_collection : bpy.props.PointerProperty(name="Asset collection", type=bpy.types.Collection, update = updateAssetAssigning)
-    asset_material : bpy.props.PointerProperty(name="Asset material", type=bpy.types.Material, update = updateAssetAssigning)
-    asset_nodegroup : bpy.props.PointerProperty(name="Asset nodegroup", type=bpy.types.NodeTree, update = updateAssetAssigning)
-    asset_world : bpy.props.PointerProperty(name="Asset world", type=bpy.types.World, update = updateAssetAssigning)
+    asset_type : bpy.props.EnumProperty(name = "Asset type", items = asset_type_items, default = 'CHARACTER', update = asset_up_fct.updateChangingAssetType)
+    asset_state : bpy.props.EnumProperty(name = "Asset state", items = asset_state_items, default = 'CONCEPT', update = asset_up_fct.saveAssetToJson)
+    asset_collection : bpy.props.PointerProperty(name="Asset collection", type=bpy.types.Collection, update = asset_up_fct.updateAssetAssigning)
+    asset_material : bpy.props.PointerProperty(name="Asset material", type=bpy.types.Material, update = asset_up_fct.updateAssetAssigning)
+    asset_nodegroup : bpy.props.PointerProperty(name="Asset nodegroup", type=bpy.types.NodeTree, update = asset_up_fct.updateAssetAssigning)
+    asset_world : bpy.props.PointerProperty(name="Asset world", type=bpy.types.World, update = asset_up_fct.updateAssetAssigning)
 
     # comments
     comments : bpy.props.CollectionProperty(type = BPM_PR_shot_comments, name="Comments")
@@ -171,13 +166,13 @@ class BPM_PR_shot_settings_strips(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_shot : bpy.props.BoolProperty(default=False)
     display_comments : bpy.props.BoolProperty(name = "Display comments", default=False)
-    shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsProperties)
-    shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = render_draft_folder , update = updateShotSettingsProperties)
+    shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = shot_js_up_fct.updateShotSettingsProperties)
+    shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = g_var.render_draft_folder , update = shot_js_up_fct.updateShotSettingsProperties)
     
-    shot_version_used : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1, update = updateShotSettingsProperties)
-    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = updateShotSettingsProperties)
+    shot_version_used : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1, update = shot_js_up_fct.updateShotSettingsProperties)
+    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = shot_js_up_fct.updateShotSettingsProperties)
     
-    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = updateShotSettingsProperties)
+    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = shot_js_up_fct.updateShotSettingsProperties)
     
     #shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
 
@@ -193,22 +188,22 @@ class BPM_PR_shot_settings_strips(bpy.types.PropertyGroup) :
     working_completion : bpy.props.IntProperty(default = 0, min = 0, max = 100)
 
     # tasks
-    storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateStringPlusDays(10))
-    layout_deadline : bpy.props.StringProperty(name = 'Layout deadline', default = getDateStringPlusDays(20))
-    animation_deadline : bpy.props.StringProperty(name = 'Animation deadline', default = getDateStringPlusDays(30))
-    lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = getDateStringPlusDays(40))
-    rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = getDateStringPlusDays(50))
-    compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = getDateStringPlusDays(60))
+    storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = date_functions.getDateStringPlusDays(10))
+    layout_deadline : bpy.props.StringProperty(name = 'Layout deadline', default = date_functions.getDateStringPlusDays(20))
+    animation_deadline : bpy.props.StringProperty(name = 'Animation deadline', default = date_functions.getDateStringPlusDays(30))
+    lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = date_functions.getDateStringPlusDays(40))
+    rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = date_functions.getDateStringPlusDays(50))
+    compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = date_functions.getDateStringPlusDays(60))
 
-    storyboard_done : bpy.props.BoolProperty(name = "Storyboard done", update = updateShotSettingsProperties)
-    layout_done : bpy.props.BoolProperty(name = "Layout done", update = updateShotSettingsProperties)
-    animation_done : bpy.props.BoolProperty(name = "Animation done", update = updateShotSettingsProperties)
-    lighting_done : bpy.props.BoolProperty(name = "Lighting done", update = updateShotSettingsProperties)
-    rendering_done : bpy.props.BoolProperty(name = "Rendering done", update = updateShotSettingsProperties)
-    compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = updateShotSettingsProperties)
+    storyboard_done : bpy.props.BoolProperty(name = "Storyboard done", update = shot_js_up_fct.updateShotSettingsProperties)
+    layout_done : bpy.props.BoolProperty(name = "Layout done", update = shot_js_up_fct.updateShotSettingsProperties)
+    animation_done : bpy.props.BoolProperty(name = "Animation done", update = shot_js_up_fct.updateShotSettingsProperties)
+    lighting_done : bpy.props.BoolProperty(name = "Lighting done", update = shot_js_up_fct.updateShotSettingsProperties)
+    rendering_done : bpy.props.BoolProperty(name = "Rendering done", update = shot_js_up_fct.updateShotSettingsProperties)
+    compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = shot_js_up_fct.updateShotSettingsProperties)
 
     # render 
-    is_rendering : bpy.props.BoolProperty(update = updateShotSettingsProperties)
+    is_rendering : bpy.props.BoolProperty(update = shot_js_up_fct.updateShotSettingsProperties)
 
     # comments
     comments : bpy.props.CollectionProperty(type = BPM_PR_shot_comments_strips, name="Comments")
@@ -219,14 +214,14 @@ class BPM_PR_shot_settings(bpy.types.PropertyGroup) :
     '''name : StringProperty() '''
     is_shot : bpy.props.BoolProperty(default=False)
     display_comments : bpy.props.BoolProperty(name = "Display comments", default=False)
-    shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = updateShotSettingsProperties)
-    shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = render_draft_folder , update = updateShotRenderState)
+    shot_state : bpy.props.EnumProperty(name = "Shot state", items = shot_state_items, default = 'STORYBOARD', update = shot_js_up_fct.updateShotSettingsProperties)
+    shot_render_state : bpy.props.EnumProperty(name = "Shot render state", items = shot_render_state_items, default = g_var.render_draft_folder , update = shot_js_up_fct.updateShotRenderState)
     
     shot_version_used : bpy.props.IntProperty(name = "Shot version", default = 1, min = 1)
     shot_version_file : bpy.props.IntProperty(name = "Shot version file", default = 1, min = 1)
-    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = updateShotSettingsProperties)
+    shot_last_version : bpy.props.IntProperty(name = "Shot last version", default = 1, min = 1, update = shot_js_up_fct.updateShotSettingsProperties)
     
-    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = updateShotSettingsProperties)
+    auto_audio_sync : bpy.props.BoolProperty(name = "Automatic audio sync", default=True, update = shot_js_up_fct.updateShotSettingsProperties)
     
     #shot_folder : bpy.props.StringProperty(name = 'Shot folder', subtype = 'DIR_PATH')
 
@@ -236,22 +231,22 @@ class BPM_PR_shot_settings(bpy.types.PropertyGroup) :
     shot_frame_end:  bpy.props.IntProperty(name = "Shot frame end", default = 100, min = 1)
 
     # tasks
-    storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = getDateStringPlusDays(10))
-    layout_deadline : bpy.props.StringProperty(name = 'Layout deadline', default = getDateStringPlusDays(20))
-    animation_deadline : bpy.props.StringProperty(name = 'Animation deadline', default = getDateStringPlusDays(30))
-    lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = getDateStringPlusDays(40))
-    rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = getDateStringPlusDays(50))
-    compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = getDateStringPlusDays(60))
+    storyboard_deadline : bpy.props.StringProperty(name = 'Storyboard deadline', default = date_functions.getDateStringPlusDays(10))
+    layout_deadline : bpy.props.StringProperty(name = 'Layout deadline', default = date_functions.getDateStringPlusDays(20))
+    animation_deadline : bpy.props.StringProperty(name = 'Animation deadline', default = date_functions.getDateStringPlusDays(30))
+    lighting_deadline : bpy.props.StringProperty(name = 'Lighting deadline', default = date_functions.getDateStringPlusDays(40))
+    rendering_deadline : bpy.props.StringProperty(name = 'Rendering deadline', default = date_functions.getDateStringPlusDays(50))
+    compositing_deadline : bpy.props.StringProperty(name = 'Compositing deadline', default = date_functions.getDateStringPlusDays(60))
 
-    storyboard_done : bpy.props.BoolProperty(name = "Storyboard done", update = updateShotSettingsProperties)
-    layout_done : bpy.props.BoolProperty(name = "Layout done", update = updateShotSettingsProperties)
-    animation_done : bpy.props.BoolProperty(name = "Animation done", update = updateShotSettingsProperties)
-    lighting_done : bpy.props.BoolProperty(name = "Lighting done", update = updateShotSettingsProperties)
-    rendering_done : bpy.props.BoolProperty(name = "Rendering done", update = updateShotSettingsProperties)
-    compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = updateShotSettingsProperties)
+    storyboard_done : bpy.props.BoolProperty(name = "Storyboard done", update = shot_js_up_fct.updateShotSettingsProperties)
+    layout_done : bpy.props.BoolProperty(name = "Layout done", update = shot_js_up_fct.updateShotSettingsProperties)
+    animation_done : bpy.props.BoolProperty(name = "Animation done", update = shot_js_up_fct.updateShotSettingsProperties)
+    lighting_done : bpy.props.BoolProperty(name = "Lighting done", update = shot_js_up_fct.updateShotSettingsProperties)
+    rendering_done : bpy.props.BoolProperty(name = "Rendering done", update = shot_js_up_fct.updateShotSettingsProperties)
+    compositing_done : bpy.props.BoolProperty(name = "Compositing done", update = shot_js_up_fct.updateShotSettingsProperties)
 
     # render 
-    is_rendering : bpy.props.BoolProperty(update = updateShotSettingsProperties)
+    is_rendering : bpy.props.BoolProperty(update = shot_js_up_fct.updateShotSettingsProperties)
 
     # comments
     comments : bpy.props.CollectionProperty(type = BPM_PR_shot_comments, name="Comments")
@@ -402,9 +397,9 @@ class BPM_PR_scene_settings(bpy.types.PropertyGroup) :
     display_rendering_warning : bpy.props.BoolProperty(name = "Shot rendering", default=True)
     color_strip_rendering : bpy.props.FloatVectorProperty(name="Rendering", subtype='COLOR', default=(1, 0, 0, 1), min=0.0, max=1.0, size=4)
 
-    shot_deadline_preview_yr : bpy.props.IntProperty(name = "Year", min = int(getDateYearString())-10, default = int(getDateYearString()))
-    shot_deadline_preview_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12, default = int(getDateMonthString()))
-    shot_deadline_preview_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31, default = int(getDateDayString()))
+    shot_deadline_preview_yr : bpy.props.IntProperty(name = "Year", min = int(date_functions.getDateYearString())-10, default = int(date_functions.getDateYearString()))
+    shot_deadline_preview_mn : bpy.props.IntProperty(name = "Month", min = 1, max = 12, default = int(date_functions.getDateMonthString()))
+    shot_deadline_preview_da : bpy.props.IntProperty(name = "Day", min = 1, max = 31, default = int(date_functions.getDateDayString()))
 
     test_prop : bpy.props.IntProperty(name = "Debug Prop")
 
@@ -510,3 +505,71 @@ class BPM_PR_render_settings(bpy.types.PropertyGroup) :
         ('NONE', 'No Audio', ""),
         ]
     ff_audio_codec : bpy.props.EnumProperty(name = "Audio Codec", items = audio_codec_items, default='AAC')
+
+
+### REGISTER ---
+
+classes = (
+    BPM_PR_shot_comments,
+    BPM_PR_shot_comments_strips,
+    BPM_PR_project_settings,
+    BPM_PR_custom_folders,
+    BPM_PR_asset_list,
+    BPM_PR_asset_settings,
+    BPM_PR_shot_settings_strips,
+    BPM_PR_shot_settings,
+    BPM_PR_scene_settings,
+    BPM_PR_general_settings,
+    BPM_PR_render_settings,
+)
+
+def register():
+    for cls in classes :
+        bpy.utils.register_class(cls)   
+    
+    bpy.types.WindowManager.bpm_generalsettings = \
+        bpy.props.PointerProperty(type = BPM_PR_general_settings, name="BPM general settings")
+    bpy.types.WindowManager.bpm_projectdatas = \
+        bpy.props.PointerProperty(type = BPM_PR_project_settings, name="BPM project datas")
+    bpy.types.WindowManager.bpm_customfolders = \
+        bpy.props.CollectionProperty(type = BPM_PR_custom_folders, name="BPM custom folders")
+    bpy.types.WindowManager.bpm_assets = \
+        bpy.props.CollectionProperty(type = BPM_PR_asset_list, name="BPM assets")
+    bpy.types.WindowManager.bpm_assetsettings = \
+        bpy.props.PointerProperty(type = BPM_PR_asset_settings, name="BPM asset settings")
+    bpy.types.WindowManager.bpm_shotsettings = \
+        bpy.props.PointerProperty(type = BPM_PR_shot_settings, name="BPM shot settings")
+    bpy.types.WindowManager.bpm_rendersettings = \
+        bpy.props.CollectionProperty(type = BPM_PR_render_settings, name="BPM render settings")
+    bpy.types.SceneSequence.bpm_shotsettings = \
+        bpy.props.PointerProperty(type = BPM_PR_shot_settings_strips, name="BPM shot settings")
+    bpy.types.ImageSequence.bpm_shotsettings = \
+        bpy.props.PointerProperty(type = BPM_PR_shot_settings_strips, name="BPM shot settings")
+    bpy.types.Scene.bpm_scenesettings = \
+        bpy.props.PointerProperty(type = BPM_PR_scene_settings, name="BPM scene settings")
+    bpy.types.Collection.bpm_isasset = \
+        bpy.props.BoolProperty(default = False)
+    bpy.types.Material.bpm_isasset = \
+        bpy.props.BoolProperty(default = False)
+    bpy.types.NodeTree.bpm_isasset = \
+        bpy.props.BoolProperty(default = False)
+    bpy.types.World.bpm_isasset = \
+        bpy.props.BoolProperty(default = False)
+
+def unregister():
+    for cls in reversed(classes) :
+        bpy.utils.unregister_class(cls)
+
+    del bpy.types.WindowManager.bpm_generalsettings
+    del bpy.types.WindowManager.bpm_projectdatas
+    del bpy.types.WindowManager.bpm_customfolders
+    del bpy.types.WindowManager.bpm_assets
+    del bpy.types.WindowManager.bpm_shotsettings
+    del bpy.types.WindowManager.bpm_rendersettings
+    del bpy.types.SceneSequence.bpm_shotsettings
+    del bpy.types.ImageSequence.bpm_shotsettings
+    del bpy.types.Scene.bpm_scenesettings
+    del bpy.types.Collection.bpm_isasset
+    del bpy.types.Material.bpm_isasset
+    del bpy.types.NodeTree.bpm_isasset
+    del bpy.types.World.bpm_isasset

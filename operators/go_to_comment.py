@@ -127,3 +127,14 @@ class BPM_OT_goto_comment(bpy.types.Operator):
         scn.frame_current = self.frame            
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_goto_next_previous_comment)
+    bpy.utils.register_class(BPM_OT_goto_comment)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_goto_next_previous_comment)
+    bpy.utils.unregister_class(BPM_OT_goto_comment)

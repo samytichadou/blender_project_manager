@@ -150,3 +150,12 @@ class BPM_OT_create_asset(bpy.types.Operator):
             area.tag_redraw()
 
         return {'FINISHED'}
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_OT_create_asset)
+    
+def unregister():
+    bpy.utils.unregister_class(BPM_OT_create_asset)

@@ -64,3 +64,12 @@ class BPM_UL_Asset_UI_List(bpy.types.UIList):
                 flt_neworder = helper_funcs.sort_items_by_name(col, "name")
 
         return flt_flags, flt_neworder
+
+
+### REGISTER ---
+
+def register():
+    bpy.utils.register_class(BPM_UL_Asset_UI_List)
+
+def unregister():
+    bpy.utils.unregister_class(BPM_UL_Asset_UI_List)
