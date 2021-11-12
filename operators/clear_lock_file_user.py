@@ -1,6 +1,12 @@
 import bpy
 import os
 
+from ..functions import json_functions as js_fct
+from ..functions import lock_file_functions as lck_fl_fct
+from ..functions.utils_functions import getCurrentPID
+from ..functions.file_functions import suppressExistingFile
+from .. import global_variables as g_var
+
 
 class BPM_OT_clear_lock_file_user(bpy.types.Operator):
     """Clear lock file user"""
@@ -18,29 +24,19 @@ class BPM_OT_clear_lock_file_user(bpy.types.Operator):
         layout.label(text = "Are you sure ?")
 
     def execute(self, context):
-        from ..functions.json_functions import read_json, create_json_file
-        from ..functions.lock_file_functions import getLockFilepath, setupLockFile
-        from ..functions.utils_functions import getCurrentPID
-        from ..functions.file_functions import suppressExistingFile
-        from ..global_variables import (
-                                    reading_json_statement,
-                                    saving_to_json_statement,
-                                    starting_clear_user_statement,
-                                    clearing_user_statement,
-                                )
 
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
         general_settings = winman.bpm_generalsettings
 
-        if debug: print(starting_clear_user_statement) #debug
+        if debug: print(g_var.starting_clear_user_statement) #debug
 
-        lock_filepath = getLockFilepath()
+        lock_filepath = lck_fl_fct.getLockFilepath()
         pid = getCurrentPID()
 
         if os.path.isfile(lock_filepath):
-            datas = read_json(lock_filepath)
-            if debug: print(reading_json_statement + lock_filepath) #debug
+            datas = js_fct.read_json(lock_filepath)
+            if debug: print(g_var.reading_json_statement + lock_filepath) #debug
 
             chk_free = True
             n = 0
@@ -49,21 +45,21 @@ class BPM_OT_clear_lock_file_user(bpy.types.Operator):
 
                 if o['pid'] == self.pid_to_clear:
                     del datas['opened'][n]
-                    if debug: print(clearing_user_statement + o['hostname']) #debug
+                    if debug: print(g_var.clearing_user_statement + o['hostname']) #debug
 
                 elif o['pid'] != pid:
                     chk_free = False
 
                 n += 1
 
-            if debug: print(saving_to_json_statement) #debug
+            if debug: print(g_var.saving_to_json_statement) #debug
 
             # make sure this process is locked
             if len(datas['opened']) == 0:
                 suppressExistingFile(lock_filepath)
-                setupLockFile()
+                lck_fl_fct.setupLockFile()
             else:
-                create_json_file(datas, lock_filepath)
+                js_fct.create_json_file(datas, lock_filepath)
 
             # set file free if needed
             if chk_free:

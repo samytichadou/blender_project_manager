@@ -1,19 +1,11 @@
 import bpy
 import os
 
-
 from ..functions.project_data_functions import getCustomFoldersFile
 from ..functions.update_custom_folder_file import update_custom_folder_file
 from ..functions.load_project_custom_folder import load_custom_folders
+from .. import global_variables as g_var
 
-from ..global_variables import (
-                            custom_folder_added_statement,
-                            custom_folder_moved_statement,
-                            custom_folder_not_selected_message,
-                            unable_to_move_custom_folder_message,
-                            loaded_folders_message,
-                            no_custom_folder_file_message,
-                        )
 
 class BPM_OT_Custom_Folder_Actions(bpy.types.Operator):
     """Add, Remove or Move Project Custom Folders"""
@@ -56,13 +48,13 @@ class BPM_OT_Custom_Folder_Actions(bpy.types.Operator):
             new.name = os.path.basename(os.path.normpath(new.filepath))
             general_settings.custom_folders_index = len(custom_folders_coll) - 1
 
-            if debug: print(custom_folder_added_statement) #debug
+            if debug: print(g_var.custom_folder_added_statement) #debug
 
         else:
             idx = general_settings.custom_folders_index
 
             if idx not in range(0, len(custom_folders_coll)):
-                self.report({'INFO'}, custom_folder_not_selected_message)
+                self.report({'INFO'}, g_var.custom_folder_not_selected_message)
                 return {'FINISHED'}
 
             if self.action == 'REMOVE':
@@ -74,15 +66,15 @@ class BPM_OT_Custom_Folder_Actions(bpy.types.Operator):
             elif self.action == 'UP' and idx > 0:
                 custom_folders_coll.move(idx, idx - 1)
                 general_settings.custom_folders_index -= 1
-                if debug: print(custom_folder_moved_statement) #debug
+                if debug: print(g_var.custom_folder_moved_statement) #debug
 
             elif self.action == 'DOWN' and idx < len(custom_folders_coll) - 1:
                 custom_folders_coll.move(idx, idx + 1)
                 general_settings.custom_folders_index += 1
-                if debug: print(custom_folder_moved_statement) #debug
+                if debug: print(g_var.custom_folder_moved_statement) #debug
 
             else:
-                self.report({'INFO'}, unable_to_move_custom_folder_message)
+                self.report({'INFO'}, g_var.unable_to_move_custom_folder_message)
 
         general_settings.bypass_update_tag = False
 
@@ -111,12 +103,12 @@ class BPM_OT_refresh_custom_folders(bpy.types.Operator):
         custom_folders_file, is_folder_file = getCustomFoldersFile(winman)
 
         if not is_folder_file:
-            self.report({'INFO'}, no_custom_folder_file_message)
+            self.report({'INFO'}, g_var.no_custom_folder_file_message)
             return {'FINISHED'}
 
         load_custom_folders(winman)
 
-        self.report({'INFO'}, loaded_folders_message)
+        self.report({'INFO'}, g_var.loaded_folders_message)
 
         return {'FINISHED'}
 

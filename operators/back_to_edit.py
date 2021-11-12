@@ -1,5 +1,8 @@
 import bpy
 
+from ..functions.file_functions import getLastVersion
+from ..global_variables import back_to_edit_statement
+
 
 class BPM_OT_back_to_edit(bpy.types.Operator):
     """Go Back to Edit Project"""
@@ -14,9 +17,6 @@ class BPM_OT_back_to_edit(bpy.types.Operator):
                 return True
 
     def execute(self, context):
-        # import statement and functions
-        from ..functions.file_functions import absolutePath, getLastVersion
-        from ..global_variables import back_to_edit_statement
 
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug

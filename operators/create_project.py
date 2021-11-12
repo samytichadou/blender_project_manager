@@ -3,11 +3,10 @@ import os
 import shutil
 import re
 
-from .. import global_variables as gv
-
+from .. import global_variables as g_var
 from ..addon_prefs import getAddonPreferences
-from ..functions.file_functions import absolutePath, createFolder
-from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
+from ..functions import file_functions as fl_fct
+from ..functions import json_functions as js_fct
 from ..functions.utils_functions import redrawAreas
 from ..timer_function import bpmTimerFunction
 from ..vse_extra_ui import enableSequencerUICallback
@@ -34,8 +33,8 @@ class BPM_OT_create_project(bpy.types.Operator):
         datas = winman.bpm_projectdatas
 
         # find project dir and project file
-        project_dir = os.path.dirname(absolutePath(bpy.data.filepath))
-        file_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
+        project_dir = os.path.dirname(fl_fct.absolutePath(bpy.data.filepath))
+        file_name = os.path.splitext(os.path.basename(fl_fct.absolutePath(bpy.data.filepath)))[0]
         
         # get edit file pattern without version numbers
         i = re.search(r'\d+$', file_name)
@@ -75,17 +74,17 @@ class BPM_OT_create_project(bpy.types.Operator):
         datas = winman.bpm_projectdatas
         debug = datas.debug
 
-        if debug: print(gv.saving_to_json_statement) #debug
+        if debug: print(g_var.saving_to_json_statement) #debug
 
         project_folder = general_settings.project_folder
-        project_file = os.path.join(project_folder, gv.file_project)
+        project_file = os.path.join(project_folder, g_var.file_project)
 
         # format the project datas json dataset
-        json_dataset = createJsonDatasetFromProperties(datas, ("comments"))
+        json_dataset = js_fct.createJsonDatasetFromProperties(datas, ("comments"))
 
         # create json file
-        create_json_file(json_dataset, project_file)
-        if debug: print(gv.saved_to_json_statement) #debug
+        js_fct.create_json_file(json_dataset, project_file)
+        if debug: print(g_var.saved_to_json_statement) #debug
 
         # set project as bpm edit project
         general_settings.is_project = True
@@ -99,150 +98,150 @@ class BPM_OT_create_project(bpy.types.Operator):
 
         # create associated folder structure
         #datas
-        datas_folder_path = os.path.join(project_folder, gv.datas_folder)        
-        createFolder(datas_folder_path)
-        if debug: print(gv.folder_created_statement + datas_folder_path) #debug
+        datas_folder_path = os.path.join(project_folder, g_var.datas_folder)        
+        fl_fct.createFolder(datas_folder_path)
+        if debug: print(g_var.folder_created_statement + datas_folder_path) #debug
 
         #datas tasks
-        datas_tasks_path = os.path.join(datas_folder_path, gv.datas_tasks_folder)
-        createFolder(datas_tasks_path)
-        if debug: print(gv.folder_created_statement + datas_tasks_path) #debug
+        datas_tasks_path = os.path.join(datas_folder_path, g_var.datas_tasks_folder)
+        fl_fct.createFolder(datas_tasks_path)
+        if debug: print(g_var.folder_created_statement + datas_tasks_path) #debug
 
         #shot
-        shot_folder_path = os.path.join(project_folder, gv.shot_folder)
-        createFolder(shot_folder_path)
-        if debug: print(gv.folder_created_statement + shot_folder_path) #debug
+        shot_folder_path = os.path.join(project_folder, g_var.shot_folder)
+        fl_fct.createFolder(shot_folder_path)
+        if debug: print(g_var.folder_created_statement + shot_folder_path) #debug
 
         #asset
-        asset_folder_path = os.path.join(project_folder, gv.asset_folder)
-        createFolder(asset_folder_path)
-        if debug: print(gv.folder_created_statement + asset_folder_path) #debug
+        asset_folder_path = os.path.join(project_folder, g_var.asset_folder)
+        fl_fct.createFolder(asset_folder_path)
+        if debug: print(g_var.folder_created_statement + asset_folder_path) #debug
 
         #render
-        render_folder_path = os.path.join(project_folder, gv.render_folder)
-        createFolder(render_folder_path)
-        if debug: print(gv.folder_created_statement + render_folder_path) #debug
+        render_folder_path = os.path.join(project_folder, g_var.render_folder)
+        fl_fct.createFolder(render_folder_path)
+        if debug: print(g_var.folder_created_statement + render_folder_path) #debug
 
         #shot render
-        render_shot_folder_path = os.path.join(render_folder_path, gv.render_shots_folder)
-        createFolder(render_shot_folder_path)
-        if debug: print(gv.folder_created_statement + render_shot_folder_path) #debug
+        render_shot_folder_path = os.path.join(render_folder_path, g_var.render_shots_folder)
+        fl_fct.createFolder(render_shot_folder_path)
+        if debug: print(g_var.folder_created_statement + render_shot_folder_path) #debug
 
         #draft shot render
-        render_shot_draft_folder_path = os.path.join(render_shot_folder_path, gv.render_draft_folder)
-        createFolder(render_shot_draft_folder_path)
-        if debug: print(gv.folder_created_statement + render_shot_draft_folder_path) #debug
+        render_shot_draft_folder_path = os.path.join(render_shot_folder_path, g_var.render_draft_folder)
+        fl_fct.createFolder(render_shot_draft_folder_path)
+        if debug: print(g_var.folder_created_statement + render_shot_draft_folder_path) #debug
 
         #render shot render
-        render_shot_render_folder_path = os.path.join(render_shot_folder_path, gv.render_render_folder)
-        createFolder(render_shot_render_folder_path)
-        if debug: print(gv.folder_created_statement + render_shot_render_folder_path) #debug
+        render_shot_render_folder_path = os.path.join(render_shot_folder_path, g_var.render_render_folder)
+        fl_fct.createFolder(render_shot_render_folder_path)
+        if debug: print(g_var.folder_created_statement + render_shot_render_folder_path) #debug
 
         #final shot render
-        render_shot_final_folder_path = os.path.join(render_shot_folder_path, gv.render_final_folder)
-        createFolder(render_shot_final_folder_path)
-        if debug: print(gv.folder_created_statement + render_shot_final_folder_path) #debug
+        render_shot_final_folder_path = os.path.join(render_shot_folder_path, g_var.render_final_folder)
+        fl_fct.createFolder(render_shot_final_folder_path)
+        if debug: print(g_var.folder_created_statement + render_shot_final_folder_path) #debug
 
         #playblast shot render
-        render_playblast_folder_path = os.path.join(render_shot_folder_path, gv.render_playblast_folder)
-        createFolder(render_playblast_folder_path)
-        if debug: print(gv.folder_created_statement + render_playblast_folder_path) #debug
+        render_playblast_folder_path = os.path.join(render_shot_folder_path, g_var.render_playblast_folder)
+        fl_fct.createFolder(render_playblast_folder_path)
+        if debug: print(g_var.folder_created_statement + render_playblast_folder_path) #debug
 
         #dailies render
-        render_dailies_folder_path = os.path.join(render_folder_path, gv.render_dailies_folder)
-        createFolder(render_dailies_folder_path)
-        if debug: print(gv.folder_created_statement + render_dailies_folder_path) #debug
+        render_dailies_folder_path = os.path.join(render_folder_path, g_var.render_dailies_folder)
+        fl_fct.createFolder(render_dailies_folder_path)
+        if debug: print(g_var.folder_created_statement + render_dailies_folder_path) #debug
 
         #draft dailies render
-        render_dailies_draft_folder_path = os.path.join(render_dailies_folder_path, gv.render_draft_folder)
-        createFolder(render_dailies_draft_folder_path)
-        if debug: print(gv.folder_created_statement + render_dailies_draft_folder_path) #debug
+        render_dailies_draft_folder_path = os.path.join(render_dailies_folder_path, g_var.render_draft_folder)
+        fl_fct.createFolder(render_dailies_draft_folder_path)
+        if debug: print(g_var.folder_created_statement + render_dailies_draft_folder_path) #debug
 
         #render dailies render
-        render_dailies_render_folder_path = os.path.join(render_dailies_folder_path, gv.render_render_folder)
-        createFolder(render_dailies_render_folder_path)
-        if debug: print(gv.folder_created_statement + render_dailies_render_folder_path) #debug
+        render_dailies_render_folder_path = os.path.join(render_dailies_folder_path, g_var.render_render_folder)
+        fl_fct.createFolder(render_dailies_render_folder_path)
+        if debug: print(g_var.folder_created_statement + render_dailies_render_folder_path) #debug
 
         #final dailies render
-        render_dailies_final_folder_path = os.path.join(render_dailies_folder_path, gv.render_final_folder)
-        createFolder(render_dailies_final_folder_path)
-        if debug: print(gv.folder_created_statement + render_dailies_final_folder_path) #debug
+        render_dailies_final_folder_path = os.path.join(render_dailies_folder_path, g_var.render_final_folder)
+        fl_fct.createFolder(render_dailies_final_folder_path)
+        if debug: print(g_var.folder_created_statement + render_dailies_final_folder_path) #debug
 
         #ressources
-        ressources_folder_path = os.path.join(project_folder, gv.ressources_folder)
-        createFolder(ressources_folder_path)
-        if debug: print(gv.folder_created_statement + ressources_folder_path) #debug
+        ressources_folder_path = os.path.join(project_folder, g_var.ressources_folder)
+        fl_fct.createFolder(ressources_folder_path)
+        if debug: print(g_var.folder_created_statement + ressources_folder_path) #debug
 
         #startup files folder
-        project_startup_files_folder = os.path.join(ressources_folder_path, gv.startup_files_folder)
-        createFolder(project_startup_files_folder)
-        if debug: print(gv.folder_created_statement + project_startup_files_folder) #debug
+        project_startup_files_folder = os.path.join(ressources_folder_path, g_var.startup_files_folder)
+        fl_fct.createFolder(project_startup_files_folder)
+        if debug: print(g_var.folder_created_statement + project_startup_files_folder) #debug
 
         #old
-        old_folder_path = os.path.join(project_folder, gv.old_folder)
+        old_folder_path = os.path.join(project_folder, g_var.old_folder)
 
         #old shot
-        old_shot_folder_path = os.path.join(old_folder_path, gv.shot_folder)
-        createFolder(old_shot_folder_path)
-        if debug: print(gv.folder_created_statement + old_shot_folder_path) #debug
+        old_shot_folder_path = os.path.join(old_folder_path, g_var.shot_folder)
+        fl_fct.createFolder(old_shot_folder_path)
+        if debug: print(g_var.folder_created_statement + old_shot_folder_path) #debug
 
         #old asset
-        old_asset_folder_path = os.path.join(old_folder_path, gv.asset_folder)
-        createFolder(old_asset_folder_path)
-        if debug: print(gv.folder_created_statement + old_asset_folder_path) #debug
+        old_asset_folder_path = os.path.join(old_folder_path, g_var.asset_folder)
+        fl_fct.createFolder(old_asset_folder_path)
+        if debug: print(g_var.folder_created_statement + old_asset_folder_path) #debug
 
         #old render
-        old_render_folder_path = os.path.join(old_folder_path, gv.render_folder)
-        createFolder(old_render_folder_path)
-        if debug: print(gv.folder_created_statement + old_render_folder_path) #debug
+        old_render_folder_path = os.path.join(old_folder_path, g_var.render_folder)
+        fl_fct.createFolder(old_render_folder_path)
+        if debug: print(g_var.folder_created_statement + old_render_folder_path) #debug
 
         #old ressources
-        old_ressources_folder_path = os.path.join(old_folder_path, gv.ressources_folder)
-        createFolder(old_ressources_folder_path)
-        if debug: print(gv.folder_created_statement + old_ressources_folder_path) #debug
+        old_ressources_folder_path = os.path.join(old_folder_path, g_var.ressources_folder)
+        fl_fct.createFolder(old_ressources_folder_path)
+        if debug: print(g_var.folder_created_statement + old_ressources_folder_path) #debug
 
 
         # copy startup files
 
         #shot startup file
-        shot_startup = os.path.join(project_startup_files_folder, gv.shot_startup_file)
-        shutil.copy(gv.base_startup_filepath, shot_startup)
+        shot_startup = os.path.join(project_startup_files_folder, g_var.shot_startup_file)
+        shutil.copy(g_var.base_startup_filepath, shot_startup)
 
         #asset startup file
-        asset_startup = os.path.join(project_startup_files_folder, gv.asset_startup_file)
-        shutil.copy(gv.base_startup_filepath, asset_startup)
+        asset_startup = os.path.join(project_startup_files_folder, g_var.asset_startup_file)
+        shutil.copy(g_var.base_startup_filepath, asset_startup)
 
 
         # create render settings
         #playblast
         new_render = render_settings.add()
-        new_render.name = gv.render_playblast_folder
+        new_render.name = g_var.render_playblast_folder
 
         new_render.is_file_format = 'FFMPEG'
         #draft
         new_render = render_settings.add()
-        new_render.name = gv.render_draft_folder
+        new_render.name = g_var.render_draft_folder
         #render
         new_render = render_settings.add()
-        new_render.name = gv.render_render_folder
+        new_render.name = g_var.render_render_folder
         #final
         new_render = render_settings.add()
-        new_render.name = gv.render_final_folder
+        new_render.name = g_var.render_final_folder
 
 
         # save render settings as json 
-        json_render_dataset = initializeAssetJsonDatas({"render_settings"})
+        json_render_dataset = js_fct.initializeAssetJsonDatas({"render_settings"})
         for r in render_settings:
-            r_datas = createJsonDatasetFromProperties(r, ())
+            r_datas = js_fct.createJsonDatasetFromProperties(r, ())
             json_render_dataset['render_settings'].append(r_datas)
 
         # create json file
-        if debug: print(gv.saving_to_json_statement) #debug
+        if debug: print(g_var.saving_to_json_statement) #debug
 
-        render_filepath = os.path.join(render_folder_path, gv.render_file)
-        create_json_file(json_render_dataset, render_filepath)
+        render_filepath = os.path.join(render_folder_path, g_var.render_file)
+        js_fct.create_json_file(json_render_dataset, render_filepath)
 
-        if debug: print(gv.saved_to_json_statement) #debug
+        if debug: print(g_var.saved_to_json_statement) #debug
 
         
         # add extra ui

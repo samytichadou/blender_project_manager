@@ -1,40 +1,23 @@
 import bpy
 import os
-import string
-
 
 from ..functions.check_file_poll_function import check_file_poll_function
-from ..functions.json_functions import create_json_file, createJsonDatasetFromProperties
-from ..functions.date_functions import getDateTimeString, getDateTimeID
-from ..functions.file_functions import absolutePath
+from ..functions import json_functions as js_fct
+from ..functions import date_functions as dt_fct
 from ..functions.strip_functions import getShotCommentPosition
-from ..functions.reload_comments_function import return_commentcoll_folderpath, reload_comments, get_shot_comment_frame
-from ..global_variables import (
-                                comment_file,
-                                start_edit_comment_statement,
-                                editing_comment_statement,
-                                edited_comment_statement,
-                                removed_comment_statement,
-                                comment_file_updated_statement,
-                                bypass_settings_update_statement,
-                                no_active_shot_message,
-                                no_active_shot_statement,
-                                lock_strip_message,
-                                lock_strip_statement,
-                                loading_comments_statement,
-                            )
-
+from ..functions import reload_comments_function as rl_cmt_fct
+from .. import global_variables as g_var
 
 def update_comments_json_file(comment_collection, folder_path):
-    comment_filepath = os.path.join(folder_path, comment_file)
+    comment_filepath = os.path.join(folder_path, g_var.comment_file)
     datas = {}
     datas["comments"] = []
 
     for c in comment_collection:
-        new_comment = createJsonDatasetFromProperties(c, ('hide'))
+        new_comment = js_fct.createJsonDatasetFromProperties(c, ('hide'))
         datas["comments"].append(new_comment)
 
-    create_json_file(datas, comment_filepath)
+    js_fct.create_json_file(datas, comment_filepath)
 
 
 def update_comment_frame_property(self, context):
@@ -96,23 +79,23 @@ class BPM_OT_add_comment(bpy.types.Operator):
         if self.comment_type == "edit_shot":
             project, file_type, active = check_file_poll_function(context)
             if active is None:
-                self.report({'INFO'}, no_active_shot_message)
-                if debug: print(no_active_shot_statement) #debug
+                self.report({'INFO'}, g_var.no_active_shot_message)
+                if debug: print(g_var.no_active_shot_statement) #debug
                 return {'FINISHED'}
             elif active.lock:
-                self.report({'INFO'}, lock_strip_message)
-                if debug: print(lock_strip_statement) #debug
+                self.report({'INFO'}, g_var.lock_strip_message)
+                if debug: print(g_var.lock_strip_statement) #debug
                 return {'FINISHED'}
 
         # reload comments
-        reload_comments(context, self.comment_type, active)
+        rl_cmt_fct.reload_comments(context, self.comment_type, active)
 
-        if debug: print(start_edit_comment_statement) #debug
+        if debug: print(g_var.start_edit_comment_statement) #debug
 
         # get comment collection and folder path
-        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
+        comment_collection, folder_path = rl_cmt_fct.return_commentcoll_folderpath(self.comment_type, context, active)
 
-        if debug: print(editing_comment_statement + self.comment) #debug
+        if debug: print(g_var.editing_comment_statement + self.comment) #debug
 
         # set frame
         if not self.frame_comment:
@@ -125,11 +108,11 @@ class BPM_OT_add_comment(bpy.types.Operator):
 
         # add new comment to strip settings
         new_comment = comment_collection.add()
-        new_comment.name = getDateTimeID()
+        new_comment.name = dt_fct.getDateTimeID()
         new_comment.comment = self.comment
         new_comment.frame_comment = self.frame_comment
         new_comment.frame = frame
-        new_comment.time = getDateTimeString()
+        new_comment.time = dt_fct.getDateTimeString()
         new_comment.author = self.author
 
         # timeline frame comment
@@ -138,9 +121,9 @@ class BPM_OT_add_comment(bpy.types.Operator):
 
         # update json file
         update_comments_json_file(comment_collection, folder_path)
-        if debug: print(comment_file_updated_statement) #debug
+        if debug: print(g_var.comment_file_updated_statement) #debug
 
-        if debug: print(edited_comment_statement) #debug
+        if debug: print(g_var.edited_comment_statement) #debug
 
         for area in context.screen.areas:
             area.tag_redraw()
@@ -186,32 +169,32 @@ class BPM_OT_remove_comment(bpy.types.Operator):
         if self.comment_type == "edit_shot":
             project, file_type, active = check_file_poll_function(context)
             if active is None:
-                self.report({'INFO'}, no_active_shot_message)
-                if debug: print(no_active_shot_statement) #debug
+                self.report({'INFO'}, g_var.no_active_shot_message)
+                if debug: print(g_var.no_active_shot_statement) #debug
                 return {'FINISHED'}
             elif active.lock:
-                self.report({'INFO'}, lock_strip_message)
-                if debug: print(lock_strip_statement) #debug
+                self.report({'INFO'}, g_var.lock_strip_message)
+                if debug: print(g_var.lock_strip_statement) #debug
                 return {'FINISHED'}
 
         # reload comments
-        reload_comments(context, self.comment_type, active)
+        rl_cmt_fct.reload_comments(context, self.comment_type, active)
 
-        if debug: print(start_edit_comment_statement) #debug
+        if debug: print(g_var.start_edit_comment_statement) #debug
 
         # get comment collection and folder path
-        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
+        comment_collection, folder_path = rl_cmt_fct.return_commentcoll_folderpath(self.comment_type, context, active)
 
-        if debug: print(editing_comment_statement + comment_collection[self.index].name) #debug
+        if debug: print(g_var.editing_comment_statement + comment_collection[self.index].name) #debug
 
         # remove comment
         comment_collection.remove(self.index)
 
         # update json file
         update_comments_json_file(comment_collection, folder_path)
-        if debug: print(comment_file_updated_statement) #debug
+        if debug: print(g_var.comment_file_updated_statement) #debug
 
-        if debug: print(removed_comment_statement) #debug
+        if debug: print(g_var.removed_comment_statement) #debug
 
         for area in context.screen.areas:
             area.tag_redraw()
@@ -251,7 +234,7 @@ class BPM_OT_modify_comment(bpy.types.Operator):
             active = context.scene.sequence_editor.active_strip
 
         # get comment collection and folder path
-        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
+        comment_collection, folder_path = rl_cmt_fct.return_commentcoll_folderpath(self.comment_type, context, active)
         active_comment = comment_collection[self.index]
 
         if active_comment.frame_comment:
@@ -292,25 +275,25 @@ class BPM_OT_modify_comment(bpy.types.Operator):
         if self.comment_type == "edit_shot":
             project, file_type, active = check_file_poll_function(context)
             if active is None:
-                self.report({'INFO'}, no_active_shot_message)
-                if debug: print(no_active_shot_statement) #debug
+                self.report({'INFO'}, g_var.no_active_shot_message)
+                if debug: print(g_var.no_active_shot_statement) #debug
                 return {'FINISHED'}
             elif active.lock:
-                self.report({'INFO'}, lock_strip_message)
-                if debug: print(lock_strip_statement) #debug
+                self.report({'INFO'}, g_var.lock_strip_message)
+                if debug: print(g_var.lock_strip_statement) #debug
                 return {'FINISHED'}
 
         # reload comments
-        reload_comments(context, self.comment_type, active)
+        rl_cmt_fct.reload_comments(context, self.comment_type, active)
 
-        if debug: print(start_edit_comment_statement) #debug
+        if debug: print(g_var.start_edit_comment_statement) #debug
 
         # get comment collection and folder path
-        comment_collection, folder_path = return_commentcoll_folderpath(self.comment_type, context, active)
+        comment_collection, folder_path = rl_cmt_fct.return_commentcoll_folderpath(self.comment_type, context, active)
             
         active_comment = comment_collection[self.index]
 
-        if debug: print(editing_comment_statement + active_comment.comment) #debug
+        if debug: print(g_var.editing_comment_statement + active_comment.comment) #debug
 
         if self.frame_comment:
             if self.comment_type == "edit_shot":
@@ -326,7 +309,7 @@ class BPM_OT_modify_comment(bpy.types.Operator):
         active_comment.frame_comment = self.frame_comment
         active_comment.frame = frame
         active_comment.author = self.author
-        active_comment.edit_time = getDateTimeString()
+        active_comment.edit_time = dt_fct.getDateTimeString()
 
         # timeline frame comment
         if self.comment_type == "edit_shot":
@@ -334,9 +317,9 @@ class BPM_OT_modify_comment(bpy.types.Operator):
 
         # update json file
         update_comments_json_file(comment_collection, folder_path)
-        if debug: print(comment_file_updated_statement) #debug
+        if debug: print(g_var.comment_file_updated_statement) #debug
 
-        if debug: print(edited_comment_statement) #debug
+        if debug: print(g_var.edited_comment_statement) #debug
 
         for area in context.screen.areas:
             area.tag_redraw()
@@ -373,13 +356,13 @@ class BPM_OT_reload_comments(bpy.types.Operator):
         if self.comment_type == "edit_shot":
             project, file_type, active = check_file_poll_function(context)
             if active is None:
-                self.report({'INFO'}, no_active_shot_message)
-                if debug: print(no_active_shot_statement) #debug
+                self.report({'INFO'}, g_var.no_active_shot_message)
+                if debug: print(g_var.no_active_shot_statement) #debug
                 return {'FINISHED'}
 
-        if debug: print(loading_comments_statement) #debug
+        if debug: print(g_var.loading_comments_statement) #debug
 
-        reload_comments(context, self.comment_type, active)
+        rl_cmt_fct.reload_comments(context, self.comment_type, active)
 
         for area in context.screen.areas:
             area.tag_redraw()

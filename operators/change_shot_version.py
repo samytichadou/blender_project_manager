@@ -1,24 +1,11 @@
 import bpy
 import os
 
-from ..functions.file_functions import absolutePath, linkExternalScenes
+from ..functions import file_functions as fl_fct
 from ..functions.utils_functions import clearDataUsers
 from ..functions.strip_functions import getListSequencerShots
 from ..functions.check_file_poll_function import check_file_poll_function
-from ..global_variables import (invalid_shot_version_message,
-                                invalid_shot_version_statement,
-                                already_loaded_shot_version_message,
-                                already_loaded_shot_version_statement,
-                                changing_shot_version_statement,
-                                file_does_not_exist_message,
-                                file_does_not_exist_statement,
-                                deleting_scene_statement,
-                                library_cleared_statement,
-                                scenes_linked_statement,
-                                linked_to_strip_statement,
-                                scene_not_found_message,
-                                scene_not_found_statement,
-                            )
+from .. import global_variables as g_var
 
 
 class BPM_OT_change_shot_version_edit(bpy.types.Operator):
@@ -78,19 +65,19 @@ class BPM_OT_change_shot_version_edit(bpy.types.Operator):
 
         # check for invalid shot version number or already loaded version
         if self.version_number > shot_settings.shot_last_version:
-            self.report({'INFO'}, invalid_shot_version_message)
-            if debug: print(invalid_shot_version_statement) #debug
+            self.report({'INFO'}, g_var.invalid_shot_version_message)
+            if debug: print(g_var.invalid_shot_version_statement) #debug
             return {'FINISHED'}
 
         elif self.version_number == shot_settings.shot_version_used:
-            self.report({'INFO'}, already_loaded_shot_version_message)
-            if debug: print(already_loaded_shot_version_statement) #debug
+            self.report({'INFO'}, g_var.already_loaded_shot_version_message)
+            if debug: print(g_var.already_loaded_shot_version_statement) #debug
             return {'FINISHED'}
 
-        if debug: print(changing_shot_version_statement + str(self.version_number)) #debug
+        if debug: print(g_var.changing_shot_version_statement + str(self.version_number)) #debug
 
         # check if file exist
-        old_version_shot_filepath = absolutePath(shot_settings.shot_filepath)
+        old_version_shot_filepath = fl_fct.absolutePath(shot_settings.shot_filepath)
         shot_folder_path = os.path.dirname(old_version_shot_filepath)
         old_version_shot_file = os.path.basename(old_version_shot_filepath)
         old_version_shot_name = os.path.splitext(old_version_shot_file)[0]
@@ -99,8 +86,8 @@ class BPM_OT_change_shot_version_edit(bpy.types.Operator):
         target_shot_path = os.path.join(shot_folder_path, target_shot_name + ".blend")
 
         if not os.path.isfile(target_shot_path):
-            self.report({'INFO'}, file_does_not_exist_message + target_shot_path)
-            if debug: print(file_does_not_exist_statement + target_shot_path) #debug
+            self.report({'INFO'}, g_var.file_does_not_exist_message + target_shot_path)
+            if debug: print(g_var.file_does_not_exist_statement + target_shot_path) #debug
             return {'FINISHED'}
         
         # change version number
@@ -116,25 +103,25 @@ class BPM_OT_change_shot_version_edit(bpy.types.Operator):
             shot_lib = shot_scn.library
 
             # link new scene
-            linkExternalScenes(target_shot_path)
-            if debug: print(scenes_linked_statement + target_shot_path) #debug
+            fl_fct.linkExternalScenes(target_shot_path)
+            if debug: print(g_var.scenes_linked_statement + target_shot_path) #debug
 
             # link strip to new scene
             scene_to_link = None
             for s in bpy.data.scenes:
                 if s.library:
-                    if absolutePath(s.library.filepath) == target_shot_path:
+                    if fl_fct.absolutePath(s.library.filepath) == target_shot_path:
                         if s.name == shot_name:
                             scene_to_link = s
                             break
             if scene_to_link is not None:
                 active_strip.scene = scene_to_link
-                if debug: print(linked_to_strip_statement + target_shot_path) #debug
+                if debug: print(g_var.linked_to_strip_statement + target_shot_path) #debug
 
             # error message if scene not found
             else:
-                self.report({'INFO'}, scene_not_found_message + shot_name)
-                if debug: print(scene_not_found_statement + shot_name) #debug
+                self.report({'INFO'}, g_var.scene_not_found_message + shot_name)
+                if debug: print(g_var.scene_not_found_statement + shot_name) #debug
                 return {'FINISHED'}
 
             # check if old library is still used
@@ -142,13 +129,13 @@ class BPM_OT_change_shot_version_edit(bpy.types.Operator):
             if shot_lib not in lib_used:
 
                 # delete old scene
-                if debug: print(deleting_scene_statement + shot_name) #debug
+                if debug: print(g_var.deleting_scene_statement + shot_name) #debug
                 bpy.data.scenes.remove(shot_scn, do_unlink = True)
 
                 # unlink old lib
                 clearDataUsers(shot_lib)
                 bpy.data.orphans_purge()
-                if debug: print(library_cleared_statement + old_version_shot_filepath) #debug
+                if debug: print(g_var.library_cleared_statement + old_version_shot_filepath) #debug
 
         ### deal with images if image strip ###
         elif active_strip.type == 'IMAGE':

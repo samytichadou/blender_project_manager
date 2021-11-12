@@ -2,7 +2,7 @@ import bpy
 import os
 
 from .functions.project_data_functions import getProjectDataFile
-from .functions import lock_file_functions as lck_fct
+from .functions import lock_file_functions as lck_fl_fct
 from . import global_variables as g_var
 
 addon_name = os.path.basename(os.path.dirname(__file__))
@@ -43,10 +43,10 @@ def updateLockFileToggle(self, context):
     debug = context.window_manager.bpm_projectdatas.debug
 
     if self.use_lock_file_system:
-        lck_fct.setupLockFile()
+        lck_fl_fct.setupLockFile()
         if debug: print(g_var.created_lock_file_statement) #debug
     else:
-        lck_fct.clearLockFile(lck_fct.getLockFilepath())
+        lck_fl_fct.clearLockFile(lck_fl_fct.getLockFilepath())
         if debug: print(g_var.deleted_lock_file_statement) #debug
 
 

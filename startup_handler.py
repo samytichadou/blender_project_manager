@@ -9,7 +9,7 @@ from . import global_variables as g_var
 from . import vse_extra_ui as vse_ui
 from . import dopesheet_extra_ui as dsht_ui
 from .functions.audio_sync_functions import syncAudioShot
-from .functions import lock_file_functions as lck_fct
+from .functions import lock_file_functions as lck_fl_fct
 from .functions.date_functions import getDateString
 from .functions.reload_comments_function import reload_comments
 from .functions import load_asset_settings as ld_ast_stg
@@ -56,18 +56,18 @@ def bpmStartupHandler(scene):
             # lock file system
             if prefs.use_lock_file_system:
                 # check for lock file
-                lock_filepath = lck_fct.getLockFilepath()
+                lock_filepath = lck_fl_fct.getLockFilepath()
                 if os.path.isfile(lock_filepath):
                     if debug: print(g_var.locked_file_statement) #debug
                     # set already opened prop
                     general_settings.blend_already_opened = True
                 
                 # setup lock file
-                lock_filepath = lck_fct.setupLockFile()
+                lock_filepath = lck_fl_fct.setupLockFile()
                 if debug: print(g_var.created_lock_file_statement) #debug
                 
                 if debug: print(g_var.registering_exit_function_statement) #debug
-                atexit.register(lck_fct.deleteLockFileExit, lock_filepath)
+                atexit.register(lck_fl_fct.deleteLockFileExit, lock_filepath)
 
             # setup timer if needed
             if prefs.use_timer_refresh:

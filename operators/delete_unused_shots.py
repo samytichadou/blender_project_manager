@@ -4,28 +4,10 @@ import shutil
 
 
 from ..functions.check_file_poll_function import check_file_poll_function
-from ..global_variables import (
-                            shot_folder, 
-                            used_shots_list_statement,
-                            existing_shots_list_statement,
-                            unused_shots_list_statement,
-                            no_unused_shots_message,
-                            no_unused_shots_statement,
-                            old_folder,
-                            starting_delete_shots_statement,
-                            starting_delete_specific_shot_statement,
-                            deleting_scene_statement,
-                            starting_moving_folder,
-                            moved_folder_statement,
-                            starting_deleting_folder,
-                            deleted_folder_statement,
-                            render_folder,
-                            render_shots_folder,
-                            render_files_removed_statement,
-                        )
+from .. import global_variables as g_var
 from ..functions.strip_functions import getListSequencerShots
-from ..functions.project_data_functions import getAvailableShotsList, findLibFromShot
-from ..functions.utils_functions import listDifference, clearDataUsers
+from ..functions import project_data_functions as pjt_dta_fct
+from ..functions import utils_functions as utl_fct
 
 
 # get non existing folder with version
@@ -50,7 +32,6 @@ def get_non_existing_folderpath(folderpath):
             dir_path = name + "_" + str(v_number) + extension
 
     return dir_path
-
 
 
 class BPM_OT_delete_unused_shots(bpy.types.Operator):
@@ -87,27 +68,27 @@ class BPM_OT_delete_unused_shots(bpy.types.Operator):
         self.project_prefix = project_prefix
         self.shot_prefix = project_datas.shot_prefix
 
-        self.shot_folder_path = os.path.join(general_settings.project_folder, shot_folder)
+        self.shot_folder_path = os.path.join(general_settings.project_folder, g_var.shot_folder)
         sequencer = context.scene.sequence_editor
 
         # get used shot
         timeline_shots, used_libraries = getListSequencerShots(sequencer)
 
-        if debug: print(used_shots_list_statement + str(timeline_shots)) #debug
+        if debug: print(g_var.used_shots_list_statement + str(timeline_shots)) #debug
 
         # get all existing shot
-        existing_shots = getAvailableShotsList(self.shot_folder_path, self.project_prefix)
+        existing_shots = pjt_dta_fct.getAvailableShotsList(self.shot_folder_path, self.project_prefix)
 
-        if debug: print(existing_shots_list_statement + str(existing_shots)) #debug
+        if debug: print(g_var.existing_shots_list_statement + str(existing_shots)) #debug
 
         # find difference
-        self.shots_to_remove = listDifference(existing_shots, timeline_shots)
+        self.shots_to_remove = utl_fct.listDifference(existing_shots, timeline_shots)
 
-        if debug: print(unused_shots_list_statement + str(self.shots_to_remove)) #debug
+        if debug: print(g_var.unused_shots_list_statement + str(self.shots_to_remove)) #debug
 
         if len(self.shots_to_remove) == 0:
-            self.report({'INFO'}, no_unused_shots_message)
-            if debug: print(no_unused_shots_statement) #debug
+            self.report({'INFO'}, g_var.no_unused_shots_message)
+            if debug: print(g_var.no_unused_shots_statement) #debug
             return {'FINISHED'}
 
         return context.window_manager.invoke_props_dialog(self)
@@ -126,20 +107,20 @@ class BPM_OT_delete_unused_shots(bpy.types.Operator):
         debug = winman.bpm_projectdatas.debug
         general_settings = context.window_manager.bpm_generalsettings
 
-        if debug: print(starting_delete_shots_statement) #debug
+        if debug: print(g_var.starting_delete_shots_statement) #debug
 
         if self.remove_renders:
-            render_shot_folder_path = os.path.join(os.path.join(general_settings.project_folder, render_folder), render_shots_folder)
+            render_shot_folder_path = os.path.join(os.path.join(general_settings.project_folder, g_var.render_folder), g_var.render_shots_folder)
 
         # move shots
         for shot in self.shots_to_remove:
             
-            if debug: print(starting_delete_specific_shot_statement + shot) #debug
+            if debug: print(g_var.starting_delete_specific_shot_statement + shot) #debug
 
             # delete corresponding scene if exists
             for s in bpy.data.scenes:
                 if s.name == shot:
-                    if debug: print(deleting_scene_statement + s.name) #debug
+                    if debug: print(g_var.deleting_scene_statement + s.name) #debug
 
                     bpy.data.scenes.remove(s, do_unlink = True)
             
@@ -148,10 +129,10 @@ class BPM_OT_delete_unused_shots(bpy.types.Operator):
 
             # move
             if not self.permanently_delete:
-                old_folder_path = os.path.join(general_settings.project_folder, old_folder)
-                if debug: print(starting_moving_folder + shot_folder_name + " to " + old_folder_path) #debug
+                old_folder_path = os.path.join(general_settings.project_folder, g_var.old_folder)
+                if debug: print(g_var.starting_moving_folder + shot_folder_name + " to " + old_folder_path) #debug
 
-                old_shot_path = os.path.join(old_folder_path, shot_folder)
+                old_shot_path = os.path.join(old_folder_path, g_var.shot_folder)
                 temp_dir_path = os.path.join(old_shot_path, shot_folder_name)
 
                 # check if existing and change name to copy
@@ -159,12 +140,12 @@ class BPM_OT_delete_unused_shots(bpy.types.Operator):
 
                 shutil.move(folder, dir_path)
 
-                if debug: print(moved_folder_statement) #debug
+                if debug: print(g_var.moved_folder_statement) #debug
 
                 # move renders
                 if self.remove_renders:
 
-                    old_render_shot_folder_path = os.path.join(os.path.join(old_folder_path, render_folder), render_shots_folder)
+                    old_render_shot_folder_path = os.path.join(os.path.join(old_folder_path, g_var.render_folder), g_var.render_shots_folder)
 
                     for render_dir in os.scandir(render_shot_folder_path):
                         old_dir = os.path.join(old_render_shot_folder_path, render_dir.name)
@@ -176,14 +157,14 @@ class BPM_OT_delete_unused_shots(bpy.types.Operator):
                                 new_path = get_non_existing_folderpath(os.path.join(old_dir, sub.name))
                                 shutil.move(sub.path, new_path)
 
-                    if debug: print(render_files_removed_statement) #debug
+                    if debug: print(g_var.render_files_removed_statement) #debug
                 
 
             # delete
             else:
-                if debug: print(starting_deleting_folder + shot_folder_name) #debug
+                if debug: print(g_var.starting_deleting_folder + shot_folder_name) #debug
                 shutil.rmtree(folder)
-                if debug: print(deleted_folder_statement) #debug
+                if debug: print(g_var.deleted_folder_statement) #debug
 
                 # delete renders
                 if self.remove_renders:
@@ -197,13 +178,13 @@ class BPM_OT_delete_unused_shots(bpy.types.Operator):
                                 elif sub.is_file():
                                     os.remove(sub.path)
 
-                    if debug: print(render_files_removed_statement) #debug
+                    if debug: print(g_var.render_files_removed_statement) #debug
 
 
             # remove libraries
-            lib = findLibFromShot(shot_folder_name)
+            lib = pjt_dta_fct.findLibFromShot(shot_folder_name)
             if lib is not None:
-                clearDataUsers(lib)
+                utl_fct.clearDataUsers(lib)
                 bpy.data.orphans_purge()
         
         return {'FINISHED'}

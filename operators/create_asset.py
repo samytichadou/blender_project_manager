@@ -2,6 +2,11 @@ import bpy
 import os
 import shutil
 
+from .. import global_variables as g_var
+from ..functions import json_functions as js_fct
+from ..functions.project_data_functions import getAssetFile
+from ..functions.file_functions import createDirectory
+
 
 class BPM_OT_create_asset(bpy.types.Operator):
     """Create new asset"""
@@ -36,37 +41,14 @@ class BPM_OT_create_asset(bpy.types.Operator):
         layout.prop(self, 'asset_state')
 
     def execute(self, context):
-        # import statements and functions
-        from ..global_variables import(
-                                asset_folder,
-                                asset_file,
-                                reading_json_statement,
-                                saving_to_json_statement,
-                                saved_to_json_statement,
-                                deleted_file_statement,
-                                creating_asset_statement,
-                                asset_created_statement,
-                                dupe_asset_name_message,
-                                dupe_asset_name_statement,
-                                initialize_json_statement,
-                                asset_file_creation_statement,
-                                ressources_folder,
-                                startup_files_folder,
-                                asset_startup_file,
-                                copying_file_statement,
-                                asset_ressources_folder,
-                                )
-        from ..functions.json_functions import read_json, createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
-        from ..functions.dataset_functions import setPropertiesFromDataset
-        from ..functions.project_data_functions import getAssetFile
-        from ..functions.file_functions import createDirectory
+        
 
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
         general_settings = winman.bpm_generalsettings
         asset_collection = winman.bpm_assets
 
-        if debug: print(creating_asset_statement + self.name) #debug
+        if debug: print(g_var.creating_asset_statement + self.name) #debug
 
         # get json file path
         asset_file_path, asset_file_exist = getAssetFile(winman)
@@ -75,25 +57,25 @@ class BPM_OT_create_asset(bpy.types.Operator):
 
         if asset_file_exist:
 
-            if debug: print(reading_json_statement + asset_file_path) #debug
+            if debug: print(g_var.reading_json_statement + asset_file_path) #debug
 
-            datas = read_json(asset_file_path)
+            datas = js_fct.(asset_file_path)
 
             for asset in datas['assets']:
 
                 if asset['name']==self.name:
 
                     # error message because dupe name
-                    self.report({'INFO'}, dupe_asset_name_message)
-                    if debug: print(dupe_asset_name_statement) #debug
+                    self.report({'INFO'}, g_var.dupe_asset_name_message)
+                    if debug: print(g_var.dupe_asset_name_statement) #debug
 
                     return {'FINISHED'}
 
         else:
 
-            if debug: print(initialize_json_statement + asset_file_path) #debug
+            if debug: print(g_var.initialize_json_statement + asset_file_path) #debug
 
-            datas = initializeAssetJsonDatas({"assets"})
+            datas = js_fct.({"assets"})
 
         # create asset datas
         asset_prop = asset_collection.add()
@@ -104,38 +86,38 @@ class BPM_OT_create_asset(bpy.types.Operator):
         asset_prop.asset_state = self.asset_state
 
         # format new asset datas
-        asset_datas_json = createJsonDatasetFromProperties(asset_prop, ("is_thisassetfile"))
+        asset_datas_json = js_fct.(asset_prop, ("is_thisassetfile"))
 
         # add the new asset
         datas['assets'].append(asset_datas_json)
 
         # write json
-        if debug: print(saving_to_json_statement) #debug
+        if debug: print(g_var.saving_to_json_statement) #debug
 
-        create_json_file(datas, asset_file_path)
+        js_fct.(datas, asset_file_path)
 
-        if debug: print(saved_to_json_statement) #debug
+        if debug: print(g_var.saved_to_json_statement) #debug
         
         # create the folder
-        asset_folder_path = os.path.join(general_settings.project_folder, asset_folder)
+        asset_folder_path = os.path.join(general_settings.project_folder, g_var.asset_folder)
         new_asset_folder_path = os.path.join(asset_folder_path, self.name)
         createDirectory(new_asset_folder_path)
         
         new_asset_file_path = os.path.join(new_asset_folder_path, self.name + ".blend")
 
-        if debug: print(asset_file_creation_statement + new_asset_file_path) #debug    
+        if debug: print(g_var.asset_file_creation_statement + new_asset_file_path) #debug    
 
         # create ressources folder
-        ressources_folder_path = os.path.join(new_asset_folder_path, asset_ressources_folder)
+        ressources_folder_path = os.path.join(new_asset_folder_path, g_var.asset_ressources_folder)
         createDirectory(ressources_folder_path)
 
         # create asset blend
         ressources_folder = os.path.join(general_settings.project_folder, ressources_folder)
-        startup_folder = os.path.join(ressources_folder, startup_files_folder)
-        asset_startup_filepath = os.path.join(startup_folder, asset_startup_file)
+        startup_folder = os.path.join(ressources_folder, g_var.startup_files_folder)
+        asset_startup_filepath = os.path.join(startup_folder, g_var.asset_startup_file)
         shutil.copy(asset_startup_filepath, new_asset_file_path)
 
-        if debug: print(copying_file_statement + asset_startup_filepath) #debug
+        if debug: print(g_var.copying_file_statement + asset_startup_filepath) #debug
 
         # select asset if available
         if general_settings.panel_asset_display in {'ALL', self.asset_type}:
@@ -144,7 +126,7 @@ class BPM_OT_create_asset(bpy.types.Operator):
                     general_settings.asset_list_index = idx
                     break
 
-        if debug: print(asset_created_statement + self.name) #debug
+        if debug: print(g_var.asset_created_statement + self.name) #debug
 
         for area in context.screen.areas:
             area.tag_redraw()

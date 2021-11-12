@@ -3,24 +3,12 @@ import os
 import shutil
 import atexit
 
-
-from ..functions.file_functions import absolutePath, linkExternalScenes, createShotRenderFolders, get_filename_from_filepath
+from ..functions import file_functions as fl_fct
 from ..functions.check_file_poll_function import check_file_poll_function
-from ..global_variables import (bumping_shot_statement, 
-                            copying_file_statement,
-                            deleting_scene_statement,
-                            library_cleared_statement,
-                            scenes_linked_statement,
-                            linked_to_strip_statement,
-                            scene_not_found_message,
-                            scene_not_found_statement,
-                            locked_file_statement,
-                            created_lock_file_statement,
-                            registering_exit_function_statement,
-                        )
+from .. import global_variables as g_var
 from ..functions.utils_functions import clearDataUsers
 from ..functions.strip_functions import getListSequencerShots
-from ..functions.lock_file_functions import deleteLockFileExit, getLockFilepath, setupLockFile
+from ..functions import lock_file_functions as lck_fl_fct
 from ..addon_prefs import getAddonPreferences
 
 
@@ -59,7 +47,6 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
         layout.prop(self, 'file_to_copy', expand = True)
 
     def execute(self, context):
-
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
         general_settings = winman.bpm_generalsettings
@@ -69,14 +56,14 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
 
         shot_name = active_strip.name
        
-        if debug: print(bumping_shot_statement) #debug
+        if debug: print(g_var.bumping_shot_statement) #debug
 
         # bump version number
         shot_settings.shot_version_used = shot_settings.shot_last_version + 1
 
         # get new shot path
-        old_version_shot_filepath = absolutePath(shot_settings.shot_filepath)
-        old_version_shot_name, shot_folder_path, extension = get_filename_from_filepath(old_version_shot_filepath)
+        old_version_shot_filepath = fl_fct.absolutePath(shot_settings.shot_filepath)
+        old_version_shot_name, shot_folder_path, extension = fl_fct.get_filename_from_filepath(old_version_shot_filepath)
 
         shot_pattern = old_version_shot_name[:-(proj_datas.version_digits)]
         new_shot_name = shot_pattern + str(shot_settings.shot_version_used).zfill(proj_datas.version_digits)
@@ -90,7 +77,7 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
         shot_settings.shot_last_version = shot_settings.shot_version_used
 
         # copy the shot file
-        if debug: print(copying_file_statement + old_version_shot_filepath + " - to - " + new_shot_path) #debug
+        if debug: print(g_var.copying_file_statement + old_version_shot_filepath + " - to - " + new_shot_path) #debug
         shutil.copy(old_version_shot_filepath, new_shot_path)
 
         # set new shot filepath
@@ -106,25 +93,25 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
             shot_lib = shot_scn.library
 
             # link new scene
-            linkExternalScenes(new_shot_path)
-            if debug: print(scenes_linked_statement + new_shot_path) #debug
+            fl_fct.linkExternalScenes(new_shot_path)
+            if debug: print(g_var.scenes_linked_statement + new_shot_path) #debug
 
             # link strip to new scene
             scene_to_link = None
             for s in bpy.data.scenes:
                 if s.library:
-                    if absolutePath(s.library.filepath) == new_shot_path:
+                    if fl_fct.absolutePath(s.library.filepath) == new_shot_path:
                         if s.name == shot_name:
                             scene_to_link = s
                             break
             if scene_to_link is not None:
                 active_strip.scene = scene_to_link
-                if debug: print(linked_to_strip_statement + new_shot_path) #debug
+                if debug: print(g_var.linked_to_strip_statement + new_shot_path) #debug
 
             # error message if scene not found
             else:
-                self.report({'INFO'}, scene_not_found_message + shot_name)
-                if debug: print(scene_not_found_statement + shot_name) #debug
+                self.report({'INFO'}, g_var.scene_not_found_message + shot_name)
+                if debug: print(g_var.scene_not_found_statement + shot_name) #debug
                 return {'FINISHED'}
 
 
@@ -133,13 +120,13 @@ class BPM_OT_bump_shot_version_edit(bpy.types.Operator):
             if shot_lib not in lib_used:
 
                 # delete old scene
-                if debug: print(deleting_scene_statement + shot_name) #debug
+                if debug: print(g_var.deleting_scene_statement + shot_name) #debug
                 bpy.data.scenes.remove(shot_scn, do_unlink = True)
 
                 # unlink old lib
                 clearDataUsers(shot_lib)
                 bpy.data.orphans_purge()
-                if debug: print(library_cleared_statement + old_version_shot_filepath) #debug
+                if debug: print(g_var.library_cleared_statement + old_version_shot_filepath) #debug
 
         ### deal with images if image strip ###
         elif active_strip.type == 'IMAGE':
@@ -163,14 +150,13 @@ class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
 
 
     def execute(self, context):
-
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
         shot_settings = winman.bpm_shotsettings
         proj_datas = winman.bpm_projectdatas
         prefs = getAddonPreferences()
 
-        if debug: print(bumping_shot_statement) #debug
+        if debug: print(g_var.bumping_shot_statement) #debug
 
         bpy.ops.wm.save_as_mainfile(filepath = bpy.data.filepath)
 
@@ -179,7 +165,7 @@ class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
         shot_settings.shot_version_file = shot_settings.shot_last_version
 
         # get new shot path
-        old_version_shot_name, shot_folder_path, extension = get_filename_from_filepath(bpy.data.filepath)
+        old_version_shot_name, shot_folder_path, extension = fl_fct.get_filename_from_filepath(bpy.data.filepath)
 
         shot_pattern = old_version_shot_name[:-(proj_datas.version_digits)]
         new_shot_name = shot_pattern + str(shot_settings.shot_last_version).zfill(proj_datas.version_digits)
@@ -187,22 +173,22 @@ class BPM_OT_bump_shot_version_shot(bpy.types.Operator):
 
         # delete lock file
         if prefs.use_lock_file_system:
-            deleteLockFileExit(getLockFilepath())
-            atexit.unregister(deleteLockFileExit)
+            lck_fl_fct.deleteLockFileExit(lck_fl_fct.getLockFilepath())
+            atexit.unregister(lck_fl_fct.deleteLockFileExit)
 
         # copy the shot file
-        if debug: print(copying_file_statement + bpy.data.filepath + " - to - " + new_shot_path) #debug
+        if debug: print(g_var.copying_file_statement + bpy.data.filepath + " - to - " + new_shot_path) #debug
         bpy.ops.wm.save_as_mainfile(filepath = new_shot_path)
 
         # update lock file
         if prefs.use_lock_file_system:
-            if debug: print(locked_file_statement) #debug
+            if debug: print(g_var.locked_file_statement) #debug
                 
-            lock_filepath = setupLockFile()
-            if debug: print(created_lock_file_statement) #debug
+            lock_filepath = lck_fl_fct.setupLockFile()
+            if debug: print(g_var.created_lock_file_statement) #debug
 
-            atexit.register(deleteLockFileExit, lock_filepath)
-            if debug: print(registering_exit_function_statement) #debug
+            atexit.register(lck_fl_fct.deleteLockFileExit, lock_filepath)
+            if debug: print(g_var.registering_exit_function_statement) #debug
 
         return {'FINISHED'}
 
