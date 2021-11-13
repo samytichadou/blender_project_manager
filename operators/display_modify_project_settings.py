@@ -1,9 +1,10 @@
-import bpy, os
+import bpy
+import os
 
-
-from ..functions.dataset_functions import returnDatasetProperties, setPropertiesFromJsonDataset
+from ..functions import dataset_functions as dtset_fct
 from ..functions.json_functions import read_json
-from ..global_variables import file_project, reading_json_statement
+from .. import global_variables as g_var
+
 
 
 #update function for reloading from json
@@ -14,13 +15,13 @@ def reloadProjectSettingsFromJson(self, context):
         debug = winman.bpm_projectdatas.debug
 
         datas = winman.bpm_projectdatas
-        json_project_file = os.path.join(general_settings.project_folder, file_project)
+        json_project_file = os.path.join(general_settings.project_folder, g_var.file_project)
 
-        if debug: print(reading_json_statement + json_project_file) #debug
+        if debug: print(g_var.reading_json_statement + json_project_file) #debug
 
         json_dataset = read_json(json_project_file)
 
-        setPropertiesFromJsonDataset(json_dataset, datas, False, ())
+        dtset_fct.setPropertiesFromJsonDataset(json_dataset, datas, False, ())
 
 
 # display project settings
@@ -47,7 +48,7 @@ class BPM_OT_display_modify_project_settings(bpy.types.Operator):
         col1 = split.column(align=True)
         col2 = split.column(align=True)
 
-        for p in returnDatasetProperties(datas):
+        for p in dtset_fct.returnDatasetProperties(datas):
             box = col1.box()
             box.label(text=p[0].name)
             if not self.modify:

@@ -1,10 +1,9 @@
 import bpy
 import os
 
-
 from ..functions.lock_file_functions import getLockFilepath
 from ..functions.json_functions import read_json
-from ..functions.utils_functions import returnFormatedTimestamp, getCurrentPID
+from ..functions import utils_functions as utl_fct
 from ..addon_prefs import getAddonPreferences
 
 
@@ -28,12 +27,11 @@ class BPM_OT_show_open_blend_lock_file(bpy.types.Operator):
 
     def invoke(self, context, event):
         self.lock_filepath = getLockFilepath()
-        self.pid = getCurrentPID()
+        self.pid = utl_fct.getCurrentPID()
 
         return context.window_manager.invoke_props_dialog(self, width=400)
  
     def draw(self, context):
-
         datas = read_json(self.lock_filepath)
 
         layout = self.layout
@@ -59,7 +57,7 @@ class BPM_OT_show_open_blend_lock_file(bpy.types.Operator):
             row.label(text = i['hostname'])
 
             box2 = col2.box()
-            box2.label(text = returnFormatedTimestamp(i['timestamp']))
+            box2.label(text = utl_fct.returnFormatedTimestamp(i['timestamp']))
 
 
     def execute(self, context):

@@ -1,11 +1,8 @@
 import bpy
 import webbrowser
 
-from ..global_variables import (
-                            no_url_message,
-                            opening_web_page_statement,
-                            wiki_url,
-                            )
+from .. import global_variables as g_var
+
 
 class BPM_OT_open_url(bpy.types.Operator):
     """Open URL in web browser"""
@@ -24,11 +21,11 @@ class BPM_OT_open_url(bpy.types.Operator):
         debug = context.window_manager.bpm_projectdatas.debug
 
         if self.url == "":
-            self.report({'INFO'}, no_url_message)
+            self.report({'INFO'}, g_var.no_url_message)
 
         else:
             webbrowser.open(self.url)
-            if debug: print(opening_web_page_statement + self.url) #debug
+            if debug: print(g_var.opening_web_page_statement + self.url) #debug
             
         return {'FINISHED'}
 
@@ -49,9 +46,9 @@ class BPM_OT_open_wiki_page(bpy.types.Operator):
         
         debug = context.window_manager.bpm_projectdatas.debug
 
-        url = wiki_url + self.wiki_page
+        url = g_var.wiki_url + self.wiki_page
 
-        if debug: print(opening_web_page_statement + url) #debug
+        if debug: print(g_var.opening_web_page_statement + url) #debug
         
         webbrowser.open(url)
 

@@ -1,7 +1,9 @@
 import bpy
 
-
 from ..functions.date_functions import getDateYearString
+from ..functions.shot_settings_json_update_function import updateShotSettingsProperties
+from ..functions.strip_functions import returnSelectedStrips
+from .. import global_variables as g_var
 
 
 class BPM_OT_modify_shot_task_deadline(bpy.types.Operator):
@@ -147,16 +149,11 @@ class BPM_OT_modify_shot_task_deadline(bpy.types.Operator):
         row.prop(self, 'co_da', text='')
 
     def execute(self, context):
-        # import statement and functions
-        from ..functions.shot_settings_json_update_function import updateShotSettingsProperties
-        from ..functions.strip_functions import returnSelectedStrips
-        from ..global_variables import shot_deadlines_modification_statement, deadlines_modified_statement
-
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
         general_settings = context.window_manager.bpm_generalsettings
 
-        if debug: print(shot_deadlines_modification_statement) #debug
+        if debug: print(g_var.shot_deadlines_modification_statement) #debug
 
         # format temp properties
         st = str(self.st_yr) + "-" + str(self.st_mn).zfill(2) + "-"  + str(self.st_da).zfill(2)
@@ -176,7 +173,7 @@ class BPM_OT_modify_shot_task_deadline(bpy.types.Operator):
 
         updateShotSettingsProperties(self.shot_settings, context)
 
-        if debug: print(deadlines_modified_statement + "active shot") #debug
+        if debug: print(g_var.deadlines_modified_statement + "active shot") #debug
 
         if general_settings.file_type == 'EDIT' and self.behavior == "selected_strips":
 
@@ -197,7 +194,7 @@ class BPM_OT_modify_shot_task_deadline(bpy.types.Operator):
 
                     updateShotSettingsProperties(shot_settings, context)
 
-                    if debug: print(deadlines_modified_statement + s.name) #debug
+                    if debug: print(g_var.deadlines_modified_statement + s.name) #debug
 
         # reload sequencer
         bpy.ops.sequencer.refresh_all()

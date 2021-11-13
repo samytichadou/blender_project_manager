@@ -2,6 +2,8 @@ import bpy
 import os
 import subprocess
 
+from .. import global_variables as g_var
+
 
 class BPM_OT_open_asset_file(bpy.types.Operator):
     """Open asset file"""
@@ -21,32 +23,23 @@ class BPM_OT_open_asset_file(bpy.types.Operator):
                 return general_settings.is_project and not winman.bpm_assets[idx].is_thisassetfile
 
     def execute(self, context):
-        from ..global_variables import (
-                                    importing_asset_statement,
-                                    asset_not_existing_message,
-                                    asset_not_existing_statement,
-                                    asset_file_not_found_message,
-                                    asset_file_not_found_statement,
-                                    asset_folder,
-                                )
-
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
         debug = winman.bpm_projectdatas.debug
         asset_list = winman.bpm_assets
         asset_name = asset_list[general_settings.asset_list_index].name
 
-        if debug: print(importing_asset_statement + asset_name) #debug
+        if debug: print(g_var.importing_asset_statement + asset_name) #debug
 
         # asset filepath
-        asset_folder_path = os.path.join(general_settings.project_folder, asset_folder)
+        asset_folder_path = os.path.join(general_settings.project_folder, g_var.asset_folder)
         specific_asset_folder_path = os.path.join(asset_folder_path, asset_name)
         specific_asset_filepath = os.path.join(specific_asset_folder_path, asset_name + ".blend")
 
         # check for asset file
         if not os.path.isfile(specific_asset_filepath):
-            self.report({'INFO'}, asset_file_not_found_message + asset_name)
-            if debug: print(asset_file_not_found_statement + asset_name) #debug
+            self.report({'INFO'}, g_var.asset_file_not_found_message + asset_name)
+            if debug: print(g_var.asset_file_not_found_statement + asset_name) #debug
             return {'FINISHED'}
 
         # save

@@ -1,5 +1,8 @@
 import bpy
 
+from ..functions.set_render_shot_update_function import setRenderShot
+from .. import global_variables as g_var
+
 
 class BPM_OT_render_shot_playblast(bpy.types.Operator):
     """Find help on the wiki page"""
@@ -13,43 +16,32 @@ class BPM_OT_render_shot_playblast(bpy.types.Operator):
         return general_settings.is_project and general_settings.file_type == 'SHOT'
 
     def execute(self, context):
-        # import statements and functions
-        from ..functions.set_render_shot_update_function import setRenderShot
-        from ..global_variables import (
-                                    render_playblast_folder,
-                                    setting_playblast_statement,
-                                    starting_playblast_statement,
-                                    playing_playblast_statement,
-                                    setting_usual_render_statement,
-                                    completed_playblast_statement,
-                                )
-
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
         general_settings = winman.bpm_generalsettings
         shot_settings = winman.bpm_shotsettings
         old_render_state = shot_settings.shot_render_state
 
-        if debug: print(setting_playblast_statement) #debug
+        if debug: print(g_var.setting_playblast_statement) #debug
         
         # set render settings 
-        setRenderShot(context, render_playblast_folder)
+        setRenderShot(context, g_var.render_playblast_folder)
         
         # launch viewport render
-        if debug: print(starting_playblast_statement) #debug
+        if debug: print(g_var.starting_playblast_statement) #debug
         bpy.ops.render.opengl(animation=True)
 
         # launch playback
         bpy.ops.render.play_rendered_anim()
-        if debug: print(playing_playblast_statement) #debug
+        if debug: print(g_var.playing_playblast_statement) #debug
 
         # set old settings back
-        if debug: print(setting_usual_render_statement) #debug
+        if debug: print(g_var.setting_usual_render_statement) #debug
         general_settings.bypass_update_tag = True
         shot_settings.shot_render_state = old_render_state
         general_settings.bypass_update_tag = False
 
-        if debug: print(completed_playblast_statement) #debug
+        if debug: print(g_var.completed_playblast_statement) #debug
 
         return {'FINISHED'}
 

@@ -1,5 +1,7 @@
 import bpy
 
+from ..functions.audio_sync_functions import syncAudioEdit
+
 
 class BPM_OT_synchronize_audio_edit(bpy.types.Operator):
     """Synchronize audio edit file for shots"""
@@ -14,9 +16,6 @@ class BPM_OT_synchronize_audio_edit(bpy.types.Operator):
         return general_settings.is_project and general_settings.file_type == 'EDIT' and keyword in context.scene.name
 
     def execute(self, context):
-        # import statements and functions
-        from ..functions.audio_sync_functions import syncAudioEdit
-
         winman = context.window_manager
         general_settings = winman.bpm_generalsettings
         debug = winman.bpm_projectdatas.debug

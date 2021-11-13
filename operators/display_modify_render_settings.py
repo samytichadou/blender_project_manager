@@ -1,18 +1,10 @@
-import bpy, os
-
+import bpy
+import os
 
 from ..functions.dataset_functions import returnDatasetProperties
 from ..functions.project_data_functions import loadJsonInCollection
 from ..properties import shot_render_state_items
-from ..global_variables import (
-                            reading_json_statement,
-                            render_folder,
-                            render_file,
-                            render_draft_folder,
-                            render_render_folder,
-                            render_final_folder,
-                            render_playblast_folder,
-                        )
+from .. import global_variables as g_var
 
 
 #update function for reloading from json
@@ -22,10 +14,10 @@ def reloadRenderSettingsFromJson(self, context):
         general_settings = context.window_manager.bpm_generalsettings
         debug = winman.bpm_projectdatas.debug
 
-        render_folderpath = os.path.join(general_settings.project_folder, render_folder)
-        render_filepath = os.path.join(render_folderpath, render_file)
+        render_folderpath = os.path.join(general_settings.project_folder, g_var.render_folder)
+        render_filepath = os.path.join(render_folderpath, g_var.render_file)
 
-        if debug: print(reading_json_statement + render_filepath) #debug
+        if debug: print(g_var.reading_json_statement + render_filepath) #debug
 
         loadJsonInCollection(winman, render_filepath, winman.bpm_rendersettings, 'render_settings')
 
@@ -37,7 +29,7 @@ class BPM_OT_display_modify_render_settings(bpy.types.Operator):
     bl_label = "Render Settings"
 
     shot_render_state_extended_items = shot_render_state_items.copy()
-    shot_render_state_extended_items.append((render_playblast_folder, render_playblast_folder, ""))
+    shot_render_state_extended_items.append((g_var.render_playblast_folder, g_var.render_playblast_folder, ""))
 
     render_settings : bpy.props.EnumProperty(name = "Render settings", items = shot_render_state_extended_items)
     modify: bpy.props.BoolProperty(name = "Modify", default = False, update = reloadRenderSettingsFromJson)

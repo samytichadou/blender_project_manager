@@ -1,6 +1,9 @@
 import bpy
 import os
 
+from ..functions import json_functions as js_fct
+from .. import global_variables as g_var
+
 
 # save render settings
 class BPM_OT_save_render_settings_to_json(bpy.types.Operator):
@@ -20,30 +23,26 @@ class BPM_OT_save_render_settings_to_json(bpy.types.Operator):
         layout.label(text="Save Render Settings to json file ?")
         
     def execute(self, context):
-        # import statements and functions
-        from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file, initializeAssetJsonDatas
-        from ..global_variables import saving_to_json_statement, saved_to_json_statement, render_folder, render_file
-
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
         render_settings = winman.bpm_rendersettings
         debug = winman.bpm_projectdatas.debug
 
-        if debug: print(saving_to_json_statement)
+        if debug: print(g_var.saving_to_json_statement)
 
-        render_folder_path = os.path.join(general_settings.project_folder, render_folder)
-        render_filepath = os.path.join(render_folder_path, render_file)
+        render_folder_path = os.path.join(general_settings.project_folder, g_var.render_folder)
+        render_filepath = os.path.join(render_folder_path, g_var.render_file)
 
         # format the json dataset
-        json_render_dataset = initializeAssetJsonDatas({"render_settings"})
+        json_render_dataset = js_fct.initializeAssetJsonDatas({"render_settings"})
         for r in render_settings:
-            r_datas = createJsonDatasetFromProperties(r, ())
+            r_datas = js_fct.createJsonDatasetFromProperties(r, ())
             json_render_dataset['render_settings'].append(r_datas)
 
         # create json file
-        create_json_file(json_render_dataset, render_filepath)
+        js_fct.create_json_file(json_render_dataset, render_filepath)
 
-        if debug: print(saved_to_json_statement)
+        if debug: print(g_var.saved_to_json_statement)
 
         return {'FINISHED'}
 

@@ -1,6 +1,9 @@
 import bpy
 import os
 
+from ..functions import json_functions as js_fct
+from .. import global_variables as g_var
+
 
 # save project settings
 class BPM_OT_save_project_settings_to_json(bpy.types.Operator):
@@ -19,26 +22,22 @@ class BPM_OT_save_project_settings_to_json(bpy.types.Operator):
         layout = self.layout
         layout.label(text="Save Project Settings to json file ?")
         
-    def execute(self, context):
-        # import statements and functions
-        from ..functions.json_functions import createJsonDatasetFromProperties, create_json_file
-        from ..global_variables import file_project, saving_to_json_statement, saved_to_json_statement
-
+    def execute(self, context):     
         winman = context.window_manager
         general_settings = context.window_manager.bpm_generalsettings
         datas = winman.bpm_projectdatas
 
-        if general_settings.debug: print(saving_to_json_statement)
+        if general_settings.debug: print(g_var.saving_to_json_statement)
 
-        project_file = os.path.join(general_settings.project_folder, file_project)
+        project_file = os.path.join(general_settings.project_folder, g_var.file_project)
 
         # format the json dataset
-        json_dataset = createJsonDatasetFromProperties(datas, ("comments"))
+        json_dataset = js_fct.createJsonDatasetFromProperties(datas, ("comments"))
 
         # create json file
-        create_json_file(json_dataset, project_file)
+        js_fct.create_json_file(json_dataset, project_file)
 
-        if general_settings.debug: print(saved_to_json_statement)
+        if general_settings.debug: print(g_var.saved_to_json_statement)
 
         return {'FINISHED'}
 

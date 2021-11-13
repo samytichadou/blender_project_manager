@@ -2,8 +2,8 @@ import bpy
 import os
 import subprocess
 
-
 from ..functions.file_functions import absolutePath
+from ..global_variables import opening_statement
 
 
 class BPM_OT_open_shot(bpy.types.Operator):
@@ -29,10 +29,6 @@ class BPM_OT_open_shot(bpy.types.Operator):
                                         return True
 
     def execute(self, context):
-        # import statements and functions
-        from ..functions.file_functions import absolutePath
-        from ..global_variables import opening_statement
-
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
         filepath = absolutePath(context.scene.sequence_editor.active_strip.bpm_shotsettings.shot_filepath)

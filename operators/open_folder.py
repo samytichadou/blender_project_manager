@@ -1,19 +1,9 @@
 import bpy
 import os
 
-
 from ..functions.utils_functions import openFolderInExplorer
-from ..functions.file_functions import absolutePath, returnRenderFilePathFromShot
-from ..global_variables import (
-                            opening_folder_statement,
-                            no_folder_statement,
-                            render_folder,
-                            shot_folder,
-                            asset_folder,
-                            ressources_folder,
-                            render_playblast_folder,
-                            render_shots_folder,
-                        )
+from ..functions import file_functions as fl_fct
+from .. import global_variables as g_var
 from ..functions.check_file_poll_function import check_file_poll_function
 
 
@@ -21,7 +11,7 @@ from ..functions.check_file_poll_function import check_file_poll_function
 def openFolderFilebrowserOption(folder_path, filebrowser, context, debug):        
     if os.path.isdir(folder_path):
 
-        if debug: print(opening_folder_statement + folder_path) #debug
+        if debug: print(g_var.opening_folder_statement + folder_path) #debug
 
         if filebrowser:
             area = context.area
@@ -31,7 +21,7 @@ def openFolderFilebrowserOption(folder_path, filebrowser, context, debug):
             openFolderInExplorer(folder_path)
 
     else:
-        if debug: print(no_folder_statement + folder_path) #debug
+        if debug: print(g_var.no_folder_statement + folder_path) #debug
 
 
 # shot folder
@@ -62,7 +52,7 @@ class BPM_OT_open_shot_folder(bpy.types.Operator):
         # get shot settings and filepath 
         if general_settings.file_type == 'EDIT':
             shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-            folder_path = os.path.dirname(absolutePath(shot_settings.shot_filepath))
+            folder_path = os.path.dirname(fl_fct.absolutePath(shot_settings.shot_filepath))
 
         elif general_settings.file_type == 'SHOT':
             folder_path = os.path.dirname(bpy.data.filepath)
@@ -101,14 +91,14 @@ class BPM_OT_open_shot_render_folder(bpy.types.Operator):
         # get shot settings and filepath 
         if general_settings.file_type == 'EDIT':
             shot_settings = context.scene.sequence_editor.active_strip.bpm_shotsettings
-            shot_filepath = absolutePath(shot_settings.shot_filepath)
+            shot_filepath = fl_fct.absolutePath(shot_settings.shot_filepath)
             render_state = shot_settings.shot_render_state
 
         elif general_settings.file_type == 'SHOT':
             shot_filepath = bpy.data.filepath
             render_state = winman.bpm_shotsettings.shot_render_state
 
-        folder_path = os.path.dirname(returnRenderFilePathFromShot(shot_filepath, winman, render_state))
+        folder_path = os.path.dirname(fl_fct.returnRenderFilePathFromShot(shot_filepath, winman, render_state))
 
         # open if available        
         openFolderFilebrowserOption(folder_path, self.filebrowser, context, debug)
@@ -139,23 +129,23 @@ class BPM_OT_open_project_folder(bpy.types.Operator):
         folder_path = None
 
         if self.folder == "Render":
-            folder_path = os.path.join(general_settings.project_folder, render_folder)
+            folder_path = os.path.join(general_settings.project_folder, g_var.render_folder)
 
         elif self.folder == "Asset":
-            folder_path = os.path.join(general_settings.project_folder, asset_folder)
+            folder_path = os.path.join(general_settings.project_folder, g_var.asset_folder)
 
         elif self.folder == "Shot":
-            folder_path = os.path.join(general_settings.project_folder, shot_folder)
+            folder_path = os.path.join(general_settings.project_folder, g_var.shot_folder)
 
         elif self.folder == "Ressources":
-            folder_path = os.path.join(general_settings.project_folder, ressources_folder)
+            folder_path = os.path.join(general_settings.project_folder, g_var.ressources_folder)
 
         elif self.folder == "Project":
             folder_path = general_settings.project_folder
 
         elif self.folder == "Playblast":
-            render_shot_folderpath = os.path.join(os.path.join(general_settings.project_folder, render_folder), render_shots_folder)
-            folder_path = os.path.join(render_shot_folderpath, render_playblast_folder)
+            render_shot_folderpath = os.path.join(os.path.join(general_settings.project_folder, g_var.render_folder), g_var.render_shots_folder)
+            folder_path = os.path.join(render_shot_folderpath, g_var.render_playblast_folder)
 
         # open if available  
         openFolderFilebrowserOption(folder_path, self.filebrowser, context, debug)
@@ -190,12 +180,12 @@ class BPM_OT_open_custom_folder(bpy.types.Operator):
         folder = winman.bpm_customfolders[general_settings.custom_folders_index]
 
         if not os.path.isdir(folder.filepath):
-            self.report({'INFO'}, no_folder_statement + folder.filepath)
+            self.report({'INFO'}, g_var.no_folder_statement + folder.filepath)
             return
 
         openFolderInExplorer(folder.filepath)
 
-        if debug: print(opening_folder_statement + folder.filepath) #debug
+        if debug: print(g_var.opening_folder_statement + folder.filepath) #debug
 
         return {'FINISHED'}
 

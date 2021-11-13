@@ -1,21 +1,18 @@
 import bpy
 import os
 
-
-from .. import global_variables as gv
-
-from ..functions.file_functions import absolutePath, get_filename_from_filepath
+from .. import global_variables as g_var
+from ..functions import file_functions as fl_fct
 from ..functions.command_line_functions import buildBlenderCommandBackgroundRender
 from ..functions.threading_functions import launchSeparateThread
 from ..functions.check_file_poll_function import check_file_poll_function
-from ..functions.task_functions import return_task_folder, create_task_dataset
+from ..functions import task_functions as tsk_fct
 from ..functions.json_functions import create_json_file
-from ..functions.hash_functions import generate_hash
-from ..functions.date_functions import getDateTimeString, getDateTimeID
+from ..functions import date_functions as dt_fct
 
 
 def renderShotEndFunction(shot_strip, debug):
-    if debug: print(gv.completed_render_statement + shot_strip.name) #debug
+    if debug: print(g_var.completed_render_statement + shot_strip.name) #debug
     shot_strip.bpm_shotsettings.is_rendering = False
     bpy.ops.sequencer.refresh_all()
 
@@ -37,7 +34,6 @@ class BPM_OT_render_shot_edit(bpy.types.Operator):
 
 
     def execute(self, context):
-        
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
 
@@ -45,7 +41,7 @@ class BPM_OT_render_shot_edit(bpy.types.Operator):
 
         shot_settings = active_strip.bpm_shotsettings
 
-        shot_filepath = absolutePath(shot_settings.shot_filepath)
+        shot_filepath = fl_fct.absolutePath(shot_settings.shot_filepath)
 
         #set rendering
         shot_settings.is_rendering = True
@@ -54,18 +50,18 @@ class BPM_OT_render_shot_edit(bpy.types.Operator):
         command = buildBlenderCommandBackgroundRender(shot_filepath)
 
         #create task file
-        shot_name = get_filename_from_filepath(shot_filepath)[0]
-        id = getDateTimeID()
-        time = getDateTimeString()
-        task_folder = return_task_folder(winman)
-        task_filepath = os.path.join(task_folder, shot_name + "_" + id + gv.taskfile_extension)
+        shot_name = fl_fct.get_filename_from_filepath(shot_filepath)[0]
+        id = dt_fct.getDateTimeID()
+        time = dt_fct.getDateTimeString()
+        task_folder = tsk_fct.return_task_folder(winman)
+        task_filepath = os.path.join(task_folder, shot_name + "_" + id + g_var.taskfile_extension)
         completion_total = shot_settings.shot_frame_end - shot_settings.shot_frame_start + 1
 
-        task_datas = create_task_dataset(shot_name, time, shot_filepath, "render", id, completion_total)
+        task_datas = tsk_fct.create_task_dataset(shot_name, time, shot_filepath, "render", id, completion_total)
         create_json_file(task_datas, task_filepath)
 
         #launch command
-        if debug: print(gv.launching_command_statement + command) #debug
+        if debug: print(g_var.launching_command_statement + command) #debug
         launchSeparateThread([command, debug, task_filepath, renderShotEndFunction, active_strip, debug])
 
         #refresh sequencer

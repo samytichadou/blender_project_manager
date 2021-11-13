@@ -1,15 +1,8 @@
 import bpy
 
-
 from ..functions.strip_functions import returnShotStrips
 from ..functions.reload_comments_function import get_shot_comment_frame
-from ..global_variables import (
-                            no_more_comments_message,
-                            getting_edit_comments_statement,
-                            getting_shot_comments_statement,
-                            searching_comment_statement,
-                            getting_asset_comments_statement,
-                        )
+from .. import global_variables as g_var
 
 
 # return all frame from comment collection
@@ -63,41 +56,41 @@ class BPM_OT_goto_next_previous_comment(bpy.types.Operator):
 
         if file_type == "EDIT":
             # get edit comments
-            if debug: print(getting_edit_comments_statement) #debug
+            if debug: print(g_var.getting_edit_comments_statement) #debug
             frames.extend(return_frame_from_comments(winman.bpm_projectdatas.comments))
 
             # get all shot comments
-            if debug: print(getting_shot_comments_statement) #debug
+            if debug: print(g_var.getting_shot_comments_statement) #debug
             for s in returnShotStrips(context.scene.sequence_editor):
                 for f in return_frame_from_comments(s.bpm_shotsettings.comments):
                     frames.append(get_shot_comment_frame(f, s))
 
         elif file_type == "SHOT":
             # get shot comments
-            if debug: print(getting_shot_comments_statement) #debug
+            if debug: print(g_var.getting_shot_comments_statement) #debug
             frames.extend(return_frame_from_comments(winman.bpm_shotsettings.comments))
 
         elif file_type == "ASSET":
             # get asset comments
-            if debug: print(getting_asset_comments_statement) #debug
+            if debug: print(g_var.getting_asset_comments_statement) #debug
             frames.extend(return_frame_from_comments(winman.bpm_assetsettings.comments))
 
         current = scn.frame_current
 
         previous, next = return_previous_next_int_from_list(frames, current)
 
-        if debug: print(searching_comment_statement) #debug
+        if debug: print(g_var.searching_comment_statement) #debug
             
         if not self.next:
             if previous is not None:
                 scn.frame_current = previous
             else:
-                self.report({'INFO'}, no_more_comments_message)
+                self.report({'INFO'}, g_var.no_more_comments_message)
         else:
             if next is not None:
                 scn.frame_current = next
             else:
-                self.report({'INFO'}, no_more_comments_message)
+                self.report({'INFO'}, g_var.no_more_comments_message)
             
 
         return {'FINISHED'}
@@ -122,7 +115,7 @@ class BPM_OT_goto_comment(bpy.types.Operator):
 
         debug = winman.bpm_projectdatas.debug
 
-        if debug: print(searching_comment_statement) #debug
+        if debug: print(g_var.searching_comment_statement) #debug
             
         scn.frame_current = self.frame            
 

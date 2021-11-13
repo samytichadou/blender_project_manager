@@ -1,17 +1,8 @@
 import bpy
-import os
 
-
-from ..functions.project_data_functions import refreshTimelineShotDatas, loadJsonDataToDataset, getShotSettingsFileFromBlend
+from ..functions import project_data_functions as pjt_dta_fct
 from ..functions.reload_comments_function import reload_comments
-from ..global_variables import (
-                                refreshing_timeline_shot_datas_statement,
-                                refreshed_timeline_shot_datas_statement,
-                                shot_loading_statement,
-                                shot_loaded_statement,
-                                missing_shot_file_message,
-                                missing_shot_file_statement,
-                            )
+from .. import global_variables as g_var
 
 
 class BPM_OT_refresh_edit_datas(bpy.types.Operator):
@@ -32,11 +23,11 @@ class BPM_OT_refresh_edit_datas(bpy.types.Operator):
         winman = context.window_manager
         debug = winman.bpm_projectdatas.debug
 
-        if debug: print(refreshing_timeline_shot_datas_statement) #debug
+        if debug: print(g_var.refreshing_timeline_shot_datas_statement) #debug
 
-        refreshTimelineShotDatas(context, context.scene.sequence_editor)
+        pjt_dta_fct.refreshTimelineShotDatas(context, context.scene.sequence_editor)
 
-        if debug: print(refreshed_timeline_shot_datas_statement) #debug
+        if debug: print(g_var.refreshed_timeline_shot_datas_statement) #debug
 
         return {'FINISHED'}
 
@@ -47,24 +38,24 @@ def refresh_shot_datas(context):
     debug = winman.bpm_projectdatas.debug
     general_settings = winman.bpm_generalsettings
 
-    shot_json = getShotSettingsFileFromBlend()
+    shot_json = pjt_dta_fct.getShotSettingsFileFromBlend()
 
     if shot_json is None:
         return False
 
-    if debug: print(shot_loading_statement + shot_json) #debug
+    if debug: print(g_var.shot_loading_statement + shot_json) #debug
 
     # load json in props
     shot_settings = winman.bpm_shotsettings
 
     general_settings.bypass_update_tag = True
-    loadJsonDataToDataset(winman, shot_settings, shot_json, ())
+    pjt_dta_fct.loadJsonDataToDataset(winman, shot_settings, shot_json, ())
     general_settings.bypass_update_tag = False
 
     # refresh comments
     reload_comments(context, "shot", None)
 
-    if debug: print(shot_loaded_statement) #debug
+    if debug: print(g_var.shot_loaded_statement) #debug
 
     return True
 
@@ -88,7 +79,7 @@ class BPM_OT_refresh_shot_datas(bpy.types.Operator):
         debug = winman.bpm_projectdatas.debug
 
         if not refresh_shot_datas(context):
-            self.report({'INFO'}, missing_shot_file_message)
+            self.report({'INFO'}, g_var.missing_shot_file_message)
             return {'FINISHED'}
     
         return {'FINISHED'}
