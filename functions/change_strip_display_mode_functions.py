@@ -2,36 +2,13 @@ import bpy
 import os
 import shutil
 
-
-from .file_functions import (
-                        returnAllFilesInFolder, 
-                        linkExternalScenes, 
-                        absolutePath, 
-                        returnRenderFolderFromStrip, 
-                        returnRenderFilePathFromShot, 
-                        suppressExistingFile,
-                    )
+from . import file_functions as fl_fct
 from .utils_functions import clearDataUsers
 from .strip_functions import getListSequencerShots
 from .dataset_functions import setPropertiesFromDataset
 from .project_data_functions import returnRenderExtensionFromSettings
 from .reload_comments_function import reload_comments
-
-from ..global_variables import (
-                            scenes_linked_statement,
-                            scene_not_found_statement,
-                            render_draft_folder,
-                            render_render_folder,
-                            render_final_folder,
-                            created_strip_statement,
-                            setting_strip_properties_statement,
-                            setting_strip_display_mode_statement,
-                            bypass_settings_update_statement,
-                            missing_file_image,
-                            library_cleared_statement,
-                            shot_display_no_render_images_statement,
-                            shot_display_render_images_statement,
-                        )
+from .. import global_variables as g_var                        
 
 
 # fill with missing images
@@ -43,24 +20,24 @@ def completeRenderMissingImages(render_filepath, extension, start_frame, end_fra
     if not os.path.isdir(render_folderpath):
         os.makedirs(render_folderpath, exist_ok=True)
 
-    frame_list = returnAllFilesInFolder(render_folderpath)
+    frame_list = fl_fct.returnAllFilesInFolder(render_folderpath)
     shot_frames = []
 
     # no image rendered
     if len(frame_list) == 0:
         
-        if debug: print(shot_display_no_render_images_statement) #debug
+        if debug: print(g_var.shot_display_no_render_images_statement) #debug
 
         for i in range(start_frame, end_frame + 1):
 
             image_filepath = render_filepath + str(i).zfill(5) + extension
-            shutil.copy(missing_file_image, image_filepath)
+            shutil.copy(g_var.missing_file_image, image_filepath)
             shot_frames.append(os.path.basename(image_filepath))
 
     # image rendered
     else:
 
-        if debug: print(shot_display_render_images_statement) #debug
+        if debug: print(g_var.shot_display_render_images_statement) #debug
 
         frames_to_create = []
 
@@ -74,12 +51,12 @@ def completeRenderMissingImages(render_filepath, extension, start_frame, end_fra
 
         for f in frame_list:
             if f not in shot_frames:
-                suppressExistingFile(os.path.join(render_folderpath, f))
+                fl_fct.suppressExistingFile(os.path.join(render_folderpath, f))
                 pass
                 
         for f in frames_to_create:
             image_filepath = os.path.join(render_folderpath, f)
-            shutil.copy(missing_file_image, image_filepath)
+            shutil.copy(g_var.missing_file_image, image_filepath)
 
     return shot_frames
 
@@ -98,7 +75,7 @@ def updateStripToImageSequence(strip, sequencer, sequence_folder, winman):
     start_frame = shot_settings.shot_frame_start
     end_frame = shot_settings.shot_frame_end
 
-    render_filepath = returnRenderFilePathFromShot(absolutePath(shot_settings.shot_filepath), winman, shot_settings.shot_timeline_display)
+    render_filepath = fl_fct.returnRenderFilePathFromShot(fl_fct.absolutePath(shot_settings.shot_filepath), winman, shot_settings.shot_timeline_display)
 
     extension = returnRenderExtensionFromSettings(winman.bpm_rendersettings[shot_settings.shot_timeline_display])
 
@@ -114,9 +91,9 @@ def updateStripToImageSequence(strip, sequencer, sequence_folder, winman):
         frame_start = strip.frame_start,
     )
 
-    if debug: print(created_strip_statement + strip.name) #debug
+    if debug: print(g_var.created_strip_statement + strip.name) #debug
 
-    if debug: print(setting_strip_properties_statement) #debug
+    if debug: print(g_var.setting_strip_properties_statement) #debug
 
     # remove first image already used
     frames.remove(frames[0])
@@ -142,7 +119,7 @@ def updateStripToImageSequence(strip, sequencer, sequence_folder, winman):
         lib_used = getListSequencerShots(sequencer)[1]
 
         if lib not in lib_used:
-            if debug: print(library_cleared_statement + lib.filepath) #debug
+            if debug: print(g_var.library_cleared_statement + lib.filepath) #debug
 
             clearDataUsers(lib)
             bpy.data.orphans_purge()
@@ -167,21 +144,21 @@ def updateStripToScene(strip, winman):
     final_duration = strip.frame_final_duration
 
     # link new scene
-    shot_path = absolutePath(strip.bpm_shotsettings.shot_filepath)
-    linkExternalScenes(shot_path)
-    if debug: print(scenes_linked_statement + shot_path) #debug
+    shot_path = fl_fct.absolutePath(strip.bpm_shotsettings.shot_filepath)
+    fl_fct.linkExternalScenes(shot_path)
+    if debug: print(g_var.scenes_linked_statement + shot_path) #debug
 
     # link strip to new scene
     scene_to_link = None
     for s in bpy.data.scenes:
         if s.library:
-            if absolutePath(s.library.filepath) == shot_path:
+            if fl_fct.absolutePath(s.library.filepath) == shot_path:
                 if s.name == strip.name:
                     scene_to_link = s
                     break
     # error message if scene not found
     if scene_to_link is None:
-        if debug: print(scene_not_found_statement + strip.name) #debug
+        if debug: print(g_var.scene_not_found_statement + strip.name) #debug
         return
 
     # copy strip
@@ -192,9 +169,9 @@ def updateStripToScene(strip, winman):
         frame_start = strip.frame_start,
     )
 
-    if debug: print(created_strip_statement + strip.name) #debug
+    if debug: print(g_var.created_strip_statement + strip.name) #debug
 
-    if debug: print(setting_strip_properties_statement) #debug
+    if debug: print(g_var.setting_strip_properties_statement) #debug
 
     # set bpm shot props
     setPropertiesFromDataset(strip.bpm_shotsettings, new_strip.bpm_shotsettings, winman)
@@ -228,7 +205,7 @@ def updateShotDisplayMode(self, context):
 
     display_mode = self.shot_timeline_display
 
-    if debug: print(setting_strip_display_mode_statement + display_mode) #debug
+    if debug: print(g_var.setting_strip_display_mode_statement + display_mode) #debug
 
     # open gl
     if display_mode == '00_openGL':
@@ -236,14 +213,14 @@ def updateShotDisplayMode(self, context):
             new_strip = updateStripToScene(active, winman)
 
     else:
-        shot_filepath = absolutePath(active.bpm_shotsettings.shot_filepath)
-        shot_draft, shot_render, shot_final = returnRenderFolderFromStrip(shot_filepath, winman.bpm_generalsettings.project_folder)
+        shot_filepath = fl_fct.absolutePath(active.bpm_shotsettings.shot_filepath)
+        shot_draft, shot_render, shot_final = fl_fct.returnRenderFolderFromStrip(shot_filepath, winman.bpm_generalsettings.project_folder)
         # draft
-        if display_mode == render_draft_folder:
+        if display_mode == g_var.render_draft_folder:
             shot_render_folder = shot_draft
-        elif display_mode == render_render_folder:
+        elif display_mode == g_var.render_render_folder:
             shot_render_folder = shot_render
-        elif display_mode == render_final_folder:
+        elif display_mode == g_var.render_final_folder:
             shot_render_folder = shot_final
         
         new_strip = updateStripToImageSequence(active, sequencer, shot_render_folder, winman)

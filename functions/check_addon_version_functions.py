@@ -3,15 +3,7 @@ import socket
 import requests
 import addon_utils
 
-
-from ..global_variables import (
-                            error_statement,
-                            addon_version_url,
-                            check_addon_version_statement,
-                            no_internet_statement,
-                            addon_new_version_statement,
-                            addon_up_to_date_statement,
-                            )
+from .. import global_variables as g_var
 
 
 # check for internet connection
@@ -21,7 +13,7 @@ def is_connected(host="8.8.8.8", port=53, timeout=3):
         socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
         return True
     except socket.error as ex:
-        print(error_statement + ex)
+        print(g_var.error_statement + ex)
         return False
 
 
@@ -54,15 +46,15 @@ def check_addon_version(winman):
 
     debug = winman.bpm_projectdatas.debug
 
-    if debug: print(check_addon_version_statement) #debug
+    if debug: print(g_var.check_addon_version_statement) #debug
 
     if not is_connected():
-        if debug: print(no_internet_statement) #debug
+        if debug: print(g_var.no_internet_statement) #debug
         return False
     
     general_settings = winman.bpm_generalsettings
 
-    new_addon_infos = read_online_json(addon_version_url)
+    new_addon_infos = read_online_json(g_var.addon_version_url)
 
     if new_addon_infos["version"] != get_addon_version("BPM - Blender Project Manager"):
         general_settings.update_message = new_addon_infos["message"]
@@ -70,11 +62,11 @@ def check_addon_version(winman):
         if not general_settings.update_needed:
             general_settings.update_needed = True
 
-        if debug: print(addon_new_version_statement) #debug
+        if debug: print(g_var.addon_new_version_statement) #debug
 
         return True
 
-    if debug: print(addon_up_to_date_statement) #debug
+    if debug: print(g_var.addon_up_to_date_statement) #debug
     
     return True
 

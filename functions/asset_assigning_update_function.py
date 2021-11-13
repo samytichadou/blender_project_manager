@@ -1,17 +1,6 @@
-import bpy
-import os
-
-
-from .project_data_functions import getAssetFile, clearOldAssetBpmIsasset
-from .json_functions import read_json, createJsonDatasetFromProperties, create_json_file
-from .file_functions import getBlendName
-from ..global_variables import (
-                            bypass_settings_update_statement,
-                            cleared_old_asset_statement,
-                            set_asset_statement,
-                            saving_to_json_statement,
-                            saved_to_json_statement,
-                        )
+from . import project_data_functions as pjt_dta_fct
+from . import json_functions as js_fct
+from .. import global_variables as g_var
 
 
 # save asset to json
@@ -23,12 +12,12 @@ def saveAssetToJson(self, context):
         #if debug: print(bypass_settings_update_statement) #debug
         return
 
-    assets_json_file, asset_file_exist = getAssetFile(winman)
+    assets_json_file, asset_file_exist = pjt_dta_fct.getAssetFile(winman)
     asset_settings = winman.bpm_assetsettings
     
-    datas = read_json(assets_json_file)
+    datas = js_fct.read_json(assets_json_file)
 
-    if debug: print(saving_to_json_statement) #debug
+    if debug: print(g_var.saving_to_json_statement) #debug
 
     # remove old asset settings
     n = 0
@@ -39,7 +28,7 @@ def saveAssetToJson(self, context):
         n += 1
     
     # get new asset datas
-    asset_datas = createJsonDatasetFromProperties(asset_settings, ("is_thisassetfile", "comments"))
+    asset_datas = js_fct.createJsonDatasetFromProperties(asset_settings, ("is_thisassetfile", "comments"))
 
     # add collection and shader
     if asset_settings.asset_collection is not None:
@@ -54,9 +43,9 @@ def saveAssetToJson(self, context):
     datas['assets'].append(asset_datas)
 
     #create json
-    create_json_file(datas, assets_json_file)
+    js_fct.create_json_file(datas, assets_json_file)
 
-    if debug: print(saved_to_json_statement) #debug
+    if debug: print(g_var.saved_to_json_statement) #debug
 
 
 # update function for assigning asset through pointer
@@ -77,15 +66,15 @@ def updateAssetAssigning(self, context):
     else:
         asset = self.asset_collection
 
-    if debug: print(cleared_old_asset_statement)
+    if debug: print(g_var.cleared_old_asset_statement)
 
     # clear old assets
-    clearOldAssetBpmIsasset()
+    pjt_dta_fct.clearOldAssetBpmIsasset()
 
     # set asset
     if asset is not None:
         asset.bpm_isasset = True
-        if debug: print(set_asset_statement + asset.name)
+        if debug: print(g_var.set_asset_statement + asset.name)
 
     # save json
     saveAssetToJson(self, context)
@@ -103,7 +92,7 @@ def updateChangingAssetType(self, context):
     
     general_settings.bypass_update_tag = True
 
-    clearOldAssetBpmIsasset()
+    pjt_dta_fct.clearOldAssetBpmIsasset()
 
     if self.asset_type not in {'SHADER', 'WORLD', 'NODEGROUP'}:       
         self.asset_material = None
@@ -131,7 +120,7 @@ def updateChangingAssetType(self, context):
     if asset is not None:
         asset.bpm_isasset = True
 
-    if debug: print(cleared_old_asset_statement)
+    if debug: print(g_var.cleared_old_asset_statement)
 
     # save json
     saveAssetToJson(self, context)
