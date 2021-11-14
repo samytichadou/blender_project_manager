@@ -59,7 +59,7 @@ class BPM_OT_create_asset(bpy.types.Operator):
 
             if debug: print(g_var.reading_json_statement + asset_file_path) #debug
 
-            datas = js_fct.(asset_file_path)
+            datas = js_fct.read_json(asset_file_path)
 
             for asset in datas['assets']:
 
@@ -75,7 +75,7 @@ class BPM_OT_create_asset(bpy.types.Operator):
 
             if debug: print(g_var.initialize_json_statement + asset_file_path) #debug
 
-            datas = js_fct.({"assets"})
+            datas = js_fct.initializeAssetJsonDatas({"assets"})
 
         # create asset datas
         asset_prop = asset_collection.add()
@@ -86,7 +86,7 @@ class BPM_OT_create_asset(bpy.types.Operator):
         asset_prop.asset_state = self.asset_state
 
         # format new asset datas
-        asset_datas_json = js_fct.(asset_prop, ("is_thisassetfile"))
+        asset_datas_json = js_fct.createJsonDatasetFromProperties(asset_prop, ("is_thisassetfile"))
 
         # add the new asset
         datas['assets'].append(asset_datas_json)
@@ -94,7 +94,7 @@ class BPM_OT_create_asset(bpy.types.Operator):
         # write json
         if debug: print(g_var.saving_to_json_statement) #debug
 
-        js_fct.(datas, asset_file_path)
+        js_fct.create_json_file(datas, asset_file_path)
 
         if debug: print(g_var.saved_to_json_statement) #debug
         
