@@ -1,4 +1,5 @@
-import bpy, sys
+import bpy
+import sys
 
 # get arguments
 def get_args() :
