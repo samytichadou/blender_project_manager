@@ -45,6 +45,7 @@ from . import(
     properties,
     addon_prefs,
     dopesheet_extra_ui,
+    vse_extra_ui,
     startup_handler,
     render_handler,
     timer_function,
@@ -85,8 +86,6 @@ from .operators import(
 
 from .functions.lock_file_functions import deleteLockFileHandler
 
-from .vse_extra_ui import disableSequencerUICallback
-
 
 # register
 ##################################
@@ -99,6 +98,7 @@ def register():
     properties.register()
     addon_prefs.register()
 
+    ### HANDLERS ###
     startup_handler.register()
     render_handler.register()
 
@@ -140,17 +140,17 @@ def register():
 
 def unregister():
 
-    ### DISABLE EXTRA UI IF EXISTING ###
-    disableSequencerUICallback()
-
     folders_ui_list.unregister()
     asset_ui_list.unregister()
     gui.unregister()
     properties.unregister()
     addon_prefs.unregister()
 
+    ### EXTRA UI ###
     dopesheet_extra_ui.unregister()
+    vse_extra_ui.unregister()
 
+    ### HANDLERS ###
     startup_handler.unregister()
     render_handler.unregister()
 

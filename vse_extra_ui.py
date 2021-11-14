@@ -4,17 +4,10 @@ import blf
 import bgl
 from gpu_extras.batch import batch_for_shader
 
-
 from .functions.strip_functions import returnShotStrips
-from .global_variables import (
-                            font_file, 
-                            add_sequencer_extra_ui_statement, 
-                            remove_sequencer_extra_ui_statement, 
-                            load_font_statement, 
-                            unload_font_statement,
-                        )
-from .functions.project_data_functions import getShotTaskDeadline, getShotTaskComplete
-from .functions.date_functions import formatDateFromYrMoDa, returnPriorDate
+from . import global_variables as g_var
+from .functions import project_data_functions as pjt_dta_fct
+from .functions import date_functions as dt_fct
 from .functions.reload_comments_function import get_shot_comment_frame
 
 
@@ -37,7 +30,7 @@ text_size = 12
 def initializeExternalFontId(font_id, file_font):
     winman = bpy.context.window_manager
     debug = winman.bpm_projectdatas.debug
-    if debug: print(load_font_statement + file_font) #debug
+    if debug: print(g_var.load_font_statement + file_font) #debug
     font_id["font_id"] = blf.load(file_font)
 
 
@@ -45,7 +38,7 @@ def initializeExternalFontId(font_id, file_font):
 def unloadExternalFontId(font_id, file_font):
     winman = bpy.context.window_manager
     debug = winman.bpm_projectdatas.debug
-    if debug: print(unload_font_statement + file_font) #debug
+    if debug: print(g_var.unload_font_statement + file_font) #debug
     font_id["font_id"] = 0
     blf.unload(file_font)
 
@@ -223,7 +216,7 @@ def draw_bpm_sequencer_strip_callback_px():
     scene_settings = scn.bpm_scenesettings
 
     date = context.window_manager.bpm_generalsettings.today_date
-    preview_date = formatDateFromYrMoDa(scene_settings.shot_deadline_preview_yr, scene_settings.shot_deadline_preview_mn, scene_settings.shot_deadline_preview_da)
+    preview_date = dt_fct.formatDateFromYrMoDa(scene_settings.shot_deadline_preview_yr, scene_settings.shot_deadline_preview_mn, scene_settings.shot_deadline_preview_da)
 
     c_display = scene_settings.display_shot_comments
     c_n_display = scene_settings.display_shot_comments_names
@@ -369,14 +362,14 @@ def draw_bpm_sequencer_strip_callback_px():
         # bpm todo shot
         if scene_settings.display_shot_todo != "NONE":
 
-            shot_deadline = getShotTaskDeadline(strip.bpm_shotsettings)[1]
+            shot_deadline = pjt_dta_fct.getShotTaskDeadline(strip.bpm_shotsettings)[1]
 
             if scene_settings.display_shot_todo ==  'TODAY':
                 if shot_deadline == date:
                     display_todo = True
 
             elif scene_settings.display_shot_todo == 'UNTIL_TODAY':
-                if shot_deadline == date or returnPriorDate(shot_deadline, date):
+                if shot_deadline == date or dt_fct.returnPriorDate(shot_deadline, date):
                     display_todo = True
 
             elif scene_settings.display_shot_todo == 'SPECIFIC_DATE':
@@ -444,7 +437,7 @@ def draw_bpm_sequencer_strip_callback_px():
                 n_e_st_fi += 4
 
             # bpm state done
-            if getShotTaskComplete(strip.bpm_shotsettings)[1] and strip.bpm_shotsettings.shot_state != 'FINISHED':
+            if pjt_dta_fct.getShotTaskComplete(strip.bpm_shotsettings)[1] and strip.bpm_shotsettings.shot_state != 'FINISHED':
                 
                 y1do = y1st - strip_line_length
 
@@ -703,7 +696,7 @@ def enableSequencerUICallback():
     if cb_handle:
         return
     
-    initializeExternalFontId(comments_font, font_file)
+    initializeExternalFontId(comments_font, g_var.font_file)
 
     cb_handle.append(bpy.types.SpaceSequenceEditor.draw_handler_add(
         draw_bpm_sequencer_strip_callback_px, (), 'WINDOW', 'POST_PIXEL'))
@@ -713,14 +706,14 @@ def enableSequencerUICallback():
 
     winman = bpy.context.window_manager
     debug = winman.bpm_projectdatas.debug
-    if debug: print(add_sequencer_extra_ui_statement)#debug
+    if debug: print(g_var.add_sequencer_extra_ui_statement)#debug
 
 #disable callback
 def disableSequencerUICallback():
     if not cb_handle:
         return
 
-    unloadExternalFontId(comments_font, font_file)
+    unloadExternalFontId(comments_font, g_var.font_file)
 
     # bpy.types.SpaceSequenceEditor.draw_handler_remove(cb_handle[0], 'WINDOW')
 
@@ -730,4 +723,14 @@ def disableSequencerUICallback():
 
     winman = bpy.context.window_manager
     debug = winman.bpm_projectdatas.debug
-    if debug: print(remove_sequencer_extra_ui_statement) #debug
+    if debug: print(g_var.remove_sequencer_extra_ui_statement) #debug
+
+
+### REGISTER ---
+
+# def register():
+#     pass
+
+def unregister():
+    disableSequencerUICallback()
+    
