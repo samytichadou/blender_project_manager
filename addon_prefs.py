@@ -100,12 +100,18 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
     def draw(self, context):
         layout = self.layout
 
-        row = layout.row()
+        op = layout.operator('bpm.open_url', text="Donate", icon='FUND')
+        op.url = "https://ko-fi.com/tonton_blender"
+
+        box1 = layout.box()
+        box1.label(text="Settings", icon="SETTINGS")
+
+        row = box1.row()
         row.prop(self, "use_lock_file_system")
 
         # timer
-        box = layout.box()
-        row = box.row()
+        box2 = box1.box()
+        row = box2.row()
         row.prop(self, "use_timer_refresh")
 
         subrow = row.row()
@@ -113,7 +119,7 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
             subrow.enabled = False
         subrow.prop(self, "timer_frequency")
 
-        col = box.column(align=True)
+        col = box2.column(align=True)
 
         if not self.use_timer_refresh:
             col.enabled = False

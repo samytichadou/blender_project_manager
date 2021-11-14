@@ -19,17 +19,17 @@ Created by Samy Tichadou (tonton)
 '''
 
 bl_info = {  
- "name": "BPM - Blender Project Manager",  
- "author": "Samy Tichadou (tonton)",  
- "version": (0, 3, 0),  
- "blender": (2, 83, 0),  
- "location": "Timeline",  
- "description": "Manage small animation project from Blender",  
-  "wiki_url": "https://github.com/samytichadou/blender_project_manager/wiki",  
- "tracker_url": "https://github.com/samytichadou/blender_project_manager/issues/new",  
- "category": "Animation",
- "warning": "Alpha version, use at your own risks"
- }
+    "name": "BPM - Blender Project Manager",  
+    "author": "Samy Tichadou (tonton)",  
+    "version": (0, 3, 0),  
+    "blender": (2, 83, 0),  
+    "location": "Timeline",  
+    "description": "Manage small animation project from Blender",  
+    "wiki_url": "https://github.com/samytichadou/blender_project_manager/wiki",  
+    "tracker_url": "https://github.com/samytichadou/blender_project_manager/issues/new",
+    "category": "Animation",
+    "warning": "Alpha version, use at your own risks"
+}
 
 
 import bpy
