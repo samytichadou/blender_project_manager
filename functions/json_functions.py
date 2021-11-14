@@ -1,5 +1,6 @@
 import json
 
+
 # create json file
 def create_json_file(datas, path) :
     with open(path, "w") as write_file :

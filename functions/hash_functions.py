@@ -1,4 +1,6 @@
-import string, random
+import string
+import random
+
 
 # generate hash number
 def generate_hash(length):

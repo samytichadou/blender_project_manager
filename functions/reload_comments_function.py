@@ -1,4 +1,5 @@
-import bpy, os
+import bpy
+import os
 
 from .dataset_functions import setPropertiesFromJsonDataset
 from .json_functions import read_json

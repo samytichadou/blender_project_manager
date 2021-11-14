@@ -1,26 +1,23 @@
-from .project_data_functions import getCustomFoldersFile, loadJsonInCollection
-from ..global_variables import (
-                            loaded_folders_statement,
-                            no_custom_folder_file_statement,
-                            )
+from . import project_data_functions as pjt_dta_fct
+from .. import global_variables as g_var
 
 
 def load_custom_folders(winman):
 
-    custom_folders_file, is_folder_file = getCustomFoldersFile(winman)
+    custom_folders_file, is_folder_file = pjt_dta_fct.getCustomFoldersFile(winman)
     debug = winman.bpm_projectdatas.debug
     custom_folders_coll = winman.bpm_customfolders
 
     if not is_folder_file:
         custom_folders_coll.clear()
-        if debug: print(no_custom_folder_file_statement) #debug
+        if debug: print(g_var.no_custom_folder_file_statement) #debug
         return
 
     general_settings = winman.bpm_generalsettings
     general_settings.bypass_update_tag = True
     
-    loadJsonInCollection(winman, custom_folders_file, custom_folders_coll, 'folders')
+    pjt_dta_fct.loadJsonInCollection(winman, custom_folders_file, custom_folders_coll, 'folders')
 
     general_settings.bypass_update_tag = False
 
-    if debug: print(loaded_folders_statement) #debug
+    if debug: print(g_var.loaded_folders_statement) #debug

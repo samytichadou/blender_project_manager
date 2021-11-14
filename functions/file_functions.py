@@ -2,15 +2,7 @@ import bpy
 import os
 import shutil
 
-
-from ..global_variables import (
-                            render_folder, 
-                            render_shots_folder, 
-                            render_draft_folder, 
-                            render_render_folder, 
-                            render_final_folder,
-                            folder_created_statement,
-                        )
+from .. import global_variables as g_var
 
 
 # absolute path
@@ -264,12 +256,12 @@ def returnRenderFolderFromStrip(shot_filepath, project_folder):
     #shot_filepath = absolutePath(strip.bpm_shotsettings.shot_filepath)
     shot_name = os.path.splitext(os.path.basename(shot_filepath))[0]
 
-    render_folder_path = os.path.join(project_folder, render_folder)
-    render_shot_folder_path = os.path.join(render_folder_path, render_shots_folder)
+    render_folder_path = os.path.join(project_folder, g_var.render_folder)
+    render_shot_folder_path = os.path.join(render_folder_path, g_var.render_shots_folder)
 
-    draft_folder_path = os.path.join(render_shot_folder_path, render_draft_folder)
-    render_folder_path = os.path.join(render_shot_folder_path, render_render_folder)
-    final_folder_path = os.path.join(render_shot_folder_path, render_final_folder)
+    draft_folder_path = os.path.join(render_shot_folder_path, g_var.render_draft_folder)
+    render_folder_path = os.path.join(render_shot_folder_path, g_var.render_render_folder)
+    final_folder_path = os.path.join(render_shot_folder_path, g_var.render_final_folder)
 
     shot_draft_folder_path = os.path.join(draft_folder_path, shot_name)
     shot_render_folder_path = os.path.join(render_folder_path, shot_name)
@@ -287,13 +279,13 @@ def createShotRenderFolders(shot_filepath, winman):
     shot_draft, shot_render, shot_final = returnRenderFolderFromStrip(shot_filepath, general_settings.project_folder)
 
     createDirectory(shot_draft)
-    if debug: print(folder_created_statement + shot_draft) #debug
+    if debug: print(g_var.folder_created_statement + shot_draft) #debug
 
     createDirectory(shot_render)
-    if debug: print(folder_created_statement + shot_render) #debug
+    if debug: print(g_var.folder_created_statement + shot_render) #debug
 
     createDirectory(shot_final)
-    if debug: print(folder_created_statement + shot_final) #debug
+    if debug: print(g_var.folder_created_statement + shot_final) #debug
 
 
 # return render filepath
@@ -302,8 +294,8 @@ def returnRenderFilePathFromShot(shot_filepath, winman, shot_render_state):
     render_settings = winman.bpm_rendersettings[shot_render_state]
 
     shot_name = os.path.splitext(os.path.basename(shot_filepath))[0]
-    render_folder_path = os.path.join(project_folder, render_folder)
-    render_shot_folder_path = os.path.join(render_folder_path, render_shots_folder)
+    render_folder_path = os.path.join(project_folder, g_var.render_folder)
+    render_shot_folder_path = os.path.join(render_folder_path, g_var.render_shots_folder)
     spec_render_folder_path = os.path.join(render_shot_folder_path, shot_render_state)
 
     if render_settings.is_file_format == 'FFMPEG':

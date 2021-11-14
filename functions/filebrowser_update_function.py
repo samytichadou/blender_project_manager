@@ -1,6 +1,4 @@
-import bpy
 import os
-
 
 from ..global_variables import custom_folder_not_found_statement
 

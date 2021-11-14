@@ -1,4 +1,5 @@
-import bpy, os
+import bpy
+import os
 
 
 # build blender command for launching with python script
@@ -21,3 +22,4 @@ def buildBlenderCommandBackgroundRender(blend_file):
 # launch command
 def launchCommand(command):
     os.system(command)
+    

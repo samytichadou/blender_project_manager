@@ -22,3 +22,4 @@ def check_file_poll_function(context):
                             pass
 
     return (is_bpm_project, bpm_filetype, bpm_active_strip)
+    

@@ -1,25 +1,11 @@
-import bpy, os
+import bpy
+import os
 
-
-from ..global_variables import (
-                            file_project, 
-                            loading_statement, 
-                            currently_loading_statement, 
-                            custom_folders_file, 
-                            bpm_statement,
-                            asset_folder,
-                            shot_folder,
-                            asset_file,
-                            shot_file,
-                            render_folder,
-                            render_file,
-                            missing_shot_file_statement,
-                            setting_prop_statement,
-                        )
+from .. import global_variables as g_var
 from .json_functions import read_json
-from .file_functions import absolutePath, getBlendName
+from . import file_functions as fl_fct
 from .dataset_functions import setPropertiesFromJsonDataset
-from .strip_functions import returnShotStrips, getListSequencerShots
+from . import strip_functions as str_fct
 from .reload_comments_function import reload_comments
 
 
@@ -30,8 +16,8 @@ def getProjectDataFile():
         parent_folder = os.path.dirname(bpy.data.filepath)
         subparent_folder = os.path.dirname(parent_folder)
         subsubparent_folder = os.path.dirname(subparent_folder)
-        edit_project_data_file = os.path.join(parent_folder, file_project)
-        shot_asset_project_data_file = os.path.join(subsubparent_folder, file_project)
+        edit_project_data_file = os.path.join(parent_folder, g_var.file_project)
+        shot_asset_project_data_file = os.path.join(subsubparent_folder, g_var.file_project)
 
         # edit file
         if os.path.isfile(edit_project_data_file):
@@ -39,9 +25,9 @@ def getProjectDataFile():
 
         # shot or asset file
         elif os.path.isfile(shot_asset_project_data_file):
-            if os.path.basename(subparent_folder) == asset_folder:
+            if os.path.basename(subparent_folder) == g_var.asset_folder:
                 return shot_asset_project_data_file, subsubparent_folder, 'ASSET'
-            elif os.path.basename(subparent_folder) == shot_folder:
+            elif os.path.basename(subparent_folder) == g_var.shot_folder:
                 return shot_asset_project_data_file, subsubparent_folder, 'SHOT'
 
         else:
@@ -54,7 +40,7 @@ def getProjectDataFile():
 def chekIfBpmProject(winman, project_data_file, file_type):
     general_settings = winman.bpm_generalsettings
     dataset = read_json(project_data_file)
-    blend_name = os.path.splitext(os.path.basename(absolutePath(bpy.data.filepath)))[0]
+    blend_name = os.path.splitext(os.path.basename(fl_fct.absolutePath(bpy.data.filepath)))[0]
 
     # edit
     if file_type == 'EDIT':
@@ -90,7 +76,7 @@ def chekIfBpmProject(winman, project_data_file, file_type):
 # load json to dataset
 def loadJsonDataToDataset(winman, dataset, json_file, avoid_list):
     debug = winman.bpm_projectdatas.debug
-    if debug: print(loading_statement + json_file) #debug
+    if debug: print(g_var.loading_statement + json_file) #debug
 
     datasetin = read_json(json_file)
 
@@ -101,7 +87,7 @@ def loadJsonDataToDataset(winman, dataset, json_file, avoid_list):
 # get custom folders file
 def getCustomFoldersFile(winman):
     project_folder = winman.bpm_generalsettings.project_folder
-    folders_file = os.path.join(project_folder, custom_folders_file)
+    folders_file = os.path.join(project_folder, g_var.custom_folders_file)
 
     return folders_file, os.path.isfile(folders_file)
 
@@ -109,8 +95,8 @@ def getCustomFoldersFile(winman):
 # get asset file
 def getAssetFile(winman):
     project_folder = winman.bpm_generalsettings.project_folder
-    asset_folder_path = os.path.join(project_folder, asset_folder)
-    asset_file_path = os.path.join(asset_folder_path, asset_file)
+    asset_folder_path = os.path.join(project_folder, g_var.asset_folder)
+    asset_file_path = os.path.join(asset_folder_path, g_var.asset_file)
 
     return asset_file_path, os.path.isfile(asset_file_path)
 
@@ -118,8 +104,8 @@ def getAssetFile(winman):
 # get render settings file
 def getRenderSettingsFile(winman):
     project_folder = winman.bpm_generalsettings.project_folder
-    render_folder_path = os.path.join(project_folder, render_folder)
-    render_filepath = os.path.join(render_folder_path, render_file)
+    render_folder_path = os.path.join(project_folder, g_var.render_folder)
+    render_filepath = os.path.join(render_folder_path, g_var.render_file)
 
     return render_filepath, os.path.isfile(render_filepath)
 
@@ -149,7 +135,7 @@ def getShotPattern(project_datas):
 # get shot replacement list for python script for shot creation
 def getScriptReplacementListShotCreation(project_datas, next_shot_folder, next_shot_file, next_shot_number):
     replacement_list = []
-    replacement_list.append(['|bpm_statement', bpm_statement])
+    replacement_list.append(['|bpm_statement', g_var.bpm_statement])
     replacement_list.append(['|filepath', next_shot_file])
     replacement_list.append(['|scene_name', project_datas.shot_prefix + next_shot_number])
     replacement_list.append(['|frame_start', project_datas.shot_start_frame])
@@ -171,10 +157,10 @@ def getArgumentForPythonScript(argument_list):
 
 
 # get all available shots list
-def getAvailableShotsList(shot_folder, project_prefix):
+def getAvailableShotsList(shot_folder_var, project_prefix):
     shot_list = []
-    for filename in os.listdir(shot_folder):
-        filepath = os.path.join(shot_folder, filename)
+    for filename in os.listdir(shot_folder_var):
+        filepath = os.path.join(shot_folder_var, filename)
         if os.path.isdir(filepath):
             if project_prefix in filename:
                 shot_list.append(filename.split(project_prefix)[1])
@@ -194,7 +180,7 @@ def findUnusedLibraries():
     lib_list = []
     for scn in bpy.data.scenes:
         sequencer = scn.sequence_editor
-        used_lib_list = getListSequencerShots(sequencer)[1]
+        used_lib_list = str_fct.getListSequencerShots(sequencer)[1]
         for lib in bpy.data.libraries:
             if lib not in used_lib_list:
                 lib_list.append(lib)
@@ -204,7 +190,7 @@ def findUnusedLibraries():
 # get shot settings file
 def getShotSettingsFileFromBlend():
     parent_folder = os.path.dirname(bpy.data.filepath)
-    shot_json = os.path.join(parent_folder, shot_file)
+    shot_json = os.path.join(parent_folder, g_var.shot_file)
     if os.path.isfile(shot_json):
         return shot_json
 
@@ -218,16 +204,16 @@ def refreshTimelineShotDatas(context, sequencer):
 
     general_settings.bypass_update_tag = True
     # iterate through timeline strips
-    for strip in returnShotStrips(sequencer):
+    for strip in str_fct.returnShotStrips(sequencer):
         # get json path
-        shot_folder = os.path.dirname(absolutePath(strip.bpm_shotsettings.shot_filepath))
-        shot_json = os.path.join(shot_folder, shot_file)
+        shot_folder_var = os.path.dirname(fl_fct.absolutePath(strip.bpm_shotsettings.shot_filepath))
+        shot_json = os.path.join(shot_folder_var, g_var.shot_file)
 
         # set json datas
         if os.path.isfile(shot_json):
             loadJsonDataToDataset(winman, strip.bpm_shotsettings, shot_json, avoid_list)
         else:
-            if debug: print(missing_shot_file_statement + " for " + strip.name) #debug
+            if debug: print(g_var.missing_shot_file_statement + " for " + strip.name) #debug
 
         # load comments
         reload_comments(context, "edit_shot", strip)
@@ -240,7 +226,7 @@ def refreshTimelineShotDatas(context, sequencer):
 
 # get specific asset datas from json
 def getAssetDatasFromJson(asset_datas):
-    name = getBlendName()
+    name = fl_fct.getBlendName()
     for a in asset_datas['assets']:
         if name == a['name']:
             return a
@@ -268,7 +254,7 @@ def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
             if m.name == specific_asset_datas[prop]:
                 datasetout.asset_material = m
                 m.bpm_isasset = True
-                if debug: print(setting_prop_statement + prop) #debug
+                if debug: print(g_var.setting_prop_statement + prop) #debug
                 return
 
     # world
@@ -278,7 +264,7 @@ def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
             if w.name == specific_asset_datas[prop]:
                 datasetout.asset_world = w
                 w.bpm_isasset = True
-                if debug: print(setting_prop_statement + prop) #debug
+                if debug: print(g_var.setting_prop_statement + prop) #debug
                 return
 
     # collections
@@ -288,7 +274,7 @@ def setAssetCollectionFromJsonDataset(datasetout, specific_asset_datas, debug):
             if c.name == specific_asset_datas[prop]:
                 datasetout.asset_collection = c
                 c.bpm_isasset = True
-                if debug: print(setting_prop_statement + prop) #debug
+                if debug: print(g_var.setting_prop_statement + prop) #debug
                 return
 
 
@@ -331,3 +317,4 @@ def find_file_version(filepath, winman):
     version = int(version_string)
 
     return version
+    
