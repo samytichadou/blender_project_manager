@@ -1,15 +1,6 @@
 import bpy
-import os
 
-
-from ..global_variables import (
-                            render_folder,
-                            render_shots_folder,
-                            setting_prop_statement,
-                            setting_prop_error_statement,
-                            setting_render_statement,
-                            render_set_statement,
-                        )
+from .. import global_variables as g_var
 from .file_functions import returnRenderFilePathFromShot
 
 
@@ -22,7 +13,7 @@ def setRenderShot(context, shot_render_state):
     scn = context.scene
     render = scn.render
 
-    if debug: print(setting_render_statement) #debug
+    if debug: print(g_var.setting_render_statement) #debug
 
     # get render folder
     output_filepath = returnRenderFilePathFromShot(bpy.data.filepath, winman, shot_render_state)
@@ -36,7 +27,7 @@ def setRenderShot(context, shot_render_state):
     render.filepath = bpy.path.relpath(output_filepath)
 
     #props
-    if debug: print(setting_prop_statement + "render settings") #debug
+    if debug: print(g_var.setting_prop_statement + "render settings") #debug
     for p in render_settings.bl_rna.properties:
         if not p.is_readonly and p.identifier != 'name':
             # set dataset
@@ -61,7 +52,7 @@ def setRenderShot(context, shot_render_state):
             try:
                 setattr(dataset, identif, getattr(render_settings, p.identifier))
             except (KeyError, AttributeError, TypeError):
-                if debug: print(setting_prop_error_statement + identif) #debug
+                if debug: print(g_var.setting_prop_error_statement + identif) #debug
                 pass
 
-    if debug: print(render_set_statement) #debug
+    if debug: print(g_var.render_set_statement) #debug

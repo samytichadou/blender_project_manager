@@ -1,7 +1,6 @@
 import bpy
 import os
 
-
 from .dataset_functions import setPropertiesFromDataset
 
 

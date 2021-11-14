@@ -1,7 +1,5 @@
-import os
-
 from .project_data_functions import getCustomFoldersFile
-from .json_functions import createJsonDatasetFromProperties, create_json_file
+from . import json_functions as js_fct
 from ..global_variables import saved_to_json_statement
 
 
@@ -16,9 +14,9 @@ def update_custom_folder_file(winman):
     datas["folders"] = []
 
     for c in custom_folders_coll:
-        datas["folders"].append(createJsonDatasetFromProperties(c, ()))
+        datas["folders"].append(js_fct.createJsonDatasetFromProperties(c, ()))
 
-    create_json_file(datas, custom_folders_file)
+    js_fct.create_json_file(datas, custom_folders_file)
 
     if debug: print(saved_to_json_statement) #debug
 

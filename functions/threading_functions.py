@@ -1,17 +1,14 @@
-import bpy
 import subprocess
 import threading
 
-
-from .. import global_variables as gv
-
+from .. import global_variables as g_var
 from .task_functions import write_pid_task
 
 
 # launch command in separate thread
 def launchCommandFunction(command, debug, task_file, endfunction, *endfunction_args):
 
-    if debug: print(gv.thread_start_statement) #debug
+    if debug: print(g_var.thread_start_statement) #debug
 
     # launch command
     process = subprocess.Popen(command, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -31,17 +28,17 @@ def launchCommandFunction(command, debug, task_file, endfunction, *endfunction_a
             if b"Blender quit" in line :
                 break
             elif b"EXCEPTION_ACCESS_VIOLATION" in line:
-                if debug: print(gv.thread_error_statement) #debug
+                if debug: print(g_var.thread_error_statement) #debug
                 break
             previous_line = line
         else:
             break
     
     # when ending
-    if debug: print(gv.thread_end_statement) #debug
+    if debug: print(g_var.thread_end_statement) #debug
 
     if endfunction is not None:
-        if debug: print(gv.thread_end_function_statement) #debug
+        if debug: print(g_var.thread_end_function_statement) #debug
         endfunction(*endfunction_args)
 
 
@@ -49,3 +46,4 @@ def launchCommandFunction(command, debug, task_file, endfunction, *endfunction_a
 def launchSeparateThread(arguments):
     render_thread = threading.Thread(target=launchCommandFunction, args=arguments)
     render_thread.start()
+    

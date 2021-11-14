@@ -1,14 +1,8 @@
 import bpy
 import os
 
-
-from ..global_variables import (
-                            saving_to_json_statement,
-                            saved_to_json_statement,
-                            shot_file,
-                            bypass_settings_update_statement,
-                        )
-from .json_functions import create_json_file, createJsonDatasetFromProperties
+from .. import global_variables as g_var
+from . import json_functions as js_fct
 from .set_render_shot_update_function import setRenderShot
 from .file_functions import absolutePath
 
@@ -24,21 +18,21 @@ def updateShotSettingsProperties(self, context):
         return
 
     # create the json file
-    if debug: print(saving_to_json_statement) #debug
+    if debug: print(g_var.saving_to_json_statement) #debug
 
     if general_settings.file_type == 'EDIT':
         shot_folder = os.path.dirname(absolutePath(self.shot_filepath))
     else:
         shot_folder = os.path.dirname(bpy.data.filepath)
     
-    shot_json = os.path.join(shot_folder, shot_file)
+    shot_json = os.path.join(shot_folder, g_var.shot_file)
 
     # format the json dataset
-    json_dataset = createJsonDatasetFromProperties(self, ("shot_timeline_display", "shot_filepath", "shot_version_file"))
+    json_dataset = js_fct.createJsonDatasetFromProperties(self, ("shot_timeline_display", "shot_filepath", "shot_version_file"))
     # create json file
-    create_json_file(json_dataset, shot_json)
+    js_fct.create_json_file(json_dataset, shot_json)
 
-    if debug: print(saved_to_json_statement) #debug
+    if debug: print(g_var.saved_to_json_statement) #debug
 
 
 #update function for shot render state prop
@@ -47,3 +41,4 @@ def updateShotRenderState(self, context):
     updateShotSettingsProperties(self, context)
     # set render settings
     setRenderShot(context, context.window_manager.bpm_shotsettings.shot_render_state)
+    
