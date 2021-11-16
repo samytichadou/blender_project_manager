@@ -81,7 +81,7 @@ from .operators import(
     custom_folder_operator,
     dialog_popup,
     open_folder,
-    open_webpage,
+    open_url,
 )
 
 from .functions.lock_file_functions import deleteLockFileHandler
@@ -132,7 +132,7 @@ def register():
     custom_folder_operator.register()
     dialog_popup.register()
     open_folder.register()
-    open_webpage.register()
+    open_url.register()
 
     ### HANDLER ###
     bpy.app.handlers.load_pre.append(deleteLockFileHandler)
@@ -186,7 +186,7 @@ def unregister():
     custom_folder_operator.unregister()
     dialog_popup.unregister()
     open_folder.unregister()
-    open_webpage.unregister()
+    open_url.unregister()
 
     ### HANDLER ###
     bpy.app.handlers.load_pre.remove(deleteLockFileHandler)

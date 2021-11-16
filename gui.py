@@ -1449,7 +1449,7 @@ class BPM_MT_topbar_menu(bpy.types.Menu):
             # addon update needed
             if general_settings.update_needed:
                 layout.separator()
-                op = layout.operator("bpm.open_url", text = "New addon version available", icon = "URL")
+                op = layout.operator("wm.url_open", text = "New addon version available", icon = "URL")
                 op.url = general_settings.update_download_url
                                 
 

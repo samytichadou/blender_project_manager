@@ -100,7 +100,7 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
     def draw(self, context):
         layout = self.layout
 
-        op = layout.operator('bpm.open_url', text="Donate", icon='FUND')
+        op = layout.operator('wm.url_open', text="Donate", icon='FUND')
         op.url = "https://ko-fi.com/tonton_blender"
 
         box1 = layout.box()
