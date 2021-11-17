@@ -16,7 +16,7 @@ def bpm_render_handler(scene):
     if general_settings.is_project:
         shot_name = get_filename_from_filepath(bpy.data.filepath)[0]
 
-        for entry in os.scandir(return_task_folder(winman)):
+        for entry in os.scandir(return_task_folder()):
             if shot_name in entry.name and entry.is_file():
                 dataset = read_json(entry.path)
                 if os.getpid() == dataset["pid"]:

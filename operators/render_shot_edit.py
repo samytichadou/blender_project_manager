@@ -53,7 +53,7 @@ class BPM_OT_render_shot_edit(bpy.types.Operator):
         shot_name = fl_fct.get_filename_from_filepath(shot_filepath)[0]
         id = dt_fct.getDateTimeID()
         time = dt_fct.getDateTimeString()
-        task_folder = tsk_fct.return_task_folder(winman)
+        task_folder = tsk_fct.return_task_folder()
         task_filepath = os.path.join(task_folder, shot_name + "_" + id + g_var.taskfile_extension)
         completion_total = shot_settings.shot_frame_end - shot_settings.shot_frame_start + 1
 

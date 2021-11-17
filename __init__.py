@@ -49,6 +49,7 @@ from . import(
     startup_handler,
     render_handler,
     timer_function,
+    task_properties,
 )
 
 from .operators import(
@@ -97,6 +98,7 @@ def register():
     gui.register()
     properties.register()
     addon_prefs.register()
+    task_properties.register()
 
     ### HANDLERS ###
     startup_handler.register()
@@ -145,6 +147,7 @@ def unregister():
     gui.unregister()
     properties.unregister()
     addon_prefs.unregister()
+    task_properties.unregister()
 
     ### EXTRA UI ###
     dopesheet_extra_ui.unregister()

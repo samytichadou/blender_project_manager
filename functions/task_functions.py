@@ -1,6 +1,10 @@
+import bpy
 import os
 
 from .. import global_variables as g_var
+from . import json_functions as js_fct
+from . import file_functions as fl_fct
+from . import dataset_functions as dtset_fct
 from . import json_functions as js_fct
 
 
@@ -18,16 +22,29 @@ def create_task_dataset(name, time, file_filepath, type, id, completion_total):
     
     return datas
 
-
 # return task folder
-def return_task_folder(winman):
+def return_task_folder():
+    winman = bpy.data.window_managers[0]
     general_settings = winman.bpm_generalsettings
     datas_folder = os.path.join(general_settings.project_folder, g_var.datas_folder)
     return os.path.join(datas_folder, g_var.datas_tasks_folder)
-
 
 # write pid
 def write_pid_task(taskfile, pid):
     dataset = js_fct.read_json(taskfile)
     dataset["pid"] = pid
     js_fct.create_json_file(dataset, taskfile)
+
+# reload tasks in list
+def load_task_list(reload=False):
+    winman = bpy.data.window_managers[0]
+    task_collection = winman.bpm_tasklist
+    task_folder = return_task_folder()
+
+    if reload:
+        pass
+
+    for task_file in fl_fct.returnAllFilesInFolder(task_folder):
+        newentry = task_collection.add()
+        dataset = js_fct.read_json(os.path.join(task_folder, task_file))
+        dtset_fct.setPropertiesFromJsonDataset(dataset, newentry, winman)
