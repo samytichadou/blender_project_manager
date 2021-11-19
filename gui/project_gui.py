@@ -46,8 +46,8 @@ def draw_tasks_panel(container, winman):
 
             col = split.column(align=True)
             col.label(text=task.creation_time)
-            col.label(text=task.type)
             col.label(text=task.filepath)
+            col.label(text=task.type)
             col.label(text=task.id)
             col.label(text=str(task.pid))
 
