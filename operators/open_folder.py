@@ -143,6 +143,9 @@ class BPM_OT_open_project_folder(bpy.types.Operator):
         elif self.folder == "Project":
             folder_path = general_settings.project_folder
 
+        elif self.folder == "Datas":
+            folder_path = os.path.join(general_settings.project_folder, g_var.datas_folder)
+
         elif self.folder == "Playblast":
             render_shot_folderpath = os.path.join(os.path.join(general_settings.project_folder, g_var.render_folder), g_var.render_shots_folder)
             folder_path = os.path.join(render_shot_folderpath, g_var.render_playblast_folder)

@@ -21,6 +21,8 @@ def bpm_render_handler(scene):
                 dataset = read_json(entry.path)
                 if os.getpid() == dataset["pid"]:
                     dataset["completion"] += 1
+                    if dataset["completion_total"] == dataset["completion"]:
+                        dataset["completed"] = 1
                     create_json_file(dataset, entry.path)
                     break
 

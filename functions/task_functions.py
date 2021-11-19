@@ -5,7 +5,6 @@ from .. import global_variables as g_var
 from . import json_functions as js_fct
 from . import file_functions as fl_fct
 from . import dataset_functions as dtset_fct
-from . import json_functions as js_fct
 
 
 # create task dataset
@@ -19,6 +18,7 @@ def create_task_dataset(name, time, file_filepath, type, id, completion_total):
     datas["completion"]         = 0
     datas["completion_total"]   = completion_total
     datas["pid"]                = 0
+    datas["completed"]          = 0
     
     return datas
 
@@ -36,15 +36,15 @@ def write_pid_task(taskfile, pid):
     js_fct.create_json_file(dataset, taskfile)
 
 # reload tasks in list
-def load_task_list(reload=False):
+def reload_task_list():
     winman = bpy.data.window_managers[0]
+    debug = winman.bpm_projectdatas.debug
     task_collection = winman.bpm_tasklist
     task_folder = return_task_folder()
 
-    if reload:
-        pass
+    task_collection.clear()
 
     for task_file in fl_fct.returnAllFilesInFolder(task_folder):
         newentry = task_collection.add()
         dataset = js_fct.read_json(os.path.join(task_folder, task_file))
-        dtset_fct.setPropertiesFromJsonDataset(dataset, newentry, winman)
+        dtset_fct.setPropertiesFromJsonDataset(dataset, newentry, debug, ())

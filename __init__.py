@@ -39,9 +39,6 @@ import bpy
 ##################################
 
 from . import(
-    folders_ui_list,
-    asset_ui_list,
-    gui,
     properties,
     addon_prefs,
     dopesheet_extra_ui,
@@ -50,6 +47,16 @@ from . import(
     render_handler,
     timer_function,
     task_properties,
+)
+
+from .ui_lists import(
+    folders_ui_list,
+    asset_ui_list,
+)
+
+from .gui import(
+    gui,
+    project_gui,
 )
 
 from .operators import(
@@ -83,6 +90,7 @@ from .operators import(
     dialog_popup,
     open_folder,
     open_url,
+    task_management,
 )
 
 from .functions.lock_file_functions import deleteLockFileHandler
@@ -95,10 +103,12 @@ def register():
 
     folders_ui_list.register()
     asset_ui_list.register()
-    gui.register()
     properties.register()
     addon_prefs.register()
     task_properties.register()
+
+    gui.register()
+    project_gui.register()
 
     ### HANDLERS ###
     startup_handler.register()
@@ -135,6 +145,7 @@ def register():
     dialog_popup.register()
     open_folder.register()
     open_url.register()
+    task_management.register()
 
     ### HANDLER ###
     bpy.app.handlers.load_pre.append(deleteLockFileHandler)
@@ -142,16 +153,18 @@ def register():
 
 def unregister():
 
-    folders_ui_list.unregister()
-    asset_ui_list.unregister()
-    gui.unregister()
-    properties.unregister()
-    addon_prefs.unregister()
-    task_properties.unregister()
-
     ### EXTRA UI ###
     dopesheet_extra_ui.unregister()
     vse_extra_ui.unregister()
+
+    folders_ui_list.unregister()
+    asset_ui_list.unregister()
+    properties.unregister()
+    addon_prefs.unregister()
+    task_properties.unregister()
+    
+    gui.unregister()
+    project_gui.unregister()
 
     ### HANDLERS ###
     startup_handler.unregister()
@@ -190,6 +203,7 @@ def unregister():
     dialog_popup.unregister()
     open_folder.unregister()
     open_url.unregister()
+    task_management.unregister()
 
     ### HANDLER ###
     bpy.app.handlers.load_pre.remove(deleteLockFileHandler)

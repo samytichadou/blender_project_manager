@@ -4,14 +4,18 @@ import bpy
 # task list
 class BPM_PR_task_list(bpy.types.PropertyGroup):
     '''name : StringProperty() '''
-    name : bpy.props.StringProperty()
-    creation_time : bpy.props.StringProperty()
-    type : bpy.props.StringProperty()
-    id : bpy.props.StringProperty()
-    filepath : bpy.props.StringProperty()
-    completion : bpy.props.IntProperty()
-    completion_total : bpy.props.IntProperty()
-    pid : bpy.props.IntProperty()
+    creation_time :     bpy.props.StringProperty()
+    type :              bpy.props.StringProperty()
+    id :                bpy.props.StringProperty()
+    filepath :          bpy.props.StringProperty()
+    completion :        bpy.props.IntProperty()
+    completion_total :  bpy.props.IntProperty()
+    pid :               bpy.props.IntProperty()
+    completed :         bpy.props.BoolProperty()
+    hide :              bpy.props.BoolProperty(default=True)
+
+
+### REGISTER ---
 
 def register():   
     bpy.utils.register_class(BPM_PR_task_list)

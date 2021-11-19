@@ -1,7 +1,6 @@
 import bpy
 
-
-from .properties import getAssetIcon
+from ..properties import getAssetIcon
 
 
 # asset ui list
