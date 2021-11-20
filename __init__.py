@@ -62,6 +62,10 @@ from .gui import(
     shot_gui,
 )
 
+from .timers import(
+    render_timer,
+)
+
 from .operators import(
     back_to_edit,
     open_shot,
@@ -183,7 +187,9 @@ def unregister():
     startup_handler.unregister()
     render_handler.unregister()
 
+    ### TIMERS ###
     timer_function.unregister()
+    render_timer.unregister()
 
     ### OPERATORS ###
     back_to_edit.unregister()

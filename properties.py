@@ -9,6 +9,7 @@ from .functions.check_addon_version_functions import update_function_updateneede
 from .functions import shot_settings_json_update_function as shot_js_up_fct
 from .functions import asset_assigning_update_function as asset_up_fct
 from .functions import date_functions
+from .timers.render_timer import bpm_render_timer
 from . import global_variables as g_var
 
 
@@ -81,6 +82,15 @@ def updateAssetDisplayType(self, context):
     
     self.asset_list_index = -1
 
+# update function for is_rendering
+def update_is_rendering(self, context):
+    debug = context.window_manager.bpm_projectdatas.debug
+    if self.is_rendering:
+        if debug: print(g_var.render_timer_function_added_statement) #debug
+        bpy.app.timers.register(bpm_render_timer)
+    else:
+        if debug: print(g_var.render_timer_function_removed_statement) #debug
+        bpy.app.timers.unregister(bpm_render_timer)
 
 # shot comments
 class BPM_PR_shot_comments(bpy.types.PropertyGroup):
@@ -281,6 +291,8 @@ class BPM_PR_general_settings(bpy.types.PropertyGroup) :
     update_needed : bpy.props.BoolProperty(update = update_function_updateneeded)
     update_message : bpy.props.StringProperty()
     update_download_url : bpy.props.StringProperty()
+
+    is_rendering : bpy.props.BoolProperty(update = update_is_rendering)
 
 
 def display_panels_callback(scene, context):

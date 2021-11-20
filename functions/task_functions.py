@@ -48,3 +48,17 @@ def reload_task_list():
         newentry = task_collection.add()
         dataset = js_fct.read_json(os.path.join(task_folder, task_file))
         dtset_fct.setPropertiesFromJsonDataset(dataset, newentry, debug, ())
+
+# check if renders finished
+def tasks_render_finished():
+    winman = bpy.data.window_managers[0]
+    debug = winman.bpm_projectdatas.debug
+    task_collection = winman.bpm_tasklist
+
+    chk_render_unfinished = False
+    for task in task_collection:
+        if task.type == "render":
+            if not task.completed:
+                chk_render_unfinished = True
+
+    return not chk_render_unfinished

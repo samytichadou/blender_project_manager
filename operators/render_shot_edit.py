@@ -9,6 +9,7 @@ from ..functions.check_file_poll_function import check_file_poll_function
 from ..functions import task_functions as tsk_fct
 from ..functions.json_functions import create_json_file
 from ..functions import date_functions as dt_fct
+from ..timers.render_timer import bpm_render_timer
 
 
 def renderShotEndFunction(shot_strip, debug):
@@ -66,6 +67,10 @@ class BPM_OT_render_shot_edit(bpy.types.Operator):
 
         #refresh sequencer
         bpy.ops.sequencer.refresh_all()
+
+        #launch render timer
+        if not winman.bpm_generalsettings.is_rendering:
+            winman.bpm_generalsettings.is_rendering = True
         
         return {'FINISHED'}
 

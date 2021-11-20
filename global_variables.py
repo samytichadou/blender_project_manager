@@ -145,6 +145,10 @@ timer_function_updated_statement = bpm_statement + "Timer function updated"
 timer_function_removed_statement = bpm_statement + "Timer function removed"
 timer_function_processing_statement = bpm_statement + "Timer function processing"
 
+render_timer_function_added_statement = bpm_statement + "Render timer function added"
+render_timer_function_removed_statement = bpm_statement + "Render timer function removed"
+render_timer_function_processing_statement = bpm_statement + "Render timer function processing"
+
 
 # thread statements
 thread_start_statement = bpm_statement + "Starting new thread"

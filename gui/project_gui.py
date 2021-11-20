@@ -10,6 +10,11 @@ def draw_tasks_panel(container, winman):
 
     task_list = winman.bpm_tasklist
 
+    if winman.bpm_generalsettings.is_rendering:
+        container.label(text="Render(s) in progress", icon="SORTTIME")
+    else:
+        container.label(text="Not Rendering", icon="CHECKMARK")
+
     gui_common.draw_operator_and_help(container, 'bpm.reload_tasks', '', 'Tasks-Management')
 
     # draw task list

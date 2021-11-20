@@ -75,7 +75,15 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
         max=3600.00, 
         default=60.00, 
         description="Frequency for timer function",
-        update = updateTimer,
+        )
+
+    render_timer_frequency : bpy.props.FloatProperty(
+        name="Render Timer frequency (s)", 
+        precision=2, 
+        min=0.01, 
+        max=3600.00, 
+        default=3.00, 
+        description="Frequency for render timer function",
         )
 
     timer_datas_refresh : bpy.props.BoolProperty(
@@ -129,6 +137,10 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
         col.prop(self, "timer_custom_folders_refresh")
 
         col.prop(self, "timer_audio_sync")
+
+        # render timer
+        box3 = box1.box()
+        box3.prop(self, "render_timer_frequency")
 
 
 # get addon preferences
