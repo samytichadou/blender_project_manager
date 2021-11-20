@@ -31,7 +31,6 @@ bl_info = {
     "warning": "Alpha version, use at your own risks"
 }
 
-
 import bpy
 
 
