@@ -55,8 +55,12 @@ from .ui_lists import(
 )
 
 from .gui import(
-    gui,
     project_gui,
+    interface_gui,
+    edit_gui,
+    assets_gui,
+    extra_gui,
+    shot_gui,
 )
 
 from .operators import(
@@ -107,8 +111,13 @@ def register():
     addon_prefs.register()
     task_properties.register()
 
-    gui.register()
+    ### GUI ###
+    interface_gui.register()
     project_gui.register()
+    edit_gui.register()
+    assets_gui.register()
+    extra_gui.register()
+    shot_gui.register()
 
     ### HANDLERS ###
     startup_handler.register()
@@ -163,8 +172,13 @@ def unregister():
     addon_prefs.unregister()
     task_properties.unregister()
     
-    gui.unregister()
+    ### GUI ###
+    interface_gui.unregister()
     project_gui.unregister()
+    edit_gui.unregister()
+    assets_gui.unregister()
+    extra_gui.unregister()
+    shot_gui.unregister()
 
     ### HANDLERS ###
     startup_handler.unregister()
