@@ -42,7 +42,8 @@ from . import (
     )
 
 from .project_management import(
-    create_project,
+    manage_projects,
+    global_project_properties,
     )
 
 # register
@@ -51,10 +52,12 @@ from .project_management import(
 def register():
     addon_prefs.register()
 
-    create_project.register()
+    manage_projects.register()
+    global_project_properties.register()
 
 def unregister():
     addon_prefs.unregister()
 
-    create_project.unregister()
+    manage_projects.unregister()
+    global_project_properties.unregister()
 

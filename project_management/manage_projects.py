@@ -92,11 +92,45 @@ class BPM_OT_create_project(bpy.types.Operator):
         # Create json
         add_project_dataset(project_name, root_folder)
 
+        # Refresh project list
+        reload_global_projects()
+
+        return {'FINISHED'}
+
+
+def reload_global_projects():
+    print("BPM --- Refreshing global project list")
+
+    props = bpy.context.window_manager.bpm_global_projects
+    props.clear()
+    dataset = return_global_project_datas()
+    for proj in dataset["projects"]:
+        new = props.add()
+        new.name = proj["name"]
+        new.folder = proj["folder"]
+
+class BPM_OT_reload_global_projects(bpy.types.Operator):
+    bl_idname = "bpm.reload_global_projects"
+    bl_label = "Reload BPM Projects"
+    bl_description = "Reload BPM Project list"
+    bl_options = {"INTERNAL"}
+
+    @classmethod
+    def poll(cls, context):
+        return os.path.isfile(return_global_project_file())
+
+    def execute(self, context):
+        reload_global_projects()
+
+        self.report({'INFO'}, "BPM Project list refreshed")
+
         return {'FINISHED'}
 
 
 ### REGISTER ---
 def register():
     bpy.utils.register_class(BPM_OT_create_project)
+    bpy.utils.register_class(BPM_OT_reload_global_projects)
 def unregister():
     bpy.utils.unregister_class(BPM_OT_create_project)
+    bpy.utils.unregister_class(BPM_OT_reload_global_projects)

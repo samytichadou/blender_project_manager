@@ -43,6 +43,9 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
             "preferences_folder",
             text = "Preference Folder",
             )
+        layout.operator(
+            "bpm.reload_global_projects",
+            )
 
         # New Project
         box = layout.box()
