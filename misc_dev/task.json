@@ -1,8 +1,0 @@
-{
-    "name": "custom_name",
-    "hash": "hash",
-    "filepath": "absolute filepath of the blend concerned",
-    "completion": 0,
-    "completion_total": 100,
-    "pid": 11111
-}
