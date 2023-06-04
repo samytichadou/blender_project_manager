@@ -43,16 +43,39 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
             "preferences_folder",
             text = "Preference Folder",
             )
-        layout.operator(
-            "bpm.reload_global_projects",
-            )
 
-        # New Project
+        # Available Projects
         box = layout.box()
         row = box.row()
         row.label(
-            text = "New",
+            text = "Available Pojects"
             )
+        row.operator(
+            "bpm.reload_global_projects",
+            text = "",
+            icon = "FILE_REFRESH",
+            )
+        global_projects = context.window_manager.bpm_global_projects
+        if global_projects:
+            col = box.column(align = True)
+            for p in context.window_manager.bpm_global_projects:
+                # TODO better spacing
+                row = col.row()
+                row.label(text = p.name)
+                row.label(text = p.folder)
+                op = row.operator(
+                    "bpm.remove_global_project",
+                    text = "",
+                    icon = "X",
+                    )
+                op.folder = p.folder
+
+        # New Project
+        box = layout.box()
+        box.label(
+            text = "New Project",
+            )
+        row = box.row()
         row.prop(
             self,
             "new_project_name",

@@ -1,6 +1,8 @@
 import bpy
 import os
 import json
+import shutil
+from bpy.app.handlers import persistent
 
 from ..addon_prefs import getAddonPreferences
 
@@ -109,6 +111,10 @@ def reload_global_projects():
         new.name = proj["name"]
         new.folder = proj["folder"]
 
+@persistent
+def global_project_load_handler(scene):
+    reload_global_projects()
+
 class BPM_OT_reload_global_projects(bpy.types.Operator):
     bl_idname = "bpm.reload_global_projects"
     bl_label = "Reload BPM Projects"
@@ -127,10 +133,74 @@ class BPM_OT_reload_global_projects(bpy.types.Operator):
         return {'FINISHED'}
 
 
+
+class BPM_OT_remove_global_project(bpy.types.Operator):
+    bl_idname = "bpm.remove_global_project"
+    bl_label = "Remove BPM Project"
+    bl_description = "Remove selected BPM project"
+    bl_options = {"INTERNAL"}
+
+    folder : bpy.props.StringProperty()
+    remove_folder : bpy.props.BoolProperty(
+        name = "Also remove project content",
+        )
+    project_index = None
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def invoke(self, context, event):
+        global_projects = context.window_manager.bpm_global_projects
+        for i, item in enumerate(global_projects, 0):
+            if item.folder == self.folder:
+                self.project_index = i
+                break
+        return context.window_manager.invoke_props_dialog(self)
+
+    def draw(self, context):
+        global_projects = context.window_manager.bpm_global_projects
+        layout = self.layout
+        layout.label(
+            text = f"Removing {global_projects[self.project_index].name}",
+            icon = "ERROR",
+            )
+        layout.label(
+            text = global_projects[self.project_index].folder,
+            )
+        layout.prop(
+            self,
+            "remove_folder",
+            )
+        layout.label(
+            text = "Are you sure ?",
+            )
+
+    def execute(self, context):
+        global_projects = context.window_manager.bpm_global_projects
+
+        global_projects.remove(self.project_index)
+
+        # Remove project from json
+
+        if self.remove_folder:
+            shutil.rmtree(self.folder)
+
+        self.report({'INFO'}, f"{self.folder} Removed")
+
+        # Refresh
+
+        return {'FINISHED'}
+
+
 ### REGISTER ---
 def register():
     bpy.utils.register_class(BPM_OT_create_project)
     bpy.utils.register_class(BPM_OT_reload_global_projects)
+    bpy.utils.register_class(BPM_OT_remove_global_project)
+    bpy.app.handlers.load_post.append(global_project_load_handler)
 def unregister():
     bpy.utils.unregister_class(BPM_OT_create_project)
     bpy.utils.unregister_class(BPM_OT_reload_global_projects)
+    bpy.utils.unregister_class(BPM_OT_remove_global_project)
+    bpy.app.handlers.load_post.remove(global_project_load_handler)
