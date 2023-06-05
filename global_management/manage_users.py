@@ -190,7 +190,10 @@ class BPM_OT_create_user(bpy.types.Operator, ua.BPM_user_authorizations):
             idx += 1
 
     def execute(self, context):
-        # Check for availability
+        # Check for name availability
+        if not self.name:
+            self.report({'WARNING'}, "Name is mandatory")
+            return {'FINISHED'}
         for user in self.datas["users"]:
             if self.name == user["name"]:
                 self.report({'WARNING'}, "Name not available")
