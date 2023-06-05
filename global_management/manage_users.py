@@ -1,6 +1,7 @@
 import bpy
 import base64
 import os
+from bpy.app.handlers import persistent
 
 from .. import addon_prefs as ap
 from . import manage_projects as mp
@@ -108,8 +109,7 @@ class BPM_OT_user_logout(bpy.types.Operator):
     def execute(self, context):
         prop_prefs = ap.getAddon().preferences
 
-        prop_prefs.logged_user = ""
-        prop_prefs.athcode = ""
+        prop_prefs.logged_user = prop_prefs.athcode = ""
 
         self.report({'INFO'}, "User Logged Out")
 
@@ -285,14 +285,32 @@ class BPM_OT_remove_user(bpy.types.Operator):
 
         return {'FINISHED'}
 
+@persistent
+def users_load_handler(scene):
+    print("BPM --- Checking valid login")
+    prop_prefs = ap.getAddon().preferences
+    if not prop_prefs.logged_user:
+        print("BPM --- Not logged")
+        return
+    datas = return_users_datas()
+    for user in datas["users"]:
+        if user["name"] == prop_prefs.logged_user:
+            print("BPM --- Valid login found")
+            return
+    prop_prefs.logged_user = prop_prefs.athcode = ""
+    print("BPM --- No valid login found, logged out")
+
+
 ### REGISTER ---
 def register():
     bpy.utils.register_class(BPM_OT_user_login)
     bpy.utils.register_class(BPM_OT_user_logout)
     bpy.utils.register_class(BPM_OT_create_user)
     bpy.utils.register_class(BPM_OT_remove_user)
+    bpy.app.handlers.load_post.append(users_load_handler)
 def unregister():
     bpy.utils.unregister_class(BPM_OT_user_login)
     bpy.utils.unregister_class(BPM_OT_user_logout)
     bpy.utils.unregister_class(BPM_OT_create_user)
     bpy.utils.unregister_class(BPM_OT_remove_user)
+    bpy.app.handlers.load_post.remove(users_load_handler)
