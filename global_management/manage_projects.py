@@ -6,6 +6,7 @@ import random
 from bpy.app.handlers import persistent
 
 from ..addon_prefs import getAddonPreferences
+from .user_authorization import compare_athcode
 
 def generate_random():
     return(str(random.randrange(0,99999)).zfill(5))
@@ -79,6 +80,8 @@ class BPM_OT_create_project(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
+        if not compare_athcode("1xxxxxxxxxxxxx", getAddonPreferences().athcode):
+            return False
         prefs = getAddonPreferences()
         if prefs.new_project_name:
             return os.path.isdir(bpy.path.abspath(prefs.new_project_folder))
@@ -153,7 +156,7 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return True
+        return compare_athcode("1xxxxxxxxxxxxx", getAddonPreferences().athcode)
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)

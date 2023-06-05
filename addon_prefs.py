@@ -33,7 +33,19 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
         name = "New Project Folder",
         subtype = "DIR_PATH",
         )
+
+    logged_user : bpy.props.StringProperty()
+    athcode : bpy.props.StringProperty()
+    user_temp : bpy.props.StringProperty(
+        name = "User",
+        )
+    password_temp : bpy.props.StringProperty(
+        name = "Password",
+        subtype = "PASSWORD",
+        )
+
     no_update : bpy.props.BoolProperty()
+
 
     def draw(self, context):
         layout = self.layout
@@ -91,11 +103,43 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
             text = "Create",
             )
 
+        # USER
+        box = layout.box()
+        row = box.row()
+        if self.logged_user:
+            user_label = self.logged_user
+        else:
+            user_label = "Not logged"
+        row.label(
+            text = user_label,
+            icon = "USER",
+            )
+        row.operator(
+            "bpm.user_logout",
+            icon = "CANCEL",
+            )
+        row = box.row()
+        row.prop(
+            self,
+            "user_temp",
+            )
+        row.prop(
+            self,
+            "password_temp",
+            )
+        row.operator(
+            "bpm.user_login",
+            text = "",
+            icon = "CHECKMARK",
+            )
 
-# get addon preferences
+# Get addon
+def getAddon():
+    return bpy.context.preferences.addons.get(addon_name)
+
+# Get addon preferences
 def getAddonPreferences():
-    addon = bpy.context.preferences.addons.get(addon_name)
-    return getattr(addon, "preferences", None)
+    return getattr(getAddon(), "preferences", None)
 
 
 ### REGISTER ---
