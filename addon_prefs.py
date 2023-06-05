@@ -61,14 +61,14 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
             for p in context.window_manager.bpm_global_projects:
                 # TODO better spacing
                 row = col.row()
-                row.label(text = p.name)
+                row.label(text = p.project_name)
                 row.label(text = p.folder)
                 op = row.operator(
                     "bpm.remove_global_project",
                     text = "",
                     icon = "X",
                     )
-                op.folder = p.folder
+                op.name = p.name
 
         # New Project
         box = layout.box()

@@ -2,9 +2,13 @@ import bpy
 import os
 import json
 import shutil
+import random
 from bpy.app.handlers import persistent
 
 from ..addon_prefs import getAddonPreferences
+
+def generate_random():
+    return(str(random.randrange(0,99999)).zfill(5))
 
 def return_global_preferences_folder():
     folder=bpy.path.abspath(
@@ -39,7 +43,8 @@ def add_project_dataset(project_name, root_folder):
     print("BPM --- Creating project dataset")
 
     dataset = {}
-    dataset["name"] = project_name
+    dataset["name"] = generate_random()
+    dataset["project_name"] = project_name
     dataset["folder"] = root_folder
 
     global_datas = return_global_project_datas()
@@ -110,6 +115,7 @@ def reload_global_projects():
         new = props.add()
         new.name = proj["name"]
         new.folder = proj["folder"]
+        new.project_name = proj["project_name"]
 
 @persistent
 def global_project_load_handler(scene):
@@ -140,33 +146,27 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
     bl_description = "Remove selected BPM project"
     bl_options = {"INTERNAL"}
 
-    folder : bpy.props.StringProperty()
+    name : bpy.props.StringProperty()
     remove_folder : bpy.props.BoolProperty(
         name = "Also remove project content",
         )
-    project_index = None
 
     @classmethod
     def poll(cls, context):
         return True
 
     def invoke(self, context, event):
-        global_projects = context.window_manager.bpm_global_projects
-        for i, item in enumerate(global_projects, 0):
-            if item.folder == self.folder:
-                self.project_index = i
-                break
         return context.window_manager.invoke_props_dialog(self)
 
     def draw(self, context):
         global_projects = context.window_manager.bpm_global_projects
         layout = self.layout
         layout.label(
-            text = f"Removing {global_projects[self.project_index].name}",
+            text = f"Removing {global_projects[self.name].project_name}",
             icon = "ERROR",
             )
         layout.label(
-            text = global_projects[self.project_index].folder,
+            text = global_projects[self.name].folder,
             )
         layout.prop(
             self,
@@ -179,16 +179,26 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
     def execute(self, context):
         global_projects = context.window_manager.bpm_global_projects
 
-        global_projects.remove(self.project_index)
-
         # Remove project from json
+        datas = return_global_project_datas()
+        for p in datas["projects"]:
+            if p["name"] == self.name:
+                datas["projects"].remove(p)
+                break
+        print("BPM --- Writing global json")
+        write_json_file(datas, return_global_project_file())
 
         if self.remove_folder:
-            shutil.rmtree(self.folder)
+            shutil.rmtree(global_projects[self.name].folder)
 
-        self.report({'INFO'}, f"{self.folder} Removed")
+        self.report({'INFO'}, f"{global_projects[self.name].project_name} Removed")
+
+        index = global_projects.find(self.name)
+        global_projects.remove(index)
 
         # Refresh
+        for area in context.screen.areas:
+            area.tag_redraw()
 
         return {'FINISHED'}
 

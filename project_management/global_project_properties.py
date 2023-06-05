@@ -1,7 +1,7 @@
 import bpy
 
 class BPM_PR_global_projects(bpy.types.PropertyGroup):
-    #name: bpy.props.StringProperty()
+    project_name: bpy.props.StringProperty()
     folder: bpy.props.StringProperty()
 
 ### REGISTER ---
