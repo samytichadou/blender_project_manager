@@ -41,7 +41,7 @@ from . import (
     addon_prefs,
     )
 
-from .project_management import(
+from .global_management import(
     manage_projects,
     global_project_properties,
     )
