@@ -153,7 +153,7 @@ class BPM_OT_create_user(bpy.types.Operator, ua.BPM_user_authorizations):
     def draw(self, context):
         layout = self.layout
 
-        row = layout.row(align = True)
+        row = layout.row()
         row.prop(
             self,
             "name",
@@ -171,7 +171,7 @@ class BPM_OT_create_user(bpy.types.Operator, ua.BPM_user_authorizations):
             )
 
         col = layout.column(align = True)
-        row = layout.row(align = True)
+        row = layout.row()
         row.prop(
             self,
             "password",
@@ -184,7 +184,7 @@ class BPM_OT_create_user(bpy.types.Operator, ua.BPM_user_authorizations):
             icon = icon,
             )
 
-        row = layout.row(align = True)
+        row = layout.row()
         row.prop(
             self,
             "password_confirm",
@@ -213,12 +213,32 @@ class BPM_OT_create_user(bpy.types.Operator, ua.BPM_user_authorizations):
             idx += 1
 
     def execute(self, context):
+        # Check for availability
+        for user in self.datas["users"]:
+            if self.name == user["name"]:
+                self.report({'WARNING'}, "Name not available")
+                return {'FINISHED'}
 
-        self.report({'INFO'}, "User Logged Out")
+        # Check for password
+        if not self.password or self.password != self.password_confirm:
+            self.report({'WARNING'}, "Invalid password")
+            return {'FINISHED'}
 
-        # Refresh
-        for area in context.screen.areas:
-            area.tag_redraw()
+        # Create dataset
+        user_datas = {}
+        user_datas["name"] = self.name
+        user_datas["password"] = encode(self.password)
+        for p in ua.ath_list:
+            user_datas[p] = int(getattr(self, p))
+
+        # Write dataset
+        self.datas["users"].append(user_datas)
+        print("BPM --- Writing users json")
+        mp.write_json_file(self.datas, return_users_file())
+
+        self.name = self.password = self.password_confirm = ""
+
+        self.report({'INFO'}, f"User {self.name} Added")
 
         return {'FINISHED'}
 

@@ -109,12 +109,18 @@ def get_athcode_from_dict(dataset):
     return athcode
 
 def compare_athcode(pattern, athcode):
+    print()
     if not athcode:
+        print("plouf")
         return False
+    print("start")
     idx = 0
     for l in pattern:
-        if l == 1:
-            if not athcode[idx] == 1:
+        print(f"P{l}")
+        if l == "1":
+            print('bou')
+            print(f"A{athcode[idx]}")
+            if athcode[idx] != "1":
                 return False
         idx += 1
     return True
