@@ -114,6 +114,10 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
             text = user_label,
             icon = "USER",
             )
+        if self.athcode:
+            row.label(
+                text = f"athcode : {self.athcode}",
+                )
         row.operator(
             "bpm.user_logout",
             icon = "CANCEL",

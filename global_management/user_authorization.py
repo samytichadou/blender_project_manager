@@ -14,12 +14,19 @@
 # 12 ath_planning_create
 # 13 ath_planning_modify
 
-def get_athcode(dataset):
+def get_athcode_from_props(dataset):
     athcode = ""
-    for k in dataset.bl_rna.properties:
-        if k.identifier.startswith("ath_"):
-            ath_code += getattr(dataset, k.identifier)
-    print(ath_code)
+    for key in dataset.bl_rna.properties:
+        if key.identifier.startswith("ath_"):
+            athcode += str(getattr(dataset, key.identifier))
+    print(athcode)
+
+def get_athcode_from_dict(dataset):
+    athcode = ""
+    for key in dataset:
+        if key.startswith("ath_"):
+            athcode += str(dataset[key])
+    return athcode
 
 def compare_athcode(pattern, athcode):
     if not athcode:

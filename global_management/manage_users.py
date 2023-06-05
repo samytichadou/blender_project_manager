@@ -4,6 +4,7 @@ import os
 
 from .. import addon_prefs as ap
 from . import manage_projects as mp
+from . import user_authorization as ua
 
 def encode(text):
     return str(base64.b64encode(text.encode("utf-8")), 'utf-8')
@@ -27,9 +28,22 @@ def init_admin_user():
     datas = {}
     datas["users"] = []
     user = {
-        "name": "admin",
-        "password": encode("admin"),
-        "athcode": "11111111111111",
+        "name"                 : "admin",
+        "password"             : encode("admin"),
+        "ath_project_create"   : 1,
+        "ath_project_modify"   : 1,
+        "ath_episode_create"   : 1,
+        "ath_episode_modify"   : 1,
+        "ath_shot_create"      : 1,
+        "ath_shot_modify"      : 1,
+        "ath_storyboard_create": 1,
+        "ath_storyboard_modify": 1,
+        "ath_render_create"    : 1,
+        "ath_render_modify"    : 1,
+        "ath_asset_create"     : 1,
+        "ath_asset_modify"     : 1,
+        "ath_planning_create"  : 1,
+        "ath_planning_modify"  : 1,
         }
     datas["users"].append(user)
     return datas
@@ -53,13 +67,13 @@ class BPM_OT_user_login(bpy.types.Operator):
         datas = return_users_datas()
 
         chk_user = False
-        for u in datas["users"]:
-            if u["name"] == prefs.user_temp:
-                password = u["password"]
+        for user in datas["users"]:
+            if user["name"] == prefs.user_temp:
+                password = user["password"]
                 print(password)
                 if decode(str(password)) == prefs.password_temp:
                     prop_prefs.logged_user = prefs.user_temp
-                    prop_prefs.athcode = u["athcode"]
+                    prop_prefs.athcode = ua.get_athcode_from_dict(user)
                     chk_user = True
                     break
 
