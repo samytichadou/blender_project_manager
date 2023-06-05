@@ -30,6 +30,8 @@ def init_admin_user():
     user = {
         "name"                 : "admin",
         "password"             : encode("admin"),
+        "ath_user_create"      : 1,
+        "ath_user_modify"      : 1,
         "ath_project_create"   : 1,
         "ath_project_modify"   : 1,
         "ath_episode_create"   : 1,
@@ -119,10 +121,114 @@ class BPM_OT_user_logout(bpy.types.Operator):
         return {'FINISHED'}
 
 
+class BPM_OT_create_user(bpy.types.Operator, ua.BPM_user_authorizations):
+    bl_idname = "bpm.create_user"
+    bl_label = "Create User"
+    bl_description = "Create new BPM user"
+    bl_options = {"INTERNAL", "UNDO"}
+
+    name : bpy.props.StringProperty(
+        name = "Name",
+        )
+    password : bpy.props.StringProperty(
+        name = "Password",
+        subtype = "PASSWORD"
+        )
+    password_confirm : bpy.props.StringProperty(
+        name = "Confirm",
+        subtype = "PASSWORD"
+        )
+    datas = None
+
+    @classmethod
+    def poll(cls, context):
+        return ua.compare_athcode(
+            ua.patt_user_creation,
+            ap.getAddonPreferences().athcode
+            )
+
+    def invoke(self, context, event):
+        self.datas = return_users_datas()
+        return context.window_manager.invoke_props_dialog(self)
+
+    def draw(self, context):
+        layout = self.layout
+
+        row = layout.row(align = True)
+        row.prop(
+            self,
+            "name",
+            )
+        icon = "CHECKMARK"
+        for user in self.datas["users"]:
+            if self.name == user["name"]:
+                icon = "ERROR"
+                break
+        if not self.name:
+            icon = "ERROR"
+        row.label(
+            text = "",
+            icon = icon,
+            )
+
+        col = layout.column(align = True)
+        row = layout.row(align = True)
+        row.prop(
+            self,
+            "password",
+            )
+        icon = "ERROR"
+        if self.password:
+            icon = "CHECKMARK"
+        row.label(
+            text = "",
+            icon = icon,
+            )
+
+        row = layout.row(align = True)
+        row.prop(
+            self,
+            "password_confirm",
+            )
+        icon = "ERROR"
+        if self.password and self.password == self.password_confirm:
+            icon = "CHECKMARK"
+        row.label(
+            text = "",
+            icon = icon,
+            )
+
+        box = layout.box()
+        box.label(
+            text = "User Authorizations",
+            )
+        col = box.column(align = True)
+        idx = 0
+        for p in ua.ath_list:
+            if (idx % 2) == 0:
+                row = col.row()
+            row.prop(
+                self,
+                p,
+                )
+            idx += 1
+
+    def execute(self, context):
+
+        self.report({'INFO'}, "User Logged Out")
+
+        # Refresh
+        for area in context.screen.areas:
+            area.tag_redraw()
+
+        return {'FINISHED'}
+
 ### REGISTER ---
 def register():
     bpy.utils.register_class(BPM_OT_user_login)
     bpy.utils.register_class(BPM_OT_user_logout)
+    bpy.utils.register_class(BPM_OT_create_user)
 def unregister():
     bpy.utils.unregister_class(BPM_OT_user_login)
     bpy.utils.unregister_class(BPM_OT_user_logout)
+    bpy.utils.unregister_class(BPM_OT_create_user)

@@ -5,15 +5,15 @@ import shutil
 import random
 from bpy.app.handlers import persistent
 
-from ..addon_prefs import getAddonPreferences
-from .user_authorization import compare_athcode
+from .. import addon_prefs as ap
+from . import user_authorization as ua
 
 def generate_random():
     return(str(random.randrange(0,99999)).zfill(5))
 
 def return_global_preferences_folder():
     folder=bpy.path.abspath(
-        getAddonPreferences().preferences_folder
+        ap.getAddonPreferences().preferences_folder
         )
     if not os.path.isdir(folder):
         os.makedirs(folder)
@@ -80,14 +80,17 @@ class BPM_OT_create_project(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if not compare_athcode("1xxxxxxxxxxxxx", getAddonPreferences().athcode):
+        if not ua.compare_athcode(
+            ua.patt_project_creation,
+            ap.getAddonPreferences().athcode,
+            ):
             return False
-        prefs = getAddonPreferences()
+        prefs = ap.getAddonPreferences()
         if prefs.new_project_name:
             return os.path.isdir(bpy.path.abspath(prefs.new_project_folder))
 
     def execute(self, context):
-        prefs = getAddonPreferences()
+        prefs = ap.getAddonPreferences()
         base_folder = bpy.path.abspath(prefs.new_project_folder)
         project_name = prefs.new_project_name
         root_folder = os.path.join(base_folder, project_name)
@@ -156,7 +159,10 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return compare_athcode("1xxxxxxxxxxxxx", getAddonPreferences().athcode)
+        return ua.compare_athcode(
+            ua.patt_project_creation,
+            ap.getAddonPreferences().athcode
+            )
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)

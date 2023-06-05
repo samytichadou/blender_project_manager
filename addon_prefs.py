@@ -83,11 +83,10 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
                 op.name = p.name
 
         # New Project
-        box = layout.box()
-        box.label(
+        row = box.row()
+        row.label(
             text = "New Project",
             )
-        row = box.row()
         row.prop(
             self,
             "new_project_name",
@@ -103,9 +102,20 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
             text = "Create",
             )
 
-        # USER
+        # User Management
+        box = layout.box()
+        box.label(
+            text = "User Management")
+        box.operator(
+            "bpm.create_user",
+            )
+
+        # User Login
         box = layout.box()
         row = box.row()
+        row.label(
+            text = "Login",
+            )
         if self.logged_user:
             user_label = self.logged_user
         else:
@@ -116,7 +126,7 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
             )
         if self.athcode:
             row.label(
-                text = f"athcode : {self.athcode}",
+                text = self.athcode,
                 )
         row.operator(
             "bpm.user_logout",
