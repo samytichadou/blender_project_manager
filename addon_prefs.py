@@ -111,6 +111,7 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
             )
 
         # User Login
+        # TODO specific login draw method for reuse
         box = layout.box()
         row = box.row()
         row.label(
