@@ -72,7 +72,6 @@ class BPM_OT_user_login(bpy.types.Operator):
         for user in datas["users"]:
             if user["name"] == prefs.user_temp:
                 password = user["password"]
-                print(password)
                 if decode(str(password)) == prefs.password_temp:
                     prop_prefs.logged_user = prefs.user_temp
                     prop_prefs.athcode = ua.get_athcode_from_dict(user)
