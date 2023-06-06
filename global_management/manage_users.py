@@ -53,6 +53,32 @@ def init_admin_user():
     datas["users"].append(user)
     return datas
 
+def login_check_athcode(name, password, datas):
+    for user in datas["users"]:
+        if user["name"] == name:
+            if user["password"] == password:
+                return ua.get_athcode_from_dict(user)
+    return None
+
+def login(name, password):
+    datas = return_users_datas()
+    prop_prefs = ap.getAddon().preferences
+    athcode = login_check_athcode(name, encode(password), datas)
+    if athcode is not None:
+        prop_prefs.logged_user = name
+        prop_prefs.athcode = athcode
+        print(f"BPM --- {name} Logged in")
+        # Reset user fields
+        print("BPM --- Cleaning temporaries user fields")
+        prop_prefs.user_temp = prop_prefs.password_temp = ""
+        return True
+    print(f"BPM --- Invalid Username/Password")
+    return False
+
+def logout():
+    prop_prefs = ap.getAddon().preferences
+    prop_prefs.logged_user = prop_prefs.athcode = ""
+    print("User Logged Out")
 
 class BPM_OT_user_login(bpy.types.Operator):
     bl_idname = "bpm.user_login"
@@ -67,26 +93,9 @@ class BPM_OT_user_login(bpy.types.Operator):
 
     def execute(self, context):
         prefs = ap.getAddonPreferences()
-        prop_prefs = ap.getAddon().preferences
 
-        datas = return_users_datas()
-
-        chk_user = False
-        for user in datas["users"]:
-            if user["name"] == prefs.user_temp:
-                password = user["password"]
-                if decode(str(password)) == prefs.password_temp:
-                    prop_prefs.logged_user = prefs.user_temp
-                    prop_prefs.athcode = ua.get_athcode_from_dict(user)
-                    chk_user = True
-                    break
-
-        if chk_user:
+        if login(prefs.user_temp, prefs.password_temp):
             self.report({'INFO'}, f"{prefs.user_temp} Logged")
-            # Reset user fields
-            print("BPM --- Cleaning temporaries user fields")
-            prop_prefs.user_temp = ""
-            prop_prefs.password_temp = ""
         else:
             self.report({'WARNING'}, "Invalid Username/Password")
 
@@ -109,10 +118,7 @@ class BPM_OT_user_logout(bpy.types.Operator):
         return prefs.logged_user
 
     def execute(self, context):
-        prop_prefs = ap.getAddon().preferences
-
-        prop_prefs.logged_user = prop_prefs.athcode = ""
-
+        logout()
         self.report({'INFO'}, "User Logged Out")
 
         # Refresh
@@ -121,6 +127,44 @@ class BPM_OT_user_logout(bpy.types.Operator):
 
         return {'FINISHED'}
 
+
+def draw_create_username_password(container, self, datas):
+    col = container.column(align = True)
+    row = col.row()
+    row.prop(self, "name")
+    icon = "CHECKMARK"
+    for user in datas["users"]:
+        if self.name == user["name"]:
+            icon = "ERROR"
+            break
+    if not self.name:
+        icon = "ERROR"
+    row.label(text = "", icon = icon,)
+
+    row = col.row()
+    row.prop(self, "password")
+    icon = "ERROR"
+    if self.password:
+        icon = "CHECKMARK"
+    row.label(text = "", icon = icon)
+
+    row = col.row()
+    row.prop(self, "password_confirm")
+    icon = "ERROR"
+    if self.password and self.password == self.password_confirm:
+        icon = "CHECKMARK"
+    row.label(text = "", icon = icon)
+
+def draw_user_authorization_list(container, self, ath_list):
+    box = container.box()
+    box.label(text = "User Authorizations")
+    col = box.column(align = True)
+    idx = 0
+    for p in ath_list:
+        if (idx % 2) == 0:
+            row = col.row()
+        row.prop(self, p)
+        idx += 1
 
 class BPM_OT_create_user(bpy.types.Operator, ua.BPM_user_authorizations):
     bl_idname = "bpm.create_user"
@@ -154,42 +198,8 @@ class BPM_OT_create_user(bpy.types.Operator, ua.BPM_user_authorizations):
 
     def draw(self, context):
         layout = self.layout
-        col = layout.column(align = True)
-
-        row = col.row()
-        row.prop(self, "name")
-        icon = "CHECKMARK"
-        for user in self.datas["users"]:
-            if self.name == user["name"]:
-                icon = "ERROR"
-                break
-        if not self.name:
-            icon = "ERROR"
-        row.label(text = "", icon = icon,)
-
-        row = col.row()
-        row.prop(self, "password")
-        icon = "ERROR"
-        if self.password:
-            icon = "CHECKMARK"
-        row.label(text = "", icon = icon)
-
-        row = col.row()
-        row.prop(self, "password_confirm")
-        icon = "ERROR"
-        if self.password and self.password == self.password_confirm:
-            icon = "CHECKMARK"
-        row.label(text = "", icon = icon)
-
-        box = layout.box()
-        box.label(text = "User Authorizations")
-        col = box.column(align = True)
-        idx = 0
-        for p in ua.ath_list:
-            if (idx % 2) == 0:
-                row = col.row()
-            row.prop(self, p)
-            idx += 1
+        draw_create_username_password(layout, self, self.datas)
+        draw_user_authorization_list(layout, self, ua.ath_list)
 
     def execute(self, context):
         # Check for name availability
@@ -240,7 +250,7 @@ class BPM_OT_remove_user(bpy.types.Operator):
 
     user : bpy.props.EnumProperty(
         name = "User",
-        items = user_callback
+        items = user_callback,
         )
 
     @classmethod
@@ -265,22 +275,19 @@ class BPM_OT_remove_user(bpy.types.Operator):
         chk_user = False
         for user in datas["users"]:
             if old_name == user["name"]:
-                self.report({'WARNING'}, "Name not available")
                 datas["users"].remove(user)
                 self.user = datas["users"][0]["name"]
                 chk_user = True
                 break
 
         if not chk_user:
-            self.report({'WARNING'}, "Invalid User name")
+            self.report({'WARNING'}, "Invalid User selection")
             return {'FINISHED'}
 
         # Log out if needed
         prop_prefs = ap.getAddon().preferences
         if prop_prefs.logged_user == old_name:
-            print("BPM --- Log out removed user")
-            prop_prefs.logged_user = prop_prefs.athcode = ""
-            # Refresh
+            logout()
             for area in context.screen.areas:
                 area.tag_redraw()
         print("BPM --- Writing users json")
@@ -290,8 +297,17 @@ class BPM_OT_remove_user(bpy.types.Operator):
 
         return {'FINISHED'}
 
+def modify_user_callback(self, context):
+    print("BPM --- Updating user infos")
+    datas = return_users_datas()
+    for user in datas["users"]:
+        if self.user == user["name"]:
+            for k in user:
+                if k.startswith("ath_"):
+                    setattr(self, k, user[k])
+            break
 
-class BPM_OT_modify_user(bpy.types.Operator):
+class BPM_OT_modify_user(bpy.types.Operator, ua.BPM_user_authorizations):
     bl_idname = "bpm.modify_user"
     bl_label = "Modify User"
     bl_description = "Modify BPM user"
@@ -299,8 +315,21 @@ class BPM_OT_modify_user(bpy.types.Operator):
 
     user : bpy.props.EnumProperty(
         name = "User",
-        items = user_callback
+        items = user_callback,
+        update = modify_user_callback,
         )
+    name : bpy.props.StringProperty(
+        name = "Name",
+        )
+    password : bpy.props.StringProperty(
+        name = "Password",
+        subtype = "PASSWORD",
+        )
+    password_confirm : bpy.props.StringProperty(
+        name = "Confirm",
+        subtype = "PASSWORD",
+        )
+    datas = None
 
     @classmethod
     def poll(cls, context):
@@ -310,42 +339,85 @@ class BPM_OT_modify_user(bpy.types.Operator):
             )
 
     def invoke(self, context, event):
+        self.datas = return_users_datas()
+        self.user = self.datas["users"][0]["name"]
         return context.window_manager.invoke_props_dialog(self)
 
     def draw(self, context):
         layout = self.layout
+
         layout.prop(self, "user", text = "")
+        layout.label(text = "Fill to change :")
+        draw_create_username_password(layout, self, self.datas)
+        draw_user_authorization_list(layout, self, ua.ath_list)
+
         layout.label(text = "Are you sure ?", icon = "ERROR")
 
     def execute(self, context):
         datas = return_users_datas()
-        old_name = self.user
 
+        # Check user to modify
         chk_user = False
-        for user in datas["users"]:
-            if old_name == user["name"]:
-                self.report({'WARNING'}, "Name not available")
-                datas["users"].remove(user)
-                self.user = datas["users"][0]["name"]
+        for user in self.datas["users"]:
+            if self.user == user["name"]:
+                old_user = user
+                old_name = user["name"]
+                self.datas["users"].remove(user)
                 chk_user = True
                 break
 
         if not chk_user:
-            self.report({'WARNING'}, "Invalid User name")
+            self.report({'WARNING'}, "Invalid User selection")
             return {'FINISHED'}
 
-        # Log out if needed
+        # Check new user name
+        chk_new_name = False
+        if self.name:
+            chk_new_name = True
+            for user in self.datas["users"]:
+                if self.name == user["name"]:
+                    self.report({'WARNING'}, "Name not available")
+                    return {'FINISHED'}
+
+        # Check new user password
+        chk_new_password = False
+        if self.password:
+            chk_new_password = True
+            if self.password != self.password_confirm:
+                self.report({'WARNING'}, "Invalid password")
+                return {'FINISHED'}
+
+        # Build new dataset
+        user_datas = {}
+        if chk_new_name:
+            user_datas["name"] = self.name
+        else:
+            user_datas["name"] = old_user["name"]
+        if chk_new_password:
+            user_datas["password"] = encode(self.password)
+        else:
+            user_datas["password"] = old_user["password"]
+        for p in ua.ath_list:
+            user_datas[p] = int(getattr(self, p))
+
+        # Write dataset
+        self.datas["users"].append(user_datas)
+        print("BPM --- Writing users json")
+        mp.write_json_file(self.datas, return_users_file())
+
+        # Relog if needed
         prop_prefs = ap.getAddon().preferences
-        if prop_prefs.logged_user == old_name:
-            print("BPM --- Log out removed user")
-            prop_prefs.logged_user = prop_prefs.athcode = ""
+        if prop_prefs.logged_user == old_user["name"]:
+            print("BPM --- Relog modified user")
+            prop_prefs.logged_user = user_datas["name"]
+            prop_prefs.athcode = ua.get_athcode_from_dict(user_datas)
             # Refresh
             for area in context.screen.areas:
                 area.tag_redraw()
-        print("BPM --- Writing users json")
-        mp.write_json_file(datas, return_users_file())
 
-        self.report({'INFO'}, f"User {old_name} Removed")
+        self.user = datas["users"][0]["name"]
+        self.name = self.password = self.password_confirm = ""
+        self.report({'INFO'}, f"User {old_name} Modified")
 
         return {'FINISHED'}
 
@@ -371,10 +443,12 @@ def register():
     bpy.utils.register_class(BPM_OT_user_logout)
     bpy.utils.register_class(BPM_OT_create_user)
     bpy.utils.register_class(BPM_OT_remove_user)
+    bpy.utils.register_class(BPM_OT_modify_user)
     bpy.app.handlers.load_post.append(users_load_handler)
 def unregister():
     bpy.utils.unregister_class(BPM_OT_user_login)
     bpy.utils.unregister_class(BPM_OT_user_logout)
     bpy.utils.unregister_class(BPM_OT_create_user)
     bpy.utils.unregister_class(BPM_OT_remove_user)
+    bpy.utils.unregister_class(BPM_OT_modify_user)
     bpy.app.handlers.load_post.remove(users_load_handler)

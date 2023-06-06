@@ -80,6 +80,7 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
         box.label(text = "User Management")
         row = box.row()
         row.operator("bpm.create_user")
+        row.operator("bpm.modify_user")
         row.operator("bpm.remove_user")
 
         # User Login

@@ -60,7 +60,6 @@ def create_hierarchy_folders(project_name, root_folder):
 
     os.makedirs(root_folder)
 
-    os.mkdir(os.path.join(root_folder, "users"))
     os.mkdir(os.path.join(root_folder, "assets"))
     os.mkdir(os.path.join(root_folder, "shots"))
     os.mkdir(os.path.join(root_folder, "renders"))
