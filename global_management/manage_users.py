@@ -432,7 +432,7 @@ def refresh_login():
         if user["name"] == prop_prefs.logged_user:
             print("BPM --- Valid login found")
             print("BPM --- Refresh authorizations")
-            prop_prefs.athcode = ua.get_athcode_from_dict(user_datas)
+            prop_prefs.athcode = ua.get_athcode_from_dict(user)
             return
     print("BPM --- No valid login found")
     logout()

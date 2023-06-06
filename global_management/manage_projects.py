@@ -70,12 +70,51 @@ def create_hierarchy_folders(project_name, root_folder):
     os.mkdir(os.path.join(root_folder, "resources"))
     os.mkdir(os.path.join(root_folder, "locks"))
 
+def first_ep_callback(self, context):
+    if self.no_update:
+        return
+    if self.first_episode > self.last_episode:
+        self.no_update = True
+        self.last_episode = self.first_episode
+        self.no_update = False
+
+def last_ep_callback(self, context):
+    if self.first_episode > self.last_episode:
+        self.no_update = True
+        self.first_episode = self.last_episode
+        self.no_update = False
 
 class BPM_OT_create_project(bpy.types.Operator):
     bl_idname = "bpm.create_project"
     bl_label = "Create Project"
     bl_description = "Create a new BPM project"
     bl_options = {"INTERNAL", "UNDO"}
+
+    framerate : bpy.props.IntProperty(
+        name = "Framerate",
+        default = 25,
+        min = 1,
+        max = 240,
+        )
+    resolution : bpy.props.IntVectorProperty(
+        name = "Resolution",
+        size = 2,
+        default = (1920,1080),
+        min = 1,
+        )
+    first_episode : bpy.props.IntProperty(
+        name = "First Episode",
+        default = 1,
+        min = 0,
+        update = first_ep_callback,
+        )
+    last_episode : bpy.props.IntProperty(
+        name = "Last Episode",
+        default = 1,
+        min = 0,
+        update = last_ep_callback,
+        )
+    no_update : bpy.props.BoolProperty()
 
     @classmethod
     def poll(cls, context):
@@ -86,7 +125,20 @@ class BPM_OT_create_project(bpy.types.Operator):
             return False
         prefs = ap.getAddonPreferences()
         if prefs.new_project_name:
-            return os.path.isdir(bpy.path.abspath(prefs.new_project_folder))
+            path = bpy.path.abspath(prefs.new_project_folder)
+            if os.path.isdir(path):
+                return not os.path.isdir(os.path.join(path, prefs.new_project_name))
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+
+    def draw(self, context):
+        global_projects = context.window_manager.bpm_global_projects
+        layout = self.layout
+        layout.prop(self, "framerate")
+        layout.prop(self, "resolution")
+        layout.prop(self, "first_episode")
+        layout.prop(self, "last_episode")
 
     def execute(self, context):
         prefs = ap.getAddonPreferences()
@@ -173,16 +225,9 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
             text = f"Removing {global_projects[self.name].project_name}",
             icon = "ERROR",
             )
-        layout.label(
-            text = global_projects[self.name].folder,
-            )
-        layout.prop(
-            self,
-            "remove_folder",
-            )
-        layout.label(
-            text = "Are you sure ?",
-            )
+        layout.label(text = global_projects[self.name].folder)
+        layout.prop(self, "remove_folder")
+        layout.label(text = "Are you sure ?")
 
     def execute(self, context):
         global_projects = context.window_manager.bpm_global_projects
