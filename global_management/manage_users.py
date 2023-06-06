@@ -78,7 +78,7 @@ def login(name, password):
 def logout():
     prop_prefs = ap.getAddon().preferences
     prop_prefs.logged_user = prop_prefs.athcode = ""
-    print("User Logged Out")
+    print("BPM --- User Logged Out")
 
 class BPM_OT_user_login(bpy.types.Operator):
     bl_idname = "bpm.user_login"
@@ -421,8 +421,7 @@ class BPM_OT_modify_user(bpy.types.Operator, ua.BPM_user_authorizations):
 
         return {'FINISHED'}
 
-@persistent
-def users_load_handler(scene):
+def refresh_login():
     print("BPM --- Checking valid login")
     prop_prefs = ap.getAddon().preferences
     if not prop_prefs.logged_user:
@@ -432,9 +431,15 @@ def users_load_handler(scene):
     for user in datas["users"]:
         if user["name"] == prop_prefs.logged_user:
             print("BPM --- Valid login found")
+            print("BPM --- Refresh authorizations")
+            prop_prefs.athcode = ua.get_athcode_from_dict(user_datas)
             return
-    prop_prefs.logged_user = prop_prefs.athcode = ""
-    print("BPM --- No valid login found, logged out")
+    print("BPM --- No valid login found")
+    logout()
+
+@persistent
+def users_load_handler(scene):
+    refresh_login()
 
 
 ### REGISTER ---
