@@ -17,22 +17,24 @@
 # 15 ath_planning_modify
 
 ath_list = [
-    "ath_user_create"      ,
-    "ath_user_modify"      ,
-    "ath_project_create"   ,
-    "ath_project_modify"   ,
-    "ath_episode_create"   ,
-    "ath_episode_modify"   ,
-    "ath_shot_create"      ,
-    "ath_shot_modify"      ,
-    "ath_storyboard_create",
-    "ath_storyboard_modify",
-    "ath_render_create"    ,
-    "ath_render_modify"    ,
-    "ath_asset_create"     ,
-    "ath_asset_modify"     ,
-    "ath_planning_create"  ,
-    "ath_planning_modify"  ,
+    "ath_user_create"       ,
+    "ath_user_modify"       ,
+    "ath_project_create"    ,
+    "ath_project_modify"    ,
+    "ath_episode_create"    ,
+    "ath_episode_modify"    ,
+    "ath_shot_create"       ,
+    "ath_shot_modify"       ,
+    "ath_storyboard_create" ,
+    "ath_storyboard_modify" ,
+    "ath_render_create"     ,
+    "ath_render_modify"     ,
+    "ath_compositing_create",
+    "ath_compositing_create",
+    "ath_asset_create"      ,
+    "ath_asset_modify"      ,
+    "ath_planning_create"   ,
+    "ath_planning_modify"   ,
     ]
 
 ### CUSTOM CLASS ###
@@ -75,6 +77,12 @@ class BPM_user_authorizations():
     ath_render_modify     : bpy.props.BoolProperty(
         name = "Render Modification",
         )
+    ath_compositing_create: bpy.props.BoolProperty(
+        name = "Compositing Creation",
+        )
+    ath_compositing_modify: bpy.props.BoolProperty(
+        name = "Compositing Modification",
+        )
     ath_asset_create      : bpy.props.BoolProperty(
         name = "Asset Creation",
         )
@@ -90,6 +98,7 @@ class BPM_user_authorizations():
 
 ### PATTERNS ###
 patt_user_creation    = "1xxxxxxxxxxxxxxx"
+patt_user_modification    = "x1xxxxxxxxxxxxxx"
 patt_project_creation = "xx1xxxxxxxxxxxxx"
 
 

@@ -29,24 +29,26 @@ def init_admin_user():
     datas = {}
     datas["users"] = []
     user = {
-        "name"                 : "admin",
-        "password"             : encode("admin"),
-        "ath_user_create"      : 1,
-        "ath_user_modify"      : 1,
-        "ath_project_create"   : 1,
-        "ath_project_modify"   : 1,
-        "ath_episode_create"   : 1,
-        "ath_episode_modify"   : 1,
-        "ath_shot_create"      : 1,
-        "ath_shot_modify"      : 1,
-        "ath_storyboard_create": 1,
-        "ath_storyboard_modify": 1,
-        "ath_render_create"    : 1,
-        "ath_render_modify"    : 1,
-        "ath_asset_create"     : 1,
-        "ath_asset_modify"     : 1,
-        "ath_planning_create"  : 1,
-        "ath_planning_modify"  : 1,
+        "name"                   : "admin",
+        "password"               : encode("admin"),
+        "ath_user_create"        : 1,
+        "ath_user_modify"        : 1,
+        "ath_project_create"     : 1,
+        "ath_project_modify"     : 1,
+        "ath_episode_create"     : 1,
+        "ath_episode_modify"     : 1,
+        "ath_shot_create"        : 1,
+        "ath_shot_modify"        : 1,
+        "ath_storyboard_create"  : 1,
+        "ath_storyboard_modify"  : 1,
+        "ath_render_create"      : 1,
+        "ath_render_modify"      : 1,
+        "ath_compositing_create" : 1,
+        "ath_compositing_modify" : 1,
+        "ath_asset_create"       : 1,
+        "ath_asset_modify"       : 1,
+        "ath_planning_create"    : 1,
+        "ath_planning_modify"    : 1,
         }
     datas["users"].append(user)
     return datas
@@ -245,6 +247,65 @@ class BPM_OT_remove_user(bpy.types.Operator):
     def poll(cls, context):
         return ua.compare_athcode(
             ua.patt_user_creation,
+            ap.getAddonPreferences().athcode
+            )
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "user", text = "")
+        layout.label(text = "Are you sure ?", icon = "ERROR")
+
+    def execute(self, context):
+        datas = return_users_datas()
+        old_name = self.user
+
+        chk_user = False
+        for user in datas["users"]:
+            if old_name == user["name"]:
+                self.report({'WARNING'}, "Name not available")
+                datas["users"].remove(user)
+                self.user = datas["users"][0]["name"]
+                chk_user = True
+                break
+
+        if not chk_user:
+            self.report({'WARNING'}, "Invalid User name")
+            return {'FINISHED'}
+
+        # Log out if needed
+        prop_prefs = ap.getAddon().preferences
+        if prop_prefs.logged_user == old_name:
+            print("BPM --- Log out removed user")
+            prop_prefs.logged_user = prop_prefs.athcode = ""
+            # Refresh
+            for area in context.screen.areas:
+                area.tag_redraw()
+        print("BPM --- Writing users json")
+        mp.write_json_file(datas, return_users_file())
+
+        self.report({'INFO'}, f"User {old_name} Removed")
+
+        return {'FINISHED'}
+
+
+class BPM_OT_modify_user(bpy.types.Operator):
+    bl_idname = "bpm.modify_user"
+    bl_label = "Modify User"
+    bl_description = "Modify BPM user"
+    bl_options = {"INTERNAL", "UNDO"}
+
+    user : bpy.props.EnumProperty(
+        name = "User",
+        items = user_callback
+        )
+
+    @classmethod
+    def poll(cls, context):
+        return ua.compare_athcode(
+            ua.patt_user_modification,
             ap.getAddonPreferences().athcode
             )
 
