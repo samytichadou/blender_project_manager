@@ -7,6 +7,8 @@ from bpy.app.handlers import persistent
 
 from .. import addon_prefs as ap
 from . import user_authorization as ua
+from . import naming_convention as nc
+from .. import constants
 
 def generate_random():
     return(str(random.randrange(0,99999)).zfill(5))
@@ -55,20 +57,70 @@ def add_project_dataset(project_name, root_folder):
     write_json_file(global_datas, return_global_project_file())
     return global_datas
 
-def create_hierarchy_folders(project_name, root_folder):
+def create_hierarchy_folders(project_name, root_folder, first_ep, last_ep):
     print("BPM --- Creating project hierarchy")
 
     os.makedirs(root_folder)
 
-    os.mkdir(os.path.join(root_folder, "assets"))
-    os.mkdir(os.path.join(root_folder, "shots"))
-    os.mkdir(os.path.join(root_folder, "renders"))
-    os.mkdir(os.path.join(root_folder, "plannings"))
-    os.mkdir(os.path.join(root_folder, "storyboards"))
-    os.mkdir(os.path.join(root_folder, "edits"))
-    os.mkdir(os.path.join(root_folder, "startups"))
-    os.mkdir(os.path.join(root_folder, "resources"))
-    os.mkdir(os.path.join(root_folder, "locks"))
+    os.mkdir(os.path.join(root_folder, nc.assets_folder))
+    os.mkdir(os.path.join(root_folder, nc.shots_folder))
+    os.mkdir(os.path.join(root_folder, nc.renders_folder))
+    os.mkdir(os.path.join(root_folder, nc.plannings_folder))
+    os.mkdir(os.path.join(root_folder, nc.storyboards_folder))
+    os.mkdir(os.path.join(root_folder, nc.startups_folder))
+    os.mkdir(os.path.join(root_folder, nc.resources_folder))
+    os.mkdir(os.path.join(root_folder, nc.locks_folder))
+
+    edit_folder = os.path.join(root_folder, nc.edits_folder)
+    os.mkdir(edit_folder)
+
+    # Episodes folders and base files
+    for i in range(first_ep, last_ep+1):
+        pattern = return_episode_edit_pattern(project_name, i)
+        folder = os.path.join(edit_folder, pattern)
+        file = os.path.join(folder, f"{pattern}_v001.blend")
+        os.mkdir(folder)
+        shutil.copy(constants.episode_base_filepath, file)
+
+# TODO clean episode function to get ep file
+
+def get_episode_identifier(project_name, number):
+    return f"{project_name}_ep{str(number).zfill(3)}"
+
+def intialize_project_infos_datas(
+    project_name,
+    framerate,
+    resolution_x,
+    resolution_y,
+    first_ep,
+    last_ep,
+    folder,
+    ):
+    datas = {
+        "project_name" : project_name,
+        "framerate" : framerate,
+        "resolution_x" : resolution_x,
+        "resolution_y" : resolution_y,
+        "root_folder" : folder,
+        }
+    datas["episodes"] = []
+    for i in range(first_ep, last_ep+1):
+        ep = {
+            "number" : i,
+            "identifier" : get_episode_identifier(project_name, i),
+            }
+        datas["episodes"].append(ep)
+    return datas
+
+def return_episode_edit_pattern(project_name, ep_number):
+    return f"{nc.edits_folder}_{get_episode_identifier(project_name, ep_number)}"
+
+def return_project_infos_filepath(folder, name, pattern = "_projectinfos.json"):
+    return os.path.join(folder, f"{name}{pattern}")
+
+def create_project_infos_file(datas):
+    path = return_project_infos_filepath(datas["root_folder"], datas["project_name"])
+    write_json_file(datas, path)
 
 def first_ep_callback(self, context):
     if self.no_update:
@@ -84,6 +136,7 @@ def last_ep_callback(self, context):
         self.first_episode = self.last_episode
         self.no_update = False
 
+
 class BPM_OT_create_project(bpy.types.Operator):
     bl_idname = "bpm.create_project"
     bl_label = "Create Project"
@@ -96,10 +149,14 @@ class BPM_OT_create_project(bpy.types.Operator):
         min = 1,
         max = 240,
         )
-    resolution : bpy.props.IntVectorProperty(
-        name = "Resolution",
-        size = 2,
-        default = (1920,1080),
+    resolution_x : bpy.props.IntProperty(
+        name = "Resolution X",
+        default = 1920,
+        min = 1,
+        )
+    resolution_y : bpy.props.IntProperty(
+        name = "Resolution Y",
+        default = 1080,
         min = 1,
         )
     first_episode : bpy.props.IntProperty(
@@ -136,7 +193,8 @@ class BPM_OT_create_project(bpy.types.Operator):
         global_projects = context.window_manager.bpm_global_projects
         layout = self.layout
         layout.prop(self, "framerate")
-        layout.prop(self, "resolution")
+        layout.prop(self, "resolution_x")
+        layout.prop(self, "resolution_y")
         layout.prop(self, "first_episode")
         layout.prop(self, "last_episode")
 
@@ -151,18 +209,40 @@ class BPM_OT_create_project(bpy.types.Operator):
             return {'CANCELLED'}
 
         # Create hierarchy
-        create_hierarchy_folders(project_name, root_folder)
+        create_hierarchy_folders(
+            project_name,
+            root_folder,
+            self.first_episode,
+            self.last_episode,
+            )
 
-        # Create json
+        # Add project to global json
         add_project_dataset(project_name, root_folder)
+
+        # Create project info file
+        datas = intialize_project_infos_datas(
+            project_name,
+            self.framerate,
+            self.resolution_x,
+            self.resolution_y,
+            self.first_episode,
+            self.last_episode,
+            root_folder,
+            )
+        create_project_infos_file(datas)
 
         # Refresh project list
         reload_global_projects()
+
+        # Refresh
+        for area in context.screen.areas:
+            area.tag_redraw()
 
         return {'FINISHED'}
 
 
 def reload_global_projects():
+    # TODO reload episode lists from projects
     print("BPM --- Refreshing global project list")
 
     props = bpy.context.window_manager.bpm_global_projects
@@ -174,9 +254,6 @@ def reload_global_projects():
         new.folder = proj["folder"]
         new.project_name = proj["project_name"]
 
-@persistent
-def global_project_load_handler(scene):
-    reload_global_projects()
 
 class BPM_OT_reload_global_projects(bpy.types.Operator):
     bl_idname = "bpm.reload_global_projects"
@@ -194,7 +271,6 @@ class BPM_OT_reload_global_projects(bpy.types.Operator):
         self.report({'INFO'}, "BPM Project list refreshed")
 
         return {'FINISHED'}
-
 
 
 class BPM_OT_remove_global_project(bpy.types.Operator):
@@ -242,7 +318,11 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
         write_json_file(datas, return_global_project_file())
 
         if self.remove_folder:
-            shutil.rmtree(global_projects[self.name].folder)
+            if os.path.isdir(global_projects[self.name].folder):
+                print("BPM --- Removing project content")
+                shutil.rmtree(global_projects[self.name].folder)
+            else:
+                print("BPM --- No project content to remove")
 
         self.report({'INFO'}, f"{global_projects[self.name].project_name} Removed")
 
@@ -255,6 +335,10 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
 
         return {'FINISHED'}
 
+
+@persistent
+def global_project_load_handler(scene):
+    reload_global_projects()
 
 ### REGISTER ---
 def register():
