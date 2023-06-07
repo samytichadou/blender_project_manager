@@ -64,7 +64,7 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
                 # TODO better spacing
                 row = col.row()
                 row.label(text = p.project_name)
-                row.label(text = p.folder)
+                row.label(text = p.project_folder)
                 op = row.operator("bpm.remove_global_project", text = "", icon = "X")
                 op.name = p.name
 

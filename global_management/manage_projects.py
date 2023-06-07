@@ -48,14 +48,14 @@ def add_project_dataset(project_name, root_folder):
     dataset = {}
     dataset["name"] = generate_random()
     dataset["project_name"] = project_name
-    dataset["folder"] = root_folder
+    dataset["root_folder"] = root_folder
 
     global_datas = return_global_project_datas()
     global_datas["projects"].append(dataset)
 
     print("BPM --- Writing global json")
     write_json_file(global_datas, return_global_project_file())
-    return global_datas
+    return dataset
 
 def create_hierarchy_folders(project_name, root_folder, first_ep, last_ep):
     print("BPM --- Creating project hierarchy")
@@ -88,6 +88,7 @@ def get_episode_identifier(project_name, number):
     return f"{project_name}_ep{str(number).zfill(3)}"
 
 def intialize_project_infos_datas(
+    uuid,
     project_name,
     framerate,
     resolution_x,
@@ -97,6 +98,7 @@ def intialize_project_infos_datas(
     folder,
     ):
     datas = {
+        "name" : uuid,
         "project_name" : project_name,
         "framerate" : framerate,
         "resolution_x" : resolution_x,
@@ -217,10 +219,11 @@ class BPM_OT_create_project(bpy.types.Operator):
             )
 
         # Add project to global json
-        add_project_dataset(project_name, root_folder)
+        project_datas = add_project_dataset(project_name, root_folder)
 
         # Create project info file
         datas = intialize_project_infos_datas(
+            project_datas["name"],
             project_name,
             self.framerate,
             self.resolution_x,
@@ -251,7 +254,7 @@ def reload_global_projects():
     for proj in dataset["projects"]:
         new = props.add()
         new.name = proj["name"]
-        new.folder = proj["folder"]
+        new.project_folder = proj["root_folder"]
         new.project_name = proj["project_name"]
 
 
@@ -301,7 +304,7 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
             text = f"Removing {global_projects[self.name].project_name}",
             icon = "ERROR",
             )
-        layout.label(text = global_projects[self.name].folder)
+        layout.label(text = global_projects[self.name].project_folder)
         layout.prop(self, "remove_folder")
         layout.label(text = "Are you sure ?")
 
@@ -318,9 +321,9 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
         write_json_file(datas, return_global_project_file())
 
         if self.remove_folder:
-            if os.path.isdir(global_projects[self.name].folder):
+            if os.path.isdir(global_projects[self.name].project_folder):
                 print("BPM --- Removing project content")
-                shutil.rmtree(global_projects[self.name].folder)
+                shutil.rmtree(global_projects[self.name].project_folder)
             else:
                 print("BPM --- No project content to remove")
 

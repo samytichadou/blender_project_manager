@@ -45,6 +45,7 @@ from .global_management import(
     manage_projects,
     global_project_properties,
     manage_users,
+    current_project_detection,
     )
 
 # register
@@ -56,6 +57,7 @@ def register():
     manage_projects.register()
     global_project_properties.register()
     manage_users.register()
+    current_project_detection.register()
 
 def unregister():
     addon_prefs.unregister()
@@ -63,4 +65,4 @@ def unregister():
     manage_projects.unregister()
     global_project_properties.unregister()
     manage_users.unregister()
-
+    current_project_detection.unregister()
