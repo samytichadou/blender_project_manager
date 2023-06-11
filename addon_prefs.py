@@ -58,8 +58,8 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
         row.label(text = "Available Projects")
         row.operator("bpm.reload_global_projects", text = "", icon = "FILE_REFRESH")
 
-        global_projects = context.window_manager["bpm_global_projects"]
-        if global_projects:
+        try:
+            global_projects = context.window_manager["bpm_global_projects"]
             col = box.column(align = True)
             for project in global_projects["projects"]:
                 # TODO better spacing
@@ -68,6 +68,8 @@ class BPM_PF_addon_prefs(bpy.types.AddonPreferences):
                 row.label(text = project["root_folder"])
                 op = row.operator("bpm.remove_global_project", text = "", icon = "X")
                 op.name = project["name"]
+        except KeyError:
+            pass
 
         # New Project
         row = box.row()
