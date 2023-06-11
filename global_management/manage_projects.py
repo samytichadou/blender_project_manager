@@ -49,6 +49,7 @@ def add_project_dataset(project_name, root_folder):
     dataset["name"] = generate_random()
     dataset["project_name"] = project_name
     dataset["root_folder"] = root_folder
+    dataset["project_infos"] = return_project_infos_filepath(root_folder, project_name)
 
     global_datas = return_global_project_datas()
     global_datas["projects"].append(dataset)
@@ -78,9 +79,9 @@ def create_hierarchy_folders(project_name, root_folder, first_ep, last_ep):
     for i in range(first_ep, last_ep+1):
         pattern = return_episode_edit_pattern(project_name, i)
         folder = os.path.join(edit_folder, pattern)
-        file = os.path.join(folder, f"{pattern}_v001.blend")
+        edit_file = os.path.join(folder, f"{pattern}_v001.blend")
         os.mkdir(folder)
-        shutil.copy(constants.episode_base_filepath, file)
+        shutil.copy(constants.episode_base_filepath, edit_file)
 
 # TODO clean episode function to get ep file
 
@@ -95,7 +96,7 @@ def intialize_project_infos_datas(
     resolution_y,
     first_ep,
     last_ep,
-    folder,
+    root_folder,
     ):
     datas = {
         "name" : uuid,
@@ -103,13 +104,18 @@ def intialize_project_infos_datas(
         "framerate" : framerate,
         "resolution_x" : resolution_x,
         "resolution_y" : resolution_y,
-        "root_folder" : folder,
+        "root_folder" : root_folder,
         }
     datas["episodes"] = []
     for i in range(first_ep, last_ep+1):
+        pattern = return_episode_edit_pattern(project_name, i)
+        edit_folder = os.path.join(root_folder, nc.edits_folder)
+        ep_folder = os.path.join(edit_folder, pattern)
+        edit_file = os.path.join(ep_folder, f"{pattern}_v001.blend")
         ep = {
             "number" : i,
             "identifier" : get_episode_identifier(project_name, i),
+            "edit_file" : edit_file,
             }
         datas["episodes"].append(ep)
     return datas
