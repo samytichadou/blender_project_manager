@@ -42,7 +42,12 @@ def return_global_project_datas():
         datas["projects"] = []
         return datas
 
-def add_project_dataset(project_name, root_folder):
+def add_project_dataset(
+    project_name,
+    root_folder,
+    first_ep,
+    last_ep,
+    ):
     print("BPM --- Creating project dataset")
 
     dataset = {}
@@ -50,6 +55,18 @@ def add_project_dataset(project_name, root_folder):
     dataset["project_name"] = project_name
     dataset["root_folder"] = root_folder
     dataset["project_info_file"] = return_project_infos_filepath(root_folder, project_name)
+    dataset["episodes"] = []
+
+    # Episodes folders and base files
+    for i in range(first_ep, last_ep+1):
+        pattern = return_episode_edit_pattern(project_name, i)
+        edit_folder = os.path.join(root_folder, pattern)
+        ep = {
+            "number" : i,
+            "identifier" : get_episode_identifier(project_name, i),
+            "edit_folder" : edit_folder,
+            }
+        dataset["episodes"].append(ep)
 
     global_datas = return_global_project_datas()
     global_datas["projects"].append(dataset)
@@ -78,9 +95,9 @@ def create_hierarchy_folders(project_name, root_folder, first_ep, last_ep):
     # Episodes folders and base files
     for i in range(first_ep, last_ep+1):
         pattern = return_episode_edit_pattern(project_name, i)
-        folder = os.path.join(edit_folder, pattern)
-        edit_file = os.path.join(folder, f"{pattern}_v001.blend")
-        os.mkdir(folder)
+        edit_folder = os.path.join(edit_folder, pattern)
+        edit_file = os.path.join(edit_folder, f"{pattern}_v001.blend")
+        os.mkdir(edit_folder)
         shutil.copy(constants.episode_base_filepath, edit_file)
 
 # TODO clean episode function to get ep file
@@ -198,7 +215,6 @@ class BPM_OT_create_project(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
 
     def draw(self, context):
-        global_projects = context.window_manager.bpm_global_projects
         layout = self.layout
         layout.prop(self, "framerate")
         layout.prop(self, "resolution_x")
@@ -225,7 +241,12 @@ class BPM_OT_create_project(bpy.types.Operator):
             )
 
         # Add project to global json
-        project_datas = add_project_dataset(project_name, root_folder)
+        project_datas = add_project_dataset(
+            project_name,
+            root_folder,
+            self.first_episode,
+            self.last_episode,
+            )
 
         # Create project info file
         datas = intialize_project_infos_datas(
@@ -254,15 +275,8 @@ def reload_global_projects():
     # TODO reload episode lists from projects
     print("BPM --- Refreshing global project list")
 
-    props = bpy.context.window_manager.bpm_global_projects
-    props.clear()
     dataset = return_global_project_datas()
-    for proj in dataset["projects"]:
-        new = props.add()
-        new.name = proj["name"]
-        new.project_folder = proj["root_folder"]
-        new.project_name = proj["project_name"]
-
+    bpy.context.window_manager["bpm_global_projects"] = dataset
 
 class BPM_OT_reload_global_projects(bpy.types.Operator):
     bl_idname = "bpm.reload_global_projects"
@@ -292,6 +306,7 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
     remove_folder : bpy.props.BoolProperty(
         name = "Also remove project content",
         )
+    project_datas = None
 
     @classmethod
     def poll(cls, context):
@@ -301,22 +316,26 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
             )
 
     def invoke(self, context, event):
+        for project in context.window_manager["bpm_global_projects"]["projects"]:
+            if project["name"] == self.name:
+                self.project_datas = project
+                break
         return context.window_manager.invoke_props_dialog(self)
 
     def draw(self, context):
-        global_projects = context.window_manager.bpm_global_projects
+        project_name = self.project_datas["project_name"]
+        root_folder = self.project_datas["root_folder"]
+
         layout = self.layout
         layout.label(
-            text = f"Removing {global_projects[self.name].project_name}",
+            text = f"Removing {project_name}",
             icon = "ERROR",
             )
-        layout.label(text = global_projects[self.name].project_folder)
+        layout.label(text = root_folder)
         layout.prop(self, "remove_folder")
         layout.label(text = "Are you sure ?")
 
     def execute(self, context):
-        global_projects = context.window_manager.bpm_global_projects
-
         # Remove project from json
         datas = return_global_project_datas()
         for p in datas["projects"]:
@@ -327,16 +346,16 @@ class BPM_OT_remove_global_project(bpy.types.Operator):
         write_json_file(datas, return_global_project_file())
 
         if self.remove_folder:
-            if os.path.isdir(global_projects[self.name].project_folder):
+            if os.path.isdir(self.project_datas["root_folder"]):
                 print("BPM --- Removing project content")
-                shutil.rmtree(global_projects[self.name].project_folder)
+                shutil.rmtree(self.project_datas["root_folder"])
             else:
                 print("BPM --- No project content to remove")
 
-        self.report({'INFO'}, f"{global_projects[self.name].project_name} Removed")
+        project_name = self.project_datas["project_name"]
+        self.report({'INFO'}, f"{project_name} Removed")
 
-        index = global_projects.find(self.name)
-        global_projects.remove(index)
+        context.window_manager["bpm_global_projects"] = datas
 
         # Refresh
         for area in context.screen.areas:
