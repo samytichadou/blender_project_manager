@@ -47,6 +47,10 @@ from .global_management import(
     current_project_detection,
     )
 
+from .project_management import(
+    project_topbar,
+    )
+
 # register
 ##################################
 
@@ -57,9 +61,13 @@ def register():
     manage_users.register()
     current_project_detection.register()
 
+    project_topbar.register()
+
 def unregister():
     addon_prefs.unregister()
 
     manage_projects.unregister()
     manage_users.unregister()
     current_project_detection.unregister()
+
+    project_topbar.unregister()
