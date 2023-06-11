@@ -49,7 +49,7 @@ def add_project_dataset(project_name, root_folder):
     dataset["name"] = generate_random()
     dataset["project_name"] = project_name
     dataset["root_folder"] = root_folder
-    dataset["project_infos"] = return_project_infos_filepath(root_folder, project_name)
+    dataset["project_info_file"] = return_project_infos_filepath(root_folder, project_name)
 
     global_datas = return_global_project_datas()
     global_datas["projects"].append(dataset)

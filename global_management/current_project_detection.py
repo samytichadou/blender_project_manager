@@ -11,7 +11,7 @@ def get_project_from_filepath():
     datas = mp.return_global_project_datas()
     for project in datas["projects"]:
         if project["root_folder"] in filepath:
-            datas = mp.read_json(project["project_infos"])
+            datas = mp.read_json(project["project_info_file"])
             return datas
     return None
 
