@@ -15,7 +15,7 @@ def bpm_project_topbar(self, context):
         return
     if context.region.alignment == 'RIGHT':
         layout=self.layout
-        project_name = datas["project_name"]
+        project_name = context.window_manager["bpm_project_datas"]["project_name"]
         layout.menu(
             "BPM_MT_project_menu",
             text = f" {project_name}",
