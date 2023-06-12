@@ -6,6 +6,7 @@ from bpy.app.handlers import persistent
 from .. import addon_prefs as ap
 from . import manage_projects as mp
 from . import user_authorization as ua
+from . import naming_convention as nc
 
 def encode(text):
     return str(base64.b64encode(text.encode("utf-8")), 'utf-8')
@@ -421,6 +422,66 @@ class BPM_OT_modify_user(bpy.types.Operator, ua.BPM_user_authorizations):
 
         return {'FINISHED'}
 
+def return_project_users(name):
+    root_folder = None
+    for project in bpy.context.window_manager["bpm_global_projects"]["projects"]:
+        if project["name"] == name:
+            root_folder = project["root_folder"]
+            break
+    if root_folder is not None:
+        user_list = []
+        user_folder = os.path.join(root_folder, nc.users_folder)
+        for filename in os.listdir(user_folder):
+            user_list.append(filename.split(".json")[0])
+        return user_list
+
+class BPM_OT_add_user_to_project(bpy.types.Operator, ua.BPM_user_authorizations):
+    bl_idname = "bpm.add_user_to_project"
+    bl_label = "Add User"
+    bl_description = "Add BPM user to selected project"
+    bl_options = {"INTERNAL", "UNDO"}
+
+    name : bpy.props.StringProperty()
+    global_users = None
+    project_users = None
+    global_users_datas = None
+
+    @classmethod
+    def poll(cls, context):
+        return ua.compare_athcode(
+            "x1x1xxxxxxxxxxxx",
+            ap.getAddonPreferences().athcode
+            )
+
+    def invoke(self, context, event):
+        self.global_users_datas = return_users_datas()
+        self.global_users = []
+        for user in self.global_users_datas["users"]:
+            self.global_users.append(user["name"])
+        self.project_users = return_project_users(self.name)
+        return context.window_manager.invoke_props_dialog(self)
+
+    def draw(self, context):
+        layout = self.layout
+        split = layout.split()
+        col1 = split.column(align = True)
+        col2 = split.column(align = True)
+        # TODO use ui_list to allow authorizations change
+        for user in self.global_users:
+            if user not in self.project_users:
+                row = col1.row()
+                row.label(text = user)
+                row.label(text = "", icon = "TRIA_RIGHT")
+        for user in self.project_users:
+            if user not in self.global_users:
+                row = col2.row()
+                row.label(text = "", icon = "TRIA_LEFT")
+                row.label(text = user)
+
+    def execute(self, context):
+        # TODO create user file for project
+        return {'FINISHED'}
+
 def refresh_login():
     print("BPM --- Checking valid login")
     prop_prefs = ap.getAddon().preferences
@@ -449,6 +510,7 @@ def register():
     bpy.utils.register_class(BPM_OT_create_user)
     bpy.utils.register_class(BPM_OT_remove_user)
     bpy.utils.register_class(BPM_OT_modify_user)
+    bpy.utils.register_class(BPM_OT_add_user_to_project)
     bpy.app.handlers.load_post.append(users_load_handler)
 def unregister():
     bpy.utils.unregister_class(BPM_OT_user_login)
@@ -456,4 +518,5 @@ def unregister():
     bpy.utils.unregister_class(BPM_OT_create_user)
     bpy.utils.unregister_class(BPM_OT_remove_user)
     bpy.utils.unregister_class(BPM_OT_modify_user)
+    bpy.utils.unregister_class(BPM_OT_add_user_to_project)
     bpy.app.handlers.load_post.remove(users_load_handler)

@@ -89,6 +89,7 @@ def create_hierarchy_folders(project_name, root_folder, first_ep, last_ep):
     os.mkdir(os.path.join(root_folder, nc.startups_folder))
     os.mkdir(os.path.join(root_folder, nc.resources_folder))
     os.mkdir(os.path.join(root_folder, nc.locks_folder))
+    os.mkdir(os.path.join(root_folder, nc.users_folder))
 
     edit_folder = os.path.join(root_folder, nc.edits_folder)
     os.mkdir(edit_folder)
