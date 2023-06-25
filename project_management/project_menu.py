@@ -31,6 +31,8 @@ class BPM_MT_project_menu(bpy.types.Menu):
         return poll_bpm_project(context)
 
     def draw(self, context):
+        project_datas = context.window_manager["bpm_project_datas"]
+
         layout = self.layout
 
         layout.label(
@@ -49,7 +51,8 @@ class BPM_MT_project_menu(bpy.types.Menu):
 
         layout.separator()
 
-        layout.label(text = "Manage Users") # Placeholder
+        op = layout.operator("bpm.manage_project_users")
+        op.project_name = project_datas["name"]
 
         layout.separator()
 
