@@ -1,4 +1,4 @@
-# TODO Handler to manage project user on startup
+# TODO Modify project user authorizations
 import bpy
 import os
 from bpy.app.handlers import persistent
