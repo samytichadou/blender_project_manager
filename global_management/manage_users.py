@@ -435,15 +435,70 @@ def return_project_users(name):
             user_list.append(filename.split(".json")[0])
         return user_list
 
-class BPM_OT_add_user_to_project(bpy.types.Operator, ua.BPM_user_authorizations):
-    bl_idname = "bpm.add_user_to_project"
-    bl_label = "Add User"
-    bl_description = "Add BPM user to selected project"
+def return_project_users_folder(name):
+    root_folder = None
+    for project in bpy.context.window_manager["bpm_global_projects"]["projects"]:
+        if project["name"] == name:
+            root_folder = project["root_folder"]
+            break
+    if root_folder is not None:
+        user_list = []
+        user_folder = os.path.join(root_folder, nc.users_folder)
+        return user_folder
+
+def return_project_user_dataset(global_user):
+    dataset = {}
+    for k in global_user:
+        if k.startswith("ath_"):
+            dataset[k] = global_user[k]
+    return dataset
+
+class BPM_OT_add_remove_user_to_project(bpy.types.Operator, ua.BPM_user_authorizations):
+    bl_idname = "bpm.add_remove_user_to_project"
+    bl_label = "Add/Remove User"
+    bl_description = "Add/Remove BPM user to selected project"
+    bl_options = {"INTERNAL"}
+
+    remove : bpy.props.BoolProperty(default=False)
+    user_name : bpy.props.StringProperty()
+
+    @classmethod
+    def poll(cls, context):
+        return ua.compare_athcode(
+            "x1x1xxxxxxxxxxxx",
+            ap.getAddonPreferences().athcode
+            )
+
+    def execute(self, context):
+        wm = context.window_manager
+
+        global_users = []
+        for user in wm["temporary_global_users"]:
+            global_users.append(user)
+
+        project_users = []
+        for user in wm["temporary_project_users"]:
+            project_users.append(user)
+
+        if not self.remove:
+            if self.user_name not in project_users:
+                project_users.append(self.user_name)
+        else:
+            if self.user_name in project_users:
+                project_users.remove(self.user_name)
+
+        wm["temporary_project_users"] = project_users
+
+        return {'FINISHED'}
+
+
+class BPM_OT_manage_project_users(bpy.types.Operator, ua.BPM_user_authorizations):
+    bl_idname = "bpm.manage_project_users"
+    bl_label = "Manage Users"
+    bl_description = "Manage BPM users for selected project"
     bl_options = {"INTERNAL", "UNDO"}
 
-    name : bpy.props.StringProperty()
-    global_users = None
-    project_users = None
+    project_name : bpy.props.StringProperty()
     global_users_datas = None
 
     @classmethod
@@ -454,32 +509,97 @@ class BPM_OT_add_user_to_project(bpy.types.Operator, ua.BPM_user_authorizations)
             )
 
     def invoke(self, context, event):
+        wm = context.window_manager
         self.global_users_datas = return_users_datas()
-        self.global_users = []
+
+        user_list = []
         for user in self.global_users_datas["users"]:
-            self.global_users.append(user["name"])
-        self.project_users = return_project_users(self.name)
+            user_list.append(user["name"])
+        wm["temporary_global_users"] = user_list
+
+        wm["temporary_project_users"] = return_project_users(self.project_name)
+
         return context.window_manager.invoke_props_dialog(self)
 
     def draw(self, context):
+        wm = context.window_manager
         layout = self.layout
         split = layout.split()
         col1 = split.column(align = True)
         col2 = split.column(align = True)
+
+        box = col1.box()
+        box.label(text = "Global Users")
+        box = col2.box()
+        box.label(text = "Project Users")
+
+        box1 = col1.box()
+        box2 = col2.box()
+
         # TODO use ui_list to allow authorizations change
-        for user in self.global_users:
-            if user not in self.project_users:
-                row = col1.row()
+
+        for user in wm["temporary_global_users"]:
+            if user not in wm["temporary_project_users"]:
+                row = box1.row()
                 row.label(text = user)
-                row.label(text = "", icon = "TRIA_RIGHT")
-        for user in self.project_users:
-            if user not in self.global_users:
-                row = col2.row()
-                row.label(text = "", icon = "TRIA_LEFT")
-                row.label(text = user)
+                op = row.operator(
+                    "bpm.add_remove_user_to_project",
+                    text = "",
+                    icon = "TRIA_RIGHT",
+                    )
+                op.remove = False
+                op.user_name = user
+        for user in wm["temporary_project_users"]:
+            row = box2.row()
+            #row.label(text = "", icon = "TRIA_LEFT")
+            op = row.operator(
+                "bpm.add_remove_user_to_project",
+                text = "",
+                icon = "TRIA_LEFT",
+                )
+            op.remove = True
+            op.user_name = user
+            row.label(text = user)
 
     def execute(self, context):
-        # TODO create user file for project
+        wm = context.window_manager
+
+        # Create or remove user file for project
+        project_users = return_project_users(self.project_name)
+
+        # Add missing project users
+        for user in wm["temporary_project_users"]:
+            if user not in project_users:
+                # Create json
+                filepath = os.path.join(
+                    return_project_users_folder(self.project_name),
+                    f"{user}.json",
+                    )
+                for u in self.global_users_datas["users"]:
+                    if u["name"] == user:
+                        global_user_datas = u
+                        break
+                user_dataset = return_project_user_dataset(global_user_datas)
+                mp.write_json_file(user_dataset, filepath)
+                print(f"BPM --- Added : {user} to project")
+
+        # Remove project users
+        for user in project_users:
+            if user not in wm["temporary_project_users"]:
+                # Remove json
+                filepath = os.path.join(
+                    return_project_users_folder(self.project_name),
+                    f"{user}.json",
+                    )
+                os.remove(filepath)
+                print(f"BPM --- Removed : {user} from project")
+
+        # Remove temp datas
+        del wm["temporary_global_users"]
+        del wm["temporary_project_users"]
+
+        self.report({'INFO'}, "Project Users Modified")
+
         return {'FINISHED'}
 
 def refresh_login():
@@ -510,7 +630,8 @@ def register():
     bpy.utils.register_class(BPM_OT_create_user)
     bpy.utils.register_class(BPM_OT_remove_user)
     bpy.utils.register_class(BPM_OT_modify_user)
-    bpy.utils.register_class(BPM_OT_add_user_to_project)
+    bpy.utils.register_class(BPM_OT_add_remove_user_to_project)
+    bpy.utils.register_class(BPM_OT_manage_project_users)
     bpy.app.handlers.load_post.append(users_load_handler)
 def unregister():
     bpy.utils.unregister_class(BPM_OT_user_login)
@@ -518,5 +639,6 @@ def unregister():
     bpy.utils.unregister_class(BPM_OT_create_user)
     bpy.utils.unregister_class(BPM_OT_remove_user)
     bpy.utils.unregister_class(BPM_OT_modify_user)
-    bpy.utils.unregister_class(BPM_OT_add_user_to_project)
+    bpy.utils.unregister_class(BPM_OT_add_remove_user_to_project)
+    bpy.utils.unregister_class(BPM_OT_manage_project_users)
     bpy.app.handlers.load_post.remove(users_load_handler)
