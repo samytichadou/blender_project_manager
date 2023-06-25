@@ -49,6 +49,7 @@ from .global_management import(
 
 from .project_management import(
     project_menu,
+    project_users,
     )
 
 # register
@@ -62,6 +63,7 @@ def register():
     current_project_detection.register()
 
     project_menu.register()
+    project_users.register()
 
 def unregister():
     addon_prefs.unregister()
@@ -71,3 +73,4 @@ def unregister():
     current_project_detection.unregister()
 
     project_menu.unregister()
+    project_users.unregister()
