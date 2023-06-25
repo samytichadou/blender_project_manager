@@ -11,10 +11,12 @@
 # 09 ath_storyboard_modify
 # 10 ath_render_create
 # 11 ath_render_modify
-# 12 ath_asset_create
-# 13 ath_asset_modify
-# 14 ath_planning_create
-# 15 ath_planning_modify
+# 12 ath_compositing_create
+# 13 ath_compositing_modify
+# 14 ath_asset_create
+# 15 ath_asset_modify
+# 16 ath_planning_create
+# 17 ath_planning_modify
 
 ath_list = [
     "ath_user_create"       ,
@@ -30,7 +32,7 @@ ath_list = [
     "ath_render_create"     ,
     "ath_render_modify"     ,
     "ath_compositing_create",
-    "ath_compositing_create",
+    "ath_compositing_modify",
     "ath_asset_create"      ,
     "ath_asset_modify"      ,
     "ath_planning_create"   ,
