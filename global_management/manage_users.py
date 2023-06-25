@@ -7,6 +7,7 @@ from .. import addon_prefs as ap
 from . import manage_projects as mp
 from . import user_authorization as ua
 from . import naming_convention as nc
+from ..project_management import project_users as pu
 
 def encode(text):
     return str(base64.b64encode(text.encode("utf-8")), 'utf-8')
@@ -73,6 +74,7 @@ def login(name, password):
         print("BPM --- Cleaning temporaries user fields")
         prop_prefs.user_temp = prop_prefs.password_temp = ""
         return True
+
     print(f"BPM --- Invalid Username/Password")
     return False
 
@@ -96,6 +98,8 @@ class BPM_OT_user_login(bpy.types.Operator):
         prefs = ap.getAddonPreferences()
 
         if login(prefs.user_temp, prefs.password_temp):
+            # Reload project user authorizations
+            pu.update_project_user_authorizations()
             self.report({'INFO'}, f"{prefs.user_temp} Logged")
         else:
             self.report({'WARNING'}, "Invalid Username/Password")
@@ -597,6 +601,9 @@ class BPM_OT_manage_project_users(bpy.types.Operator, ua.BPM_user_authorizations
         # Remove temp datas
         del wm["temporary_global_users"]
         del wm["temporary_project_users"]
+
+        # Reload project user authorizations
+        pu.update_project_user_authorizations()
 
         self.report({'INFO'}, "Project Users Modified")
 

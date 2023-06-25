@@ -8,7 +8,7 @@ from ..global_management import user_authorization as ua
 from ..global_management import manage_projects as mp
 from .. import addon_prefs as ap
 
-def log_project_user():
+def update_project_user_authorizations():
     prop_prefs = ap.getAddon().preferences
 
     # Check if user logged
@@ -33,13 +33,13 @@ def log_project_user():
             return True
 
     # If user not in this project, set authorizations
-    print(f"BPM --- {user} not found for this project, settings authorizations")
+    print(f"BPM --- {prop_prefs.logged_user} not found for this project, settings authorizations")
     prop_prefs.athcode = "0000000000000000"
     return False
 
 @persistent
 def project_users_load_handler(scene):
-    log_project_user()
+    update_project_user_authorizations()
 
 
 ### REGISTER ---
