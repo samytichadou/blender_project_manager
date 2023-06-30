@@ -59,6 +59,13 @@ class BPM_MT_project_menu(bpy.types.Menu):
 
         layout.label(text = "Modify Project") # Placeholder
 
+        try:
+            last_user = context.scene["bpm_last_user"]
+            layout.separator()
+            layout.label(text = f"Last save : {last_user}")
+        except KeyError:
+            pass
+
 
 ### REGISTER ---
 def register():

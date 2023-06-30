@@ -29,11 +29,11 @@ def update_project_user_authorizations():
             # Get project authorizations
             user_datas = mp.read_json(os.path.join(user_folder, filename))
             prop_prefs.athcode = ua.get_athcode_from_dict(user_datas)
-            print(f"BPM --- {user} found for this project, settings authorizations")
+            print(f"BPM --- User : {user} found for this project, settings authorizations")
             return True
 
     # If user not in this project, set authorizations
-    print(f"BPM --- {prop_prefs.logged_user} not found for this project, settings authorizations")
+    print(f"BPM --- User : {prop_prefs.logged_user} not found for this project, settings authorizations")
     prop_prefs.athcode = "0000000000000000"
     return False
 
@@ -72,10 +72,38 @@ def project_users_load_handler(scene):
 def project_users_cleaning_handler(scene):
     remove_old_project_user()
 
+@persistent
+def save_last_file_user_handler(scene):
+    scn = bpy.context.scene
+    user = ap.getAddonPreferences().logged_user
+    if user:
+        print("BPM --- Saving last user")
+        scn["bpm_last_user"] = user
+
+@persistent
+def project_setup_last_user_handler(scene):
+    # Check if bpm project
+    try:
+        project_datas = bpy.context.window_manager["bpm_project_datas"]
+    except KeyError:
+        # Try to remove existing handler
+        for handler in bpy.app.handlers.save_pre:
+            if "save_last_file_user_handler"==handler.__name__:
+                print("BPM --- Removing save handler")
+                bpy.app.handlers.save_pre.remove(save_last_file_user_handler)
+                break
+        return False
+
+    # Setup save handler
+    print("BPM --- Setting up save handler")
+    bpy.app.handlers.save_pre.append(save_last_file_user_handler)
+
 ### REGISTER ---
 def register():
     bpy.app.handlers.load_post.append(project_users_cleaning_handler)
     bpy.app.handlers.load_post.append(project_users_load_handler)
+    bpy.app.handlers.load_post.append(project_setup_last_user_handler)
 def unregister():
     bpy.app.handlers.load_post.remove(project_users_cleaning_handler)
     bpy.app.handlers.load_post.remove(project_users_load_handler)
+    bpy.app.handlers.load_post.remove(project_setup_last_user_handler)
