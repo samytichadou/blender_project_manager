@@ -53,6 +53,7 @@ class BPM_MT_project_menu(bpy.types.Menu):
 
         op = layout.operator("bpm.manage_project_users")
         op.project_name = project_datas["name"]
+        layout.operator("bpm.modify_project_user")
 
         layout.separator()
 

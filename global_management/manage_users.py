@@ -426,6 +426,104 @@ class BPM_OT_modify_user(bpy.types.Operator, ua.BPM_user_authorizations):
 
         return {'FINISHED'}
 
+
+def project_user_callback(scene, context):
+    project_datas = context.window_manager["bpm_project_datas"]
+    users = return_project_users(project_datas["name"])
+    items = []
+    for user in users:
+        items.append((user, user, ""))
+    return items
+
+def return_project_user_filepath(user_name):
+    project_datas = bpy.context.window_manager["bpm_project_datas"]
+    root_folder = project_datas["root_folder"]
+    userfolder = os.path.join(root_folder, nc.users_folder)
+    filepath = os.path.join(userfolder, f"{user_name}.json")
+    if os.path.isfile(filepath):
+        return filepath
+    return None
+
+def return_project_user_dataset(user_name):
+    filepath = return_project_user_filepath(user_name)
+    if filepath is not None:
+        return mp.read_json(filepath)
+    return None
+
+def modify_project_user_callback(self, context):
+    print("BPM --- Updating user infos")
+    datas = return_project_user_dataset(self.user)
+    for k in datas:
+        if k.startswith("ath_"):
+            setattr(self, k, datas[k])
+
+class BPM_OT_modify_project_user(bpy.types.Operator, ua.BPM_user_authorizations):
+    bl_idname = "bpm.modify_project_user"
+    bl_label = "Modify Project User"
+    bl_description = "Modify BPM project user"
+    bl_options = {"INTERNAL", "UNDO"}
+
+    user : bpy.props.EnumProperty(
+        name = "User",
+        items = project_user_callback,
+        update = modify_project_user_callback,
+        )
+
+    @classmethod
+    def poll(cls, context):
+        return ua.compare_athcode(
+            ua.patt_user_modification,
+            ap.getAddonPreferences().athcode
+            )
+
+    def invoke(self, context, event):
+        datas = context.window_manager["bpm_project_datas"]
+        # If current user available, select it
+        current_user = ap.getAddonPreferences().logged_user
+        try:
+            self.user = current_user
+        except KeyError:
+            self.user = return_project_users(datas["name"])[0]
+        return context.window_manager.invoke_props_dialog(self)
+
+    def draw(self, context):
+        layout = self.layout
+
+        layout.prop(self, "user", text = "")
+        draw_user_authorization_list(layout, self, ua.ath_list)
+
+        layout.label(text = "Are you sure ?", icon = "ERROR")
+
+    def execute(self, context):
+        user_dataset = return_project_user_dataset(self.user)
+
+        if user_dataset is None:
+            self.report({'WARNING'}, "Invalid User selection")
+            return {'CANCELLED'}
+
+        # Build new dataset
+        user_datas = {}
+        for p in ua.ath_list:
+            user_datas[p] = int(getattr(self, p))
+
+        # Write dataset
+        print("BPM --- Writing users json")
+        filepath = return_project_user_filepath(self.user)
+        mp.write_json_file(user_datas, filepath)
+
+        # Relog if needed
+        prop_prefs = ap.getAddon().preferences
+        if prop_prefs.logged_user == self.user:
+            print("BPM --- Relog modified user")
+            prop_prefs.athcode = ua.get_athcode_from_dict(user_datas)
+            # Refresh
+            for area in context.screen.areas:
+                area.tag_redraw()
+
+        self.report({'INFO'}, f"User {self.user} Modified")
+
+        return {'FINISHED'}
+
 def return_project_users(name):
     root_folder = None
     for project in bpy.context.window_manager["bpm_global_projects"]["projects"]:
@@ -450,7 +548,7 @@ def return_project_users_folder(name):
         user_folder = os.path.join(root_folder, nc.users_folder)
         return user_folder
 
-def return_project_user_dataset(global_user):
+def return_project_user_dataset_from_global(global_user):
     dataset = {}
     for k in global_user:
         if k.startswith("ath_"):
@@ -583,7 +681,7 @@ class BPM_OT_manage_project_users(bpy.types.Operator, ua.BPM_user_authorizations
                     if u["name"] == user:
                         global_user_datas = u
                         break
-                user_dataset = return_project_user_dataset(global_user_datas)
+                user_dataset = return_project_user_dataset_from_global(global_user_datas)
                 mp.write_json_file(user_dataset, filepath)
                 print(f"BPM --- Added : {user} to project")
 
@@ -608,6 +706,7 @@ class BPM_OT_manage_project_users(bpy.types.Operator, ua.BPM_user_authorizations
         self.report({'INFO'}, "Project Users Modified")
 
         return {'FINISHED'}
+
 
 def refresh_login():
     print("BPM --- Checking valid login")
@@ -637,6 +736,7 @@ def register():
     bpy.utils.register_class(BPM_OT_create_user)
     bpy.utils.register_class(BPM_OT_remove_user)
     bpy.utils.register_class(BPM_OT_modify_user)
+    bpy.utils.register_class(BPM_OT_modify_project_user)
     bpy.utils.register_class(BPM_OT_add_remove_user_to_project)
     bpy.utils.register_class(BPM_OT_manage_project_users)
     bpy.app.handlers.load_post.append(users_load_handler)
@@ -646,6 +746,7 @@ def unregister():
     bpy.utils.unregister_class(BPM_OT_create_user)
     bpy.utils.unregister_class(BPM_OT_remove_user)
     bpy.utils.unregister_class(BPM_OT_modify_user)
+    bpy.utils.unregister_class(BPM_OT_modify_project_user)
     bpy.utils.unregister_class(BPM_OT_add_remove_user_to_project)
     bpy.utils.unregister_class(BPM_OT_manage_project_users)
     bpy.app.handlers.load_post.remove(users_load_handler)
