@@ -54,6 +54,7 @@ from .project_management import(
 
 from .asset_management import(
     asset_library_handler,
+    reload_asset_list,
     )
 
 # register
@@ -70,6 +71,7 @@ def register():
     project_users.register()
 
     asset_library_handler.register()
+    reload_asset_list.register()
 
 def unregister():
     addon_prefs.unregister()
@@ -82,3 +84,4 @@ def unregister():
     project_users.unregister()
 
     asset_library_handler.unregister()
+    reload_asset_list.unregister()
