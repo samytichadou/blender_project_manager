@@ -79,8 +79,7 @@ def file_infos_handler(scene):
     print("BPM --- Getting file datas")
     file_datas = get_file_datas()
     if file_datas is not None:
-        print("BPM --- Storing file datas :")
-        print(f"BPM --- {file_datas}")
+        print(f"BPM --- Storing file datas : {file_datas}")
         bpy.context.window_manager["bpm_file_datas"] = file_datas
 
 
