@@ -54,7 +54,12 @@ from .project_management import(
 
 from .asset_management import(
     asset_library_handler,
-    reload_asset_list,
+    asset_management,
+    asset_gui,
+    )
+
+from .utilities_operator import(
+    open_blend,
     )
 
 # register
@@ -71,7 +76,10 @@ def register():
     project_users.register()
 
     asset_library_handler.register()
-    reload_asset_list.register()
+    asset_management.register()
+    asset_gui.register()
+
+    open_blend.register()
 
 def unregister():
     addon_prefs.unregister()
@@ -84,4 +92,7 @@ def unregister():
     project_users.unregister()
 
     asset_library_handler.unregister()
-    reload_asset_list.unregister()
+    asset_management.unregister()
+    asset_gui.unregister()
+
+    open_blend.unregister()
