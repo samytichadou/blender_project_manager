@@ -33,7 +33,7 @@ class BPM_PT_asset_workfiles(asset_utils.AssetBrowserPanel, bpy.types.Panel):
 
         layout = self.layout
 
-        row = layout.row(align = True)
+        row = layout.row()
         row.template_list(
             "BPM_UL_asset_workfiles",
             "",
