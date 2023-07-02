@@ -39,12 +39,16 @@ def get_file_datas():
     filepath = bpy.path.abspath(bpy.data.filepath)
     parent_folder = os.path.dirname(filepath)
 
+    # TODO Get additional infos and types
+
     # Asset Library
     if nc.asset_library_folder in parent_folder:
         file_datas["file_type"] = "asset_library"
+
     # Asset
     elif nc.assets_folder in parent_folder:
         file_datas["file_type"] = "asset"
+
     # Edit
     elif nc.edits_folder in parent_folder:
         # Get infos from filename
@@ -57,6 +61,7 @@ def get_file_datas():
         file_datas["file_type"] = "edit"
         file_datas["episode"] = episode
         file_datas["version"] = version
+
     # Shot
     elif nc.shots_folder in parent_folder:
         file_datas["file_type"] = "shot"
