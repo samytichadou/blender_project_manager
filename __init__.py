@@ -52,6 +52,10 @@ from .project_management import(
     project_users,
     )
 
+from .asset_management import(
+    asset_library_handler,
+    )
+
 # register
 ##################################
 
@@ -65,6 +69,8 @@ def register():
     project_menu.register()
     project_users.register()
 
+    asset_library_handler.register()
+
 def unregister():
     addon_prefs.unregister()
 
@@ -74,3 +80,5 @@ def unregister():
 
     project_menu.unregister()
     project_users.unregister()
+
+    asset_library_handler.unregister()
