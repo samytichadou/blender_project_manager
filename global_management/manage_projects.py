@@ -80,7 +80,10 @@ def create_hierarchy_folders(project_name, root_folder, first_ep, last_ep):
 
     os.makedirs(root_folder)
 
-    os.mkdir(os.path.join(root_folder, nc.assets_folder))
+    asset_folder = os.path.join(root_folder, nc.assets_folder)
+    os.mkdir(asset_folder)
+    os.mkdir(os.path.join(asset_folder, nc.asset_library_folder))
+
     os.mkdir(os.path.join(root_folder, nc.shots_folder))
     os.mkdir(os.path.join(root_folder, nc.renders_folder))
     os.mkdir(os.path.join(root_folder, nc.plannings_folder))
