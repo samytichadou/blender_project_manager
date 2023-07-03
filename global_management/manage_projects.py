@@ -105,6 +105,15 @@ def create_hierarchy_folders(project_name, root_folder, first_ep, last_ep):
         os.mkdir(edit_folder)
         shutil.copy(constants.episode_base_filepath, edit_file)
 
+    copy_startup_files(root_folder)
+
+def copy_startup_files(root_folder):
+    startup_folder = os.path.join(root_folder, nc.startups_folder)
+
+    shutil.copy(constants.episode_base_filepath, startup_folder)
+    shutil.copy(constants.asset_base_filepath, startup_folder)
+
+
 # TODO clean episode function to get ep file
 
 def get_episode_identifier(project_name, number):

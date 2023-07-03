@@ -4,6 +4,8 @@ from bpy_extras import (
     asset_utils,
 )
 
+from . import asset_management as am
+
 class BPM_UL_asset_workfiles(bpy.types.UIList):
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
@@ -47,10 +49,17 @@ class BPM_PT_asset_workfiles(asset_utils.AssetBrowserPanel, bpy.types.Panel):
         col = row.column(align=True)
         col.operator("bpm.reload_asset_list", icon='FILE_REFRESH', text="")
         col.separator()
-        col.label(text="", icon="ADD")
+        col.operator("bpm.create_asset", text="", icon="ADD")
         col.operator("bpm.remove_asset", text="", icon="REMOVE")
         col.separator()
-        col.label(text="", icon="BLENDER")
+        op = col.operator("bpm.open_blend", text="", icon="BLENDER")
+        if asset_props.asset_index in range(len(asset_props.asset_list)):
+            active = asset_props.asset_list[asset_props.asset_index]
+            op.folderpath = active.folderpath
+            op.pattern = am.get_asset_workfile_pattern(
+                            active.name,
+                            context.window_manager["bpm_project_datas"]["project_name"],
+                            )
 
 
 ### REGISTER ---

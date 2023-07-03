@@ -2,6 +2,15 @@ import bpy
 import os
 import subprocess
 
+def get_last_version(folder, pattern):
+    filename_list = []
+    for file in os.listdir(folder):
+        if pattern in file:
+            filename_list.append(file)
+    if not filename_list:
+        return None
+    return os.path.join(folder, max(filename_list))
+
 class BPM_OT_open_blend(bpy.types.Operator):
     bl_idname = "bpm.open_blend"
     bl_label = "Open Blend"
@@ -10,14 +19,21 @@ class BPM_OT_open_blend(bpy.types.Operator):
 
     new_blender_instance : bpy.props.BoolProperty()
     filepath : bpy.props.StringProperty()
+    folderpath : bpy.props.StringProperty()
+    pattern : bpy.props.StringProperty()
 
     @classmethod
     def poll(cls, context):
         return True
 
     def execute(self, context):
+        if self.filepath:
+            filepath = self.filepath
+        else:
+            filepath = get_last_version(self.folderpath, self.pattern)
+
         # Check if filepath exists
-        if not os.path.isfile(self.filepath):
+        if not os.path.isfile(filepath):
             self.report({'WARNING'}, "Invalid file path")
 
         # open

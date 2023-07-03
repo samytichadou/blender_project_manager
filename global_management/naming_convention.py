@@ -10,3 +10,8 @@ startups_folder      = "startups"
 resources_folder     = "resources"
 locks_folder         = "locks"
 users_folder         = "users"
+
+startup_episode = "episode_startup.blend"
+startup_asset   = "asset_startup.blend"
+
+# TODO Set constants here
