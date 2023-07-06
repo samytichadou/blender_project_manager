@@ -123,6 +123,14 @@ def is_asset_workfile_name_existing(name):
             return True
     return False
 
+def asset_types_callback(scene, context):
+    items = []
+    project_datas = context.window_manager["bpm_project_datas"]
+
+    for type in project_datas["asset_types"]:
+        items.append((type, type, ""))
+    return items
+
 class BPM_OT_create_asset(bpy.types.Operator):
     bl_idname = "bpm.create_asset"
     bl_label = "Create BPM Asset"
@@ -133,6 +141,10 @@ class BPM_OT_create_asset(bpy.types.Operator):
         default = "New Asset",
         )
     # TODO Type system from project json
+    asset_types : bpy.props.EnumProperty(
+        name = "Type",
+        items = asset_types_callback,
+        )
 
     @classmethod
     def poll(cls, context):
@@ -156,6 +168,8 @@ class BPM_OT_create_asset(bpy.types.Operator):
         else:
             icon = "CHECKMARK"
         row.label(text="", icon=icon)
+
+        layout.prop(self, "asset_types", text="")
 
     def execute(self, context):
         reload_asset_list()

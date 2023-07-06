@@ -119,6 +119,10 @@ def copy_startup_files(root_folder):
 def get_episode_identifier(project_name, number):
     return f"{project_name}_ep{str(number).zfill(3)}"
 
+def get_list_from_csv(csv):
+    list = csv.split(",")
+    return list
+
 def intialize_project_infos_datas(
     uuid,
     project_name,
@@ -127,6 +131,7 @@ def intialize_project_infos_datas(
     resolution_y,
     first_ep,
     last_ep,
+    asset_types,
     root_folder,
     ):
     datas = {
@@ -136,6 +141,7 @@ def intialize_project_infos_datas(
         "resolution_x" : resolution_x,
         "resolution_y" : resolution_y,
         "root_folder" : root_folder,
+        "asset_types" : get_list_from_csv(asset_types),
         }
     datas["episodes"] = []
     for i in range(first_ep, last_ep+1):
@@ -149,6 +155,7 @@ def intialize_project_infos_datas(
             "edit_file" : edit_file,
             }
         datas["episodes"].append(ep)
+    print(datas)
     return datas
 
 def return_episode_edit_pattern(project_name, ep_number):
@@ -210,6 +217,11 @@ class BPM_OT_create_project(bpy.types.Operator):
         min = 0,
         update = last_ep_callback,
         )
+    asset_types : bpy.props.StringProperty(
+        name = "Available Asset Types",
+        description = "Available asset types separated with comma",
+        default = "setdress,prop,character,fx",
+        )
     no_update : bpy.props.BoolProperty()
 
     @classmethod
@@ -235,6 +247,7 @@ class BPM_OT_create_project(bpy.types.Operator):
         layout.prop(self, "resolution_y")
         layout.prop(self, "first_episode")
         layout.prop(self, "last_episode")
+        layout.prop(self, "asset_types", text="Asset Types")
 
     def execute(self, context):
         prefs = ap.getAddonPreferences()
@@ -271,6 +284,7 @@ class BPM_OT_create_project(bpy.types.Operator):
             self.resolution_y,
             self.first_episode,
             self.last_episode,
+            self.asset_types,
             root_folder,
             )
         create_project_infos_file(datas)
