@@ -5,6 +5,8 @@ from bpy.app.handlers import persistent
 
 from ..global_management import naming_convention as nc
 from ..global_management import manage_projects as mp
+from ..global_management import user_authorization as ua
+from .. import addon_prefs as ap
 
 def get_asset_workfile_pattern(asset_workfile_name, project_name):
     return f"asset_{project_name}_{asset_workfile_name}"
@@ -32,7 +34,7 @@ def get_last_version_from_folder_pattern(folder, pattern, extension):
 
     for f in os.listdir(folder):
         if pattern in f\
-        and extension in f\
+        and f.endswith(extension)\
         and os.path.isfile(os.path.join(folder, f)):
             temp = f.split(f"{pattern}_v")[1]
             version_list.append(int(os.path.splitext(temp)[0]))
@@ -104,8 +106,15 @@ class BPM_OT_remove_asset(bpy.types.Operator):
             bpy.context.window_manager["bpm_project_datas"]
         except KeyError:
             return False
+        # Check if active asset
         asset_props = context.window_manager.bpm_project_assets
-        return asset_props.asset_index in range(len(asset_props.asset_list))
+        if not asset_props.asset_index in range(len(asset_props.asset_list)):
+            return False
+        # Check for authorisation
+        return ua.compare_athcode(
+            ua.patt_asset_modification,
+            ap.getAddonPreferences().athcode
+            )
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
@@ -187,9 +196,13 @@ class BPM_OT_create_asset(bpy.types.Operator):
         # Check if bpm project
         try:
             bpy.context.window_manager["bpm_project_datas"]
-            return True
         except KeyError:
             return False
+        # Check for authorisation
+        return ua.compare_athcode(
+            ua.patt_asset_creation,
+            ap.getAddonPreferences().athcode
+            )
 
     def invoke(self, context, event):
         reload_asset_list()

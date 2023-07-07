@@ -99,9 +99,12 @@ class BPM_user_authorizations():
         )
 
 ### PATTERNS ###
-patt_user_creation    = "1xxxxxxxxxxxxxxx"
-patt_user_modification    = "x1xxxxxxxxxxxxxx"
-patt_project_creation = "xx1xxxxxxxxxxxxx"
+patt_user_creation        = "1xxxxxxxxxxxxxxxxx"
+patt_user_modification    = "x1xxxxxxxxxxxxxxxx"
+patt_project_creation     = "xx1xxxxxxxxxxxxxxx"
+
+patt_asset_creation       = "xxxxxxxxxxxxxx1xxx"
+patt_asset_modification   = "xxxxxxxxxxxxxxx1xx"
 
 
 ### FUNCTIONS ###

@@ -83,16 +83,21 @@ def save_last_file_user_handler(scene):
 @persistent
 def project_setup_last_user_handler(scene):
     # Check if bpm project
+    bpm_project = True
     try:
         project_datas = bpy.context.window_manager["bpm_project_datas"]
     except KeyError:
-        # Try to remove existing handler
-        for handler in bpy.app.handlers.save_pre:
-            if "save_last_file_user_handler"==handler.__name__:
+        bpm_project = False
+
+    # Look for existing handler
+    for handler in bpy.app.handlers.save_pre:
+        if "save_last_file_user_handler"==handler.__name__:
+            if not bpm_project:
                 print("BPM --- Removing save handler")
                 bpy.app.handlers.save_pre.remove(save_last_file_user_handler)
-                break
-        return False
+            else:
+                print("BPM --- Existing save handler found")
+            return False
 
     # Setup save handler
     print("BPM --- Setting up save handler")

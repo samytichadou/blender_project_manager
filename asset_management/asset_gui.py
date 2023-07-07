@@ -5,6 +5,8 @@ from bpy_extras import (
 )
 
 from . import asset_management as am
+from ..global_management import user_authorization as ua
+from .. import addon_prefs as ap
 
 class BPM_UL_asset_workfiles(bpy.types.UIList):
 
@@ -61,13 +63,13 @@ class BPM_PT_asset_workfiles(asset_utils.AssetBrowserPanel, bpy.types.Panel):
                             context.window_manager["bpm_project_datas"]["project_name"],
                             )
             row = layout.row()
-            row.label(text = active.type)
-            row.label(text = f"v{active.last_workfile_version}")
+            text = f"{active.type} v{active.last_workfile_version}"
+            row.label(text=text, icon="INFO")
             if active.description:
                 text=active.description
             else:
                 text="No description"
-            layout.label(text=text, icon="INFO")
+            layout.label(text=text)
 
 
 ### REGISTER ---

@@ -3,23 +3,22 @@ import os
 
 from ..addon_prefs import getAddonPreferences
 
-def poll_bpm_project(context):
+def poll_bpm_project():
     try:
-        context.window_manager["bpm_project_datas"]
+        bpy.context.window_manager["bpm_project_datas"]
         return True
     except KeyError:
         return False
 
 def bpm_project_topbar(self, context):
-    if not poll_bpm_project(context):
+    if not poll_bpm_project():
         return
     if context.region.alignment == 'RIGHT':
         layout=self.layout
-        project_name = context.window_manager["bpm_project_datas"]["project_name"]
+        layout.operator("bpm.open_back_blend", text="", icon="LOOP_BACK")
         layout.menu(
             "BPM_MT_project_menu",
-            text = f" {project_name}",
-            icon = "FREEZE",
+            text = "BPM",
             )
 
 class BPM_MT_project_menu(bpy.types.Menu):
@@ -28,12 +27,16 @@ class BPM_MT_project_menu(bpy.types.Menu):
 
     @classmethod
     def poll(cls, context):
-        return poll_bpm_project(context)
+        return poll_bpm_project()
 
     def draw(self, context):
         project_datas = context.window_manager["bpm_project_datas"]
 
         layout = self.layout
+
+        layout.label(text = project_datas["project_name"])
+
+        layout.separator()
 
         layout.label(
             text = getAddonPreferences().logged_user,
