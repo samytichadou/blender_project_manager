@@ -16,14 +16,29 @@ class BPM_PR_asset_list(bpy.types.PropertyGroup):
     # TODO Use name
     asset_name : bpy.props.StringProperty()
     folderpath : bpy.props.StringProperty()
-    last_version : bpy.props.IntProperty()
-    # TODO Version enum for asset browser
+    type : bpy.props.StringProperty()
+    description : bpy.props.StringProperty()
+    last_workfile_version : bpy.props.IntProperty()
+    last_published_version : bpy.props.IntProperty()
 
 class BPM_PR_project_assets(bpy.types.PropertyGroup):
     asset_list : bpy.props.CollectionProperty(
         type = BPM_PR_asset_list,
         )
     asset_index : bpy.props.IntProperty()
+
+def get_last_version_from_folder_pattern(folder, pattern, extension):
+    version_list = []
+
+    for f in os.listdir(folder):
+        if pattern in f\
+        and extension in f\
+        and os.path.isfile(os.path.join(folder, f)):
+            temp = f.split(f"{pattern}_v")[1]
+            version_list.append(int(os.path.splitext(temp)[0]))
+
+    return max(version_list)
+
 
 def get_project_asset_list():
     asset_props = bpy.context.window_manager.bpm_project_assets
@@ -33,12 +48,19 @@ def get_project_asset_list():
     assets_folder = os.path.join(root_folder, nc.assets_folder)
 
     for f in os.listdir(assets_folder):
-        path = os.path.join(assets_folder, f)
+        asset_folderpath = os.path.join(assets_folder, f)
         if f != nc.asset_library_folder\
-        and os.path.isdir(path):
-            new = asset_props.asset_list.add()
-            new.asset_name = get_asset_workfile_name(f, project_datas["project_name"])
-            new.folderpath = path
+        and os.path.isdir(asset_folderpath):
+            json_filepath = os.path.join(asset_folderpath, f"{f}.json")
+            if os.path.isfile(json_filepath):
+                dataset = mp.read_json(json_filepath)
+                new = asset_props.asset_list.add()
+                new.asset_name = get_asset_workfile_name(f, project_datas["project_name"])
+                new.folderpath = asset_folderpath
+                new.type = dataset["type"]
+                new.description = dataset["description"]
+                new.last_published_version = dataset["last_published_version"]
+                new.last_workfile_version = get_last_version_from_folder_pattern(asset_folderpath, f, ".blend")
 
 def reload_asset_list():
     asset_props = bpy.context.window_manager.bpm_project_assets
@@ -119,10 +141,13 @@ class BPM_OT_remove_asset(bpy.types.Operator):
         return {'FINISHED'}
 
 def create_asset_dataset(self):
-    datas = {}
-    datas["name"] = self.asset_workfile_name
-    datas["type"] = self.asset_type
-    datas["published_versions"] = []
+    datas = {
+        "name" : self.asset_workfile_name,
+        "type" : self.asset_type,
+        "description" : self.asset_description,
+        "last_published_version" : 0,
+        "published_versions" : [],
+        }
     return datas
 
 def is_asset_workfile_name_existing(name):
@@ -153,6 +178,9 @@ class BPM_OT_create_asset(bpy.types.Operator):
         name = "Type",
         items = asset_types_callback,
         )
+    asset_description : bpy.props.StringProperty(
+        name = "Description",
+        )
 
     @classmethod
     def poll(cls, context):
@@ -178,6 +206,7 @@ class BPM_OT_create_asset(bpy.types.Operator):
         row.label(text="", icon=icon)
 
         layout.prop(self, "asset_type", text="")
+        layout.prop(self, "asset_description")
 
     def execute(self, context):
         reload_asset_list()

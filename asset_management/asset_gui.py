@@ -15,7 +15,7 @@ class BPM_UL_asset_workfiles(bpy.types.UIList):
 
         elif self.layout_type in {'GRID'}:
             layout.alignment = 'CENTER'
-            layout.label(text = "item.asset_name")
+            layout.label(text = item.asset_name)
 
 class BPM_PT_asset_workfiles(asset_utils.AssetBrowserPanel, bpy.types.Panel):
     bl_region_type = 'TOOL_PROPS'
@@ -60,6 +60,14 @@ class BPM_PT_asset_workfiles(asset_utils.AssetBrowserPanel, bpy.types.Panel):
                             active.name,
                             context.window_manager["bpm_project_datas"]["project_name"],
                             )
+            row = layout.row()
+            row.label(text = active.type)
+            row.label(text = f"v{active.last_workfile_version}")
+            if active.description:
+                text=active.description
+            else:
+                text="No description"
+            layout.label(text=text, icon="INFO")
 
 
 ### REGISTER ---
