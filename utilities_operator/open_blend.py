@@ -14,17 +14,23 @@ def get_last_version(folder, pattern):
 class BPM_OT_open_blend(bpy.types.Operator):
     bl_idname = "bpm.open_blend"
     bl_label = "Open Blend"
-    bl_description = "Open blend file"
+    bl_description = "Open blend file, Shift for new instance"
     bl_options = {'INTERNAL'}
 
-    new_blender_instance : bpy.props.BoolProperty()
     filepath : bpy.props.StringProperty()
     folderpath : bpy.props.StringProperty()
     pattern : bpy.props.StringProperty()
 
+    shift = False
+
     @classmethod
     def poll(cls, context):
         return True
+
+    def invoke(self, context, event):
+        if event.shift:
+            self.shift=True
+        return self.execute(context)
 
     def execute(self, context):
         if self.filepath:
@@ -37,7 +43,7 @@ class BPM_OT_open_blend(bpy.types.Operator):
             self.report({'WARNING'}, "Invalid file path")
 
         # open
-        if self.new_blender_instance:
+        if self.shift:
             print(f"BPM --- Opening in new instance : {self.filepath}")
             subprocess.Popen([bpy.app.binary_path, filepath])
         else:
