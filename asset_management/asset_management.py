@@ -4,6 +4,7 @@ import shutil
 from bpy.app.handlers import persistent
 
 from ..global_management import naming_convention as nc
+from ..global_management import manage_projects as mp
 
 def get_asset_workfile_pattern(asset_workfile_name, project_name):
     return f"asset_{project_name}_{asset_workfile_name}"
@@ -12,6 +13,7 @@ def get_asset_workfile_name(pattern, project_name):
     return pattern.split(f"{project_name}_")[1]
 
 class BPM_PR_asset_list(bpy.types.PropertyGroup):
+    # TODO Use name
     asset_name : bpy.props.StringProperty()
     folderpath : bpy.props.StringProperty()
     last_version : bpy.props.IntProperty()
@@ -116,6 +118,13 @@ class BPM_OT_remove_asset(bpy.types.Operator):
 
         return {'FINISHED'}
 
+def create_asset_dataset(self):
+    datas = {}
+    datas["name"] = self.asset_workfile_name
+    datas["type"] = self.asset_type
+    datas["published_versions"] = []
+    return datas
+
 def is_asset_workfile_name_existing(name):
     asset_list = bpy.context.window_manager.bpm_project_assets.asset_list
     for asset in asset_list:
@@ -140,8 +149,7 @@ class BPM_OT_create_asset(bpy.types.Operator):
         name = "Name",
         default = "New Asset",
         )
-    # TODO Type system from project json
-    asset_types : bpy.props.EnumProperty(
+    asset_type : bpy.props.EnumProperty(
         name = "Type",
         items = asset_types_callback,
         )
@@ -169,13 +177,13 @@ class BPM_OT_create_asset(bpy.types.Operator):
             icon = "CHECKMARK"
         row.label(text="", icon=icon)
 
-        layout.prop(self, "asset_types", text="")
+        layout.prop(self, "asset_type", text="")
 
     def execute(self, context):
         reload_asset_list()
 
         # Check if asset name exists
-        if is_asset_workfile_name_existing(self.name):
+        if is_asset_workfile_name_existing(self.asset_workfile_name):
             self.report({'WARNING'}, "BPM Asset name already existing")
             return {'CANCELLED'}
 
@@ -186,15 +194,21 @@ class BPM_OT_create_asset(bpy.types.Operator):
         asset_folder = os.path.join(root_folder, nc.assets_folder)
         asset_pattern = get_asset_workfile_pattern(self.asset_workfile_name, project_datas["project_name"])
         new_folder = os.path.join(asset_folder, asset_pattern)
+        print(f"BPM --- Creating asset folder : {new_folder}")
         os.mkdir(new_folder)
 
         # Create empty file
         startup_folders = os.path.join(root_folder, nc.startups_folder)
         asset_base_filepath = os.path.join(startup_folders, nc.startup_asset)
         new_asset_filepath = os.path.join(new_folder, f"{asset_pattern}_v001.blend")
+        print(f"BPM --- Creating asset file : {new_asset_filepath}")
         shutil.copy(asset_base_filepath, new_asset_filepath)
 
-        # TODO Create asset json
+        # Create asset json
+        dataset = create_asset_dataset(self)
+        json_filepath = os.path.join(new_folder, f"{asset_pattern}.json")
+        print(f"BPM --- Creating asset json : {json_filepath}")
+        mp.write_json_file(dataset, json_filepath)
 
         # Reload asset list
         reload_asset_list()
@@ -203,7 +217,7 @@ class BPM_OT_create_asset(bpy.types.Operator):
         for area in context.screen.areas:
             area.tag_redraw()
 
-        self.report({'INFO'}, "BPM Asset Created")
+        self.report({'INFO'}, f"BPM Asset Created : {self.asset_workfile_name}")
 
         return {'FINISHED'}
 
