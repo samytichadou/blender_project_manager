@@ -15,6 +15,7 @@ def bpm_project_topbar(self, context):
         return
     if context.region.alignment == 'RIGHT':
         layout=self.layout
+        # TODO Back menu
         layout.operator("bpm.open_back_blend", text="", icon="LOOP_BACK")
         layout.menu(
             "BPM_MT_project_menu",
@@ -34,10 +35,6 @@ class BPM_MT_project_menu(bpy.types.Menu):
 
         layout = self.layout
 
-        layout.label(text = project_datas["project_name"])
-
-        layout.separator()
-
         layout.label(
             text = getAddonPreferences().logged_user,
             icon = "USER",
@@ -45,10 +42,21 @@ class BPM_MT_project_menu(bpy.types.Menu):
 
         layout.separator()
 
-        layout.label(text = "Lock Files") # Placeholder
+        layout.label(text = project_datas["project_name"])
 
         layout.separator()
 
+        layout.label(text = "Lock Files") # Placeholder
+        # TODO Label current file
+
+        layout.separator()
+
+        layout.operator("bpm.publish_asset") # TODO Hide if not asset file
+
+        layout.separator()
+
+        ### TODO Hide if not authorized users
+        layout.separator()
         layout.label(text = "Create Episode(s)") # Placeholder
         layout.label(text = "Remove Episode(s)") # Placeholder
 
@@ -61,6 +69,7 @@ class BPM_MT_project_menu(bpy.types.Menu):
         layout.separator()
 
         layout.label(text = "Modify Project") # Placeholder
+        ###
 
         try:
             last_user = context.scene["bpm_last_user"]

@@ -56,6 +56,7 @@ from .asset_management import(
     asset_library_handler,
     asset_management,
     asset_gui,
+    asset_publish,
     )
 
 from .utilities_operator import(
@@ -78,6 +79,7 @@ def register():
     asset_library_handler.register()
     asset_management.register()
     asset_gui.register()
+    asset_publish.register()
 
     open_blend.register()
 
@@ -94,5 +96,6 @@ def unregister():
     asset_library_handler.unregister()
     asset_management.unregister()
     asset_gui.unregister()
+    asset_publish.unregister()
 
     open_blend.unregister()
