@@ -22,6 +22,10 @@ def bpm_project_topbar(self, context):
             text = "BPM",
             )
 
+def draw_asset_entry(container):
+    container.operator("bpm.publish_asset")
+    container.separator()
+
 class BPM_MT_project_menu(bpy.types.Menu):
     bl_label = "BPMP Project"
     bl_idname = "BPM_MT_project_menu"
@@ -32,6 +36,8 @@ class BPM_MT_project_menu(bpy.types.Menu):
 
     def draw(self, context):
         project_datas = context.window_manager["bpm_project_datas"]
+        file_datas = context.window_manager["bpm_file_datas"]
+        file_type = file_datas["file_type"]
 
         layout = self.layout
 
@@ -51,9 +57,8 @@ class BPM_MT_project_menu(bpy.types.Menu):
 
         layout.separator()
 
-        layout.operator("bpm.publish_asset") # TODO Hide if not asset file
-
-        layout.separator()
+        if file_type == "asset": # TODO Only if authorization
+            draw_asset_entry(layout)
 
         ### TODO Hide if not authorized users
         layout.separator()
