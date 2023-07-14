@@ -6,6 +6,7 @@ from datetime import datetime
 from . import asset_management as am
 from ..global_management import naming_convention as nc
 from ..global_management import manage_projects as mp
+from ..global_management import user_authorization as ua
 from .. import addon_prefs as ap
 
 def get_datetime():
@@ -40,9 +41,15 @@ class BPM_OT_publish_asset(bpy.types.Operator):
         try:
             wm = context.window_manager
             wm["bpm_project_datas"]
-            return wm["bpm_file_datas"]["file_type"] == "asset"
+            if wm["bpm_file_datas"]["file_type"] != "asset":
+                return False
         except KeyError:
             return False
+        # Check for authorisation
+        return ua.compare_athcode(
+            ua.patt_asset_modification,
+            ap.getAddonPreferences().athcode
+            )
 
     def invoke(self, context, event):
         if not get_current_file_assets():
