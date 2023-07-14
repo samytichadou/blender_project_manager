@@ -48,7 +48,7 @@ def get_file_datas():
     # Asset
     elif nc.assets_folder in parent_folder:
         file_datas["file_type"] = "asset"
-        # TODO Get asset informations (publish or workfiles, asset_name and type)
+        # TODO Get asset informations (asset_name and type)
 
     # Edit
     elif nc.edits_folder in parent_folder:
