@@ -11,7 +11,7 @@ from .. import addon_prefs as ap
 class BPM_UL_asset_workfiles(bpy.types.UIList):
 
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
-
+        # TODO Add currently opened asset indication
         if self.layout_type in {'DEFAULT', 'COMPACT'}:
             layout.label(text = item.asset_name)
 

@@ -89,7 +89,7 @@ class BPM_OT_reload_asset_list(bpy.types.Operator):
 
     def execute(self, context):
         reload_asset_list()
-
+        # TODO Add currently opened asset indication
         self.report({'INFO'}, "BPM Asset list refreshed")
 
         return {'FINISHED'}
@@ -130,12 +130,17 @@ class BPM_OT_remove_asset(bpy.types.Operator):
         asset_list = asset_props.asset_list
         active_asset = asset_list[asset_props.asset_index]
 
+        # Check if currently opened
+        if active_asset.folderpath == os.path.dirname(bpy.data.filepath):
+            self.report({'WARNING'}, "Asset currently opened")
+            return {'CANCELLED'}
+
         # Remove asset folder and content
         print("BPM --- Removing asset files : {active_asset.asset_name}")
         asset_folder = active_asset.folderpath
         shutil.rmtree(asset_folder)
 
-        # TODO Remove asset library file
+        # TODO Remove asset library file if asked from user
 
         # Remove asset from list
         print("BPM --- Removing asset from list : {active_asset.asset_name}")
