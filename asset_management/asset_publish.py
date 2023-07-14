@@ -25,7 +25,6 @@ def get_current_file_assets():
 def get_publish_pattern(asset_name, project_name):
     return f"assetpublish_{project_name}_{asset_name}"
 
-# TODO Finish operator
 class BPM_OT_publish_asset(bpy.types.Operator):
     bl_idname = "bpm.publish_asset"
     bl_label = "Publish BPM Asset"
@@ -41,12 +40,14 @@ class BPM_OT_publish_asset(bpy.types.Operator):
         try:
             wm = context.window_manager
             wm["bpm_project_datas"]
-            if wm["bpm_file_datas"]["file_type"] == "asset":
-                return get_current_file_assets()
+            return wm["bpm_file_datas"]["file_type"] == "asset"
         except KeyError:
             return False
 
     def invoke(self, context, event):
+        if not get_current_file_assets():
+            self.report({'WARNING'}, "No asset in this file")
+            return {'CANCELLED'}
         return context.window_manager.invoke_props_dialog(self)
 
     def draw(self, context):
