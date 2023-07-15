@@ -2,6 +2,8 @@ import bpy
 import os
 import subprocess
 
+# TODO Limit number of available back steps ?
+
 def get_last_version(folder, pattern, extension=".blend"):
     filename_list = []
     for file in os.listdir(folder):
