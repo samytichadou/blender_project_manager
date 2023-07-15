@@ -3,6 +3,8 @@ import os
 
 from ..addon_prefs import getAddonPreferences
 
+# TODO Warning if not asset last version
+
 def poll_bpm_project():
     try:
         bpy.context.window_manager["bpm_project_datas"]

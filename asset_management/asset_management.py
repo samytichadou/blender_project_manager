@@ -8,6 +8,8 @@ from ..global_management import manage_projects as mp
 from ..global_management import user_authorization as ua
 from .. import addon_prefs as ap
 
+# TODO Warning if not asset last version
+
 def get_asset_workfile_pattern(asset_workfile_name, project_name):
     return f"asset_{project_name}_{asset_workfile_name}"
 
@@ -49,9 +51,9 @@ def get_project_asset_list():
     root_folder = project_datas["root_folder"]
     assets_folder = os.path.join(root_folder, nc.assets_folder)
 
-    for f in os.listdir(assets_folder):
+    for f in sorted(os.listdir(assets_folder)):
         asset_folderpath = os.path.join(assets_folder, f)
-        if f != nc.asset_library_folder\
+        if f not in {nc.asset_library_folder, nc.old_asset_library_folder}\
         and os.path.isdir(asset_folderpath):
             json_filepath = os.path.join(asset_folderpath, f"{f}.json")
             if os.path.isfile(json_filepath):
