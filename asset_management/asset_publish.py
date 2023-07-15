@@ -26,6 +26,16 @@ def get_current_file_assets():
 def get_publish_pattern(asset_name, project_name):
     return f"assetpublish_{project_name}_{asset_name}"
 
+def get_new_publish_datas(version, publish_filename, comment=""):
+    new_publish_version = {}
+    new_publish_version["version_number"] = version
+    new_publish_version["workfile_from"] = os.path.basename(bpy.data.filepath)
+    new_publish_version["publish_from"] = publish_filename
+    new_publish_version["author"] = ap.getAddonPreferences().logged_user
+    new_publish_version["datetime"] = get_datetime()
+    new_publish_version["comment"] = comment
+    return new_publish_version
+
 class BPM_OT_publish_asset(bpy.types.Operator):
     bl_idname = "bpm.publish_asset"
     bl_label = "Publish BPM Asset"
@@ -64,11 +74,9 @@ class BPM_OT_publish_asset(bpy.types.Operator):
     def execute(self, context):
         project_datas = context.window_manager["bpm_project_datas"]
 
-        # TODO Save asset informations in the file for asset browser usage ?
-
         # Get asset datablocks
         print("BPM --- Collecting asset datas")
-        data_blocks = set(get_current_file_assets())
+        data_blocks = get_current_file_assets()
 
         # Save asset library
         asset_folder_path = os.path.dirname(bpy.data.filepath)
@@ -88,6 +96,16 @@ class BPM_OT_publish_asset(bpy.types.Operator):
 
         lib_path = os.path.join(asset_lib_folder, publish_filename)
 
+        # Save asset informations in assets for asset browser usage
+        print("BPM --- Saving dataset in assets")
+        new_publish_dataset = get_new_publish_datas(
+            new_version,
+            publish_filename,
+            self.comment,
+            )
+        for data in data_blocks:
+            data["bpm_asset_datas"] = new_publish_dataset
+
         # Old previous publish
         print("BPM --- Saving previous publish asset file if needed")
         old_publish_filename = f"{publish_pattern}_v{str(last_version).zfill(3)}.blend"
@@ -98,19 +116,12 @@ class BPM_OT_publish_asset(bpy.types.Operator):
 
         # Write new library
         print("BPM --- Writing new asset library")
-        bpy.data.libraries.write(lib_path, data_blocks)
+        bpy.data.libraries.write(lib_path, set(data_blocks))
 
         # Update asset json
         print("BPM --- Updating asset json")
         asset_datas["last_published_version"] = new_version
-        new_publish_version = {}
-        new_publish_version["version_number"] = new_version
-        new_publish_version["file_from"] = os.path.basename(bpy.data.filepath)
-        new_publish_version["author"] = ap.getAddonPreferences().logged_user
-        new_publish_version["datetime"] = get_datetime()
-        new_publish_version["comment"] = self.comment
-
-        asset_datas["published_versions"].append(new_publish_version)
+        asset_datas["published_versions"].append(new_publish_dataset)
 
         mp.write_json_file(asset_datas, json_filepath)
 
