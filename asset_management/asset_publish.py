@@ -1,3 +1,5 @@
+# TODO Remove version number from lib to be sure to relink automatically
+
 import bpy
 import os
 import shutil
