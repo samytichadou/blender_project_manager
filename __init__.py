@@ -54,10 +54,10 @@ from .project_management import(
 
 from .asset_management import(
     asset_library_handler,
-    asset_management,
+    asset_workfile_management,
     asset_gui,
     asset_publish,
-    asset_detection,
+    asset_management,
     )
 
 from .utilities_operator import(
@@ -78,10 +78,10 @@ def register():
     project_users.register()
 
     asset_library_handler.register()
-    asset_management.register()
+    asset_workfile_management.register()
     asset_gui.register()
     asset_publish.register()
-    asset_detection.register()
+    asset_management.register()
 
     open_blend.register()
 
@@ -96,9 +96,9 @@ def unregister():
     project_users.unregister()
 
     asset_library_handler.unregister()
-    asset_management.unregister()
+    asset_workfile_management.unregister()
     asset_gui.unregister()
     asset_publish.unregister()
-    asset_detection.unregister()
+    asset_management.unregister()
 
     open_blend.unregister()

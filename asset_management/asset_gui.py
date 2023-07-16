@@ -4,7 +4,7 @@ from bpy_extras import (
     asset_utils,
 )
 
-from . import asset_management as am
+from . import asset_workfile_management as awm
 from ..global_management import user_authorization as ua
 from .. import addon_prefs as ap
 
@@ -58,7 +58,7 @@ class BPM_PT_asset_workfiles(asset_utils.AssetBrowserPanel, bpy.types.Panel):
         if asset_props.asset_index in range(len(asset_props.asset_list)):
             active = asset_props.asset_list[asset_props.asset_index]
             op.folderpath = active.folderpath
-            op.pattern = am.get_asset_workfile_pattern(
+            op.pattern = awm.get_asset_workfile_pattern(
                             active.name,
                             context.window_manager["bpm_project_datas"]["project_name"],
                             )

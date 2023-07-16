@@ -3,7 +3,7 @@ import os
 import shutil
 from datetime import datetime
 
-from . import asset_management as am
+from . import asset_workfile_management as awm
 from ..global_management import naming_convention as nc
 from ..global_management import manage_projects as mp
 from ..global_management import user_authorization as ua
@@ -81,7 +81,7 @@ class BPM_OT_publish_asset(bpy.types.Operator):
         # Save asset library
         asset_folder_path = os.path.dirname(bpy.data.filepath)
         asset_folder = os.path.basename(asset_folder_path)
-        asset_name = am.get_asset_workfile_name(asset_folder, project_datas["project_name"])
+        asset_name = awm.get_asset_workfile_name(asset_folder, project_datas["project_name"])
 
         assets_folder = os.path.join(project_datas["root_folder"], nc.assets_folder)
         asset_lib_folder = os.path.join(assets_folder, nc.asset_library_folder)
