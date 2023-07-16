@@ -300,6 +300,9 @@ def unregister():
     bpy.utils.unregister_class(BPM_PR_asset_list)
     bpy.utils.unregister_class(BPM_PR_project_assets)
     del bpy.types.WindowManager.bpm_project_assets
+    bpy.utils.unregister_class(BPM_PR_scene_asset_list)
+    bpy.utils.unregister_class(BPM_PR_scene_assets)
+    del bpy.types.WindowManager.bpm_scene_assets
     bpy.utils.unregister_class(BPM_OT_reload_asset_list)
     bpy.utils.unregister_class(BPM_OT_remove_asset)
     bpy.utils.unregister_class(BPM_OT_create_asset)

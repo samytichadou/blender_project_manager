@@ -8,8 +8,8 @@ from . import asset_management as am
 from ..global_management import user_authorization as ua
 from .. import addon_prefs as ap
 
-class BPM_UL_asset_workfiles(bpy.types.UIList):
 
+class BPM_UL_asset_workfiles(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         # TODO Add currently opened asset indication
         if self.layout_type in {'DEFAULT', 'COMPACT'}:
@@ -71,11 +71,48 @@ class BPM_PT_asset_workfiles(asset_utils.AssetBrowserPanel, bpy.types.Panel):
                 text="No description"
             layout.label(text=text)
 
+class BPM_UL_scene_assets(bpy.types.UIList):
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+        # TODO Add type logo
+        if self.layout_type in {'DEFAULT', 'COMPACT'}:
+            layout.label(text = item.name)
+
+        elif self.layout_type in {'GRID'}:
+            layout.alignment = 'CENTER'
+            layout.label(text = item.name)
+
+class BPM_PT_scene_assets(bpy.types.Panel):
+    """Creates a Panel in the Object properties window"""
+    bl_label = "BPM Scene Assets"
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = "scene"
+
+    def draw(self, context):
+        scene_assets = context.window_manager.bpm_scene_assets
+
+        layout = self.layout
+
+        row = layout.row()
+        row.template_list(
+            "BPM_UL_scene_assets",
+            "",
+            scene_assets,
+            "asset_list",
+            scene_assets,
+            "asset_index",
+            rows = 5,
+            )
+
 
 ### REGISTER ---
 def register():
     bpy.utils.register_class(BPM_UL_asset_workfiles)
     bpy.utils.register_class(BPM_PT_asset_workfiles)
+    bpy.utils.register_class(BPM_UL_scene_assets)
+    bpy.utils.register_class(BPM_PT_scene_assets)
 def unregister():
     bpy.utils.unregister_class(BPM_UL_asset_workfiles)
     bpy.utils.unregister_class(BPM_PT_asset_workfiles)
+    bpy.utils.unregister_class(BPM_UL_scene_assets)
+    bpy.utils.unregister_class(BPM_PT_scene_assets)
