@@ -103,7 +103,25 @@ class BPM_PT_scene_assets(bpy.types.Panel):
             "asset_index",
             rows = 5,
             )
+        col = row.column(align=True)
+        col.operator("bpm.reload_project_assets", icon='FILE_REFRESH', text="")
+        col.separator()
 
+        # TODO Move into subpanel
+        if scene_assets.asset_index in range(len(scene_assets.asset_list)):
+            # TODO Add and organize infos
+
+            active = scene_assets.asset_list[scene_assets.asset_index]
+            ob = getattr(active, active.data_type)
+            datas = ob["bpm_asset_datas"]
+            col = layout.column(align=True)
+            col.label(text="Publish : %s" %datas["publish_from"])
+            col.label(text="Workfile : %s" %datas["workfile_from"])
+            col.label(text="Author : %s - Date : %s" % (datas["author"],datas["datetime"]))
+            if datas["Comment"]:
+                col.label(text="Comment : %s" %datas["comment"])
+            else:
+                col.label(text="No comment")
 
 ### REGISTER ---
 def register():

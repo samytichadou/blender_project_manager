@@ -1,4 +1,5 @@
 import bpy
+from bpy.app.handlers import persistent
 
 asset_types = {
     "actions",
@@ -79,7 +80,7 @@ class BPM_PR_scene_assets(bpy.types.PropertyGroup):
         )
     asset_index : bpy.props.IntProperty()
 
-def get_asset_in_blend():
+def reload_project_assets():
     asset_list = bpy.context.window_manager.bpm_scene_assets.asset_list
 
     # Clear list
@@ -100,9 +101,42 @@ def get_asset_in_blend():
             new.data_type = type
             setattr(new, type, ob)
 
-# TODO Reload operator with dependency writing
 # TODO Remove operator
-# TODO Switch operator
+# TODO Switch version operator
+
+class BPM_OT_reload_project_assets(bpy.types.Operator):
+    bl_idname = "bpm.reload_project_assets"
+    bl_label = "Reload BPM Project Asset"
+    bl_description = "Reload BPM assets in this project"
+
+    @classmethod
+    def poll(cls, context):
+        # Check if bpm asset file
+        try:
+            wm = context.window_manager
+            wm["bpm_project_datas"]
+            return True
+        except KeyError:
+            return False
+
+    def execute(self, context):
+        print("BPM --- Reloading current project assets")
+        reload_project_assets()
+
+        # TODO Write dependencies to json files
+        self.report({'INFO'}, "BPM  Project Assets Reloaded")
+        return {'FINISHED'}
+
+
+@persistent
+def asset_project_reload_handler(scene):
+    # Check if bpm project
+    try:
+        bpy.context.window_manager["bpm_project_datas"]
+    except KeyError:
+        return
+    reload_project_assets()
+
 
 ### REGISTER ---
 def register():
@@ -113,8 +147,14 @@ def register():
             type = BPM_PR_scene_assets,
             name="BPM Scene Assets",
             )
+    bpy.utils.register_class(BPM_OT_reload_project_assets)
+
+    bpy.app.handlers.load_post.append(asset_project_reload_handler)
 
 def unregister():
     bpy.utils.unregister_class(BPM_PR_scene_asset_list)
     bpy.utils.unregister_class(BPM_PR_scene_assets)
     del bpy.types.WindowManager.bpm_scene_assets
+    bpy.utils.unregister_class(BPM_OT_reload_project_assets)
+
+    bpy.app.handlers.load_post.remove(asset_project_reload_handler)
