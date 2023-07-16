@@ -118,7 +118,7 @@ class BPM_PT_scene_assets(bpy.types.Panel):
             col.label(text="Publish : %s" %datas["publish_from"])
             col.label(text="Workfile : %s" %datas["workfile_from"])
             col.label(text="Author : %s - Date : %s" % (datas["author"],datas["datetime"]))
-            if datas["Comment"]:
+            if datas["comment"]:
                 col.label(text="Comment : %s" %datas["comment"])
             else:
                 col.label(text="No comment")
