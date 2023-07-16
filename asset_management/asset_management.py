@@ -1,3 +1,5 @@
+# TODO Rename this py file to reflect asset workfile management
+
 import bpy
 import os
 import shutil

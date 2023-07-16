@@ -101,6 +101,9 @@ def get_asset_in_blend():
             setattr(new, type, ob)
 
 # TODO Reload operator with dependency writing
+# TODO Remove operator
+# TODO Switch operator
+# TODO Rename this py file to reflect asset management
 
 ### REGISTER ---
 def register():
